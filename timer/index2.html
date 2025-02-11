@@ -83,7 +83,7 @@
         }
 
         .blink {
-            animation: blink 1s ease-in-out infinite;
+            animation: blink .3s ease-in-out infinite;
             color: var(--red500) !important;
         }
 
@@ -162,10 +162,16 @@
             position: relative;
         }
 
+        .progress-container.total-pb {
+            height: 24px;
+        }
+
         .progress-bar {
             height: 100%;
             transition: width 0.5s cubic-bezier(0.33, 1, 0.68, 1);
         }
+
+
 
         .track-marker {
             position: absolute;
@@ -237,7 +243,7 @@
                 </div>
             </div>
 
-            <div class="progress-container">
+            <div class="progress-container total-pb">
                 <div id="totalProgress" class="progress-bar" style="background: var(--red500);"></div>
             </div>
             
@@ -351,9 +357,14 @@
 
             // Мигание
             const trackTimerElement = document.getElementById('trackTimer');
+            const trackProgressBar = document.getElementById('trackProgress');
             trackRemaining <= 60 && trackRemaining > 0 ?
                 trackTimerElement.classList.add('blink') :
                 trackTimerElement.classList.remove('blink');
+
+            trackRemaining <= 30 && trackRemaining > 0 ?
+                trackProgressBar.classList.add('blink') :
+                trackProgressBar.classList.remove('blink');
         }
 
         function resetApp() {
