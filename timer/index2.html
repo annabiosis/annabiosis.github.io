@@ -14,13 +14,12 @@
             --primary-color: #71FEAB;
             --red600: #DB3323;
             --red500: #FF5230;
+            --red100: #FFCCAC;
             --green600: #30DA98;
             --green400: #71FEAB;
             --green900: #0C7970;
-            --secondary-color: #2196F3;
             --border-color: rgba(255,255,255,.2);
             --grey40: rgba(255,255,255,.4);
-
             --radius-outer: 24px;
         }
 
@@ -141,8 +140,8 @@
         }
 
         .timer.main {
-            font-size: 104px;
-            line-height: 112px;
+            font-size: 112px;
+            line-height: 120px;
             font-weight: 100;
             color: var(--green400);
         }
@@ -188,7 +187,12 @@
 
         #resetBtn {
             background: var(--red500);
-            margin-top: 24px;
+            color: var(--red100);
+        }
+
+        #nextTrackBtn {
+            background: var(--green400);
+            color: var(--green900);
         }
 
         #wakeLockStatus {
@@ -217,6 +221,7 @@
         <div class="timer-container">
             <h4><span class="curTrack" id="currentTrack"></span><span class="trkCount" id="trackCount"></span></h4>
             <div><span id="trackTimer" class="timer main"></span></div>
+            <div><span id="trackDuration">100</span></div>
             <div class="progress-container">
                 <div id="trackProgress" class="progress-bar"></div>
             </div>
@@ -235,9 +240,10 @@
             <div class="progress-container">
                 <div id="totalProgress" class="progress-bar" style="background: var(--red500);"></div>
             </div>
+            
+            <button id="nextTrackBtn" onclick="nextTrack()">Следующий трек</button>
+            <button id="resetBtn" onclick="handleReset()">Сброс</button>
         </div>
-
-        <button id="resetBtn" onclick="handleReset()">Сброс</button>
     </div>
 
     <div id="wakeLockStatus"></div>
@@ -245,18 +251,15 @@
     <script>
         let wakeLock = null;
         let intervalId;
+        let state = {
+            startTime: null,
+            totalTime: null,
+            originalTracks: null,
+            currentTrack: 1,
+            spentTimes: [],
+            markers: []
+        };
 
-        function updateTrackMarkers(numTracks) {
-            const container = document.querySelector('#totalProgress').parentElement;
-            container.querySelectorAll('.track-marker').forEach(m => m.remove());
-            
-            for(let i = 1; i < numTracks; i++) {
-                const marker = document.createElement('div');
-                marker.className = 'track-marker';
-                marker.style.left = `${(i / numTracks) * 100}%`;
-                container.appendChild(marker);
-            }
-        }
 
         async function requestWakeLock() {
             try {
@@ -280,58 +283,93 @@
         }
 
         function formatTime(seconds) {
-            const mins = Math.floor(seconds / 60);
-            const secs = seconds % 60;
+            const totalSeconds = Math.floor(seconds);
+            const mins = Math.floor(totalSeconds / 60);
+            const secs = totalSeconds % 60;
             return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
         }
 
-        function updateTimers() {
-            const startTime = parseInt(localStorage.getItem('startTime'));
-            const totalTime = parseInt(localStorage.getItem('totalTime'));
-            const numTracks = parseInt(localStorage.getItem('numTracks'));
-
+        function nextTrack() {
             const now = Math.floor(Date.now() / 1000);
-            const elapsed = now - startTime;
+            const totalSpent = state.spentTimes.reduce((a, b) => a + b, 0);
+            const currentTrackTime = now - state.startTime - totalSpent;
             
-            if(elapsed >= totalTime) {
+            if(currentTrackTime <= 0) return;
+            
+            state.spentTimes.push(currentTrackTime);
+            state.currentTrack++;
+            
+            if(state.currentTrack > state.originalTracks) {
+                state.currentTrack = state.originalTracks;
+                return;
+            }
+            
+            localStorage.setItem('timerState', JSON.stringify(state));
+            updateTimers();
+        }
+
+        function updateTimers() {
+            const now = Math.floor(Date.now() / 1000);
+            const totalElapsed = now - state.startTime;
+            
+            if(totalElapsed >= state.totalTime) {
                 clearInterval(intervalId);
                 alert('Выступление завершено!');
                 resetApp();
                 return;
             }
 
-            const remaining = totalTime - elapsed;
-            const durationPerTrack = totalTime / numTracks;
-            const currentTrack = Math.min(Math.floor(elapsed / durationPerTrack) + 1, numTracks);
-            const trackRemaining = Math.ceil(currentTrack * durationPerTrack - elapsed);
+            const remainingTotal = state.totalTime - totalElapsed;
+            const remainingTracks = state.originalTracks - state.currentTrack + 1;
+            const trackDuration = Math.floor(remainingTotal / remainingTracks);
+            const trackElapsed = totalElapsed - state.spentTimes.reduce((a, b) => a + b, 0);
+            let trackRemaining = trackDuration - trackElapsed;
 
-            const trackTimerElement = document.getElementById('trackTimer');
-            
-            if (trackRemaining <= 60 && trackRemaining > 0) {
-                trackTimerElement.classList.add('blink');
-            } else {
-                trackTimerElement.classList.remove('blink');
+            // Автоматический переход при завершении времени трека
+            if(trackRemaining <= 0 && remainingTracks > 1) {
+                state.spentTimes.push(trackDuration); // Фиксируем полное время трека
+                state.currentTrack++;
+                trackRemaining = Math.floor((remainingTotal - trackDuration) / (remainingTracks - 1));
+                localStorage.setItem('timerState', JSON.stringify(state));
             }
 
-            document.getElementById('elapsedTimer').textContent = formatTime(elapsed);
-            document.getElementById('remainingTimer').textContent = formatTime(remaining);
-            document.getElementById('trackTimer').textContent = formatTime(trackRemaining);
-            document.getElementById('currentTrack').textContent = `${currentTrack}`;
-            document.getElementById('trackCount').textContent = ` / ${numTracks}`;
+            // Обновление интерфейса
+            document.getElementById('currentTrack').textContent = state.currentTrack;
+            document.getElementById('trackCount').textContent = ` / ${state.originalTracks}`;
+            document.getElementById('trackDuration').textContent = formatTime(trackDuration);
+            document.getElementById('trackTimer').textContent = formatTime(Math.max(0, trackRemaining));
+            document.getElementById('elapsedTimer').textContent = formatTime(totalElapsed);
+            document.getElementById('remainingTimer').textContent = formatTime(remainingTotal);
 
-            document.getElementById('totalProgress').style.width = `${(elapsed / totalTime) * 100}%`;
-            document.getElementById('trackProgress').style.width = `${((elapsed % durationPerTrack) / durationPerTrack) * 100}%`;
+            // Прогресс-бары
+            const totalProgress = (totalElapsed / state.totalTime) * 100;
+            const trackProgress = (trackElapsed / trackDuration) * 100;
+            
+            document.getElementById('totalProgress').style.width = `${totalProgress}%`;
+            document.getElementById('trackProgress').style.width = `${trackProgress}%`;
+
+
+            // Мигание
+            const trackTimerElement = document.getElementById('trackTimer');
+            trackRemaining <= 60 && trackRemaining > 0 ?
+                trackTimerElement.classList.add('blink') :
+                trackTimerElement.classList.remove('blink');
         }
 
         function resetApp() {
             clearInterval(intervalId);
             releaseWakeLock();
-            localStorage.removeItem('startTime');
-            localStorage.removeItem('totalTime');
-            localStorage.removeItem('numTracks');
+            state = {
+                startTime: null,
+                totalTime: null,
+                originalTracks: null,
+                currentTrack: 1,
+                spentTimes: [],
+                markers: []
+            };
+            localStorage.removeItem('timerState');
             document.getElementById('timers').style.display = 'none';
             document.getElementById('configForm').style.display = 'block';
-            document.getElementById('trackTimer').classList.remove('blink');
         }
 
         function handleReset() {
@@ -351,20 +389,37 @@
                 return;
             }
 
-            const totalTime = totalMinutes * 60;
-            const startTime = Math.floor(Date.now() / 1000);
-
-            localStorage.setItem('startTime', startTime);
-            localStorage.setItem('totalTime', totalTime);
-            localStorage.setItem('numTracks', numTracks);
-
-            updateTrackMarkers(numTracks);
-            requestWakeLock();
+            state.startTime = Math.floor(Date.now() / 1000);
+            state.totalTime = totalMinutes * 60;
+            state.originalTracks = numTracks;
+            state.currentTrack = 1;
+            state.spentTimes = [];
             
+            localStorage.setItem('timerState', JSON.stringify(state));
+            
+            requestWakeLock();
             document.getElementById('configForm').style.display = 'none';
             document.getElementById('timers').style.display = 'block';
             intervalId = setInterval(updateTimers, 1000);
             updateTimers();
+        });
+
+        // Восстановление состояния
+        window.addEventListener('load', () => {
+            const savedState = localStorage.getItem('timerState');
+            if(savedState) {
+                state = JSON.parse(savedState);
+                const now = Math.floor(Date.now() / 1000);
+                
+                if(now - state.startTime < state.totalTime) {
+                    document.getElementById('configForm').style.display = 'none';
+                    document.getElementById('timers').style.display = 'block';
+                    intervalId = setInterval(updateTimers, 1000);
+                    requestWakeLock();
+                } else {
+                    resetApp();
+                }
+            }
         });
 
         // Wake Lock оптимизация
@@ -374,31 +429,10 @@
             }
         });
 
-        window.addEventListener('scroll', requestWakeLock);
-
-        window.addEventListener('load', () => {
-            const startTime = localStorage.getItem('startTime');
-            if(startTime) {
-                const totalTime = parseInt(localStorage.getItem('totalTime'));
-                const now = Math.floor(Date.now() / 1000);
-                
-                if(now - startTime < totalTime) {
-                    document.getElementById('configForm').style.display = 'none';
-                    document.getElementById('timers').style.display = 'block';
-                    intervalId = setInterval(updateTimers, 1000);
-                    updateTimers();
-                    updateTrackMarkers(parseInt(localStorage.getItem('numTracks')));
-                    requestWakeLock();
-                } else {
-                    resetApp();
-                }
-            }
-        });
-
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 const swCode = `
-                    const CACHE_NAME = 'music-timer-v5';
+                    const CACHE_NAME = 'music-timer-v6';
                     self.addEventListener('install', (event) => {
                         event.waitUntil(
                             caches.open(CACHE_NAME)
