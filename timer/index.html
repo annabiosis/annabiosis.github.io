@@ -15,7 +15,7 @@
 
         body {
             font-family: Arial, sans-serif;
-            padding: 20px;
+            padding: 16px;
             max-width: 600px;
             margin: 0 auto;
             background-color: var(--bg-color);
@@ -23,29 +23,31 @@
         }
 
         .input-group {
-            margin-bottom: 15px;
+            margin-bottom: 16px;
         }
 
         input {
             width: 100%;
             padding: 8px;
-            margin: 5px 0;
+            margin: 8px 0;
             box-sizing: border-box;
             background: #333;
             color: white;
             border: 1px solid var(--border-color);
-            border-radius: 4px;
+            border-radius: 8px;
+            font-size: 16px;
         }
 
         button {
             width: 100%;
-            padding: 12px;
+            padding: 16px;
             background: var(--primary-color);
             color: white;
             border: none;
-            border-radius: 4px;
+            border-radius: 8px;
             cursor: pointer;
             transition: opacity 0.3s;
+            font-size: 16px;
         }
 
         button:active {
@@ -53,29 +55,38 @@
         }
 
         .timer-container {
-            margin: 20px 0;
+            margin: 24px 0;
             text-align: center;
         }
 
         .timer {
             font-size: 32px;
-            margin: 15px 0;
+            margin: 16px 0;
             font-weight: bold;
             letter-spacing: 2px;
         }
 
         .progress-container {
-            height: 20px;
+            height: 24px;
             background: #333;
-            border-radius: 10px;
-            margin: 20px 0;
+            border-radius: 12px;
+            margin: 24px 0;
             overflow: hidden;
+            position: relative;
         }
 
         .progress-bar {
             height: 100%;
-            border-radius: 10px;
-            transition: width 1s linear;
+            border-radius: 12px;
+            transition: width 0.3s ease;
+        }
+
+        .track-marker {
+            position: absolute;
+            width: 2px;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.5);
+            z-index: 1;
         }
 
         #trackProgress {
@@ -83,37 +94,23 @@
         }
 
         #currentTrack {
-            font-size: 20px;
-            margin: 10px 0;
+            font-size: 24px;
+            margin: 16px 0;
             color: var(--secondary-color);
         }
 
         #resetBtn {
             background: #ff4444;
-            margin-top: 20px;
-        }
- /* Добавленные стили для разделителей и Wake Lock статуса */
-        .progress-container {
-            position: relative;
-        }
-
-        .track-marker {
-            position: absolute;
-            top:0;
-            width: 2px;
-            height: 100%;
-            background: rgba(255, 255, 255, 0.5);
-            z-index: 1;
+            margin-top: 24px;
         }
 
         #wakeLockStatus {
             position: fixed;
-            bottom: 10px;
-            right: 10px;
-            font-size: 12px;
+            bottom: 16px;
+            right: 16px;
+            font-size: 16px;
             color: #4CAF50;
         }
-
     </style>
 </head>
 <body>
@@ -146,10 +143,12 @@
         <button id="resetBtn" onclick="handleReset()">Сброс</button>
     </div>
 
+    <div id="wakeLockStatus"></div>
+
     <script>
         let wakeLock = null;
-        
-        // Добавление разделителей треков
+        let intervalId;
+
         function updateTrackMarkers(numTracks) {
             const container = document.querySelector('#totalProgress').parentElement;
             container.querySelectorAll('.track-marker').forEach(m => m.remove());
@@ -162,7 +161,6 @@
             }
         }
 
-        // Управление Wake Lock
         async function requestWakeLock() {
             try {
                 if ('wakeLock' in navigator) {
@@ -183,33 +181,6 @@
                 wakeLock = null;
             }
         }
-
-
-        // Регистрация Service Worker для оффлайн-работы
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                const swCode = `
-                    const CACHE_NAME = 'music-timer-v3';
-                    self.addEventListener('install', (event) => {
-                        event.waitUntil(
-                            caches.open(CACHE_NAME)
-                                .then(cache => cache.addAll([location.href]))
-                        );
-                    self.addEventListener('fetch', (event) => {
-                        event.respondWith(
-                            caches.match(event.request)
-                                .then(response => response || fetch(event.request))
-                        );
-                `;
-                
-                const blob = new Blob([swCode], { type: 'application/javascript' });
-                navigator.serviceWorker.register(URL.createObjectURL(blob));
-            });
-        }
-
-        const form = document.getElementById('configForm');
-        const timersSection = document.getElementById('timers');
-        let intervalId;
 
         function formatTime(seconds) {
             const mins = Math.floor(seconds / 60);
@@ -246,15 +217,14 @@
             document.getElementById('trackProgress').style.width = `${((elapsed % durationPerTrack) / durationPerTrack) * 100}%`;
         }
 
-// Обновленный сброс
         function resetApp() {
             clearInterval(intervalId);
             releaseWakeLock();
             localStorage.removeItem('startTime');
             localStorage.removeItem('totalTime');
             localStorage.removeItem('numTracks');
-            timersSection.style.display = 'none';
-            form.style.display = 'block';
+            document.getElementById('timers').style.display = 'none';
+            document.getElementById('configForm').style.display = 'block';
         }
 
         function handleReset() {
@@ -263,8 +233,7 @@
             }
         }
 
-        // Модифицированная функция старта
-        form.addEventListener('submit', (e) => {
+        document.getElementById('configForm').addEventListener('submit', (e) => {
             e.preventDefault();
             
             const totalMinutes = parseInt(document.getElementById('totalTime').value);
@@ -279,8 +248,8 @@
             updateTrackMarkers(numTracks);
             requestWakeLock();
             
-            form.style.display = 'none';
-            timersSection.style.display = 'block';
+            document.getElementById('configForm').style.display = 'none';
+            document.getElementById('timers').style.display = 'block';
             intervalId = setInterval(updateTimers, 1000);
             updateTimers();
         });
@@ -292,19 +261,40 @@
                 const now = Math.floor(Date.now() / 1000);
                 
                 if(now - startTime < totalTime) {
-                    form.style.display = 'none';
-                    timersSection.style.display = 'block';
+                    document.getElementById('configForm').style.display = 'none';
+                    document.getElementById('timers').style.display = 'block';
                     intervalId = setInterval(updateTimers, 1000);
                     updateTimers();
+                    updateTrackMarkers(parseInt(localStorage.getItem('numTracks')));
+                    requestWakeLock();
                 } else {
                     resetApp();
                 }
             }
         });
-        // Добавляем элемент статуса Wake Lock
-        const wakeLockStatus = document.createElement('div');
-        wakeLockStatus.id = 'wakeLockStatus';
-        document.body.appendChild(wakeLockStatus);
+
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                const swCode = `
+                    const CACHE_NAME = 'music-timer-v4';
+                    self.addEventListener('install', (event) => {
+                        event.waitUntil(
+                            caches.open(CACHE_NAME)
+                                .then(cache => cache.addAll([location.href]))
+                        );
+                    });
+                    self.addEventListener('fetch', (event) => {
+                        event.respondWith(
+                            caches.match(event.request)
+                                .then(response => response || fetch(event.request))
+                        );
+                    });
+                `;
+                
+                const blob = new Blob([swCode], { type: 'application/javascript' });
+                navigator.serviceWorker.register(URL.createObjectURL(blob));
+            });
+        }
     </script>
 </body>
 </html>
