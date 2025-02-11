@@ -129,18 +129,34 @@
 
     <div id="timers" style="display: none;">
         <div class="timer-container">
-            <div id="currentTrack"></div>
-            <div>Прошло: <span id="elapsedTimer" class="timer"></span></div>
-            <div>Осталось всего: <span id="remainingTimer" class="timer"></span></div>
-            <div>Текущая композиция: <span id="trackTimer" class="timer"></span></div>
+            
+            <h4><span class="curTrack" id="currentTrack"></span><span class="trkCount" id="trackCount"></span></h4>
+
+            <!-- Текущая композиция -->
+            <div><span id="trackTimer" class="timer main"></span></div>
+            <div class="progress-container">
+                <div id="trackProgress" class="progress-bar"></div>
+            </div>
+            
+        <div class="row">
+            <div class="column">
+                <!-- Прошло -->
+                <h4>Прошло</h4>
+                <div><span id="elapsedTimer" class="timer secondary"></span></div>
+            </div>
+            <div class="column">
+                <!-- Осталось -->
+                <h4>Осталось</h4>
+                <div><span id="remainingTimer" class="timer secondary"></span></div>
+            </div>
         </div>
 
-        <div class="progress-container">
-            <div id="totalProgress" class="progress-bar" style="background: var(--primary-color);"></div>
+
+            <div class="progress-container">
+                <div id="totalProgress" class="progress-bar" style="background: var(--red500);"></div>
+            </div>
         </div>
-        <div class="progress-container">
-            <div id="trackProgress" class="progress-bar"></div>
-        </div>
+
         <button id="resetBtn" onclick="handleReset()">Сброс</button>
     </div>
 
@@ -193,6 +209,8 @@
             const startTime = parseInt(localStorage.getItem('startTime'));
             const totalTime = parseInt(localStorage.getItem('totalTime'));
             const numTracks = parseInt(localStorage.getItem('numTracks'));
+            
+
 
             const now = Math.floor(Date.now() / 1000);
             const elapsed = now - startTime;
@@ -207,12 +225,28 @@
             const remaining = totalTime - elapsed;
             const durationPerTrack = totalTime / numTracks;
             const currentTrack = Math.min(Math.floor(elapsed / durationPerTrack) + 1, numTracks);
+            
+// Для мигания
+            const trackTimerElement = document.getElementById('trackTimer');
             const trackRemaining = Math.ceil(currentTrack * durationPerTrack - elapsed);
+
+
+            
+
+
+            // Обновление класса blink
+            if (trackRemaining <= 60 && trackRemaining > 0) {
+                trackTimerElement.classList.add('blink');
+            } else {
+                trackTimerElement.classList.remove('blink');
+            }
+
 
             document.getElementById('elapsedTimer').textContent = formatTime(elapsed);
             document.getElementById('remainingTimer').textContent = formatTime(remaining);
             document.getElementById('trackTimer').textContent = formatTime(trackRemaining);
-            document.getElementById('currentTrack').textContent = `Композиция ${currentTrack} из ${numTracks}`;
+            document.getElementById('currentTrack').textContent = `${currentTrack}`;
+            document.getElementById('trackCount').textContent = ` / ${numTracks}`;
 
             document.getElementById('totalProgress').style.width = `${(elapsed / totalTime) * 100}%`;
             document.getElementById('trackProgress').style.width = `${((elapsed % durationPerTrack) / durationPerTrack) * 100}%`;
@@ -226,6 +260,9 @@
             localStorage.removeItem('numTracks');
             document.getElementById('timers').style.display = 'none';
             document.getElementById('configForm').style.display = 'block';
+
+            // Очистка мигания
+            document.getElementById('trackTimer').classList.remove('blink');
         }
 
         function handleReset() {
