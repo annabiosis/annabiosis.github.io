@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Музыкальный таймер</title>
+    <style>
+        :root {
+            --bg-color: #1a1a1a;
+            --text-color: #ffffff;
+            --primary-color: #4CAF50;
+            --secondary-color: #2196F3;
+            --border-color: #333333;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0;
+            box-sizing: border-box;
+            background: #333;
+            color: white;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: opacity 0.3s;
+        }
+
+        button:active {
+            opacity: 0.8;
+        }
+
+        .timer-container {
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .timer {
+            font-size: 32px;
+            margin: 15px 0;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+
+        .progress-container {
+            height: 20px;
+            background: #333;
+            border-radius: 10px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.3s ease;
+        }
+
+        #trackProgress {
+            background: var(--secondary-color);
+        }
+
+        #currentTrack {
+            font-size: 20px;
+            margin: 10px 0;
+            color: var(--secondary-color);
+        }
+
+        #resetBtn {
+            background: #ff4444;
+            margin-top: 20px;
+        }
+ /* Добавленные стили для разделителей и Wake Lock статуса */
+        .progress-container {
+            position: relative;
+        }
+
+        .track-marker {
+            position: absolute;
+            top:0;
+            width: 2px;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.5);
+            z-index: 1;
+        }
+
+        #wakeLockStatus {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            font-size: 12px;
+            color: #4CAF50;
+        }
+
+    </style>
+</head>
+<body>
+    <form id="configForm">
+        <div class="input-group">
+            <label>Общее время выступления (минут):</label>
+            <input type="number" id="totalTime" required>
+        </div>
+        <div class="input-group">
+            <label>Количество композиций:</label>
+            <input type="number" id="numTracks" required>
+        </div>
+        <button type="submit">Старт</button>
+    </form>
+
+    <div id="timers" style="display: none;">
+        <div class="timer-container">
+            <div id="currentTrack"></div>
+            <div>Прошло: <span id="elapsedTimer" class="timer"></span></div>
+            <div>Осталось всего: <span id="remainingTimer" class="timer"></span></div>
+            <div>Текущая композиция: <span id="trackTimer" class="timer"></span></div>
+        </div>
+
+        <div class="progress-container">
+            <div id="totalProgress" class="progress-bar" style="background: var(--primary-color);"></div>
+        </div>
+        <div class="progress-container">
+            <div id="trackProgress" class="progress-bar"></div>
+        </div>
+        <button id="resetBtn" onclick="handleReset()">Сброс</button>
+    </div>
+
+    <script>
+        let wakeLock = null;
+        
+        // Добавление разделителей треков
+        function updateTrackMarkers(numTracks) {
+            const container = document.querySelector('#totalProgress').parentElement;
+            container.querySelectorAll('.track-marker').forEach(m => m.remove());
+            
+            for(let i = 1; i < numTracks; i++) {
+                const marker = document.createElement('div');
+                marker.className = 'track-marker';
+                marker.style.left = `${(i / numTracks) * 100}%`;
+                container.appendChild(marker);
+            }
+        }
+
+        // Управление Wake Lock
+        async function requestWakeLock() {
+            try {
+                if ('wakeLock' in navigator) {
+                    wakeLock = await navigator.wakeLock.request('screen');
+                    wakeLock.addEventListener('release', () => {
+                        document.getElementById('wakeLockStatus').textContent = '';
+                    });
+                    document.getElementById('wakeLockStatus').textContent = 'Экран активен';
+                }
+            } catch (err) {
+                console.error('Ошибка Wake Lock:', err);
+            }
+        }
+
+        function releaseWakeLock() {
+            if (wakeLock !== null && !wakeLock.released) {
+                wakeLock.release();
+                wakeLock = null;
+            }
+        }
+
+
+        // Регистрация Service Worker для оффлайн-работы
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                const swCode = `
+                    const CACHE_NAME = 'music-timer-v3';
+                    self.addEventListener('install', (event) => {
+                        event.waitUntil(
+                            caches.open(CACHE_NAME)
+                                .then(cache => cache.addAll([location.href]))
+                        );
+                    self.addEventListener('fetch', (event) => {
+                        event.respondWith(
+                            caches.match(event.request)
+                                .then(response => response || fetch(event.request))
+                        );
+                `;
+                
+                const blob = new Blob([swCode], { type: 'application/javascript' });
+                navigator.serviceWorker.register(URL.createObjectURL(blob));
+            });
+        }
+
+        const form = document.getElementById('configForm');
+        const timersSection = document.getElementById('timers');
+        let intervalId;
+
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            return `${mins}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        function updateTimers() {
+            const startTime = parseInt(localStorage.getItem('startTime'));
+            const totalTime = parseInt(localStorage.getItem('totalTime'));
+            const numTracks = parseInt(localStorage.getItem('numTracks'));
+
+            const now = Math.floor(Date.now() / 1000);
+            const elapsed = now - startTime;
+            
+            if(elapsed >= totalTime) {
+                clearInterval(intervalId);
+                alert('Выступление завершено!');
+                resetApp();
+                return;
+            }
+
+            const remaining = totalTime - elapsed;
+            const durationPerTrack = totalTime / numTracks;
+            const currentTrack = Math.min(Math.floor(elapsed / durationPerTrack) + 1, numTracks);
+            const trackRemaining = Math.ceil(currentTrack * durationPerTrack - elapsed);
+
+            document.getElementById('elapsedTimer').textContent = formatTime(elapsed);
+            document.getElementById('remainingTimer').textContent = formatTime(remaining);
+            document.getElementById('trackTimer').textContent = formatTime(trackRemaining);
+            document.getElementById('currentTrack').textContent = `Композиция ${currentTrack} из ${numTracks}`;
+
+            document.getElementById('totalProgress').style.width = `${(elapsed / totalTime) * 100}%`;
+            document.getElementById('trackProgress').style.width = `${((elapsed % durationPerTrack) / durationPerTrack) * 100}%`;
+        }
+
+// Обновленный сброс
+        function resetApp() {
+            clearInterval(intervalId);
+            releaseWakeLock();
+            localStorage.removeItem('startTime');
+            localStorage.removeItem('totalTime');
+            localStorage.removeItem('numTracks');
+            timersSection.style.display = 'none';
+            form.style.display = 'block';
+        }
+
+        function handleReset() {
+            if(confirm('Вы уверены, что хотите сбросить таймер? Все данные будут удалены!')) {
+                resetApp();
+            }
+        }
+
+        // Модифицированная функция старта
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const totalMinutes = parseInt(document.getElementById('totalTime').value);
+            const numTracks = parseInt(document.getElementById('numTracks').value);
+            const totalTime = totalMinutes * 60;
+            const startTime = Math.floor(Date.now() / 1000);
+
+            localStorage.setItem('startTime', startTime);
+            localStorage.setItem('totalTime', totalTime);
+            localStorage.setItem('numTracks', numTracks);
+
+            updateTrackMarkers(numTracks);
+            requestWakeLock();
+            
+            form.style.display = 'none';
+            timersSection.style.display = 'block';
+            intervalId = setInterval(updateTimers, 1000);
+            updateTimers();
+        });
+
+        window.addEventListener('load', () => {
+            const startTime = localStorage.getItem('startTime');
+            if(startTime) {
+                const totalTime = parseInt(localStorage.getItem('totalTime'));
+                const now = Math.floor(Date.now() / 1000);
+                
+                if(now - startTime < totalTime) {
+                    form.style.display = 'none';
+                    timersSection.style.display = 'block';
+                    intervalId = setInterval(updateTimers, 1000);
+                    updateTimers();
+                } else {
+                    resetApp();
+                }
+            }
+        });
+        // Добавляем элемент статуса Wake Lock
+        const wakeLockStatus = document.createElement('div');
+        wakeLockStatus.id = 'wakeLockStatus';
+        document.body.appendChild(wakeLockStatus);
+    </script>
+</body>
+</html>
