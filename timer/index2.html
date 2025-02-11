@@ -24,7 +24,6 @@
             --radius-outer: 24px;
         }
 
-
         body {
             font-family: "IBM Plex Sans", serif;
             font-weight: 300;
@@ -48,7 +47,6 @@
             margin-top: 24px;
         }
 
-/* украшательсвто ------------------------------ */
         label.green500 {
             color: var(--green600);
         }
@@ -80,19 +78,15 @@
             font-size: 20px;
         }
 
-/*-----------------------------------------------*/
-
-
-        /* Добавляем анимацию */
         @keyframes blink {
+            0%, 100% { opacity: 1; }
             50% { opacity: 0.3; }
         }
 
         .blink {
-            animation: blink .3s infinite;
-            color: #ff4444 !important;
+            animation: blink 1s ease-in-out infinite;
+            color: var(--red500) !important;
         }
-
 
         input {
             width: 100%;
@@ -101,7 +95,6 @@
             padding: 8px;
             margin: 16px 0;
             box-sizing: border-box;
-            background: #333;
             border: 1px solid var(--border-color);
             border-radius: var(--radius-outer);
             font-size: 144px;
@@ -143,9 +136,7 @@
         }
 
         .timer {
-            font-size: 32px;
             margin: 16px 0;
-            font-weight: bold;
             letter-spacing: 2px;
         }
 
@@ -174,15 +165,15 @@
 
         .progress-bar {
             height: 100%;
-            transition: width 0.3s ease;
+            transition: width 0.5s cubic-bezier(0.33, 1, 0.68, 1);
         }
 
         .track-marker {
             position: absolute;
             top:0;
-            width: 2px;
+            width: 3px;
             height: 100%;
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(255, 255, 255, 0.15);
             z-index: 1;
         }
 
@@ -191,12 +182,12 @@
         }
 
         #currentTrack {
-         margin: 16px 0;
+            margin: 16px 0;
             color: var(--green400);
         }
 
         #resetBtn {
-            background: #ff4444;
+            background: var(--red500);
             margin-top: 24px;
         }
 
@@ -205,7 +196,7 @@
             bottom: 16px;
             right: 16px;
             font-size: 16px;
-            color: #4CAF50;
+            color: var(--green400);
         }
     </style>
 </head>
@@ -213,39 +204,33 @@
     <form id="configForm">
         <div class="input-group">
             <label class="green500">Длительность лайва</label>
-            <input type="number" id="totalTime" placeholder="0" required>
+            <input type="number" id="totalTime" placeholder="0" pattern="[0-9]*" inputmode="numeric" required>
         </div>
         <div class="input-group">
             <label class="red600">Треков</label>
-            <input type="number" id="numTracks" placeholder="0" required>
+            <input type="number" id="numTracks" placeholder="0" pattern="[0-9]*" inputmode="numeric" required>
         </div>
         <button type="submit">Старт</button>
     </form>
 
     <div id="timers" style="display: none;">
         <div class="timer-container">
-            
             <h4><span class="curTrack" id="currentTrack"></span><span class="trkCount" id="trackCount"></span></h4>
-
-            <!-- Текущая композиция -->
             <div><span id="trackTimer" class="timer main"></span></div>
             <div class="progress-container">
                 <div id="trackProgress" class="progress-bar"></div>
             </div>
             
-        <div class="row">
-            <div class="column">
-                <!-- Прошло -->
-                <h4>Прошло</h4>
-                <div><span id="elapsedTimer" class="timer secondary"></span></div>
+            <div class="row">
+                <div class="column">
+                    <h4>Прошло</h4>
+                    <div><span id="elapsedTimer" class="timer secondary"></span></div>
+                </div>
+                <div class="column">
+                    <h4>Осталось</h4>
+                    <div><span id="remainingTimer" class="timer secondary"></span></div>
+                </div>
             </div>
-            <div class="column">
-                <!-- Осталось -->
-                <h4>Осталось</h4>
-                <div><span id="remainingTimer" class="timer secondary"></span></div>
-            </div>
-        </div>
-
 
             <div class="progress-container">
                 <div id="totalProgress" class="progress-bar" style="background: var(--red500);"></div>
@@ -297,15 +282,13 @@
         function formatTime(seconds) {
             const mins = Math.floor(seconds / 60);
             const secs = seconds % 60;
-            return `${mins}:${secs.toString().padStart(2, '0')}`;
+            return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
         }
 
         function updateTimers() {
             const startTime = parseInt(localStorage.getItem('startTime'));
             const totalTime = parseInt(localStorage.getItem('totalTime'));
             const numTracks = parseInt(localStorage.getItem('numTracks'));
-            
-
 
             const now = Math.floor(Date.now() / 1000);
             const elapsed = now - startTime;
@@ -320,22 +303,15 @@
             const remaining = totalTime - elapsed;
             const durationPerTrack = totalTime / numTracks;
             const currentTrack = Math.min(Math.floor(elapsed / durationPerTrack) + 1, numTracks);
-            
-// Для мигания
-            const trackTimerElement = document.getElementById('trackTimer');
             const trackRemaining = Math.ceil(currentTrack * durationPerTrack - elapsed);
 
-
+            const trackTimerElement = document.getElementById('trackTimer');
             
-
-
-            // Обновление класса blink
             if (trackRemaining <= 60 && trackRemaining > 0) {
                 trackTimerElement.classList.add('blink');
             } else {
                 trackTimerElement.classList.remove('blink');
             }
-
 
             document.getElementById('elapsedTimer').textContent = formatTime(elapsed);
             document.getElementById('remainingTimer').textContent = formatTime(remaining);
@@ -355,8 +331,6 @@
             localStorage.removeItem('numTracks');
             document.getElementById('timers').style.display = 'none';
             document.getElementById('configForm').style.display = 'block';
-
-            // Очистка мигания
             document.getElementById('trackTimer').classList.remove('blink');
         }
 
@@ -371,6 +345,12 @@
             
             const totalMinutes = parseInt(document.getElementById('totalTime').value);
             const numTracks = parseInt(document.getElementById('numTracks').value);
+            
+            if(totalMinutes < 1 || numTracks < 1) {
+                alert('Введите значения больше нуля!');
+                return;
+            }
+
             const totalTime = totalMinutes * 60;
             const startTime = Math.floor(Date.now() / 1000);
 
@@ -386,6 +366,15 @@
             intervalId = setInterval(updateTimers, 1000);
             updateTimers();
         });
+
+        // Wake Lock оптимизация
+        document.addEventListener('visibilitychange', () => {
+            if(document.visibilityState === 'visible') {
+                requestWakeLock();
+            }
+        });
+
+        window.addEventListener('scroll', requestWakeLock);
 
         window.addEventListener('load', () => {
             const startTime = localStorage.getItem('startTime');
@@ -409,7 +398,7 @@
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 const swCode = `
-                    const CACHE_NAME = 'music-timer-v4';
+                    const CACHE_NAME = 'music-timer-v5';
                     self.addEventListener('install', (event) => {
                         event.waitUntil(
                             caches.open(CACHE_NAME)
