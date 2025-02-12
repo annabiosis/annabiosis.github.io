@@ -63,6 +63,7 @@
             --green600: #30DA98;
             --green400: #71FEAB;
             --green900: #0C7970;
+            --green1000: #042d29;
             --border-color: rgba(255,255,255,.2);
             --border-red: var(--red900);
             --border-green: var(--green900);
@@ -347,6 +348,30 @@
     display: none;
     z-index: 999;
 }
+
+.shortcuts {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+}
+
+.chip{
+    font-size: 20px;
+    line-height: 24px;
+    font-weight: 400;
+    padding: 8px 16px;
+    background-color: var(--green1000);
+    color: var(--green400);
+    border-radius: var(--radius-outer);
+}
+
+.chip.active {
+    background: var(--green600);
+    color: var(--green900);
+}
+
     </style>
 </head>
 <body>
@@ -363,6 +388,12 @@
         <div class="input-group">
             <label class="green500">Время (мин)</label>
             <input type="number" id="totalTime" placeholder="0" pattern="[0-9]*" inputmode="numeric" required>
+            <div class="shortcuts">
+                <div class="chip" data-minutes="30">30</div>
+                <div class="chip" data-minutes="60">60</div>
+                <div class="chip" data-minutes="90">90</div>
+                <div class="chip" data-minutes="120">120</div>
+            </div>
         </div>
         <div class="input-group">
             <label class="red600">Треков</label>
@@ -693,6 +724,43 @@ window.addEventListener('load', () => {
         }
     }
 });
+
+
+
+// Обработчик для чипов
+document.querySelectorAll('.chip').forEach(chip => {
+    chip.addEventListener('click', function() {
+        // Удаляем активный класс у всех чипов
+        document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+        
+        // Устанавливаем значение в поле ввода
+        const minutes = this.dataset.minutes;
+        document.getElementById('totalTime').value = minutes;
+        
+        // Добавляем активный класс текущему чипу
+        this.classList.add('active');
+        
+        // Триггерим событие изменения для обновления расчетов
+        document.getElementById('totalTime').dispatchEvent(new Event('input'));
+    });
+});
+
+// Сброс чипов при ручном вводе
+document.getElementById('totalTime').addEventListener('input', function() {
+    const chips = document.querySelectorAll('.chip');
+    const currentValue = this.value;
+    
+    // Проверяем, совпадает ли значение с чипом
+    const activeChip = Array.from(chips).find(chip => 
+        chip.dataset.minutes === currentValue
+    );
+    
+    if(!activeChip) {
+        chips.forEach(chip => chip.classList.remove('active'));
+    }
+});
+
+
 
 // Wake Lock при возвращении на вкладку
 document.addEventListener('visibilitychange', () => {
