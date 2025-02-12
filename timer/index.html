@@ -403,6 +403,23 @@
     <div id="wakeLockStatus"></div>
 
     <script>
+
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', async () => {
+        try {
+            const registration = await navigator.serviceWorker.register('/sw.js');
+            console.log('ServiceWorker зарегистрирован');
+        } catch (err) {
+            console.log('Ошибка регистрации ServiceWorker:', err);
+        }
+    });
+}
+
+// Обработчик обновлений
+navigator.serviceWorker.addEventListener('controllerchange', () => {
+    window.location.reload();
+});
+
 let wakeLock = null;
 let intervalId;
 let state = {
@@ -684,28 +701,6 @@ document.addEventListener('visibilitychange', () => {
     }
 });
 
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                const swCode = `
-                    const CACHE_NAME = 'music-timer-v4';
-                    self.addEventListener('install', (event) => {
-                        event.waitUntil(
-                            caches.open(CACHE_NAME)
-                                .then(cache => cache.addAll([location.href]))
-                        );
-                    });
-                    self.addEventListener('fetch', (event) => {
-                        event.respondWith(
-                            caches.match(event.request)
-                                .then(response => response || fetch(event.request))
-                        );
-                    });
-                `;
-                
-                const blob = new Blob([swCode], { type: 'application/javascript' });
-                navigator.serviceWorker.register(URL.createObjectURL(blob));
-            });
-        }
     </script>
 </body>
 </html>
