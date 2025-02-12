@@ -1,16 +1,16 @@
 // sw.js
 const CACHE_NAME = 'music-timer-v12';
-const OFFLINE_URL = '/index.html';
+const OFFLINE_URL = '/timer/index.html';
 const ASSETS = [
-    '/',
-    '/index.html',
-    '/icons/apple-touch-icon-120x120.png',
-    '/icons/apple-touch-icon-152x152.png',
-    '/icons/apple-touch-icon-167x167.png',
-    '/icons/apple-touch-icon-180x180.png',
-    '/icons/icon-192x192.png',
-    '/icons/icon-512x512.png',
-    '/icons/favicon.svg',
+    '/timer/',
+    '/timer//index.html',
+    '/timer//icons/apple-touch-icon-120x120.png',
+    '/timer//icons/apple-touch-icon-152x152.png',
+    '/timer//icons/apple-touch-icon-167x167.png',
+    '/timer//icons/apple-touch-icon-180x180.png',
+    '/timer//icons/icon-192x192.png',
+    '/timer//icons/icon-512x512.png',
+    '/timer//icons/favicon.svg',
     OFFLINE_URL
 ];
 
