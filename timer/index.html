@@ -687,7 +687,7 @@ document.addEventListener('visibilitychange', () => {
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 const swCode = `
-                    const CACHE_NAME = 'music-timer-v6';
+                    const CACHE_NAME = 'music-timer-v4';
                     self.addEventListener('install', (event) => {
                         event.waitUntil(
                             caches.open(CACHE_NAME)
