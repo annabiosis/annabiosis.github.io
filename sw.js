@@ -10,8 +10,7 @@ const ASSETS = [
     '/timer/icons/apple-touch-icon-180x180.png',
     '/timer/icons/icon-192x192.png',
     '/timer/icons/icon-512x512.png',
-    '/timer/icons/favicon.svg',
-    OFFLINE_URL
+    '/timer/icons/favicon.svg'
 ];
 
 // Установка и кэширование ресурсов
