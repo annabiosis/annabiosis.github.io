@@ -4,6 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Музыкальный таймер</title>
+    <link rel="icon" href="icons/favicon.svg" type="image/svg+xml">
+    <!-- Apple Touch Icons (разные размеры для разных устройств) -->
+    <link rel="apple-touch-icon" href="icons/apple-touch-icon-180x180.png" sizes="180x180">
+    <link rel="apple-touch-icon" href="icons/apple-touch-icon-167x167.png" sizes="167x167">
+    <link rel="apple-touch-icon" href="icons/apple-touch-icon-152x152.png" sizes="152x152">
+    <link rel="apple-touch-icon" href="icons/apple-touch-icon-120x120.png" sizes="120x120">
+    <!-- Манифест веб-приложения -->
+    <link rel="manifest" href="manifest.json">
+    <!-- Шрифты -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
@@ -59,6 +68,10 @@
             --border-green: var(--green900);
             --grey40: rgba(255,255,255,.4);
             --radius-outer: 24px;            
+        }
+
+        body, button {
+            font-family: "IBM Plex Sans", serif;
         }
 
         body {
@@ -260,9 +273,92 @@
             font-size: 16px;
             color: var(--green400);
         }
+
+
+/*        -----------------------------------*/
+
+/* Стили для бургер-меню */
+.burger-menu {
+    position: fixed;
+    top: 24px;
+    right: 24px;
+    z-index: 1000;
+}
+
+.burger-icon {
+    cursor: pointer;
+    font-size: 32px;
+    color: var(--red500);
+    padding: 10px;
+    transition: transform 0.3s;
+}
+
+.menu-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 100%;
+    background: var(--surface-200);
+    border-radius: 8px;
+    padding: 16px;
+    min-width: 180px;
+}
+
+.menu-content.show {
+    display: block;
+    animation: slideDown 0.3s ease;
+}
+
+#hiddenResetBtn {
+    background: var(--red500);
+    border: 1px solid var(--border-red);
+    color: var(--red100);
+    padding: 12px;
+    width: 100%;
+    font-size: 16px;
+    margin: 0;
+    transition: all 0.3s;
+}
+
+#hiddenResetBtn:active {
+    background: var(--error-100);
+    color: var(--text-on-primary);
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Затемнение фона при открытом меню */
+.menu-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    display: none;
+    z-index: 999;
+}
     </style>
 </head>
 <body>
+
+    <div class="burger-menu">
+        <div class="burger-icon" onclick="toggleMenu()">☰</div>
+        <div class="menu-content">
+            <button id="hiddenResetBtn" onclick="handleReset()">Сбросить всё</button>
+        </div>
+    </div>
+
+
     <form id="configForm">
         <div class="input-group">
             <label class="green500">Длительность (мин)</label>
@@ -277,7 +373,6 @@
 
     <div id="timers" style="display: none;">
         <div class="timer-container">
-            <button id="resetBtn" onclick="handleReset()">Сброс</button>
             <h4><span class="curTrack" id="currentTrack"></span><span class="trkCount" id="trackCount"></span></h4>
             <div>Средняя длина: <span id="trackDuration"></span></div>
             <div><span id="trackTimer" class="timer main"></span></div>
@@ -317,6 +412,30 @@ let state = {
     currentTrack: 1,         // Текущий трек
     spentTimes: []           // Массив времени по трекам
 };
+let isMenuOpen = false;
+
+function toggleMenu() {
+    const menu = document.querySelector('.menu-content');
+    let backdrop = document.querySelector('.menu-backdrop'); // Используем let вместо const
+    
+    isMenuOpen = !isMenuOpen;
+    
+    if(isMenuOpen) {
+        menu.classList.add('show');
+        if(!backdrop) {
+            backdrop = document.createElement('div'); // Создаем и сохраняем в переменную
+            backdrop.className = 'menu-backdrop';
+            backdrop.onclick = toggleMenu;
+            document.body.appendChild(backdrop);
+        }
+        backdrop.style.display = 'block'; // Теперь backdrop гарантированно существует
+    } else {
+        menu.classList.remove('show');
+        if(backdrop) {
+            backdrop.style.display = 'none';
+        }
+    }
+}
 
 // Блокировка экрана
 async function requestWakeLock() {
@@ -506,6 +625,7 @@ function resetApp() {
 }
 
 function handleReset() {
+    toggleMenu(); // Закрываем меню
     if(confirm('Вы уверены, что хотите сбросить таймер? Все данные будут удалены!')) {
         resetApp();
     }
