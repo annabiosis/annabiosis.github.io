@@ -1,7 +1,7 @@
 {
   "name": "MuTimer",
   "short_name": "MuTimer",
-  "start_url": "/",
+  "start_url": "/timer",
   "display": "standalone",
   "background_color": "#272727",
   "theme_color": "#000000",
