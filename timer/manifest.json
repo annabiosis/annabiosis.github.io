@@ -3,7 +3,7 @@
   "short_name": "MuTimer",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#000000",
+  "background_color": "#272727",
   "theme_color": "#0C7970",
   "icons": [
     {
