@@ -47,6 +47,7 @@
             --bg-color: #000;
             --text-color: #fff;
             --primary-color: #71FEAB;
+            --red900: #7A0919;
             --red600: #DB3323;
             --red500: #FF5230;
             --red100: #FFCCAC;
@@ -54,6 +55,8 @@
             --green400: #71FEAB;
             --green900: #0C7970;
             --border-color: rgba(255,255,255,.2);
+            --border-red: var(--red900);
+            --border-green: var(--green900);
             --grey40: rgba(255,255,255,.4);
             --radius-outer: 24px;            
         }
@@ -91,10 +94,20 @@
 
         input#totalTime {
             color: var(--green400);
+            border-color: var(--border-green);
+        }
+
+        input#totalTime::placeholder {
+            color: var(--green900);
         }
 
         input#numTracks {
             color: var(--red600);
+            border-color: var(--border-red);
+        }
+
+        input#numTracks::placeholder {
+            color: var(--red900);
         }
 
         h4 {
@@ -126,7 +139,8 @@
             width: 100%;
             font-family: "IBM Plex Sans", serif;
             font-weight: 100;
-            padding: 8px;
+            padding: 0 0 8px 0;
+            height:152px;
             margin: 16px 0;
             box-sizing: border-box;
             border: 1px solid var(--border-color);
@@ -134,6 +148,10 @@
             font-size: 144px;
             text-align: center;
             background-color: transparent;
+        }
+
+        input::placeholder {
+            color: var(--grey40);
         }
 
         button {
@@ -203,7 +221,6 @@
 
         .progress-bar {
             height: 100%;
-/*            transition: width 0.5s cubic-bezier(0.33, 1, 0.68, 1);*/
         }
 
 
@@ -220,12 +237,18 @@
         #resetBtn {
             background: var(--red500);
             color: var(--red100);
-            margin: 0 0 48px 0;
+            margin: 0 0 32px 0;
         }
 
 
 
         #nextTrackBtn {
+            background-color: var(--green900);
+            color: var(--green400);
+        }
+
+        #nextTrackBtn:disabled {
+            opacity: .2;
             background-color: var(--green900);
             color: var(--green400);
         }
@@ -242,7 +265,7 @@
 <body>
     <form id="configForm">
         <div class="input-group">
-            <label class="green500">Длительность лайва</label>
+            <label class="green500">Длительность (мин)</label>
             <input type="number" id="totalTime" placeholder="0" pattern="[0-9]*" inputmode="numeric" required>
         </div>
         <div class="input-group">
@@ -387,6 +410,8 @@ function nextTrack() {
     const now = Date.now();
     const totalSpent = state.spentTimes.reduce((a, b) => a + b, 0);
     const currentTrackTime = now - state.startTime - totalSpent;
+
+    if(currentTrackTime <= 0) return;
     
     state.spentTimes.push(currentTrackTime);
     state.currentTrack++;
@@ -409,6 +434,11 @@ function updateTimers() {
         finishPerformance();
         return;
     }
+
+    // Управление состоянием кнопки
+    const nextTrackBtn = document.getElementById('nextTrackBtn');
+    const isLastTrack = state.currentTrack === state.originalTracks;
+    nextTrackBtn.disabled = isLastTrack;
 
     const totalSpent = state.spentTimes.reduce((a, b) => a + b, 0);
     const remainingTracks = state.originalTracks - state.currentTrack + 1;
@@ -472,6 +502,7 @@ function resetApp() {
     };
     document.getElementById('timers').style.display = 'none';
     document.getElementById('configForm').style.display = 'block';
+    document.getElementById('nextTrackBtn').disabled = false;
 }
 
 function handleReset() {
