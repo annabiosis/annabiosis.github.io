@@ -47,8 +47,7 @@
 		body {
 			font-family: "IBM Plex Sans", sans-serif;
 			font-weight: 300;
-			padding: 24px;
-			max-width: 600px;
+			padding: 8vw;
 			margin: 0 auto;
 			background-color: var(--bg-color);
 			color: var(--text-color);
@@ -57,7 +56,6 @@
 		label {
 			font-size: 32px;
 			line-height: 40px;
-			text-align: center;
 			display: block;
 			width: 100%;
 			margin-top: 24px;
@@ -83,7 +81,6 @@
 		}
 
 		button {
-			width: 100%;
 			padding: 16px;
 			background: var(--primary-color);
 			color: var(--green900);
@@ -139,7 +136,7 @@
 			font-size: 4vw;
 			line-height: 8vw;
 			font-weight: 400;
-			margin: 16px;
+			margin: 16px 0 0 0;
 		}
 
 		.input-group {
@@ -170,17 +167,17 @@
 
 		.timer-container {
 			margin: 0 0 24px 0;
-			text-align: center;
 		}
-
+		
+		/*Таймеры*/
 		.timer {
 			margin: 16px 0;
 			letter-spacing: 2px;
 		}
 
 		.timer.main {
-			font-size: 24vw;
-			line-height: 32vw;
+			font-size: 28vw;
+			line-height: 36vw;
 			font-weight: 100;
 			color: var(--green400);
 		}
@@ -191,7 +188,8 @@
 			font-weight: 300;
 			color: var(--grey40);
 		}
-
+		
+		/*Прогресс бары*/
 		.progress-container {
 			height: 48px;
 			background: #333;
@@ -218,6 +216,7 @@
 			color: var(--green400);
 		}
 
+		/*Кнопки*/
 		#resetBtn {
 			background: var(--red500);
 			color: var(--red100);
@@ -235,6 +234,7 @@
 			color: var(--green400);
 		}
 
+		/*Статус управления подсветкой*/
 		#wakeLockStatus {
 			position: fixed;
 			bottom: 16px;
@@ -246,8 +246,8 @@
 		/* Стили для бургер-меню */
 		.burger-menu {
 			position: fixed;
-			top: 24px;
-			right: 24px;
+			top: 8vw;
+			right: 8vw;
 			z-index: 1000;
 		}
 
@@ -303,6 +303,7 @@
 			z-index: 999;
 		}
 
+		/*Чипы пресетов*/
 		.shortcuts {
 			display: flex;
 			flex-direction: row;
@@ -375,12 +376,12 @@
 			<button type="submit">Старт</button>
 		</form>
 		<!-- Таймер -->
-		<div id="timers" style="display: none;">
+		<div id="timers" class="timers" style="display: none;">
 			<div class="timer-container">
 				<h4>
 					<span class="curTrack" id="currentTrack"></span> / <span class="trkCount" id="trackCount"></span>
 				</h4>
-				<div>Средняя длина: <span id="trackDuration"></span></div>
+				<div>~<span id="trackDuration"></span></div>
 				<div><span id="trackTimer" class="timer main"></span></div>
 				<div class="progress-container">
 					<div id="trackProgress" class="progress-bar"></div>
