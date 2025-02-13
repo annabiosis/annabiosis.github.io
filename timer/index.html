@@ -1,782 +1,739 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Музыкальный таймер</title>
-    <link rel="icon" href="icons/favicon.svg" type="image/svg+xml">
-    <!-- Apple Touch Icons (разные размеры для разных устройств) -->
-    <link rel="apple-touch-icon" href="icons/apple-touch-icon-180x180.png" sizes="180x180">
-    <link rel="apple-touch-icon" href="icons/apple-touch-icon-167x167.png" sizes="167x167">
-    <link rel="apple-touch-icon" href="icons/apple-touch-icon-152x152.png" sizes="152x152">
-    <link rel="apple-touch-icon" href="icons/apple-touch-icon-120x120.png" sizes="120x120">
-    <!-- Манифест веб-приложения -->
-    <link rel="manifest" href="manifest.json">
-    <!-- Шрифты -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-              /* Surface colors */
-              --surface-100: #000000;      /* Основной фон */
-              --surface-200: #111111;      /* Вторичный фон */
-              --surface-300: #1A1A1A;      /* Третичный фон */
-
-              /* Primary color palette */
-              --primary-100: #0C7970;      /* Базовый основной цвет */
-              --primary-200: #1A8F85;      /* Акцент основного цвета */
-              --primary-300: #075C55;      /* Тёмный вариант основного */
-              --primary-400: #0C797033;    /* Прозрачный вариант (20% opacity) */
-
-              /* Secondary color palette */
-              --secondary-100: #FF5230;     /* Базовый акцентный цвет */
-              --secondary-200: #FF6A4D;     /* Светлый акцент */
-              --secondary-300: #CC4126;     /* Тёмный акцент */
-              --secondary-400: #FF523033;   /* Прозрачный вариант (20% opacity) */
-
-              /* Text colors */
-              --text-primary: #FFFFFF;      /* Основной текст */
-              --text-secondary: #A0A0A0;    /* Вторичный текст */
-              --text-on-primary: #FFFFFF;   /* Текст на основном цвете */
-              --text-on-secondary: #000000; /* Текст на акцентном цвете */
-
-              /* Status colors */
-              --error-100: #FF4444;         /* Цвет ошибок */
-              --success-100: #00CC66;       /* Цвет успеха */
-              --warning-100: #FFAA00;       /* Цвет предупреждений */
-
-              /* Additional neutrals */
-              --neutral-100: #FFFFFF;       /* Белый */
-              --neutral-200: #D9D9D9;       /* Светло-серый */
-              --neutral-300: #7F7F7F;       /* Средне-серый */
-
-
-
-            --bg-color: #000;
-            --text-color: #fff;
-            --primary-color: #71FEAB;
-            --red900: #7A0919;
-            --red600: #DB3323;
-            --red500: #FF5230;
-            --red100: #FFCCAC;
-            --green600: #30DA98;
-            --green400: #71FEAB;
-            --green900: #0C7970;
-            --green1000: #042d29;
-            --border-color: rgba(255,255,255,.2);
-            --border-red: var(--red900);
-            --border-green: var(--green900);
-            --grey40: rgba(255,255,255,.4);
-            --radius-outer: 24px;            
-        }
-
-        body, button {
-            font-family: "IBM Plex Sans", serif;
-        }
-
-        body {
-            font-family: "IBM Plex Sans", serif;
-            font-weight: 300;
-            padding: 24px;
-            max-width: 600px;
-            margin: 0 auto;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-        }
-
-        .input-group {
-            margin-bottom: 16px;
-        }
-
-        label {
-            font-size: 32px;
-            line-height: 40px;
-            text-align: center;
-            display: block;
-            width: 100%;
-            margin-top: 24px;
-        }
-
-        label.green500 {
-            color: var(--green600);
-        }
-
-        label.red600, h4 {
-            color: var(--red600);
-        }
-
-        input#totalTime {
-            color: var(--green400);
-            border-color: var(--border-green);
-        }
-
-        input#totalTime:focus {
-            outline: 4px double var(--green400);
-        }
-
-        input#totalTime::placeholder {
-            color: var(--green900);
-        }
-
-        input#numTracks {
-            color: var(--red600);
-            border-color: var(--border-red);
-        }
-
-        input#numTracks:focus {
-            outline: 4px double var(--red500);
-        }
-
-        input#numTracks::placeholder {
-            color: var(--red900);
-        }
-
-        h4 {
-            font-size: 32px;
-            line-height: 40px;
-            font-weight: 400;
-            margin: 16px;
-        }
-
-        .curTrack {
-            font-size: 48px;
-        }
-
-        .trkCount {
-            font-size: 20px;
-        }
-
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.3; }
-        }
-
-        .blink {
-            animation: blink .3s ease-in-out infinite;
-            color: var(--red500) !important;
-        }
-
-        input {
-            width: 100%;
-            font-family: "IBM Plex Sans", serif;
-            font-weight: 100;
-            padding: 0 0 8px 0;
-            height:152px;
-            margin: 16px 0;
-            box-sizing: border-box;
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius-outer);
-            font-size: 144px;
-            text-align: center;
-            background-color: transparent;
-        }
-
-        input::placeholder {
-            color: var(--grey40);
-        }
-
-        button {
-            width: 100%;
-            padding: 16px;
-            background: var(--primary-color);
-            color: var(--green900);
-            border: none;
-            border-radius: var(--radius-outer);
-            cursor: pointer;
-            transition: opacity 0.3s;
-            font-size: 32px;
-            line-height: 40px;
-            font-weight: 500;
-            margin-top: 24px;
-        }
-
-        button:active {
-            opacity: 0.8;
-        }
-
-        .row {
-            display: flex;
-            flex-direction: row;
-        }
-
-        .column {
-            width: 100%;
-        }
-
-        .timer-container {
-            margin: 0 0 24px 0;
-            text-align: center;
-        }
-
-        .timer {
-            margin: 16px 0;
-            letter-spacing: 2px;
-        }
-
-        .timer.main {
-            font-size: 112px;
-            line-height: 120px;
-            font-weight: 100;
-            color: var(--green400);
-        }
-
-        .timer.secondary {
-            font-size: 48px;
-            line-height: 56px;
-            font-weight: 300;
-            color: var(--grey40);
-        }
-
-        .progress-container {
-            height: 48px;
-            background: #333;
-            border-radius: var(--radius-outer);
-            margin: 24px 0;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .progress-container.total-pb {
-            height: 24px;
-        }
-
-        .progress-bar {
-            height: 100%;
-        }
-
-
-
-        #trackProgress {
-            background: var(--green400);
-        }
-
-        #currentTrack {
-            margin: 16px 0;
-            color: var(--green400);
-        }
-
-        #resetBtn {
-            background: var(--red500);
-            color: var(--red100);
-            margin: 0 0 32px 0;
-        }
-
-
-
-        #nextTrackBtn {
-            background-color: var(--green900);
-            color: var(--green400);
-        }
-
-        #nextTrackBtn:disabled {
-            opacity: .2;
-            background-color: var(--green900);
-            color: var(--green400);
-        }
-
-        #wakeLockStatus {
-            position: fixed;
-            bottom: 16px;
-            right: 16px;
-            font-size: 16px;
-            color: var(--green400);
-        }
-
-
-/*        -----------------------------------*/
-
-/* Стили для бургер-меню */
-.burger-menu {
-    position: fixed;
-    top: 24px;
-    right: 24px;
-    z-index: 1000;
-}
-
-.burger-icon {
-    cursor: pointer;
-    font-size: 32px;
-    color: var(--red500);
-    padding: 10px;
-    transition: transform 0.3s;
-}
-
-.menu-content {
-    display: none;
-    position: absolute;
-    right: 0;
-    top: 100%;
-    background: var(--surface-200);
-    border-radius: 8px;
-    padding: 16px;
-    min-width: 180px;
-}
-
-.menu-content.show {
-    display: block;
-    animation: slideDown 0.3s ease;
-}
-
-#hiddenResetBtn {
-    background: var(--red500);
-    border: 1px solid var(--border-red);
-    color: var(--red100);
-    padding: 12px;
-    width: 100%;
-    font-size: 16px;
-    margin: 0;
-    transition: all 0.3s;
-}
-
-#hiddenResetBtn:active {
-    background: var(--error-100);
-    color: var(--text-on-primary);
-}
-
-@keyframes slideDown {
-    from {
-        opacity: 0;
-        transform: translateY(-10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* Затемнение фона при открытом меню */
-.menu-backdrop {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.5);
-    display: none;
-    z-index: 999;
-}
-
-.shortcuts {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    gap: 16px;
-}
-
-.chip{
-    font-size: 20px;
-    line-height: 24px;
-    font-weight: 400;
-    padding: 8px 16px;
-    background-color: var(--green1000);
-    color: var(--green400);
-    border-radius: var(--radius-outer);
-}
-
-.chip.active {
-    background: var(--green600);
-    color: var(--green900);
-}
-
-    </style>
-</head>
-<body>
-
-    <div class="burger-menu">
-        <div class="burger-icon" onclick="toggleMenu()">☰</div>
-        <div class="menu-content">
-            <button id="hiddenResetBtn" onclick="handleReset()">Сбросить всё</button>
-        </div>
-    </div>
-
-
-    <form id="configForm">
-        <div class="input-group">
-            <label class="green500">Время (мин)</label>
-            <input type="number" id="totalTime" placeholder="0" pattern="[0-9]*" inputmode="numeric" required>
-            <div class="shortcuts">
-                <div class="chip" data-minutes="30">30</div>
-                <div class="chip" data-minutes="60">60</div>
-                <div class="chip" data-minutes="90">90</div>
-                <div class="chip" data-minutes="120">120</div>
-            </div>
-        </div>
-        <div class="input-group">
-            <label class="red600">Треков</label>
-            <input type="number" id="numTracks" placeholder="0" pattern="[0-9]*" inputmode="numeric" required>
-        </div>
-        <button type="submit">Старт</button>
-    </form>
-
-    <div id="timers" style="display: none;">
-        <div class="timer-container">
-            <h4><span class="curTrack" id="currentTrack"></span><span class="trkCount" id="trackCount"></span></h4>
-            <div>Средняя длина: <span id="trackDuration"></span></div>
-            <div><span id="trackTimer" class="timer main"></span></div>
-            <div class="progress-container">
-                <div id="trackProgress" class="progress-bar"></div>
-            </div>
-            
-            <div class="row">
-                <div class="column">
-                    <h4>Прошло</h4>
-                    <div><span id="elapsedTimer" class="timer secondary"></span></div>
-                </div>
-                <div class="column">
-                    <h4>Осталось</h4>
-                    <div><span id="remainingTimer" class="timer secondary"></span></div>
-                </div>
-            </div>
-
-            <div class="progress-container total-pb">
-                <div id="totalProgress" class="progress-bar" style="background: var(--red500);"></div>
-            </div>
-            
-            <button id="nextTrackBtn" onclick="nextTrack()">Пропуск</button>
-            
-        </div>
-    </div>
-
-    <div id="wakeLockStatus"></div>
-
-    <script>
-// проверка поддержки Service Worker
-if ('serviceWorker' in navigator) {
-    window.addEventListener('load', async () => {
-        try {
-            const registration = await navigator.serviceWorker.register('/sw.js');
-            console.log('ServiceWorker зарегистрирован');
-        } catch (err) {
-            console.log('Ошибка регистрации ServiceWorker:', err);
-        }
-    });
-}
-
-// Обработчик обновлений
-navigator.serviceWorker.addEventListener('controllerchange', () => {
-    window.location.reload();
-});
-
-let wakeLock = null;
-let intervalId;
-let state = {
-    startTime: null,         // Время начала в миллисекундах
-    totalDuration: null,     // Общая длительность в миллисекундах
-    originalTracks: null,    // Изначальное количество треков
-    currentTrack: 1,         // Текущий трек
-    spentTimes: []           // Массив времени по трекам
-};
-let isMenuOpen = false;
-
-function toggleMenu() {
-    const menu = document.querySelector('.menu-content');
-    let backdrop = document.querySelector('.menu-backdrop'); // Используем let вместо const
-    
-    isMenuOpen = !isMenuOpen;
-    
-    if(isMenuOpen) {
-        menu.classList.add('show');
-        if(!backdrop) {
-            backdrop = document.createElement('div'); // Создаем и сохраняем в переменную
-            backdrop.className = 'menu-backdrop';
-            backdrop.onclick = toggleMenu;
-            document.body.appendChild(backdrop);
-        }
-        backdrop.style.display = 'block'; // Теперь backdrop гарантированно существует
-    } else {
-        menu.classList.remove('show');
-        if(backdrop) {
-            backdrop.style.display = 'none';
-        }
-    }
-}
-
-// Блокировка экрана
-async function requestWakeLock() {
-    try {
-        if ('wakeLock' in navigator) {
-            wakeLock = await navigator.wakeLock.request('screen');
-            document.getElementById('wakeLockStatus').textContent = 'Экран активен';
-        }
-    } catch (err) {
-        console.error('Ошибка Wake Lock:', err);
-    }
-}
-
-function releaseWakeLock() {
-    if (wakeLock !== null && !wakeLock.released) {
-        wakeLock.release();
-        wakeLock = null;
-    }
-}
-
-// Форматирование времени
-function formatTime(ms) {
-    const totalMs = Math.max(0, ms);
-    const totalSeconds = Math.floor(totalMs / 1000);
-    const mins = Math.floor(totalSeconds / 60);
-    const secs = totalSeconds % 60;
-    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-}
-
-// Сохранение состояния
-function saveState() {
-    localStorage.setItem('timerState', JSON.stringify(state));
-}
-
-// Восстановление состояния
-function restoreState() {
-    const savedState = localStorage.getItem('timerState');
-    if (!savedState) return;
-
-    try {
-        const parsed = JSON.parse(savedState);
-        const now = Date.now();
-        
-        // Проверка валидности сохраненных данных
-        if (!parsed.startTime || !parsed.totalDuration || !parsed.originalTracks) {
-            localStorage.removeItem('timerState');
-            return;
-        }
-
-        // Проверка не завершено ли выступление
-        const timePassed = now - parsed.startTime;
-        if (timePassed >= parsed.totalDuration) {
-            localStorage.removeItem('timerState');
-            return;
-        }
-
-        // Восстановление состояния
-        state = {
-            startTime: parsed.startTime,
-            totalDuration: parsed.totalDuration,
-            originalTracks: parsed.originalTracks,
-            currentTrack: parsed.currentTrack,
-            spentTimes: parsed.spentTimes
-        };
-
-        // Корректировка текущего трека
-        const totalSpent = state.spentTimes.reduce((a, b) => a + b, 0);
-        const trackDuration = (state.totalDuration - totalSpent) / 
-                            (state.originalTracks - state.currentTrack + 1);
-        const currentTrackElapsed = timePassed - totalSpent;
-
-        // Автоматический переход завершенных треков
-        while (currentTrackElapsed > trackDuration && 
-              state.currentTrack < state.originalTracks) {
-            state.spentTimes.push(trackDuration);
-            state.currentTrack++;
-            totalSpent += trackDuration;
-            trackDuration = (state.totalDuration - totalSpent) / 
-                          (state.originalTracks - state.currentTrack + 1);
-        }
-
-        saveState(); // Обновляем сохраненное состояние
-    } catch (e) {
-        console.error('Ошибка восстановления:', e);
-        localStorage.removeItem('timerState');
-    }
-}
-
-// Обработчик кнопки "Пропуск"
-function nextTrack() {
-    const now = Date.now();
-    const totalSpent = state.spentTimes.reduce((a, b) => a + b, 0);
-    const currentTrackTime = now - state.startTime - totalSpent;
-
-    if(currentTrackTime <= 0) return;
-    
-    state.spentTimes.push(currentTrackTime);
-    state.currentTrack++;
-    
-    if(state.currentTrack > state.originalTracks) {
-        finishPerformance();
-        return;
-    }
-    
-    saveState();
-    updateTimers();
-}
-
-// Обновление таймеров
-function updateTimers() {
-    const now = Date.now();
-    const totalElapsed = now - state.startTime;
-    
-    if(totalElapsed >= state.totalDuration) {
-        finishPerformance();
-        return;
-    }
-
-    // Управление состоянием кнопки
-    const nextTrackBtn = document.getElementById('nextTrackBtn');
-    const isLastTrack = state.currentTrack === state.originalTracks;
-    nextTrackBtn.disabled = isLastTrack;
-
-    const totalSpent = state.spentTimes.reduce((a, b) => a + b, 0);
-    const remainingTracks = state.originalTracks - state.currentTrack + 1;
-    const trackDuration = (state.totalDuration - totalSpent) / remainingTracks;
-    const trackElapsed = totalElapsed - totalSpent;
-    let trackRemaining = trackDuration - trackElapsed;
-
-    // Автоматический переход при отрицательном времени
-    if(trackRemaining <= 0 && remainingTracks > 1) {
-        state.spentTimes.push(trackDuration);
-        state.currentTrack++;
-        saveState();
-        return updateTimers(); // Рекурсивно обновляем
-    }
-
-    // Обновление интерфейса
-    document.getElementById('currentTrack').textContent = state.currentTrack;
-    document.getElementById('trackCount').textContent = ` / ${state.originalTracks}`;
-    document.getElementById('trackTimer').textContent = formatTime(trackRemaining);
-    document.getElementById('elapsedTimer').textContent = formatTime(totalElapsed);
-    document.getElementById('remainingTimer').textContent = formatTime(state.totalDuration - totalElapsed);
-    document.getElementById('trackDuration').textContent = formatTime(trackDuration);
-
-    // Прогресс-бары
-    const totalProgress = (totalElapsed / state.totalDuration) * 100;
-    const trackProgress = (trackElapsed / trackDuration) * 100;
-    
-    document.getElementById('totalProgress').style.width = `${totalProgress}%`;
-    document.getElementById('trackProgress').style.width = `${trackProgress}%`;
-
-    // Мигание
-    const trackTimerElement = document.getElementById('trackTimer');
-    const trackProgressBar = document.getElementById('trackProgress');
-    if (trackRemaining <= 30000) { // 30 секунд
-        trackTimerElement.classList.add('blink');
-        trackProgressBar.classList.add('blink');
-    } else {
-        trackTimerElement.classList.remove('blink');
-        trackProgressBar.classList.remove('blink');
-    }
-}
-
-// Завершение выступления
-function finishPerformance() {
-    clearInterval(intervalId);
-    alert('Выступление завершено!');
-    resetApp();
-}
-
-// Сброс приложения
-function resetApp() {
-    clearInterval(intervalId);
-    releaseWakeLock();
-    localStorage.removeItem('timerState');
-    state = {
-        startTime: null,
-        totalDuration: null,
-        originalTracks: null,
-        currentTrack: 1,
-        spentTimes: []
-    };
-    document.getElementById('timers').style.display = 'none';
-    document.getElementById('configForm').style.display = 'block';
-    document.getElementById('nextTrackBtn').disabled = false;
-}
-
-function handleReset() {
-    toggleMenu(); // Закрываем меню
-    if(confirm('Вы уверены, что хотите сбросить таймер? Все данные будут удалены!')) {
-        resetApp();
-    }
-}
-
-// Инициализация формы
-document.getElementById('configForm').addEventListener('submit', (e) => {
-    e.preventDefault();
-    
-    const totalMinutes = parseInt(document.getElementById('totalTime').value);
-    const numTracks = parseInt(document.getElementById('numTracks').value);
-    
-    if(totalMinutes < 1 || numTracks < 1) {
-        alert('Введите значения больше нуля!');
-        return;
-    }
-
-    state = {
-        startTime: Date.now(),
-        totalDuration: totalMinutes * 60 * 1000,
-        originalTracks: numTracks,
-        currentTrack: 1,
-        spentTimes: []
-    };
-    
-    saveState();
-    requestWakeLock();
-    document.getElementById('configForm').style.display = 'none';
-    document.getElementById('timers').style.display = 'block';
-    intervalId = setInterval(updateTimers, 100);
-    updateTimers();
-});
-
-// Восстановление при загрузке
-window.addEventListener('load', () => {
-    restoreState();
-    
-    if (state.startTime) {
-        const timePassed = Date.now() - state.startTime;
-        if (timePassed < state.totalDuration) {
-            document.getElementById('configForm').style.display = 'none';
-            document.getElementById('timers').style.display = 'block';
-            intervalId = setInterval(updateTimers, 100);
-            requestWakeLock();
-            updateTimers();
-        } else {
-            resetApp();
-        }
-    }
-});
-
-
-
-// Обработчик для чипов
-document.querySelectorAll('.chip').forEach(chip => {
-    chip.addEventListener('click', function() {
-        // Удаляем активный класс у всех чипов
-        document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
-        
-        // Устанавливаем значение в поле ввода
-        const minutes = this.dataset.minutes;
-        document.getElementById('totalTime').value = minutes;
-        
-        // Добавляем активный класс текущему чипу
-        this.classList.add('active');
-        
-        // Триггерим событие изменения для обновления расчетов
-        document.getElementById('totalTime').dispatchEvent(new Event('input'));
-    });
-});
-
-// Сброс чипов при ручном вводе
-document.getElementById('totalTime').addEventListener('input', function() {
-    const chips = document.querySelectorAll('.chip');
-    const currentValue = this.value;
-    
-    // Проверяем, совпадает ли значение с чипом
-    const activeChip = Array.from(chips).find(chip => 
-        chip.dataset.minutes === currentValue
-    );
-    
-    if(!activeChip) {
-        chips.forEach(chip => chip.classList.remove('active'));
-    }
-});
-
-
-
-// Wake Lock при возвращении на вкладку
-document.addEventListener('visibilitychange', () => {
-    if(document.visibilityState === 'visible') {
-        requestWakeLock();
-    }
-});
-
-    </script>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Музыкальный таймер</title>
+	
+	<link rel="icon" href="icons/favicon.svg" type="image/svg+xml">
+	
+	<!-- Apple Touch Icons (разные размеры для разных устройств) -->
+	<link rel="apple-touch-icon" href="icons/apple-touch-icon-180x180.png" sizes="180x180">
+	<link rel="apple-touch-icon" href="icons/apple-touch-icon-167x167.png" sizes="167x167">
+	<link rel="apple-touch-icon" href="icons/apple-touch-icon-152x152.png" sizes="152x152">
+	<link rel="apple-touch-icon" href="icons/apple-touch-icon-120x120.png" sizes="120x120">
+	
+	<!-- Манифест веб-приложения -->
+	<link rel="manifest" href="manifest.json">
+	
+	<!-- Шрифты -->
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+	<style>
+		:root {
+			--bg-color: #000;
+			--text-color: #fff;
+			--primary-color: #71FEAB;
+			--red900: #7A0919;
+			--red600: #DB3323;
+			--red500: #FF5230;
+			--red100: #FFCCAC;
+			--green600: #30DA98;
+			--green400: #71FEAB;
+			--green900: #0C7970;
+			--green1000: #042d29;
+			--border-color: rgba(255,255,255,.2);
+			--border-red: var(--red900);
+			--border-green: var(--green900);
+			--grey40: rgba(255,255,255,.4);
+			--radius-outer: 24px;            
+		}
+
+		body, button {
+			font-family: "IBM Plex Sans", sans-serif;
+		}
+
+		body {
+			font-family: "IBM Plex Sans", sans-serif;
+			font-weight: 300;
+			padding: 24px;
+			max-width: 600px;
+			margin: 0 auto;
+			background-color: var(--bg-color);
+			color: var(--text-color);
+		}
+		
+		label {
+			font-size: 32px;
+			line-height: 40px;
+			text-align: center;
+			display: block;
+			width: 100%;
+			margin-top: 24px;
+		}
+
+		input {
+			width: 100%;
+			font-family: "IBM Plex Sans", serif;
+			font-weight: 100;
+			padding: 0 0 8px 0;
+			height:152px;
+			margin: 16px 0;
+			box-sizing: border-box;
+			border: 1px solid var(--border-color);
+			border-radius: var(--radius-outer);
+			font-size: 144px;
+			text-align: center;
+			background-color: transparent;
+		}
+
+		input::placeholder {
+			color: var(--grey40);
+		}
+
+		button {
+			width: 100%;
+			padding: 16px;
+			background: var(--primary-color);
+			color: var(--green900);
+			border: none;
+			border-radius: var(--radius-outer);
+			cursor: pointer;
+			transition: opacity 0.3s;
+			font-size: 32px;
+			line-height: 40px;
+			font-weight: 500;
+			margin-top: 24px;
+		}
+
+		button:active {
+			opacity: 0.8;
+		}
+
+		label.green500 {
+			color: var(--green600);
+		}
+
+		label.red600, h4 {
+			color: var(--red600);
+		}
+
+		input#totalTime {
+			color: var(--green400);
+			border-color: var(--border-green);
+		}
+
+		input#totalTime:focus {
+			outline: 4px double var(--green400);
+		}
+
+		input#totalTime::placeholder {
+			color: var(--green900);
+		}
+
+		input#numTracks {
+			color: var(--red600);
+			border-color: var(--border-red);
+		}
+
+		input#numTracks:focus {
+			outline: 4px double var(--red500);
+		}
+
+		input#numTracks::placeholder {
+			color: var(--red900);
+		}
+
+		h4 {
+			font-size: 4vw;
+			line-height: 8vw;
+			font-weight: 400;
+			margin: 16px;
+		}
+
+		.input-group {
+			margin-bottom: 16px;
+		}
+
+		.curTrack {
+			font-size: 48px;
+		}
+
+		.trkCount {
+			font-size: 20px;
+		}
+
+		.blink {
+			animation: blink .3s ease-in-out infinite;
+			color: var(--red500) !important;
+		}
+
+		.row {
+			display: flex;
+			flex-direction: row;
+		}
+
+		.column {
+			width: 100%;
+		}
+
+		.timer-container {
+			margin: 0 0 24px 0;
+			text-align: center;
+		}
+
+		.timer {
+			margin: 16px 0;
+			letter-spacing: 2px;
+		}
+
+		.timer.main {
+			font-size: 24vw;
+			line-height: 32vw;
+			font-weight: 100;
+			color: var(--green400);
+		}
+
+		.timer.secondary {
+			font-size: 12vw;
+			line-height: 16vw;
+			font-weight: 300;
+			color: var(--grey40);
+		}
+
+		.progress-container {
+			height: 48px;
+			background: #333;
+			border-radius: var(--radius-outer);
+			margin: 24px 0;
+			overflow: hidden;
+			position: relative;
+		}
+
+		.progress-container.total-pb {
+			height: 24px;
+		}
+
+		.progress-bar {
+			height: 100%;
+		}
+
+		#trackProgress {
+			background: var(--green400);
+		}
+
+		#currentTrack {
+			margin: 16px 0;
+			color: var(--green400);
+		}
+
+		#resetBtn {
+			background: var(--red500);
+			color: var(--red100);
+			margin: 0 0 32px 0;
+		}
+
+		#nextTrackBtn {
+			background-color: var(--green900);
+			color: var(--green400);
+		}
+
+		#nextTrackBtn:disabled {
+			opacity: .2;
+			background-color: var(--green900);
+			color: var(--green400);
+		}
+
+		#wakeLockStatus {
+			position: fixed;
+			bottom: 16px;
+			right: 16px;
+			font-size: 16px;
+			color: var(--green400);
+		}
+
+		/* Стили для бургер-меню */
+		.burger-menu {
+			position: fixed;
+			top: 24px;
+			right: 24px;
+			z-index: 1000;
+		}
+
+		.burger-icon {
+			cursor: pointer;
+			font-size: 32px;
+			color: var(--red500);
+			padding: 10px;
+			transition: transform 0.3s;
+		}
+
+		.menu-content {
+			display: none;
+			position: absolute;
+			right: 0;
+			top: 100%;
+			background: var(--surface-200);
+			border-radius: 8px;
+			padding: 16px;
+			min-width: 180px;
+		}
+
+		.menu-content.show {
+			display: block;
+			animation: slideDown 0.3s ease;
+		}
+
+		#hiddenResetBtn {
+			background: var(--red500);
+			border: 1px solid var(--border-red);
+			color: var(--red100);
+			padding: 12px;
+			width: 100%;
+			font-size: 16px;
+			margin: 0;
+			transition: all 0.3s;
+		}
+
+		#hiddenResetBtn:active {
+			background: var(--error-100);
+			color: var(--text-on-primary);
+		}
+		
+		/* Затемнение фона при открытом меню */
+		.menu-backdrop {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background: rgba(0,0,0,0.5);
+			display: none;
+			z-index: 999;
+		}
+
+		.shortcuts {
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			justify-content: center;
+			gap: 16px;
+		}
+
+		.chip {
+			font-size: 20px;
+			line-height: 24px;
+			font-weight: 400;
+			padding: 8px 16px;
+			background-color: var(--green1000);
+			color: var(--green400);
+			border-radius: var(--radius-outer);
+		}
+
+		.chip.active {
+			background: var(--green600);
+			color: var(--green900);
+		}
+
+		/*Анимации*/
+		
+		/*Мигание*/
+		@keyframes blink {
+			0%, 100% { opacity: 1; }
+			50% { opacity: 0.3; }
+		}
+
+		/*Меню*/
+		@keyframes slideDown {
+			from {
+				opacity: 0;
+				transform: translateY(-8px);
+			}
+			to {
+				opacity: 1;
+				transform: translateY(0);
+			}
+		}
+
+	</style>
+		</head>
+		<body>
+		<!-- Бургер меню -->
+		<div class="burger-menu">
+			<div class="burger-icon" onclick="toggleMenu()">☰</div>
+			<div class="menu-content">
+				<button id="hiddenResetBtn" onclick="handleReset()">Сбросить всё</button>
+			</div>
+		</div>
+		<!-- Форма конфигурации -->
+		<form id="configForm">
+			<div class="input-group">
+				<label class="green500">Время (мин)</label>
+				<input type="number" id="totalTime" placeholder="0" pattern="[0-9]*" inputmode="numeric" required>
+				<div class="shortcuts">
+					<div class="chip" data-minutes="30">30</div>
+					<div class="chip" data-minutes="60">60</div>
+					<div class="chip" data-minutes="90">90</div>
+					<div class="chip" data-minutes="120">120</div>
+				</div>
+			</div>
+			<div class="input-group">
+				<label class="red600">Треков</label>
+				<input type="number" id="numTracks" placeholder="0" pattern="[0-9]*" inputmode="numeric" required>
+			</div>
+			<button type="submit">Старт</button>
+		</form>
+		<!-- Таймер -->
+		<div id="timers" style="display: none;">
+			<div class="timer-container">
+				<h4>
+					<span class="curTrack" id="currentTrack"></span> / <span class="trkCount" id="trackCount"></span>
+				</h4>
+				<div>Средняя длина: <span id="trackDuration"></span></div>
+				<div><span id="trackTimer" class="timer main"></span></div>
+				<div class="progress-container">
+					<div id="trackProgress" class="progress-bar"></div>
+				</div>
+				<div class="row">
+					<div class="column">
+						<h4>Прошло</h4>
+						<div><span id="elapsedTimer" class="timer secondary"></span></div>
+					</div>
+					<div class="column">
+						<h4>Осталось</h4>
+						<div><span id="remainingTimer" class="timer secondary"></span></div>
+					</div>
+				</div>
+				<div class="progress-container total-pb">
+					<div id="totalProgress" class="progress-bar" style="background: var(--red500);"></div>
+				</div>
+				<button id="nextTrackBtn" onclick="nextTrack()">Пропуск</button>
+			</div>
+		</div>
+		<div id="wakeLockStatus"></div>
+		<script>
+
+		// проверка поддержки Service Worker
+		if ('serviceWorker' in navigator) {
+			window.addEventListener('load', async () => {
+				try {
+					const registration = await navigator.serviceWorker.register('/sw.js');
+					console.log('ServiceWorker зарегистрирован');
+				} catch (err) {
+					console.log('Ошибка регистрации ServiceWorker:', err);
+				}
+			});
+		}
+
+		// Обработчик обновлений
+		navigator.serviceWorker.addEventListener('controllerchange', () => {
+			window.location.reload();
+		});
+
+		let wakeLock = null;
+		let intervalId;
+		let state = {
+			startTime: null,         // Время начала в миллисекундах
+			totalDuration: null,     // Общая длительность в миллисекундах
+			originalTracks: null,    // Изначальное количество треков
+			currentTrack: 1,         // Текущий трек
+			spentTimes: []           // Массив времени по трекам
+		};
+		let isMenuOpen = false;
+
+		function toggleMenu() {
+			const menu = document.querySelector('.menu-content');
+			let backdrop = document.querySelector('.menu-backdrop');
+			
+			isMenuOpen = !isMenuOpen;
+			
+			if(isMenuOpen) {
+				menu.classList.add('show');
+				if(!backdrop) {
+					backdrop = document.createElement('div');
+					backdrop.className = 'menu-backdrop';
+					backdrop.onclick = toggleMenu;
+					document.body.appendChild(backdrop);
+				}
+				backdrop.style.display = 'block';
+			} else {
+				menu.classList.remove('show');
+				if(backdrop) {
+					backdrop.style.display = 'none';
+				}
+			}
+		}
+
+		// Блокировка экрана
+		async function requestWakeLock() {
+			try {
+				if ('wakeLock' in navigator) {
+					wakeLock = await navigator.wakeLock.request('screen');
+					document.getElementById('wakeLockStatus').textContent = 'Экран активен';
+				}
+			} catch (err) {
+				console.error('Ошибка Wake Lock:', err);
+			}
+		}
+
+		function releaseWakeLock() {
+			if (wakeLock !== null && !wakeLock.released) {
+				wakeLock.release();
+				wakeLock = null;
+			}
+		}
+
+		// Форматирование времени
+		function formatTime(ms) {
+			const totalMs = Math.max(0, ms);
+			const totalSeconds = Math.floor(totalMs / 1000);
+			const mins = Math.floor(totalSeconds / 60);
+			const secs = totalSeconds % 60;
+			return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+		}
+
+		// Сохранение состояния
+		function saveState() {
+			localStorage.setItem('timerState', JSON.stringify(state));
+		}
+
+		// Восстановление состояния
+		function restoreState() {
+			const savedState = localStorage.getItem('timerState');
+			if (!savedState) return;
+
+			try {
+				const parsed = JSON.parse(savedState);
+				const now = Date.now();
+				
+				// Проверка валидности сохраненных данных
+				if (!parsed.startTime || !parsed.totalDuration || !parsed.originalTracks) {
+					localStorage.removeItem('timerState');
+					return;
+				}
+
+				// Проверка не завершено ли выступление
+				const timePassed = now - parsed.startTime;
+				if (timePassed >= parsed.totalDuration) {
+					localStorage.removeItem('timerState');
+					return;
+				}
+
+				// Восстановление состояния
+				state = {
+					startTime: parsed.startTime,
+					totalDuration: parsed.totalDuration,
+					originalTracks: parsed.originalTracks,
+					currentTrack: parsed.currentTrack,
+					spentTimes: parsed.spentTimes
+				};
+
+				// Корректировка текущего трека
+				const totalSpent = state.spentTimes.reduce((a, b) => a + b, 0);
+				const trackDuration = (state.totalDuration - totalSpent) / 
+									(state.originalTracks - state.currentTrack + 1);
+				const currentTrackElapsed = timePassed - totalSpent;
+
+				// Автоматический переход завершенных треков
+				while (currentTrackElapsed > trackDuration && 
+					  state.currentTrack < state.originalTracks) {
+					state.spentTimes.push(trackDuration);
+					state.currentTrack++;
+					totalSpent += trackDuration;
+					trackDuration = (state.totalDuration - totalSpent) / 
+								  (state.originalTracks - state.currentTrack + 1);
+				}
+
+				saveState(); // Обновляем сохраненное состояние
+			} catch (e) {
+				console.error('Ошибка восстановления:', e);
+				localStorage.removeItem('timerState');
+			}
+		}
+
+		// Обработчик кнопки "Пропуск"
+		function nextTrack() {
+			const now = Date.now();
+			const totalSpent = state.spentTimes.reduce((a, b) => a + b, 0);
+			const currentTrackTime = now - state.startTime - totalSpent;
+
+			if(currentTrackTime <= 0) return;
+			
+			state.spentTimes.push(currentTrackTime);
+			state.currentTrack++;
+			
+			if(state.currentTrack > state.originalTracks) {
+				finishPerformance();
+				return;
+			}
+			
+			saveState();
+			updateTimers();
+		}
+
+		// Обновление таймеров
+		function updateTimers() {
+			const now = Date.now();
+			const totalElapsed = now - state.startTime;
+			
+			if(totalElapsed >= state.totalDuration) {
+				finishPerformance();
+				return;
+			}
+
+			// Управление состоянием кнопки
+			const nextTrackBtn = document.getElementById('nextTrackBtn');
+			const isLastTrack = state.currentTrack === state.originalTracks;
+			nextTrackBtn.disabled = isLastTrack;
+			const totalSpent = state.spentTimes.reduce((a, b) => a + b, 0);
+			const remainingTracks = state.originalTracks - state.currentTrack + 1;
+			const trackDuration = (state.totalDuration - totalSpent) / remainingTracks;
+			const trackElapsed = totalElapsed - totalSpent;
+			let trackRemaining = trackDuration - trackElapsed;
+
+			// Автоматический переход при отрицательном времени
+			if(trackRemaining <= 0 && remainingTracks > 1) {
+				state.spentTimes.push(trackDuration);
+				state.currentTrack++;
+				saveState();
+				return updateTimers(); // Рекурсивно обновляем
+			}
+
+			// Обновление интерфейса
+			document.getElementById('currentTrack').textContent = state.currentTrack;
+			document.getElementById('trackCount').textContent = `${state.originalTracks}`;
+			document.getElementById('trackTimer').textContent = formatTime(trackRemaining);
+			document.getElementById('elapsedTimer').textContent = formatTime(totalElapsed);
+			document.getElementById('remainingTimer').textContent = formatTime(state.totalDuration - totalElapsed);
+			document.getElementById('trackDuration').textContent = formatTime(trackDuration);
+
+			// Прогресс-бары
+			const totalProgress = (totalElapsed / state.totalDuration) * 100;
+			const trackProgress = (trackElapsed / trackDuration) * 100;
+			
+			document.getElementById('totalProgress').style.width = `${totalProgress}%`;
+			document.getElementById('trackProgress').style.width = `${trackProgress}%`;
+
+			// Мигание
+			const trackTimerElement = document.getElementById('trackTimer');
+			const trackProgressBar = document.getElementById('trackProgress');
+			if (trackRemaining <= 30000) { // 30 секунд
+				trackTimerElement.classList.add('blink');
+				trackProgressBar.classList.add('blink');
+			} else {
+				trackTimerElement.classList.remove('blink');
+				trackProgressBar.classList.remove('blink');
+			}
+		}
+
+		// Завершение выступления
+		function finishPerformance() {
+			clearInterval(intervalId);
+			alert('Выступление завершено!');
+			resetApp();
+		}
+
+		// Сброс приложения
+		function resetApp() {
+			clearInterval(intervalId);
+			releaseWakeLock();
+			localStorage.removeItem('timerState');
+			state = {
+				startTime: null,
+				totalDuration: null,
+				originalTracks: null,
+				currentTrack: 1,
+				spentTimes: []
+			};
+			document.getElementById('timers').style.display = 'none';
+			document.getElementById('configForm').style.display = 'block';
+			document.getElementById('nextTrackBtn').disabled = false;
+		}
+
+		function handleReset() {
+			toggleMenu(); // Закрываем меню
+			if(confirm('Вы уверены, что хотите сбросить таймер? Все данные будут удалены!')) {
+				resetApp();
+			}
+		}
+
+		// Инициализация формы
+		document.getElementById('configForm').addEventListener('submit', (e) => {
+			e.preventDefault();
+			
+			const totalMinutes = parseInt(document.getElementById('totalTime').value);
+			const numTracks = parseInt(document.getElementById('numTracks').value);
+			
+			if(totalMinutes < 1 || numTracks < 1) {
+				alert('Введите значения больше нуля!');
+				return;
+			}
+
+			state = {
+				startTime: Date.now(),
+				totalDuration: totalMinutes * 60 * 1000,
+				originalTracks: numTracks,
+				currentTrack: 1,
+				spentTimes: []
+			};
+			
+			saveState();
+			requestWakeLock();
+			document.getElementById('configForm').style.display = 'none';
+			document.getElementById('timers').style.display = 'block';
+			intervalId = setInterval(updateTimers, 100);
+			updateTimers();
+		});
+
+		// Восстановление при загрузке
+		window.addEventListener('load', () => {
+			restoreState();
+			
+			if (state.startTime) {
+				const timePassed = Date.now() - state.startTime;
+				if (timePassed < state.totalDuration) {
+					document.getElementById('configForm').style.display = 'none';
+					document.getElementById('timers').style.display = 'block';
+					intervalId = setInterval(updateTimers, 100);
+					requestWakeLock();
+					updateTimers();
+				} else {
+					resetApp();
+				}
+			}
+		});
+
+		// Обработчик для чипов
+		document.querySelectorAll('.chip').forEach(chip => {
+			chip.addEventListener('click', function() {
+				// Удаляем активный класс у всех чипов
+				document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+				
+				// Устанавливаем значение в поле ввода
+				const minutes = this.dataset.minutes;
+				document.getElementById('totalTime').value = minutes;
+				
+				// Добавляем активный класс текущему чипу
+				this.classList.add('active');
+				
+				// Триггерим событие изменения для обновления расчетов
+				document.getElementById('totalTime').dispatchEvent(new Event('input'));
+			});
+		});
+
+		// Сброс чипов при ручном вводе
+		document.getElementById('totalTime').addEventListener('input', function() {
+			const chips = document.querySelectorAll('.chip');
+			const currentValue = this.value;
+			
+			// Проверяем, совпадает ли значение с чипом
+			const activeChip = Array.from(chips).find(chip => 
+				chip.dataset.minutes === currentValue
+			);
+			
+			if(!activeChip) {
+				chips.forEach(chip => chip.classList.remove('active'));
+			}
+		});
+
+		// Wake Lock при возвращении на вкладку
+		document.addEventListener('visibilitychange', () => {
+			if(document.visibilityState === 'visible') {
+				requestWakeLock();
+			}
+		});
+
+	</script>
 </body>
 </html>
