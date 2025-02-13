@@ -37,7 +37,13 @@
 			--border-red: var(--red900);
 			--border-green: var(--green900);
 			--grey40: rgba(255,255,255,.4);
-			--radius-outer: 24px;            
+			--radius-outer: 24px;
+			--gap: 4vw;
+			--gap-mid: 2vw;           
+		}
+
+		html {
+			height: 100%;
 		}
 
 		body, button {
@@ -47,10 +53,11 @@
 		body {
 			font-family: "IBM Plex Sans", sans-serif;
 			font-weight: 300;
-			padding: 8vw;
-			margin: 0 auto;
 			background-color: var(--bg-color);
 			color: var(--text-color);
+			display: flex;
+			flex-direction: column;
+			padding: 4vw;
 		}
 		
 		label {
@@ -91,7 +98,7 @@
 			font-size: 32px;
 			line-height: 40px;
 			font-weight: 500;
-			margin-top: 24px;
+			width: fit-content;
 		}
 
 		button:active {
@@ -136,7 +143,18 @@
 			font-size: 4vw;
 			line-height: 8vw;
 			font-weight: 400;
-			margin: 16px 0 0 0;
+			margin: 0;
+		}
+
+		.status-bar {
+			display: flex;
+			flex-direction: row;
+			gap: var(--gap);
+			align-items: center;
+		}
+
+		#trackDuration {
+			color: var(--green600);
 		}
 
 		.input-group {
@@ -156,6 +174,20 @@
 			color: var(--red500) !important;
 		}
 
+		.trackTimerFrame {
+			display: flex;
+			flex-direction: column;
+			width: 100%;
+			gap: var(--gap);
+		}
+
+		.perfTimerFrame {
+			display: flex;
+			flex-direction: column;
+			width: 100%;
+			gap: var(--gap);
+		}
+
 		.row {
 			display: flex;
 			flex-direction: row;
@@ -167,6 +199,9 @@
 
 		.timer-container {
 			margin: 0 0 24px 0;
+			display: flex;
+			flex-direction: column;
+			gap: var(--gap);
 		}
 		
 		/*Таймеры*/
@@ -194,7 +229,6 @@
 			height: 48px;
 			background: #333;
 			border-radius: var(--radius-outer);
-			margin: 24px 0;
 			overflow: hidden;
 			position: relative;
 		}
@@ -236,9 +270,6 @@
 
 		/*Статус управления подсветкой*/
 		#wakeLockStatus {
-			position: fixed;
-			bottom: 16px;
-			right: 16px;
 			font-size: 16px;
 			color: var(--green400);
 		}
@@ -246,7 +277,7 @@
 		/* Стили для бургер-меню */
 		.burger-menu {
 			position: fixed;
-			top: 8vw;
+			top: 4vw;
 			right: 8vw;
 			z-index: 1000;
 		}
@@ -347,6 +378,60 @@
 			}
 		}
 
+
+		@media (orientation: landscape) {
+  			body {
+    			flex-direction: row;
+    			padding: 0;
+    			align-items: center;
+				justify-content: center;
+				height: 100%;
+  			}
+
+  			.row {
+				flex-direction: column;
+			}
+
+			.trackTimerFrame {
+				width: 61vw;
+			}
+
+			.perfTimerFrame {
+				width: 28vw;
+				gap: var(--gap-mid);
+			}
+
+			.timer.main {
+			    font-size: 20vw;
+			    line-height: 20vw;
+			}
+
+			.burger-menu {
+				top: 4vw;
+				right: 4vw;
+			}
+
+			.timer.secondary {
+			    font-size: 6vw;
+			    line-height: 8vw;
+			}
+
+			h4 {
+				font-size: 2vw;
+    			line-height: 2vw;
+			}
+			
+			.timer-container {
+				flex-direction: row;
+				gap: var(--gap);
+			}
+
+			#nextTrackBtn, .total-pb.total-pb {
+				height: 100%;
+			}
+
+		}
+
 	</style>
 		</head>
 		<body>
@@ -378,31 +463,38 @@
 		<!-- Таймер -->
 		<div id="timers" class="timers" style="display: none;">
 			<div class="timer-container">
-				<h4>
-					<span class="curTrack" id="currentTrack"></span> / <span class="trkCount" id="trackCount"></span>
-				</h4>
-				<div>~<span id="trackDuration"></span></div>
-				<div><span id="trackTimer" class="timer main"></span></div>
-				<div class="progress-container">
-					<div id="trackProgress" class="progress-bar"></div>
-				</div>
-				<div class="row">
-					<div class="column">
-						<h4>Прошло</h4>
-						<div><span id="elapsedTimer" class="timer secondary"></span></div>
-					</div>
-					<div class="column">
-						<h4>Осталось</h4>
-						<div><span id="remainingTimer" class="timer secondary"></span></div>
+				
+
+				<div class="trackTimerFrame">
+					<h4 class="status-bar">
+						<span class="curTrack" id="currentTrack"></span>/<span class="trkCount" id="trackCount"></span> <span id="trackDuration"></span><span id="wakeLockStatus"></span>
+					</h4>
+					<div><span id="trackTimer" class="timer main"></span></div>
+					<div class="progress-container">
+						<div id="trackProgress" class="progress-bar"></div>
 					</div>
 				</div>
-				<div class="progress-container total-pb">
-					<div id="totalProgress" class="progress-bar" style="background: var(--red500);"></div>
+
+				
+				<div class="perfTimerFrame">
+					<div class="row">
+						<div class="column">
+							<h4>Прошло</h4>
+							<div><span id="elapsedTimer" class="timer secondary"></span></div>
+						</div>
+						<div class="column">
+							<h4>Осталось</h4>
+							<div><span id="remainingTimer" class="timer secondary"></span></div>
+						</div>
+					</div>
+					<div class="progress-container total-pb">
+						<div id="totalProgress" class="progress-bar" style="background: var(--red500);"></div>
+					</div>
+					<button id="nextTrackBtn" onclick="nextTrack()">Пропуск</button>
 				</div>
-				<button id="nextTrackBtn" onclick="nextTrack()">Пропуск</button>
+
 			</div>
 		</div>
-		<div id="wakeLockStatus"></div>
 		<script>
 
 		// проверка поддержки Service Worker
@@ -461,7 +553,7 @@
 			try {
 				if ('wakeLock' in navigator) {
 					wakeLock = await navigator.wakeLock.request('screen');
-					document.getElementById('wakeLockStatus').textContent = 'Экран активен';
+					document.getElementById('wakeLockStatus').textContent = '💡';
 				}
 			} catch (err) {
 				console.error('Ошибка Wake Lock:', err);
