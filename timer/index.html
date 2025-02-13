@@ -65,7 +65,6 @@
 			line-height: 40px;
 			display: block;
 			width: 100%;
-			margin-top: 24px;
 		}
 
 		input {
@@ -88,7 +87,7 @@
 		}
 
 		button {
-			padding: 16px;
+			padding: 16px 8vw;
 			background: var(--primary-color);
 			color: var(--green900);
 			border: none;
@@ -119,7 +118,8 @@
 		}
 
 		input#totalTime:focus {
-			outline: 4px double var(--green400);
+			outline: 4px solid var(--green400);
+			border-color: transparent;
 		}
 
 		input#totalTime::placeholder {
@@ -132,11 +132,17 @@
 		}
 
 		input#numTracks:focus {
-			outline: 4px double var(--red500);
+			outline: 4px solid var(--red500);
+			border-color: transparent;
 		}
 
 		input#numTracks::placeholder {
 			color: var(--red900);
+		}
+
+
+		.go {
+			width: 100%;
 		}
 
 		h4 {
@@ -144,6 +150,13 @@
 			line-height: 8vw;
 			font-weight: 400;
 			margin: 0;
+		}
+
+		.form-direction {
+			display: flex;
+			flex-direction: column;
+			gap: var(--gap);
+			margin-top: 8px;
 		}
 
 		.status-bar {
@@ -158,7 +171,7 @@
 		}
 
 		.input-group {
-			margin-bottom: 16px;
+			
 		}
 
 		.curTrack {
@@ -277,16 +290,17 @@
 		/* Стили для бургер-меню */
 		.burger-menu {
 			position: fixed;
-			top: 4vw;
+			top: 8vw;
 			right: 8vw;
 			z-index: 1000;
 		}
 
 		.burger-icon {
 			cursor: pointer;
-			font-size: 32px;
-			color: var(--red500);
-			padding: 10px;
+			font-size: 24px;
+			line-height: 24px;
+			color: var(--grey40);
+			padding: 2vw;
 			transition: transform 0.3s;
 		}
 
@@ -392,6 +406,22 @@
 				height: 100%;
   			}
 
+			label {
+			    font-size: 3vw;
+			    line-height: 2vw;
+			}
+
+			button {
+				padding: 16px 4vw;
+			}
+
+			.form-direction {
+				display: flex;
+				flex-direction: row;
+				gap: var(--gap-mid);
+				margin-bottom: 24px;
+			}
+
   			.row {
 				flex-direction: column;
 			}
@@ -418,8 +448,8 @@
 			}
 
 			.burger-menu {
-				top: 4vw;
-				right: 4vw;
+				top: 1vw;
+				right: 1vw;
 			}
 
 			.timer.secondary {
@@ -454,26 +484,28 @@
 		<div class="burger-menu">
 			<div class="burger-icon" onclick="toggleMenu()">☰</div>
 			<div class="menu-content">
-				<button id="hiddenResetBtn" onclick="handleReset()">Сбросить всё</button>
+				<button id="hiddenResetBtn" onclick="handleReset()">Reset</button>
 			</div>
 		</div>
 		<!-- Форма конфигурации -->
 		<form id="configForm">
-			<div class="input-group">
-				<label class="green500">Время (мин)</label>
-				<input type="number" id="totalTime" placeholder="0" pattern="[0-9]*" inputmode="numeric" required>
-				<div class="shortcuts">
-					<div class="chip" data-minutes="30">30</div>
-					<div class="chip" data-minutes="60">60</div>
-					<div class="chip" data-minutes="90">90</div>
-					<div class="chip" data-minutes="120">120</div>
+			<div class="form-direction">
+				<div class="input-group">
+					<label class="green500">Set Duration (min)</label>
+					<input type="number" id="totalTime" placeholder="0" pattern="[0-9]*" inputmode="numeric" required>
+					<div class="shortcuts">
+						<div class="chip" data-minutes="30">30</div>
+						<div class="chip" data-minutes="60">60</div>
+						<div class="chip" data-minutes="90">90</div>
+						<div class="chip" data-minutes="120">120</div>
+					</div>
+				</div>
+				<div class="input-group">
+					<label class="red600">Tracks Count</label>
+					<input type="number" id="numTracks" placeholder="0" pattern="[0-9]*" inputmode="numeric" required>
 				</div>
 			</div>
-			<div class="input-group">
-				<label class="red600">Треков</label>
-				<input type="number" id="numTracks" placeholder="0" pattern="[0-9]*" inputmode="numeric" required>
-			</div>
-			<button type="submit">Старт</button>
+			<button type="submit" class="go">Go!</button>
 		</form>
 		<!-- Таймер -->
 		<div id="timers" class="timers" style="display: none;">
@@ -494,11 +526,11 @@
 				<div class="perfTimerFrame">
 					<div class="row">
 						<div class="column">
-							<h4>Прошло</h4>
+							<h4>Elapsed</h4>
 							<div><span id="elapsedTimer" class="timer secondary"></span></div>
 						</div>
 						<div class="column">
-							<h4>Осталось</h4>
+							<h4>Remaining</h4>
 							<div><span id="remainingTimer" class="timer secondary"></span></div>
 						</div>
 					</div>
@@ -506,7 +538,7 @@
 						<div id="totalProgress" class="progress-bar" style="background: var(--red500);"></div>
 					</div>
 					<div class="spacer"></div>
-					<button id="nextTrackBtn" onclick="nextTrack()">Пропуск</button>
+					<button id="nextTrackBtn" onclick="nextTrack()">Skip</button>
 				</div>
 
 			</div>
@@ -518,9 +550,9 @@
 			window.addEventListener('load', async () => {
 				try {
 					const registration = await navigator.serviceWorker.register('/sw.js');
-					console.log('ServiceWorker зарегистрирован');
+					console.log('ServiceWorker Registered');
 				} catch (err) {
-					console.log('Ошибка регистрации ServiceWorker:', err);
+					console.log('ServiceWorker Registration Error:', err);
 				}
 			});
 		}
@@ -572,7 +604,7 @@
 					document.getElementById('wakeLockStatus').textContent = '💡';
 				}
 			} catch (err) {
-				console.error('Ошибка Wake Lock:', err);
+				console.error('Wake Lock Error:', err);
 			}
 		}
 
@@ -646,7 +678,7 @@
 
 				saveState(); // Обновляем сохраненное состояние
 			} catch (e) {
-				console.error('Ошибка восстановления:', e);
+				console.error('Restoring Error:', e);
 				localStorage.removeItem('timerState');
 			}
 		}
@@ -729,7 +761,7 @@
 		// Завершение выступления
 		function finishPerformance() {
 			clearInterval(intervalId);
-			alert('Выступление завершено!');
+			alert('Performance Completed!');
 			resetApp();
 		}
 
@@ -752,7 +784,7 @@
 
 		function handleReset() {
 			toggleMenu(); // Закрываем меню
-			if(confirm('Вы уверены, что хотите сбросить таймер? Все данные будут удалены!')) {
+			if(confirm('Reset Timer! All data will be lost!')) {
 				resetApp();
 			}
 		}
@@ -765,7 +797,7 @@
 			const numTracks = parseInt(document.getElementById('numTracks').value);
 			
 			if(totalMinutes < 1 || numTracks < 1) {
-				alert('Введите значения больше нуля!');
+				alert('Enter value gratee than ZERO!');
 				return;
 			}
 
