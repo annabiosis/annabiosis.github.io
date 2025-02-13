@@ -211,7 +211,7 @@
 		}
 
 		.timer.main {
-			font-size: 28vw;
+			font-size: 32vw;
 			line-height: 36vw;
 			font-weight: 100;
 			color: var(--green400);
@@ -270,7 +270,7 @@
 
 		/*Статус управления подсветкой*/
 		#wakeLockStatus {
-			font-size: 16px;
+			font-size: 24px;
 			color: var(--green400);
 		}
 
@@ -358,6 +358,10 @@
 			color: var(--green900);
 		}
 
+		.spacer {
+			height: 24px;
+		}
+
 		/*Анимации*/
 		
 		/*Мигание*/
@@ -401,9 +405,16 @@
 				gap: var(--gap-mid);
 			}
 
+			.timer {
+				margin: 0;
+			}
+
 			.timer.main {
 			    font-size: 20vw;
 			    line-height: 20vw;
+			    display: inline-block;
+			    width: 100%;
+			    text-align: center;
 			}
 
 			.burger-menu {
@@ -428,6 +439,10 @@
 
 			#nextTrackBtn, .total-pb.total-pb {
 				height: 100%;
+			}
+
+			.spacer {
+				display: none;
 			}
 
 		}
@@ -490,6 +505,7 @@
 					<div class="progress-container total-pb">
 						<div id="totalProgress" class="progress-bar" style="background: var(--red500);"></div>
 					</div>
+					<div class="spacer"></div>
 					<button id="nextTrackBtn" onclick="nextTrack()">Пропуск</button>
 				</div>
 
