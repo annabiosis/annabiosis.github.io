@@ -160,8 +160,21 @@
 			color: var(--green400);
 		}
 
+
+		h1 {
+			padding: 0;
+			font-weight: 100;
+			margin-top: 0;
+			margin-bottom: 0;
+			font-size: 56px;
+		}
+
 		p, li {
 			font-size: 15px;
+		}
+
+		a {
+			color: var(--green400);
 		}
 
 		.form-direction {
@@ -355,13 +368,8 @@
 			font-size: 16px;
 			margin: 0;
 			transition: all 0.3s;
+			text-wrap: nowrap;
 		}
-
-		#hiddenResetBtn:active {
-			background: var(--error-100);
-			color: var(--text-on-primary);
-		}
-
 
 		button.other {
 			background: transparent;
@@ -570,6 +578,10 @@
     			line-height: 2vw;
 			}
 			
+			h1 {
+				display: none;
+			}
+
 			.timer-container {
 				flex-direction: row;
 				gap: var(--gap);
@@ -632,10 +644,13 @@
 				</ul>
 				<h3 data-i18n="help12">Технологии</h3>
 				<p data-i18n="help13">Использует современные PWA-стандарты для кроссплатформенной работы. Сохрани ярлык на главный экран — получишь полноценное приложение.</p>
+				<h3 data-i18n="help14">Разработка</h3>
+				<p><a href="https://www.youtube.com/@Annabiosis" target="_blank" data-i18n="authorlink">Annabiosis и Синтезаторы</a></p>
 			</div>
 		</div>
 		<!-- Форма конфигурации -->
 		<form id="configForm">
+			<h1>muTimer</h1>
 			<div class="form-direction">
 				<div class="input-group">
 					<label class="green500" data-i18n="totalDuration">Set Duration (min)</label>
@@ -697,7 +712,7 @@
 		        totalDuration: "Total duration",
 		        tracks: "Tracks",
 		        start: "Start",
-		        reset: "Reset",
+		        reset: "💀 Reset",
 		        skip: "Skip",
 		        currentTrack: "Current track",
 		        elapsed: "Elapsed",
@@ -719,13 +734,15 @@
 				help10: "Automatic localization",
 				help11: "Sleep mode prevention",
 				help12: "Technologies",
-				help13: "Uses modern PWA standards for cross-platform functionality. Add to home screen — get a full-fledged app."
+				help13: "Uses modern PWA standards for cross-platform functionality. Add to home screen — get a full-fledged app.",
+				help14: "Developer", 
+				authorlink: "Annabiosis" 
 		    },
 		    ru: {
 		        totalDuration: "Длительность",
 		        tracks: "Треков",
 		        start: "Старт",
-		        reset: "Сброс",
+		        reset: "💀 Сброс",
 		        skip: "Пропуск",
 		        currentTrack: "Текущий трек",
 		        elapsed: "Прошло",
@@ -747,7 +764,9 @@
 		        help10: "Автоматическая локализация",
 		        help11: "Блокировка спящего режима",
 		        help12: "Технологии",
-		        help13: "Использует современные PWA-стандарты для кроссплатформенной работы. Сохрани ярлык на главный экран — получишь полноценное приложение."
+		        help13: "Использует современные PWA-стандарты для кроссплатформенной работы. Сохрани ярлык на главный экран — получишь полноценное приложение.",
+		        help14: "Разработка", 
+		        authorlink: "Annabiosis" 
 		    }
 		};
 
