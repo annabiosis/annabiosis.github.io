@@ -166,7 +166,14 @@
 			font-weight: 100;
 			margin-top: 0;
 			margin-bottom: 0;
-			font-size: 56px;
+			font-size: 44px;
+			color: var(--grey40);
+		}
+
+		h1.apptitle {
+			position: relative;
+			top: -4px;
+			margin-bottom: 16px;
 		}
 
 		p, li {
@@ -357,6 +364,7 @@
 			flex-direction: row;
 			padding-bottom: 16px;
 			border-bottom: 1px solid var(--divider);
+			margin-bottom: 16px;
 		}
 
 		#hiddenResetBtn {
@@ -375,8 +383,14 @@
 			background: transparent;
 			color: var(--green400);
 			font-size: 16px;
-			line-height: 20px;
+			line-height: 44px;
 			padding: 8px 16px;
+			width: 100%;
+			text-align: left;
+		}
+
+		button.other:active {
+			background-color: var(--grey40);
 		}
 		
 		/* Затемнение фона при открытом меню */
@@ -650,7 +664,7 @@
 		</div>
 		<!-- Форма конфигурации -->
 		<form id="configForm">
-			<h1>muTimer</h1>
+			<h1 class="apptitle">muTimer</h1>
 			<div class="form-direction">
 				<div class="input-group">
 					<label class="green500" data-i18n="totalDuration">Set Duration (min)</label>
@@ -720,8 +734,8 @@
 		        confirmReset: "Are you sure you want to reset?",
 		        performanceEnded: "Performance ended!",
 		        err_grater: "Enter value gratee than ZERO!",
-		        help: "Help",
-		        donate: "Support me",
+		        help: "ℹ️ About",
+		        donate: "👍 Support me",
 				help01: "Control the timing of each track and the entire performance",
 				help02: "Features",
 				help03: "Automatic division of total time into equal segments",
@@ -750,8 +764,8 @@
 		        confirmReset: "Вы уверены, что хотите сбросить таймер?",
 		        performanceEnded: "Выступление завершено!",
 		        err_grater:"Введите значение больше НОЛЯ!",
-		        help:"Помощь",
-		        donate: "Поддержите меня",
+		        help:"ℹ️ О приложении",
+		        donate: "👍 Поддержите меня",
 		        help01: "Контролируй время каждого трека и всего выступления целиком.",
 		        help02: "Возможности",
 		        help03: "Автоматическое разделение общего времени на равные отрезки",
