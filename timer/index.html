@@ -23,6 +23,7 @@
 	<style>
 		:root {
 			--bg-color: #000;
+			--bg-color-alt: #333;
 			--text-color: #fff;
 			--primary-color: #71FEAB;
 			--red900: #7A0919;
@@ -37,6 +38,8 @@
 			--border-red: var(--red900);
 			--border-green: var(--green900);
 			--grey40: rgba(255,255,255,.4);
+			--menu-bg: var(--bg-color-alt);
+
 			--radius-outer: 24px;
 			--gap: 4vw;
 			--gap-mid: 2vw;           
@@ -306,12 +309,13 @@
 		.menu-content {
 			display: none;
 			position: absolute;
+			left: 0;
 			right: 0;
-			top: 100%;
-			background: var(--surface-200);
-			border-radius: 8px;
+			bottom: 0;
+			background: var(--menu-bg);
+			border-radius: var(--radius-outer) var(--radius-outer) 0 0;
 			padding: 16px;
-			min-width: 180px;
+			z-index: 1000;
 		}
 
 		.menu-content.show {
@@ -375,6 +379,28 @@
 			height: 24px;
 		}
 
+		/*Переключатель языков*/
+		.lang-switcher {
+		    margin-bottom: 15px;
+		    display: flex;
+		    gap: 8px;
+		}
+
+		.lang-btn {
+		    padding: 8px 16px;
+		    border-radius: 20px;
+		    background: var(--surface-300);
+		    border: none;
+		    color: var(--text-secondary);
+		    cursor: pointer;
+		    transition: all 0.3s;
+		}
+
+		.lang-btn.active {
+		    background: var(--primary-200);
+		    color: var(--text-on-primary);
+		}
+
 		/*Анимации*/
 		
 		/*Мигание*/
@@ -387,7 +413,7 @@
 		@keyframes slideDown {
 			from {
 				opacity: 0;
-				transform: translateY(-8px);
+				transform: translateY(16px);
 			}
 			to {
 				opacity: 1;
@@ -474,6 +500,11 @@
 				display: none;
 			}
 
+			.menu-content {
+				left: 1vw;
+				right: 1vw;
+			}
+
 		}
 
 	</style>
@@ -482,15 +513,15 @@
 		<!-- Бургер меню -->
 		<div class="burger-menu">
 			<div class="burger-icon" onclick="toggleMenu()">☰</div>
-			<div class="menu-content">
-				<button id="hiddenResetBtn" onclick="handleReset()">Reset</button>
-			</div>
+		</div>
+		<div class="menu-content">
+			<button id="hiddenResetBtn" onclick="handleReset()" data-i18n="reset">Reset</button>
 		</div>
 		<!-- Форма конфигурации -->
 		<form id="configForm">
 			<div class="form-direction">
 				<div class="input-group">
-					<label class="green500">Set Duration (min)</label>
+					<label class="green500" data-i18n="totalDuration">Set Duration (min)</label>
 					<input type="number" id="totalTime" placeholder="0" pattern="[0-9]*" inputmode="numeric" required>
 					<div class="shortcuts">
 						<div class="chip" data-minutes="30">30</div>
@@ -500,11 +531,11 @@
 					</div>
 				</div>
 				<div class="input-group">
-					<label class="red600">Tracks Count</label>
+					<label class="red600" data-i18n="tracks">Tracks Count</label>
 					<input type="number" id="numTracks" placeholder="0" pattern="[0-9]*" inputmode="numeric" required>
 				</div>
 			</div>
-			<button type="submit" class="go">Go!</button>
+			<button type="submit" class="go" data-i18n="start">Go!</button>
 		</form>
 		<!-- Таймер -->
 		<div id="timers" class="timers" style="display: none;">
@@ -525,11 +556,11 @@
 				<div class="perfTimerFrame">
 					<div class="row">
 						<div class="column">
-							<h4>Elapsed</h4>
+							<h4 data-i18n="elapsed">Elapsed</h4>
 							<div><span id="elapsedTimer" class="timer secondary"></span></div>
 						</div>
 						<div class="column">
-							<h4>Remaining</h4>
+							<h4 data-i18n="remaining">Remaining</h4>
 							<div><span id="remainingTimer" class="timer secondary"></span></div>
 						</div>
 					</div>
@@ -537,12 +568,99 @@
 						<div id="totalProgress" class="progress-bar" style="background: var(--red500);"></div>
 					</div>
 					<div class="spacer"></div>
-					<button id="nextTrackBtn" onclick="nextTrack()">Skip</button>
+					<button id="nextTrackBtn" onclick="nextTrack()" data-i18n="skip">Skip</button>
 				</div>
 
 			</div>
 		</div>
 		<script>
+		// 1. Создаем словари переводов
+		const i18n = {
+		    en: {
+		        totalDuration: "Total duration",
+		        tracks: "Tracks",
+		        start: "Start",
+		        reset: "Reset",
+		        skip: "Skip",
+		        currentTrack: "Current track",
+		        elapsed: "Elapsed",
+		        remaining: "Remaining",
+		        confirmReset: "Are you sure you want to reset?",
+		        performanceEnded: "Performance ended!",
+		        err_grater:"Enter value gratee than ZERO!"
+		    },
+		    ru: {
+		        totalDuration: "Длительность лайва",
+		        tracks: "Треков",
+		        start: "Старт",
+		        reset: "Сброс",
+		        skip: "Пропуск",
+		        currentTrack: "Текущий трек",
+		        elapsed: "Прошло",
+		        remaining: "Осталось",
+		        confirmReset: "Вы уверены, что хотите сбросить таймер?",
+		        performanceEnded: "Выступление завершено!",
+		        err_grater:"Введите значение больше НОЛЯ!"
+		    }
+		};
+
+		// 2. Определяем язык системы
+		const getSystemLanguage = () => {
+		    const systemLang = navigator.language.split('-')[0];
+		    return Object.keys(i18n).includes(systemLang) ? systemLang : 'en';
+		};
+
+		// 3. Инициализация языка
+		let currentLang = localStorage.getItem('appLang') || getSystemLanguage();
+
+		// 4. Функция применения переводов
+		function applyTranslations() {
+		    const elements = document.querySelectorAll('[data-i18n]');
+		    
+		    elements.forEach(el => {
+		        const key = el.dataset.i18n;
+		        el.textContent = i18n[currentLang][key] || key;
+		    });
+		}
+
+		// 5. Добавляем переключатель языков в бургер-меню
+		function addLanguageSwitcher() {
+		    const menu = document.querySelector('.menu-content');
+		    const html = `
+		        <div class="lang-switcher">
+		            <button class="lang-btn ${currentLang === 'en' ? 'active' : ''}" data-lang="en">EN</button>
+		            <button class="lang-btn ${currentLang === 'ru' ? 'active' : ''}" data-lang="ru">RU</button>
+		        </div>
+		    `;
+		    menu.insertAdjacentHTML('afterbegin', html);
+		}
+
+		// 6. Обработчик смены языка
+		document.body.addEventListener('click', e => {
+		    if(e.target.classList.contains('lang-btn')) {
+		        currentLang = e.target.dataset.lang;
+		        localStorage.setItem('appLang', currentLang);
+		        applyTranslations();
+		        document.querySelectorAll('.lang-btn').forEach(btn => 
+		            btn.classList.toggle('active', btn.dataset.lang === currentLang)
+		        );
+		    }
+		});
+
+		// 7. Обновляем элементы интерфейса
+		document.addEventListener('DOMContentLoaded', () => {
+		    applyTranslations();
+		    addLanguageSwitcher();
+		});
+
+		// 8. Модифицируем сообщения
+		function showAlert(message) {
+		    alert(i18n[currentLang][message] || message);
+		}
+
+		function showConfirm(message) {
+		    confirm(i18n[currentLang][message] || message);
+		}
 
 		// проверка поддержки Service Worker
 		if ('serviceWorker' in navigator) {
@@ -760,7 +878,7 @@
 		// Завершение выступления
 		function finishPerformance() {
 			clearInterval(intervalId);
-			alert('Performance Completed!');
+			showAlert('performanceEnded');
 			resetApp();
 		}
 
@@ -783,7 +901,7 @@
 
 		function handleReset() {
 			toggleMenu(); // Закрываем меню
-			if(confirm('Reset Timer! All data will be lost!')) {
+			if(showConfirm('confirmReset')) {
 				resetApp();
 			}
 		}
@@ -796,7 +914,7 @@
 			const numTracks = parseInt(document.getElementById('numTracks').value);
 			
 			if(totalMinutes < 1 || numTracks < 1) {
-				alert('Enter value gratee than ZERO!');
+				showAlert('err_grater');
 				return;
 			}
 
