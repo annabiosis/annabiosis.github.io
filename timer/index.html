@@ -406,7 +406,7 @@
 		}
 
 
-		.help {
+		.about, .help {
 			display: none;
 			flex-direction: column;
 			position: absolute;
@@ -436,7 +436,7 @@
 			color: var(--green400);
 		}
 
-		.help.show {
+		.about.show, .help.show {
 			display: flex;
 		}
 
@@ -634,32 +634,45 @@
 			<div class="menu-container">
 				<div class="menu-panel"><button id="hiddenResetBtn" onclick="handleReset()" data-i18n="reset">Reset</button><span class="hor-spacer"></span></div>
 				<button class="other" data-i18n="help" onClick="toggleMenu(); toggleHelp();">Help</button>
+				<button class="other" data-i18n="about" onClick="toggleMenu(); toggleAbout();">About</button>
 				<button class="other" data-i18n="donate" onClick="location.href='https://www.donationalerts.com/r/annabiosis'" type="button">Donate</button>
 			</div>
 		</div>
+		<div class="about">
+			<div class="close" onClick="toggleAbout();">×</div>
+			<div class="typo-block">
+				<h2>muTimer</h2>
+				<p data-i18n="about01">Контролируй время каждого трека и всего выступления целиком.</p>
+				<h3 data-i18n="about02">Возможности</h3>
+				<ul>
+				  <li data-i18n="about03">Автоматическое разделение общего времени на равные отрезки</li>
+				  <li data-i18n="about04">Пересчет продолжительности при досрочном переходе</li>
+				  <li data-i18n="about05">Работа в фоне и оффлайн</li>
+				  <li data-i18n="about06">Визуализация прогресса с подсказками</li>
+				</ul>
+				<h3 data-i18n="about07">Преимущества</h3>
+				<ul>
+				  <li data-i18n="about08">Не требует установки — работает в браузере</li>
+				  <li data-i18n="about09">Сохраняет данные при случайном закрытии</li>
+				  <li data-i18n="about10">Автоматическая локализация</li>
+				  <li data-i18n="about11">Блокировка спящего режима</li>
+				</ul>
+				<h3 data-i18n="about12">Технологии</h3>
+				<p data-i18n="about13">Использует современные PWA-стандарты для кроссплатформенной работы. Сохрани ярлык на главный экран — получишь полноценное приложение.</p>
+				<h3 data-i18n="about14">Разработка</h3>
+				<p><a href="https://www.youtube.com/@Annabiosis" target="_blank" data-i18n="authorlink">Annabiosis и Синтезаторы</a></p>
+			</div>
+		</div>
+
 		<div class="help">
 			<div class="close" onClick="toggleHelp();">×</div>
 			<div class="typo-block">
-				<h2>muTimer</h2>
-				<p data-i18n="help01">Контролируй время каждого трека и всего выступления целиком.</p>
-				<h3 data-i18n="help02">Возможности</h3>
-				<ul>
-				  <li data-i18n="help03">Автоматическое разделение общего времени на равные отрезки</li>
-				  <li data-i18n="help04">Пересчет продолжительности при досрочном переходе</li>
-				  <li data-i18n="help05">Работа в фоне и оффлайн</li>
-				  <li data-i18n="help06">Визуализация прогресса с подсказками</li>
-				</ul>
-				<h3 data-i18n="help07">Преимущества</h3>
-				<ul>
-				  <li data-i18n="help08">Не требует установки — работает в браузере</li>
-				  <li data-i18n="help09">Сохраняет данные при случайном закрытии</li>
-				  <li data-i18n="help10">Автоматическая локализация</li>
-				  <li data-i18n="help11">Блокировка спящего режима</li>
-				</ul>
-				<h3 data-i18n="help12">Технологии</h3>
-				<p data-i18n="help13">Использует современные PWA-стандарты для кроссплатформенной работы. Сохрани ярлык на главный экран — получишь полноценное приложение.</p>
-				<h3 data-i18n="help14">Разработка</h3>
-				<p><a href="https://www.youtube.com/@Annabiosis" target="_blank" data-i18n="authorlink">Annabiosis и Синтезаторы</a></p>
+				<h2 data-i18n="help">Помощь</h2>
+				<p><strong data-i18n="skip">Пропуск</strong> — <span data-i18n="help01">нажимайте, если решили закончить трек раньше. В других случаях нажимать не требуется</span></p>
+				<p><strong data-i18n="reset">Сброс</strong> — <span data-i18n="help02">полностью сбрасывает активный таймер и все сохраненные данные</span></p>
+				<h3 data-i18n="tips">Советы</h3>
+				<p data-i18n="tips01">Если вам нужен только прогресс всего лайва, вводите время лайва и 1 трек</p>
+				<p data-i18n="tips02">Если собираетесь выступать, где не ловит интернет, заранее убедитесь что приложение закэшированно и работает оффлайн</p>
 			</div>
 		</div>
 		<!-- Форма конфигурации -->
@@ -734,23 +747,29 @@
 		        confirmReset: "Are you sure you want to reset?",
 		        performanceEnded: "Performance ended!",
 		        err_grater: "Enter value gratee than ZERO!",
-		        help: "ℹ️ About",
+		        about: "About",
+		        help: "Help", 
 		        donate: "👍 Support me",
-				help01: "Control the timing of each track and the entire performance",
-				help02: "Features",
-				help03: "Automatic division of total time into equal segments",
-				help04: "Recalculation of duration during early transitions",
-				help05: "Background and offline operation",
-				help06: "Progress visualization with cues",
-				help07: "Advantages",
-				help08: "No installation required — works in the browser",
-				help09: "Saves data on accidental closure",
-				help10: "Automatic localization",
-				help11: "Sleep mode prevention",
-				help12: "Technologies",
-				help13: "Uses modern PWA standards for cross-platform functionality. Add to home screen — get a full-fledged app.",
-				help14: "Developer", 
-				authorlink: "Annabiosis" 
+				about01: "Control the timing of each track and the entire performance",
+				about02: "Features",
+				about03: "Automatic division of total time into equal segments",
+				about04: "Recalculation of duration during early transitions",
+				about05: "Background and offline operation",
+				about06: "Progress visualization with cues",
+				about07: "Advantages",
+				about08: "No installation required — works in the browser",
+				about09: "Saves data on accidental closure",
+				about10: "Automatic localization",
+				about11: "Sleep mode prevention",
+				about12: "Technologies",
+				about13: "Uses modern PWA standards for cross-platform functionality. Add to home screen — get a full-fledged app.",
+				about14: "Developer", 
+				authorlink: "Annabiosis",
+				tips: "Tips", 
+		        help01: "Click if you want to finish the track early. No need to click otherwise",
+		        help02: "Completely resets the active timer and all saved data",
+		        tips01: "To track only the full session, input total time and select 1 track",
+		        tips02: "If performing where internet is unavailable, verify the app is cached and functions offline in advance"
 		    },
 		    ru: {
 		        totalDuration: "Длительность",
@@ -764,23 +783,29 @@
 		        confirmReset: "Вы уверены, что хотите сбросить таймер?",
 		        performanceEnded: "Выступление завершено!",
 		        err_grater:"Введите значение больше НОЛЯ!",
-		        help:"ℹ️ О приложении",
+		        about:"О приложении",
+		        help: "Помощь", 
 		        donate: "👍 Поддержите меня",
-		        help01: "Контролируй время каждого трека и всего выступления целиком.",
-		        help02: "Возможности",
-		        help03: "Автоматическое разделение общего времени на равные отрезки",
-		        help04: "Пересчет продолжительности при досрочном переходе",
-		        help05: "Работа в фоне и оффлайн",
-		        help06: "Визуализация прогресса с подсказками",
-		        help07: "Преимущества",
-		        help08: "Не требует установки — работает в браузере",
-		        help09: "Сохраняет данные при случайном закрытии",
-		        help10: "Автоматическая локализация",
-		        help11: "Блокировка спящего режима",
-		        help12: "Технологии",
-		        help13: "Использует современные PWA-стандарты для кроссплатформенной работы. Сохрани ярлык на главный экран — получишь полноценное приложение.",
-		        help14: "Разработка", 
-		        authorlink: "Annabiosis" 
+		        about01: "Контролируй время каждого трека и всего выступления целиком.",
+		        about02: "Возможности",
+		        about03: "Автоматическое разделение общего времени на равные отрезки",
+		        about04: "Пересчет продолжительности при досрочном переходе",
+		        about05: "Работа в фоне и оффлайн",
+		        about06: "Визуализация прогресса с подсказками",
+		        about07: "Преимущества",
+		        about08: "Не требует установки — работает в браузере",
+		        about09: "Сохраняет данные при случайном закрытии",
+		        about10: "Автоматическая локализация",
+		        about11: "Блокировка спящего режима",
+		        about12: "Технологии",
+		        about13: "Использует современные PWA-стандарты для кроссплатформенной работы. Сохрани ярлык на главный экран — получишь полноценное приложение.",
+		        about14: "Разработка", 
+		        authorlink: "Annabiosis",
+		        tips: "Советы", 
+		        help01: "нажимайте, если решили закончить трек раньше. В других случаях нажимать не требуется",
+		        help02: "полностью сбрасывает активный таймер и все сохраненные данные",
+		        tips01: "Если вам нужен только прогресс всего лайва, вводите время лайва и 1 трек",
+		        tips02: "Если собираетесь выступать, где не ловит интернет, заранее убедитесь, что приложение закэшированно и работает оффлайн"
 		    }
 		};
 
@@ -911,6 +936,30 @@
 		// 	}
 
 		// }
+
+	// Показ информации
+		function toggleAbout() {
+			const help = document.querySelector('.about');
+			let backdrop = document.querySelector('.menu-backdrop');
+			
+			isMenuOpen = !isMenuOpen;
+			
+			if(isMenuOpen) {
+				help.classList.add('show');
+				if(!backdrop) {
+					backdrop = document.createElement('div');
+					backdrop.className = 'menu-backdrop';
+					backdrop.onclick = toggleMenu;
+					document.body.appendChild(backdrop);
+				}
+				backdrop.style.display = 'block';
+			} else {
+				help.classList.remove('show');
+				if(backdrop) {
+					backdrop.style.display = 'none';
+				}
+			}
+		}
 
 	// Показ информации
 		function toggleHelp() {
