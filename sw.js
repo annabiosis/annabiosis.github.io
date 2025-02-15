@@ -1,5 +1,5 @@
 // sw.js
-const CACHE_NAME = 'music-timer-v12';
+const CACHE_NAME = 'muTimer-ver-1.0.0';
 const OFFLINE_URL = '/timer/index.html';
 const ASSETS = [
     '/timer/',
@@ -33,7 +33,7 @@ self.addEventListener('activate', (event) => {
     })());
 });
 
-// Стратегия "Сначала сеть, потом кэш" с оффлайн-резервом
+// Стратегия "Сначала сеть, потом кэш с оффлайн-резервом
 self.addEventListener('fetch', (event) => {
     if (event.request.mode === 'navigate') {
         event.respondWith((async () => {
