@@ -15,11 +15,11 @@ const ASSETS = [
 
 // Установка и кэширование ресурсов
 self.addEventListener('install', (event) => {
-    event.waitUntil((async () => {
-        const cache = await caches.open(CACHE_NAME);
-        await cache.addAll(ASSETS);
-        await self.skipWaiting();
-    })());
+  event.waitUntil(
+    caches.open(CACHE_NAME)
+      .then(cache => cache.addAll(ASSETS))
+      .then(() => self.skipWaiting())
+  );
 });
 
 // Активация и очистка старого кэша
@@ -33,31 +33,21 @@ self.addEventListener('activate', (event) => {
     })());
 });
 
-// Стратегия "Сначала сеть, потом кэш с оффлайн-резервом
 self.addEventListener('fetch', (event) => {
-    if (event.request.mode === 'navigate') {
-        event.respondWith((async () => {
-            try {
-                const networkResponse = await fetch(event.request);
-                return networkResponse;
-            } catch (error) {
-                const cache = await caches.open(CACHE_NAME);
-                const cachedResponse = await cache.match(OFFLINE_URL);
-                return cachedResponse;
-            }
-        })());
-    } else {
-        event.respondWith((async () => {
-            const cache = await caches.open(CACHE_NAME);
-            const cachedResponse = await cache.match(event.request);
-            if (cachedResponse) return cachedResponse;
-            try {
-                const networkResponse = await fetch(event.request);
-                cache.put(event.request, networkResponse.clone());
-                return networkResponse;
-            } catch (error) {
-                return new Response('', {status: 503});
-            }
-        })());
-    }
+  // Для навигационных запросов используем стратегию "Cache First"
+  if (event.request.mode === 'navigate') {
+    event.respondWith(
+      caches.match(event.request)
+        .then(cachedResponse => {
+          return cachedResponse || fetch(event.request)
+            .catch(() => caches.match('/index.html'));
+        })
+    );
+  } else {
+    // Для остальных ресурсов: "Cache, falling back to network"
+    event.respondWith(
+      caches.match(event.request)
+        .then(cachedResponse => cachedResponse || fetch(event.request))
+    );
+  }
 });
