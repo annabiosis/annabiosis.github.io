@@ -40,7 +40,7 @@ self.addEventListener('fetch', (event) => {
       caches.match(event.request)
         .then(cachedResponse => {
           return cachedResponse || fetch(event.request)
-            .catch(() => caches.match('/index.html'));
+            .catch(() => caches.match('/timer/index.html'));
         })
     );
   } else {
