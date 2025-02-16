@@ -23,7 +23,7 @@
 	<style>
 		:root {
 			--bg-color: #000;
-			--bg-color-alt: #272727;
+			--bg-color-alt: #011b1c;
 			--text-color: #fff;
 			--primary-color: #71FEAB;
 			--red900: #7A0919;
@@ -40,6 +40,8 @@
 			--grey40: rgba(255,255,255,.4);
 			--menu-bg: var(--bg-color-alt);
 			--divider: rgba(255,255,255,.1);
+			--divider2: rgba(255,255,255,.15);
+			--shadow: rgba(0,0,0,.5);
 
 			--radius-outer: 24px;
 			--gap: 4vw;
@@ -177,7 +179,7 @@
 		}
 
 		p, li {
-			font-size: 15px;
+			font-size: 16px;
 		}
 
 		a {
@@ -216,6 +218,11 @@
 
 		.blink {
 			animation: blink .3s ease-in-out infinite;
+			color: var(--red500) !important;
+		}
+
+		.blink-pb {
+			animation: blink-pb .3s ease-in-out infinite;
 			color: var(--red500) !important;
 		}
 
@@ -272,10 +279,11 @@
 		/*Прогресс бары*/
 		.progress-container {
 			height: 48px;
-			background: #333;
+			background: var(--divider);
 			border-radius: var(--radius-outer);
 			overflow: hidden;
 			position: relative;
+			box-shadow: 0px 4px 8px var(--shadow) inset;
 		}
 
 		.progress-container.total-pb {
@@ -284,6 +292,7 @@
 
 		.progress-bar {
 			height: 100%;
+
 		}
 
 		#trackProgress {
@@ -406,7 +415,7 @@
 		}
 
 
-		.about, .help {
+		.about, .help, .settings {
 			display: none;
 			flex-direction: column;
 			position: absolute;
@@ -436,7 +445,7 @@
 			color: var(--green400);
 		}
 
-		.about.show, .help.show {
+		.about.show, .help.show, .settings.show {
 			display: flex;
 		}
 
@@ -457,6 +466,18 @@
 			align-items: center;
 			justify-content: center;
 			gap: 16px;
+		}
+
+		.chips-container {
+			margin: 16px 0;
+			display: flex;
+			flex-direction: row;
+			gap: 8px;
+		}
+
+		.chips-container .chip {
+			width: fit-content;
+			display: inline-block;
 		}
 
 		.chip, .selector {
@@ -506,12 +527,23 @@
 			width: 100%;
 		}
 
+		.lic {
+			font-size: 12px;
+			line-height: 16px;
+			color: var(--grey40);
+		}
+
 		/*Анимации*/
 		
 		/*Мигание*/
 		@keyframes blink {
 			0%, 100% { opacity: 1; }
 			50% { opacity: 0.3; }
+		}
+
+		@keyframes blink-pb {
+			0%, 100% { background-color: var(--divider2); }
+			50% { background-color: var(--divider); }
 		}
 
 		/*Меню*/
@@ -524,6 +556,17 @@
 				opacity: 1;
 				transform: translateY(0);
 			}
+		}
+
+		@keyframes gradient-flow {
+		    0% { background-position: 0% 50%; }
+		    50% { background-position: 100% 50%; }
+		    100% { background-position: 0% 50%; }
+		}
+
+		@keyframes shine {
+		    0% { transform: translateX(-100%); }
+		    100% { transform: translateX(200%); }
 		}
 
 
@@ -633,6 +676,7 @@
 		<div class="menu-content">
 			<div class="menu-container">
 				<div class="menu-panel"><button id="hiddenResetBtn" onclick="handleReset()" data-i18n="reset">Reset</button><span class="hor-spacer"></span></div>
+				<button class="other" data-i18n="settings" onClick="toggleMenu(); toggleSettings();">Settings</button>
 				<button class="other" data-i18n="help" onClick="toggleMenu(); toggleHelp();">Help</button>
 				<button class="other" data-i18n="about" onClick="toggleMenu(); toggleAbout();">About</button>
 				<button class="other" data-i18n="donate" onClick="location.href='https://www.donationalerts.com/r/annabiosis'" type="button">Donate</button>
@@ -661,6 +705,7 @@
 				<p data-i18n="about13">Использует современные PWA-стандарты для кроссплатформенной работы. Сохрани ярлык на главный экран — получишь полноценное приложение.</p>
 				<h3 data-i18n="about14">Разработка</h3>
 				<p><a href="https://www.youtube.com/@Annabiosis" target="_blank" data-i18n="authorlink">Annabiosis и Синтезаторы</a></p>
+				<p class="lic" data-i18n="lic01">This software uses the IBM Plex Sans typeface. IBM Plex Sans © 2017-2020 IBM Corporation, under the SIL Open Font License 1.1. For details, see: <a href='https://github.com/IBM/plex'>https://github.com/IBM/plex</a></p>
 			</div>
 		</div>
 
@@ -670,11 +715,33 @@
 				<h2 data-i18n="help">Помощь</h2>
 				<p><strong data-i18n="skip">Пропуск</strong> — <span data-i18n="help01">нажимайте, если решили закончить трек раньше. В других случаях нажимать не требуется</span></p>
 				<p><strong data-i18n="reset">Сброс</strong> — <span data-i18n="help02">полностью сбрасывает активный таймер и все сохраненные данные</span></p>
+				<h3 data-i18n="statuses">Статусы</h3>
+				<p><span data-i18n="help03">💡 — статус успешного управления подсветкой</span></p>
+				<p><span data-i18n="help04">📡 — статус интернет-соединения</span></p>
 				<h3 data-i18n="tips">Советы</h3>
 				<p data-i18n="tips01">Если вам нужен только прогресс всего лайва, вводите время лайва и 1 трек</p>
 				<p data-i18n="tips02">Если собираетесь выступать, где не ловит интернет, заранее убедитесь что приложение закэшированно и работает оффлайн</p>
+				<p data-i18n="tips03">Приложение адаптировано и для горизонтального использования</p>
 			</div>
 		</div>
+		
+		<div class="settings">
+			<div class="close" onClick="toggleSettings();">×</div>
+			<div class="typo-block">
+				<h2 data-i18n="settings">Настройки</h2>
+					<div class="blink-settings">
+					    <h3 data-i18n="blinkIn">Мигать за</h3>
+					    <div class="chips-container">
+					        <div class="chip" data-i18n="off" data-seconds="0">Выкл</div>
+					        <div class="chip" data-i18n="sec30" data-seconds="30">30 c.</div>
+					        <div class="chip" data-i18n="min1" data-seconds="60">1 м.</div>
+					        <div class="chip" data-i18n="min15" data-seconds="90">1,5 м.</div>
+					    </div>
+					</div>
+					<p data-i18n="blinkhelp">Можно выбрать за сколько времени до конца трека таймер начнет мигать</p>
+			</div>
+		</div>
+
 		<!-- Форма конфигурации -->
 		<form id="configForm">
 			<h1 class="apptitle">muTimer</h1>
@@ -706,7 +773,7 @@
 						<span class="curTrack" id="currentTrack"></span>/<span class="trkCount" id="trackCount"></span> <span id="trackDuration"></span><span id="wakeLockStatus"></span><span id="connectionStatus"></span>
 					</h4>
 					<div><span id="trackTimer" class="timer main"></span></div>
-					<div class="progress-container">
+					<div id="trackProgressContainer" class="progress-container">
 						<div id="trackProgress" class="progress-bar"></div>
 					</div>
 				</div>
@@ -733,7 +800,7 @@
 			</div>
 		</div>
 		<script>
-		// 1. Создаем словари переводов
+		// Словари переводов
 		const i18n = {
 		    en: {
 		        totalDuration: "Total duration",
@@ -768,8 +835,22 @@
 				tips: "Tips", 
 		        help01: "Click if you want to finish the track early. No need to click otherwise",
 		        help02: "Completely resets the active timer and all saved data",
+		        statuses: "Statuses", 
+		        help03: "💡 — screen sleep-mode control status",
+		        help04: "📡 — internet connection status",
 		        tips01: "To track only the full session, input total time and select 1 track",
-		        tips02: "If performing where internet is unavailable, verify the app is cached and functions offline in advance"
+		        tips02: "If performing where internet is unavailable, verify the app is cached and functions offline in advance",
+		        tips03: "The app is fully optimized for landscape mode usage", 
+		        lic01: "Typeface IBM Plex Sans © 2017-2020 IBM Corporation, under the SIL Open Font License 1.1. For details, see: https://github.com/IBM/plex",
+		        settings: "Settings",
+		        blinkIn: "Blink in",
+		        min2: "2 min",
+		        min15: "1.5 min",
+		        min1: "1 min",
+		        sec30: "30 sec",
+		        blinkhelp: "Set timer blink start time before track ends",
+		        off: "Off",
+		        on: "On" 
 		    },
 		    ru: {
 		        totalDuration: "Длительность",
@@ -804,10 +885,55 @@
 		        tips: "Советы", 
 		        help01: "нажимайте, если решили закончить трек раньше. В других случаях нажимать не требуется",
 		        help02: "полностью сбрасывает активный таймер и все сохраненные данные",
+		        statuses: "Статусы",
+		        help03: "💡 — статус успешного управления подсветкой",
+		        help04: "📡 — статус интернет-соединения",  
 		        tips01: "Если вам нужен только прогресс всего лайва, вводите время лайва и 1 трек",
-		        tips02: "Если собираетесь выступать, где не ловит интернет, заранее убедитесь, что приложение закэшированно и работает оффлайн"
+		        tips02: "Если собираетесь выступать, где не ловит интернет, заранее убедитесь, что приложение закэшированно и работает оффлайн",
+		        tips03: "Приложение адаптировано и для горизонтального использования", 
+		        lic01: "Шрифт IBM Plex Sans © 2017-2020 IBM Corporation, используется в соответствии с лицензией SIL Open Font License 1.1. Подробнее. For details, see: https://github.com/IBM/plex",
+		        settings: "Настройки",
+		        blinkIn: "Мигать за",
+		        min2: "2 мин",
+		        min15: "1,5 мин",
+		        min1: "1 мин",
+		        sec30: "30 сек",
+		        blinkhelp: "Можно выбрать за сколько времени до конца трека таймер начнет мигать",
+		        off: "Выкл",
+		        on: "Вкл" 
 		    }
 		};
+
+
+		// Инициализация
+		let blinkThreshold = localStorage.getItem('blinkThreshold') || 30;
+
+		// Обработчики чипов
+		document.querySelectorAll('.blink-settings .chip').forEach(chip => {
+		    chip.addEventListener('click', function() {
+		        // Удаляем активный класс у всех чипов
+		        document.querySelectorAll('.blink-settings .chip').forEach(c => 
+		            c.classList.remove('active')
+		        );
+		        
+		        // Устанавливаем новое значение
+		        blinkThreshold = parseInt(this.dataset.seconds);
+		        localStorage.setItem('blinkThreshold', blinkThreshold);
+		        
+		        // Добавляем активный класс
+		        this.classList.add('active');
+		    });
+		});
+
+		// Восстановление при загрузке
+		document.addEventListener('DOMContentLoaded', () => {
+		    document.querySelectorAll('.blink-settings .chip').forEach(chip => {
+		        if(parseInt(chip.dataset.seconds) === parseInt(blinkThreshold)) {
+		            chip.classList.add('active');
+		        }
+		    });
+		});
+
 
 		// Обновление статуса соединения
 		function updateConnectionStatus() {
@@ -961,9 +1087,33 @@
 			}
 		}
 
-	// Показ информации
+		// Показ помощи
 		function toggleHelp() {
 			const help = document.querySelector('.help');
+			let backdrop = document.querySelector('.menu-backdrop');
+			
+			isMenuOpen = !isMenuOpen;
+			
+			if(isMenuOpen) {
+				help.classList.add('show');
+				if(!backdrop) {
+					backdrop = document.createElement('div');
+					backdrop.className = 'menu-backdrop';
+					backdrop.onclick = toggleMenu;
+					document.body.appendChild(backdrop);
+				}
+				backdrop.style.display = 'block';
+			} else {
+				help.classList.remove('show');
+				if(backdrop) {
+					backdrop.style.display = 'none';
+				}
+			}
+		}
+
+		// Показ помощи
+		function toggleSettings() {
+			const help = document.querySelector('.settings');
 			let backdrop = document.querySelector('.menu-backdrop');
 			
 			isMenuOpen = !isMenuOpen;
@@ -1111,6 +1261,7 @@
 			const trackDuration = (state.totalDuration - totalSpent) / remainingTracks;
 			const trackElapsed = totalElapsed - totalSpent;
 			let trackRemaining = trackDuration - trackElapsed;
+			const shouldBlink = trackRemaining <= blinkThreshold;
 
 			// Автоматический переход при отрицательном времени
 			if(trackRemaining <= 0 && remainingTracks > 1) {
@@ -1137,13 +1288,13 @@
 
 			// Мигание
 			const trackTimerElement = document.getElementById('trackTimer');
-			const trackProgressBar = document.getElementById('trackProgress');
-			if (trackRemaining <= 30000) { // 30 секунд
+			const trackProgressBar = document.getElementById('trackProgressContainer');
+			if (trackRemaining <= blinkThreshold*1000) { // 30 секунд
 				trackTimerElement.classList.add('blink');
-				trackProgressBar.classList.add('blink');
+				trackProgressBar.classList.add('blink-pb');
 			} else {
 				trackTimerElement.classList.remove('blink');
-				trackProgressBar.classList.remove('blink');
+				trackProgressBar.classList.remove('blink-pb');
 			}
 		}
 
@@ -1156,6 +1307,7 @@
 
 		// Сброс приложения
 		function resetApp() {
+			const savedThreshold = localStorage.getItem('blinkThreshold');
 			clearInterval(intervalId);
 			releaseWakeLock();
 			localStorage.removeItem('timerState');
@@ -1169,6 +1321,8 @@
 			document.getElementById('timers').style.display = 'none';
 			document.getElementById('configForm').style.display = 'block';
 			document.getElementById('nextTrackBtn').disabled = false;
+
+			if(savedThreshold) localStorage.setItem('blinkThreshold', savedThreshold);
 		}
 
 		function handleReset() {
@@ -1231,10 +1385,10 @@
 		});
 
 		// Обработчик для чипов
-		document.querySelectorAll('.chip').forEach(chip => {
+		document.querySelectorAll('.shortcuts .chip').forEach(chip => {
 			chip.addEventListener('click', function() {
 				// Удаляем активный класс у всех чипов
-				document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+				document.querySelectorAll('.shortcuts .chip').forEach(c => c.classList.remove('active'));
 				
 				// Устанавливаем значение в поле ввода
 				const minutes = this.dataset.minutes;
