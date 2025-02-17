@@ -86,7 +86,7 @@
 			height:152px;
 			margin: 16px 0;
 			box-sizing: border-box;
-			border: 0;
+			border: 1px solid var(--divider);
 			border-radius: var(--radius-outer);
 			font-size: 144px;
 			text-align: center;
@@ -196,7 +196,7 @@
 			flex-direction: column;
 			gap: var(--gap);
 			margin-top: 8px;
-			margin-bottom: 24px;
+			margin-bottom: 48px;
 		}
 
 		.status-bar {
@@ -273,6 +273,7 @@
 			line-height: 36vw;
 			font-weight: 100;
 			color: var(--green400);
+			text-shadow: 0 0 16px var(--green400);
 		}
 
 		.timer.secondary {
@@ -470,7 +471,7 @@
 			display: flex;
 			flex-direction: row;
 			align-items: center;
-			justify-content: center;
+			justify-content: left;
 			gap: 16px;
 		}
 
@@ -716,6 +717,7 @@
 			    display: inline-block;
 			    width: 100%;
 			    text-align: center;
+
 			}
 
 			.burger-menu {
