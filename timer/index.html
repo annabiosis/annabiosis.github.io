@@ -1131,17 +1131,6 @@
 		});
 
 
-		// Проверка поддержки вибрации
-		const supportsVibration = "vibrate" in navigator;
-
-		// Базовая функция вибрации
-		function vibrate(pattern = 50) {
-		    if (supportsVibration) {
-		        navigator.vibrate(pattern);
-		    }
-		}
-
-
 		function calculateTrackPresets(totalMinutes) {
 		    const presets = {};
 		    
@@ -1221,7 +1210,7 @@
 			            <div class="preset" 
 			                 data-minutes="${minutes}" 
 			                 data-count="${count}"
-			                 onclick="document.getElementById('numTracks').value = ${count}; updateAverageTimeDisplay(); updateActivePreset(${count}); vibrate(50);">${count}
+			                 onclick="document.getElementById('numTracks').value = ${count}; updateAverageTimeDisplay(); updateActivePreset(${count});">${count}
 			            </div>
 			        `).join('');
 			} else {
