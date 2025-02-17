@@ -502,6 +502,11 @@
 			color: var(--red500);
 		}
 
+		.preset.active {
+			background: var(--red500);
+			color: var(--red900);
+		}
+
 		.chip.active {
 			background: var(--green600);
 			color: var(--green900);
@@ -1111,7 +1116,13 @@
 
 		// Восстановление при загрузке
 		document.addEventListener('DOMContentLoaded', () => {
+			applyTranslations();
+		    addLanguageSwitcher();
 			updateTrackPresets();
+			
+			const initialValue = document.getElementById('numTracks').value;
+    		updateActivePreset(initialValue);
+		    
 		    document.querySelectorAll('.blink-settings .chip').forEach(chip => {
 		        if(parseInt(chip.dataset.seconds) === parseInt(blinkThreshold)) {
 		            chip.classList.add('active');
@@ -1129,6 +1140,28 @@
 		    });
 
 		    return presets;
+		}
+
+
+		document.getElementById('numTracks').addEventListener('input', function() {
+		    updateActivePreset(this.value);
+		});
+
+		// Функция обновления активного пресета
+		function updateActivePreset(currentValue) {
+		    const chips = document.querySelectorAll('.preset[data-count]');
+		    
+		    // Удаляем класс active у всех чипов
+		    chips.forEach(chip => chip.classList.remove('active'));
+		    
+		    // Ищем чип с совпадающим значением
+		    const activeChip = Array.from(chips).find(chip => 
+		        parseInt(chip.dataset.count) === parseInt(currentValue)
+		    );
+		    
+		    if(activeChip) {
+		        activeChip.classList.add('active');
+		    }
 		}
 
 
@@ -1173,7 +1206,7 @@
 		            <div class="preset" 
 		                 data-minutes="${minutes}" 
 		                 data-count="${count}"
-		                 onclick="document.getElementById('numTracks').value = ${count}; updateAverageTimeDisplay();">${count}
+		                 onclick="document.getElementById('numTracks').value = ${count}; updateAverageTimeDisplay(); updateActivePreset(${count});">${count}
 		            </div>
 		        `).join('');
 		}
@@ -1228,12 +1261,6 @@
 		            btn.classList.toggle('active', btn.dataset.lang === currentLang)
 		        );
 		    }
-		});
-
-		// Обновляем элементы интерфейса
-		document.addEventListener('DOMContentLoaded', () => {
-		    applyTranslations();
-		    addLanguageSwitcher();
 		});
 
 		// Алерты
@@ -1304,17 +1331,6 @@
 				}
 			}
 		}
-
-		// function hideMenu() {
-		// 	const menu = document.querySelector('.menu-content');
-		// 	let backdrop = document.querySelector('.menu-backdrop');
-
-		// 	menu.classList.remove('show');
-		// 	if(backdrop) {
-		// 		backdrop.style.display = 'none';
-		// 	}
-
-		// }
 
 	// Показ информации
 		function toggleAbout() {
