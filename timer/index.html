@@ -3,7 +3,7 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Музыкальный таймер</title>
+	<title>muTimer</title>
 	
 	<link rel="icon" href="icons/favicon.svg" type="image/svg+xml">
 	
@@ -533,8 +533,80 @@
 			color: var(--grey40);
 		}
 
-		/*Анимации*/
-		
+
+		/* Диалоги */
+
+		.dialog-overlay {
+		    position: fixed;
+		    top: 0;
+		    left: 0;
+		    right: 0;
+		    bottom: 0;
+		    background: rgba(0,0,0,0.7);
+		    display: none;
+		    align-items: center;
+		    justify-content: center;
+		    z-index: 2000;
+		    animation: fadeIn 0.3s;
+		}
+
+		.dialog-container {
+		    background: var(--bg-color-alt);
+		    border-radius: var(--radius-outer);
+		    padding: 24px;
+		    min-width: 280px;
+		    max-width: 90vw;
+		    transform: scale(0.9);
+		    margin: 48px;
+		    animation: scaleUp 0.2s forwards;
+		}
+
+		.dialog-content p {
+		    font-size: 8vw;
+		    margin: 0 0 24px;
+		    line-height: 10vw;
+		}
+
+		.dialog-buttons {
+		    display: flex;
+		    gap: var(--gap);
+		    justify-content: flex-end;
+		    flex-direction: column-reverse;
+		}
+
+		.dialog-buttons button {
+			width: 100%;
+		    padding: 8px 20px;
+		    border-radius: 20px;
+		    border: none;
+		    cursor: pointer;
+		    transition: opacity 0.2s;
+		}
+
+		#dialogConfirm {
+		    background: var(--green1000);
+		    color: var(--green400); 
+		}
+
+		#dialogCancel {
+		    background: var(--green1000);
+		    color: var(--green400);
+		}
+
+
+		/* Анимации */
+
+		/* Диалоги */
+		@keyframes fadeIn {
+		    from { opacity: 0; }
+		    to { opacity: 1; }
+		}
+
+		@keyframes scaleUp {
+		    to { transform: scale(1); }
+		}	
+
+
 		/*Мигание*/
 		@keyframes blink {
 			0%, 100% { opacity: 1; }
@@ -570,7 +642,12 @@
 		}
 
 
-		@media (orientation: landscape) {
+		@media (hover: none) and (pointer: coarse)  {
+			/* устройства с тач */
+		}
+
+
+		@media (orientation: landscape)  {
   			body {
     			flex-direction: row;
     			padding: 0;
@@ -662,6 +739,16 @@
 				flex-direction: row;
 				gap: 2vw;
 				padding: 4vw;
+			}
+
+			.dialog-content p {
+			    font-size: 4vw;
+			    line-height: 6vw;
+			}
+
+			.dialog-buttons {
+			    gap: var(--gap-mid);
+			    flex-direction: row;
 			}
 
 		}
@@ -799,6 +886,21 @@
 
 			</div>
 		</div>
+
+
+		<div class="dialog-overlay" id="dialogOverlay">
+		    <div class="dialog-container">
+		        <div class="dialog-content">
+		            <p id="dialogMessage"></p>
+		            <div class="dialog-buttons">
+		                <button id="dialogCancel"></button>
+		                <button id="dialogConfirm"></button>
+		            </div>
+		        </div>
+		    </div>
+		</div>
+
+
 		<script>
 		// Словари переводов
 		const i18n = {
@@ -850,7 +952,10 @@
 		        sec30: "30 sec",
 		        blinkhelp: "Set timer blink start time before track ends",
 		        off: "Off",
-		        on: "On" 
+		        on: "On",
+		        ok: "OK",
+				confirm: "Confirm",
+				cancel: "Cancel"
 		    },
 		    ru: {
 		        totalDuration: "Длительность",
@@ -900,10 +1005,64 @@
 		        sec30: "30 сек",
 		        blinkhelp: "Можно выбрать за сколько времени до конца трека таймер начнет мигать",
 		        off: "Выкл",
-		        on: "Вкл" 
+		        on: "Вкл",
+		        ok: "OK",
+				confirm: "Подтвердить",
+				cancel: "Отмена" 
 		    }
 		};
 
+
+		// Диалоги
+		class Dialog {
+		    constructor() {
+		        this.overlay = document.getElementById('dialogOverlay');
+		        this.message = document.getElementById('dialogMessage');
+		        this.confirmBtn = document.getElementById('dialogConfirm');
+		        this.cancelBtn = document.getElementById('dialogCancel');
+		        this.initEvents();
+		    }
+
+		    initEvents() {
+		        this.overlay.addEventListener('click', e => {
+		            if(e.target === this.overlay) this.hide();
+		        });
+		        
+		        document.addEventListener('keydown', e => {
+		            if(e.key === 'Escape') this.hide();
+		        });
+		    }
+
+		    show(options) {
+		        return new Promise(resolve => {
+		            this.message.textContent = options.message;
+		            this.confirmBtn.textContent = options.confirmText || 'OK';
+		            this.cancelBtn.textContent = options.cancelText || 'Cancel';
+
+		            this.confirmBtn.onclick = () => {
+		                this.hide();
+		                resolve(true);
+		            };
+
+		            this.cancelBtn.onclick = () => {
+		                this.hide();
+		                resolve(false);
+		            };
+
+		            this.cancelBtn.style.display = options.showCancel ? 'block' : 'none';
+		            this.overlay.style.display = 'flex';
+		            this.confirmBtn.focus();
+		        });
+		    }
+
+		    hide() {
+		        this.overlay.style.display = 'none';
+		    }
+		}
+
+
+		// Инициализация диалогов
+		const customDialog = new Dialog();
 
 		// Инициализация
 		let blinkThreshold = localStorage.getItem('blinkThreshold') || 30;
@@ -994,11 +1153,20 @@
 
 		// Алерты
 		function showAlert(message) {
-		    alert(i18n[currentLang][message] || message);
+		    return customDialog.show({
+		        message: i18n[currentLang][message],
+		        showCancel: false,
+		        confirmText: i18n[currentLang].ok
+		    });
 		}
 
 		function showConfirm(message) {
-		    return confirm(i18n[currentLang][message] || message);
+		    return customDialog.show({
+		        message: i18n[currentLang][message],
+		        showCancel: true,
+		        confirmText: i18n[currentLang].confirm,
+		        cancelText: i18n[currentLang].cancel
+		    });
 		}
 
 		// Проверка поддержки Service Worker
@@ -1327,9 +1495,11 @@
 
 		function handleReset() {
 			toggleMenu(); // Закрываем меню
-			if(showConfirm('confirmReset')) {
-				resetApp();
-			}
+			showConfirm('confirmReset').then(confirmed => {
+			    if(confirmed) {
+			        resetApp(); // Пользователь подтвердил
+			    }
+			});
 		}
 
 		// Инициализация формы
@@ -1343,6 +1513,8 @@
 				showAlert('err_grater');
 				return;
 			}
+
+
 
 			state = {
 				startTime: Date.now(),
