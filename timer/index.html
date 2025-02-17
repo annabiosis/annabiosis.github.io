@@ -69,8 +69,13 @@
 		label {
 			font-size: 32px;
 			line-height: 40px;
-			display: block;
+			display: flex;
 			width: 100%;
+			justify-content: space-between;
+		}
+
+		.average {
+			color: var(--red900);
 		}
 
 		input {
@@ -191,6 +196,7 @@
 			flex-direction: column;
 			gap: var(--gap);
 			margin-top: 8px;
+			margin-bottom: 24px;
 		}
 
 		.status-bar {
@@ -480,7 +486,7 @@
 			display: inline-block;
 		}
 
-		.chip, .selector {
+		.chip, .selector, .preset {
 			font-size: 20px;
 			line-height: 24px;
 			font-weight: 400;
@@ -489,6 +495,11 @@
 			color: var(--green400);
 			border-radius: var(--radius-outer);
 			height: fit-content;
+		}
+
+		.red .preset {
+			background-color: var(--red900);
+			color: var(--red500);
 		}
 
 		.chip.active {
@@ -580,6 +591,7 @@
 		    border-radius: 20px;
 		    border: none;
 		    cursor: pointer;
+		    font-size: 4vw;
 		    transition: opacity 0.2s;
 		}
 
@@ -589,7 +601,7 @@
 		}
 
 		#dialogCancel {
-		    background: var(--green1000);
+		    background: var(--bg-color);
 		    color: var(--green400);
 		}
 
@@ -663,6 +675,10 @@
 
 			button {
 				padding: 16px 4vw;
+			}
+
+			#configForm {
+				margin-right: 8vw
 			}
 
 			.form-direction {
@@ -749,6 +765,10 @@
 			.dialog-buttons {
 			    gap: var(--gap-mid);
 			    flex-direction: row;
+			}
+
+			.dialog-buttons button {
+			    font-size: 2vw;
 			}
 
 		}
@@ -844,8 +864,9 @@
 					</div>
 				</div>
 				<div class="input-group">
-					<label class="red600" data-i18n="tracks">Tracks Count</label>
+					<label class="red600"><span data-i18n="tracks">Tracks Count</span> <span class="average"><span data-i18n="each">по</span> <span id="averageTimeDisplay">--:--</span></span></label>
 					<input type="number" id="numTracks" placeholder="0" pattern="[0-9]*" inputmode="numeric" required>
+					<div class="shortcuts red" id="trackPresets"></div>
 				</div>
 			</div>
 			<button type="submit" class="go" data-i18n="start">Go!</button>
@@ -955,7 +976,8 @@
 		        on: "On",
 		        ok: "OK",
 				confirm: "Confirm",
-				cancel: "Cancel"
+				cancel: "Cancel",
+				each: "each"
 		    },
 		    ru: {
 		        totalDuration: "Длительность",
@@ -1008,7 +1030,8 @@
 		        on: "Вкл",
 		        ok: "OK",
 				confirm: "Подтвердить",
-				cancel: "Отмена" 
+				cancel: "Отмена",
+				each: "по"  
 		    }
 		};
 
@@ -1084,14 +1107,76 @@
 		    });
 		});
 
+		document.getElementById('totalTime').addEventListener('input', updateTrackPresets);
+
 		// Восстановление при загрузке
 		document.addEventListener('DOMContentLoaded', () => {
+			updateTrackPresets();
 		    document.querySelectorAll('.blink-settings .chip').forEach(chip => {
 		        if(parseInt(chip.dataset.seconds) === parseInt(blinkThreshold)) {
 		            chip.classList.add('active');
 		        }
 		    });
 		});
+
+
+		function calculateTrackPresets(totalMinutes) {
+		    const presets = {};
+		    
+		    [3, 4, 5, 6].forEach(minutes => {
+		        const count = Math.round(totalMinutes / minutes);
+		        presets[minutes] = count > 0 ? count : 1;
+		    });
+
+		    return presets;
+		}
+
+
+		function calculateAverageTrackTime() {
+		    const totalMinutes = parseFloat(document.getElementById('totalTime').value) || 0;
+		    const numTracks = parseInt(document.getElementById('numTracks').value) || 1;
+		    
+		    // Расчет в секундах для точности
+		    const totalSeconds = totalMinutes * 60;
+		    const averageSeconds = totalSeconds / numTracks;
+		    
+		    // Форматирование времени
+		    const minutes = Math.floor(averageSeconds / 60);
+		    const seconds = Math.round(averageSeconds % 60);
+		    
+		    
+		    return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+		}
+
+		// Функция обновления отображения
+		function updateAverageTimeDisplay() {
+		    const displayElement = document.getElementById('averageTimeDisplay');
+		    
+		    if(!displayElement) return;
+		    
+		    try {
+		        displayElement.textContent = calculateAverageTrackTime();
+		    } catch(e) {
+		        displayElement.textContent = '--:--';
+		    }
+		}
+
+
+		// Функция обновления пресетов
+		function updateTrackPresets() {
+		    const totalMinutes = parseInt(document.getElementById('totalTime').value) || 0;
+		    const presets = calculateTrackPresets(totalMinutes);
+		    const container = document.getElementById('trackPresets');
+
+		    container.innerHTML = Object.entries(presets)
+		        .map(([minutes, count]) => `
+		            <div class="preset" 
+		                 data-minutes="${minutes}" 
+		                 data-count="${count}"
+		                 onclick="document.getElementById('numTracks').value = ${count}; updateAverageTimeDisplay();">${count}
+		            </div>
+		        `).join('');
+		}
 
 
 		// Обновление статуса соединения
@@ -1578,6 +1663,7 @@
 		document.getElementById('totalTime').addEventListener('input', function() {
 			const chips = document.querySelectorAll('.chip');
 			const currentValue = this.value;
+			updateAverageTimeDisplay();
 			
 			// Проверяем, совпадает ли значение с чипом
 			const activeChip = Array.from(chips).find(chip => 
@@ -1588,6 +1674,8 @@
 				chips.forEach(chip => chip.classList.remove('active'));
 			}
 		});
+
+		document.getElementById('numTracks').addEventListener('input', updateAverageTimeDisplay);
 
 		// Wake Lock при возвращении на вкладку
 		document.addEventListener('visibilitychange', () => {
