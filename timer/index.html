@@ -86,7 +86,7 @@
 			height:152px;
 			margin: 16px 0;
 			box-sizing: border-box;
-			border: 1px solid var(--border-color);
+			border: 0;
 			border-radius: var(--radius-outer);
 			font-size: 144px;
 			text-align: center;
@@ -1139,6 +1139,7 @@
 		        presets[minutes] = count > 0 ? count : 1;
 		    });
 
+
 		    return presets;
 		}
 
@@ -1198,17 +1199,23 @@
 		// Функция обновления пресетов
 		function updateTrackPresets() {
 		    const totalMinutes = parseInt(document.getElementById('totalTime').value) || 0;
+		    const totalTracks = parseInt(document.getElementById('numTracks').value) || 0;
 		    const presets = calculateTrackPresets(totalMinutes);
 		    const container = document.getElementById('trackPresets');
 
-		    container.innerHTML = Object.entries(presets)
-		        .map(([minutes, count]) => `
-		            <div class="preset" 
-		                 data-minutes="${minutes}" 
-		                 data-count="${count}"
-		                 onclick="document.getElementById('numTracks').value = ${count}; updateAverageTimeDisplay(); updateActivePreset(${count});">${count}
-		            </div>
-		        `).join('');
+		    if (totalMinutes > 0) {
+
+			    container.innerHTML = Object.entries(presets)
+			        .map(([minutes, count]) => `
+			            <div class="preset" 
+			                 data-minutes="${minutes}" 
+			                 data-count="${count}"
+			                 onclick="document.getElementById('numTracks').value = ${count}; updateAverageTimeDisplay(); updateActivePreset(${count});">${count}
+			            </div>
+			        `).join('');
+			} else {
+				container.innerHTML = '<div class="preset">--</div>';
+			}
 		}
 
 
