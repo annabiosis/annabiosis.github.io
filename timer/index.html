@@ -25,7 +25,6 @@
 			--bg-color: #000;
 			--bg-color-alt: #011b1c;
 			--text-color: #fff;
-			--primary-color: #71FEAB;
 			--red900: #7A0919;
 			--red600: #DB3323;
 			--red500: #FF5230;
@@ -46,6 +45,28 @@
 			--radius-outer: 24px;
 			--gap: 4vw;
 			--gap-mid: 2vw;           
+		}
+
+		.night {
+			--bg-color: #000;
+			--bg-color-alt: #300000;
+			--text-color: var(--red100);
+			--red900: #7A0000;
+			--red600: #DB0000;
+			--red500: #FF0000;
+			--red100: #FF0000;
+			--green600: var(--red600);
+			--green400: var(--red500);
+			--green900: var(--red900);
+			--green1000: #500000;
+			--border-color: rgba(255,0,0,.2);
+			--border-red: var(--red900);
+			--border-green: var(--green900);
+			--grey40: rgba(255,0,0,.4);
+			--menu-bg: var(--bg-color-alt);
+			--divider: rgba(255,0,0,.1);
+			--divider2: rgba(255,0,0,.15);
+			--shadow: rgba(0,0,0,.5);
 		}
 
 		html {
@@ -99,7 +120,7 @@
 
 		button {
 			padding: 16px 8vw;
-			background: var(--primary-color);
+			background: var(--green400);
 			color: var(--green900);
 			border: none;
 			border-radius: var(--radius-outer);
@@ -189,6 +210,10 @@
 
 		a {
 			color: var(--green400);
+		}
+
+		hr {
+			border: 1px solid var(--divider);
 		}
 
 		.form-direction {
@@ -387,7 +412,7 @@
 			background: var(--red500);
 			line-height: 24px;
 			border: 1px solid var(--border-red);
-			color: var(--red100);
+			color: var(--red900);
 			padding: 8px 16px;
 			font-size: 16px;
 			margin: 0;
@@ -496,6 +521,7 @@
 			color: var(--green400);
 			border-radius: var(--radius-outer);
 			height: fit-content;
+			white-space: nowrap;
 		}
 
 		.red .preset {
@@ -807,6 +833,7 @@
 				  <li data-i18n="about04">Пересчет продолжительности при досрочном переходе</li>
 				  <li data-i18n="about05">Работа в фоне и оффлайн</li>
 				  <li data-i18n="about06">Визуализация прогресса с подсказками</li>
+				  <li data-i18n="about15">Ночная тема</li>
 				</ul>
 				<h3 data-i18n="about07">Преимущества</h3>
 				<ul>
@@ -846,14 +873,25 @@
 					<div class="blink-settings">
 					    <h3 data-i18n="blinkIn">Мигать за</h3>
 					    <div class="chips-container">
-					        <div class="chip" data-i18n="off" data-seconds="0">Выкл</div>
 					        <div class="chip" data-i18n="sec30" data-seconds="30">30 c.</div>
 					        <div class="chip" data-i18n="min1" data-seconds="60">1 м.</div>
 					        <div class="chip" data-i18n="min15" data-seconds="90">1,5 м.</div>
+					        <div class="chip" data-i18n="off" data-seconds="0">Выкл</div>
 					    </div>
+						<p data-i18n="blinkhelp">Можно выбрать за сколько времени до конца трека таймер начнет мигать</p>
 					</div>
-					<p data-i18n="blinkhelp">Можно выбрать за сколько времени до конца трека таймер начнет мигать</p>
+					<hr>
+					<div class="night-settings">
+					    <h3 data-i18n="nightMode">Ночной режим</h3>
+					    <div class="chips-container">
+					        <div class="chip" data-i18n="off" data-night="false">Выкл</div>
+					        <div class="chip" data-i18n="on" data-night="true">Вкл</div>
+					    </div>
+						<p data-i18n="nightHelp">Можно выбрать за сколько времени до конца трека таймер начнет мигать</p>
+					</div>
+					
 			</div>
+
 		</div>
 
 		<!-- Форма конфигурации -->
@@ -864,10 +902,10 @@
 					<label class="green500" data-i18n="totalDuration">Set Duration (min)</label>
 					<input type="number" id="totalTime" placeholder="0" pattern="[0-9]*" inputmode="numeric" required>
 					<div class="shortcuts">
-						<div class="chip" data-minutes="30">30</div>
-						<div class="chip" data-minutes="60">60</div>
-						<div class="chip" data-minutes="90">90</div>
-						<div class="chip" data-minutes="120">120</div>
+						<div class="chip" data-minutes="30">30′</div>
+						<div class="chip" data-minutes="60">60′</div>
+						<div class="chip" data-minutes="90">90′</div>
+						<div class="chip" data-minutes="120">120′</div>
 					</div>
 				</div>
 				<div class="input-group">
@@ -953,6 +991,7 @@
 				about04: "Recalculation of duration during early transitions",
 				about05: "Background and offline operation",
 				about06: "Progress visualization with cues",
+				about15: "Night Mode",
 				about07: "Advantages",
 				about08: "No installation required — works in the browser",
 				about09: "Saves data on accidental closure",
@@ -974,17 +1013,19 @@
 		        lic01: "Typeface IBM Plex Sans © 2017-2020 IBM Corporation, under the SIL Open Font License 1.1. For details, see: https://github.com/IBM/plex",
 		        settings: "Settings",
 		        blinkIn: "Blink in",
-		        min2: "2 min",
-		        min15: "1.5 min",
-		        min1: "1 min",
-		        sec30: "30 sec",
+		        min2: "2′",
+		        min15: "1.5′",
+		        min1: "1′",
+		        sec30: "30′′",
 		        blinkhelp: "Set timer blink start time before track ends",
 		        off: "Off",
 		        on: "On",
 		        ok: "OK",
 				confirm: "Confirm",
 				cancel: "Cancel",
-				each: "each"
+				each: "each",
+				nightMode: "Night Mode",
+				nightHelp: "Makes the interface red so it doesn't blind your eyes in the dark" 
 		    },
 		    ru: {
 		        totalDuration: "Длительность",
@@ -1007,6 +1048,7 @@
 		        about04: "Пересчет продолжительности при досрочном переходе",
 		        about05: "Работа в фоне и оффлайн",
 		        about06: "Визуализация прогресса с подсказками",
+		        about15: "Ночной режим",
 		        about07: "Преимущества",
 		        about08: "Не требует установки — работает в браузере",
 		        about09: "Сохраняет данные при случайном закрытии",
@@ -1028,19 +1070,25 @@
 		        lic01: "Шрифт IBM Plex Sans © 2017-2020 IBM Corporation, используется в соответствии с лицензией SIL Open Font License 1.1. Подробнее. For details, see: https://github.com/IBM/plex",
 		        settings: "Настройки",
 		        blinkIn: "Мигать за",
-		        min2: "2 мин",
-		        min15: "1,5 мин",
-		        min1: "1 мин",
-		        sec30: "30 сек",
+		        min2: "2′",
+		        min15: "1,5′",
+		        min1: "1′",
+		        sec30: "30′′",
 		        blinkhelp: "Можно выбрать за сколько времени до конца трека таймер начнет мигать",
 		        off: "Выкл",
 		        on: "Вкл",
 		        ok: "OK",
 				confirm: "Подтвердить",
 				cancel: "Отмена",
-				each: "по"  
+				each: "по",
+				nightMode: "Ночной режим",
+				nightHelp: "Сделает интерфейс красным, чтобы не слепить глаза в темноте"   
 		    }
 		};
+
+
+		
+
 
 
 		// Диалоги
@@ -1093,9 +1141,21 @@
 
 		// Инициализация диалогов
 		const customDialog = new Dialog();
-
+		
+		// Настройки
 		// Инициализация
 		let blinkThreshold = localStorage.getItem('blinkThreshold') || 30;
+		
+		const toggle = document.getElementById('nightModeToggle');
+		let isNightMode = localStorage.getItem('nightMode') === 'true';
+
+
+		function updateTheme() {
+		  
+		  document.body.classList.toggle('night', isNightMode);
+		  
+		}
+
 
 		// Обработчики чипов
 		document.querySelectorAll('.blink-settings .chip').forEach(chip => {
@@ -1108,6 +1168,24 @@
 		        // Устанавливаем новое значение
 		        blinkThreshold = parseInt(this.dataset.seconds);
 		        localStorage.setItem('blinkThreshold', blinkThreshold);
+		        
+		        // Добавляем активный класс
+		        this.classList.add('active');
+		    });
+		});
+
+		// Обработчики чипов
+		document.querySelectorAll('.night-settings .chip').forEach(chip => {
+		    chip.addEventListener('click', function() {
+		        // Удаляем активный класс у всех чипов
+		        document.querySelectorAll('.night-settings .chip').forEach(c => 
+		            c.classList.remove('active')
+		        );
+		        
+		        // Устанавливаем новое значение
+				isNightMode = (this.dataset.night === 'true');
+				localStorage.setItem('nightMode', isNightMode);
+				updateTheme();
 		        
 		        // Добавляем активный класс
 		        this.classList.add('active');
@@ -1127,6 +1205,14 @@
 		    
 		    document.querySelectorAll('.blink-settings .chip').forEach(chip => {
 		        if(parseInt(chip.dataset.seconds) === parseInt(blinkThreshold)) {
+		            chip.classList.add('active');
+		        }
+		    });
+
+		    document.querySelectorAll('.night-settings .chip').forEach(chip => {
+		        
+		    	var nightdata = (chip.dataset.night === "true");
+		        if(nightdata === isNightMode) {
 		            chip.classList.add('active');
 		        }
 		    });
@@ -1601,6 +1687,7 @@
 			document.getElementById('nextTrackBtn').disabled = false;
 
 			if(savedThreshold) localStorage.setItem('blinkThreshold', savedThreshold);
+			updateTheme();
 		}
 
 		function handleReset() {
@@ -1709,6 +1796,8 @@
 			}
 		});
 
+
+		updateTheme();
 	</script>
 </body>
 </html>
