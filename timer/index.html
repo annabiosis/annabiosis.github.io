@@ -316,7 +316,7 @@
 			font-size: 12vw;
 			line-height: 16vw;
 			font-weight: 300;
-			color: var(--green900);
+			color: var(--red900);
 		}
 		
 		/*Прогресс бары*/
@@ -703,8 +703,13 @@
 
 		.track-dot.current {
 		    background: var(--red100);
-		    box-shadow: 0 0 12px var(--red100);
-		    transform: scale(1.2);
+/*		    box-shadow: 0 0 12px var(--red100);*/
+		    transform: scale(1.61);
+		    animation: blink 1s infinite;
+		}
+
+		.track-dot.current + .track-dot, .track-dot.past:has(+.track-dot.current)  {
+			transform: scale(1.16);
 		}
 
 		.night .track-dot.current {
