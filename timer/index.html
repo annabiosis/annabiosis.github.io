@@ -24,6 +24,7 @@
 		:root {
 			--bg-color: #000;
 			--bg-color-alt: #011b1c;
+			--bg-color-alt-2: #1c0101;
 			--text-color: #fff;
 			--red900: #7A0919;
 			--red600: #DB3323;
@@ -50,6 +51,7 @@
 		.night {
 			--bg-color: #000;
 			--bg-color-alt: #300000;
+			--bg-color-alt-2: #300000;
 			--text-color: var(--red100);
 			--red900: #7A0000;
 			--red600: #DB0000;
@@ -107,15 +109,18 @@
 			height:136px;
 			margin: 16px 0;
 			box-sizing: border-box;
-			border: 1px solid var(--divider);
+			border: 0;
 			border-radius: var(--radius-outer);
 			font-size: 144px;
 			text-align: center;
 			background-color: transparent;
+			outline: 0 solid var(--green400);
+			transition: all .2s ease;
 		}
 
 		input::placeholder {
 			color: var(--grey40);
+
 		}
 
 		button {
@@ -146,7 +151,8 @@
 
 		input#totalTime {
 			color: var(--green400);
-			border-color: var(--border-green);
+			border-color: var(--green900);
+			background-color: var(--bg-color-alt);
 		}
 
 		input#totalTime:focus {
@@ -160,7 +166,8 @@
 
 		input#numTracks {
 			color: var(--red600);
-			border-color: var(--border-red);
+			border-color: var(--red900);
+			background-color: var(--bg-color-alt-2);
 		}
 
 		input#numTracks:focus {
