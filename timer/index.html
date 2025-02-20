@@ -87,6 +87,7 @@
 			display: flex;
 			flex-direction: column;
 			padding: 4vw;
+			overflow: hidden;
 		}
 		
 		label {
@@ -193,22 +194,28 @@
 		h2, h3 {
 			margin-bottom: 4px;
 			color: var(--green400);
+			
+		}
+
+		h2 {
+			font-size: 3em;
+			font-weight: 300;
 		}
 
 
 		h1 {
 			padding: 0;
-			font-weight: 100;
+			font-weight: 400;
 			margin-top: 0;
 			margin-bottom: 0;
-			font-size: 44px;
+			font-size: 16px;
 			color: var(--grey40);
 		}
 
 		h1.apptitle {
 			position: relative;
-			top: -4px;
-			margin-bottom: 16px;
+			top: 16px;
+			margin-bottom: 44px;
 		}
 
 		p, li {
@@ -374,8 +381,8 @@
 		}
 
 		#nextTrackBtn {
-			background-color: var(--green900);
-			color: var(--green400);
+			background-color: var(--red900);
+			color: var(--red500);
 		}
 
 		#nextTrackBtn:disabled {
@@ -492,7 +499,7 @@
 			padding: 8vw;
 			background: var(--menu-bg);
 			z-index: 1002;
-			overflow:scroll;
+			overflow-y: auto;
 			gap: var(--gap);
 			font-variant-emoji: text;
 		}
@@ -699,6 +706,7 @@
 
 		.track-dot.past {
 		    background: var(--red900);
+		    transition: transform 2s ease-in-out;
 		}
 
 		.track-dot.current {
@@ -761,11 +769,6 @@
 		@keyframes shine {
 		    0% { transform: translateX(-100%); }
 		    100% { transform: translateX(200%); }
-		}
-
-
-		@media (hover: none) and (pointer: coarse)  {
-			/* устройства с тач */
 		}
 
 
@@ -882,6 +885,33 @@
 			.dialog-buttons button {
 			    font-size: 2vw;
 			}
+
+		}
+
+/*		Десктопы*/
+
+		@media (min-width: 1024px) and (hover: hover) and (pointer: fine), (orientation: landscape) and (hover: hover) and (pointer: fine) {
+			.form-direction {
+				flex-direction: column;
+			}
+
+			#configForm {
+				margin: 0 24vw;
+			}
+
+			.apptitle {
+				display: block;
+			}
+
+			.menu-content {
+		        left: 56vw;
+		        right: 2vw;
+		        padding: 2vw;
+		        top: 8vw;
+		        bottom: auto;
+		        border-radius: var(--radius-outer);
+		    }
+
 
 		}
 
@@ -1425,7 +1455,7 @@
 			            </div>
 			        `).join('');
 			} else {
-				container.innerHTML = '<div class="preset">--</div>';
+				container.innerHTML = '<div class="preset disabled">--</div>';
 			}
 		}
 
