@@ -13,16 +13,14 @@ const ASSETS = [
     '/timer/icons/favicon.svg'
 ];
 
-// Установка и кэширование ресурсов
 self.addEventListener('install', (event) => {
-  event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(cache => cache.addAll(ASSETS))
-      .then(() => self.skipWaiting())
-  );
+    event.waitUntil(
+        caches.open(CACHE_NAME)
+            .then(cache => cache.addAll(ASSETS))
+            .then(() => self.skipWaiting())
+    );
 });
 
-// Активация и очистка старого кэша
 self.addEventListener('activate', (event) => {
     event.waitUntil((async () => {
         const keys = await caches.keys();
@@ -34,20 +32,21 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
-  // Для навигационных запросов используем стратегию "Cache First"
-  if (event.request.mode === 'navigate') {
-    event.respondWith(
-      caches.match(event.request)
-        .then(cachedResponse => {
-          return cachedResponse || fetch(event.request)
-            .catch(() => caches.match('/timer/index.html'));
-        })
-    );
-  } else {
-    // Для остальных ресурсов: "Cache, falling back to network"
-    event.respondWith(
-      caches.match(event.request)
-        .then(cachedResponse => cachedResponse || fetch(event.request))
-    );
-  }
+    // Для всех запросов сначала пробуем сеть, потом кэш
+    event.respondWith((async () => {
+        try {
+            // Пытаемся получить свежую версию из сети
+            const networkResponse = await fetch(event.request);
+            
+            // Обновляем кэш для будущих офлайн-запросов
+            const cache = await caches.open(CACHE_NAME);
+            cache.put(event.request, networkResponse.clone());
+            
+            return networkResponse;
+        } catch (error) {
+            // Если сеть недоступна - используем кэш
+            const cachedResponse = await caches.match(event.request);
+            return cachedResponse || caches.match('/timer/index.html');
+        }
+    })());
 });
