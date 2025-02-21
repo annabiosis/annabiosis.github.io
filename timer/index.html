@@ -343,7 +343,7 @@
 			width: 100%;
 			height: 2px;
 			top: 50%;
-    		transform: translateY(-50%);
+			transform: translateY(-50%);
 		}
 
 		#trackProgressContainer .progress-line {
@@ -507,10 +507,10 @@
 		}
 
 		.close {
-			position: absolute;
+			position: fixed;
 			display: block;
-			right: 12px;
-			top: 12px;
+			right: 5vw;
+			top: 5vw;
 			width: 48px;
 			height: 48px;
 			font-size: 48px;
@@ -588,24 +588,24 @@
 
 		/*Переключатель языков*/
 		.lang-switcher {
-		    display: flex;
-		    gap: 8px;
-		    width: fit-content;
+			display: flex;
+			gap: 8px;
+			width: fit-content;
 		}
 
 		.lang-btn {
-		    padding: 8px 16px;
-		    border-radius: 20px;
-		    background: var(--surface-300);
-		    border: none;
-		    color: var(--text-secondary);
-		    cursor: pointer;
-		    transition: all 0.3s;
+			padding: 8px 16px;
+			border-radius: 20px;
+			background: var(--surface-300);
+			border: none;
+			color: var(--text-secondary);
+			cursor: pointer;
+			transition: all 0.3s;
 		}
 
 		.lang-btn.active {
-		    background: var(--green900);
-		    color: var(--green400);
+			background: var(--green900);
+			color: var(--green400);
 		}
 
 		.hor-spacer {
@@ -623,99 +623,99 @@
 		/* Диалоги */
 
 		.dialog-overlay {
-		    position: fixed;
-		    top: 0;
-		    left: 0;
-		    right: 0;
-		    bottom: 0;
-		    background: rgba(0,0,0,0.7);
-		    display: none;
-		    align-items: center;
-		    justify-content: center;
-		    z-index: 2000;
-		    animation: fadeIn 0.3s;
+			position: fixed;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			background: rgba(0,0,0,0.7);
+			display: none;
+			align-items: center;
+			justify-content: center;
+			z-index: 2000;
+			animation: fadeIn 0.3s;
 		}
 
 		.dialog-container {
-		    background: var(--bg-color-alt);
-		    border-radius: var(--radius-outer);
-		    padding: 24px;
-		    min-width: 280px;
-		    max-width: 90vw;
-		    transform: scale(0.9);
-		    margin: 48px;
-		    animation: scaleUp 0.2s forwards;
+			background: var(--bg-color-alt);
+			border-radius: var(--radius-outer);
+			padding: 24px;
+			min-width: 280px;
+			max-width: 90vw;
+			transform: scale(0.9);
+			margin: 48px;
+			animation: scaleUp 0.2s forwards;
 		}
 
 		.dialog-content p {
-		    font-size: 8vw;
-		    margin: 0 0 24px;
-		    line-height: 10vw;
+			font-size: 8vw;
+			margin: 0 0 24px;
+			line-height: 10vw;
 		}
 
 		.dialog-buttons {
-		    display: flex;
-		    gap: var(--gap);
-		    justify-content: flex-end;
-		    flex-direction: column-reverse;
+			display: flex;
+			gap: var(--gap);
+			justify-content: flex-end;
+			flex-direction: column-reverse;
 		}
 
 		.dialog-buttons button {
 			width: 100%;
-		    padding: 8px 20px;
-		    border-radius: 20px;
-		    border: none;
-		    cursor: pointer;
-		    font-size: 4vw;
-		    transition: opacity 0.2s;
+			padding: 8px 20px;
+			border-radius: 20px;
+			border: none;
+			cursor: pointer;
+			font-size: 4vw;
+			transition: opacity 0.2s;
 		}
 
 		#dialogConfirm {
-		    background: var(--green1000);
-		    color: var(--green400); 
+			background: var(--green1000);
+			color: var(--green400); 
 		}
 
 		#dialogCancel {
-		    background: var(--bg-color);
-		    color: var(--green400);
+			background: var(--bg-color);
+			color: var(--green400);
 		}
 
 		/*ТОЧКИ*/
 		
 		.tracks-progress {
-		    position: relative;
-		    z-index: 100;
-		    width: 100%;
+			position: relative;
+			z-index: 100;
+			width: 100%;
 		}
 
 		.tracks-container {
-		    display: flex;
-		    gap: 0;
-		    flex-wrap: wrap;
-		    justify-content: space-evenly;
-		    align-items: center;
-		    padding: 8px 8px;
+			display: flex;
+			gap: 0;
+			flex-wrap: wrap;
+			justify-content: space-evenly;
+			align-items: center;
+			padding: 8px 8px;
 		}
 
 		.track-dot {
-		    width: 8px;
-		    height: 8px;
-		    border-radius: 50%;
-		    background: var(--green1000);
-		    transition: all 0.3s ease;
-		    position: relative;
+			width: 8px;
+			height: 8px;
+			border-radius: 50%;
+			background: var(--green1000);
+			transition: all 0.3s ease;
+			position: relative;
 		}
 
 		.track-dot.past {
-		    background: var(--red900);
-		    transition: transform 2s ease-in-out;
+			background: var(--red900);
+			transition: transform 2s ease-in-out;
 		}
 
 		.track-dot.current {
-		    background: var(--red100);
+			background: var(--red100);
 /*		    box-shadow: 0 0 12px var(--red100);*/
-		    transform: scale(1.61);
-		    animation: blink 1s infinite;
+			transform: scale(1.61);
+			animation: blink 1s infinite;
 		}
 
 		.track-dot.current + .track-dot, .track-dot.past:has(+.track-dot.current)  {
@@ -730,12 +730,12 @@
 
 		/* Диалоги */
 		@keyframes fadeIn {
-		    from { opacity: 0; }
-		    to { opacity: 1; }
+			from { opacity: 0; }
+			to { opacity: 1; }
 		}
 
 		@keyframes scaleUp {
-		    to { transform: scale(1); }
+			to { transform: scale(1); }
 		}	
 
 
@@ -763,29 +763,29 @@
 		}
 
 		@keyframes gradient-flow {
-		    0% { background-position: 0% 50%; }
-		    50% { background-position: 100% 50%; }
-		    100% { background-position: 0% 50%; }
+			0% { background-position: 0% 50%; }
+			50% { background-position: 100% 50%; }
+			100% { background-position: 0% 50%; }
 		}
 
 		@keyframes shine {
-		    0% { transform: translateX(-100%); }
-		    100% { transform: translateX(200%); }
+			0% { transform: translateX(-100%); }
+			100% { transform: translateX(200%); }
 		}
 
 
 		@media (orientation: landscape)  {
-  			body {
-    			flex-direction: row;
-    			padding: 0;
-    			align-items: center;
+			body {
+				flex-direction: row;
+				padding: 0;
+				align-items: center;
 				justify-content: center;
 				height: 100%;
-  			}
+			}
 
 			label {
-			    font-size: 3vw;
-			    line-height: 2vw;
+				font-size: 3vw;
+				line-height: 2vw;
 			}
 
 			button {
@@ -803,7 +803,7 @@
 				margin-bottom: 24px;
 			}
 
-  			.row {
+			.row {
 				flex-direction: column;
 			}
 
@@ -822,11 +822,11 @@
 			}
 
 			.timer.main {
-			    font-size: 20vw;
-			    line-height: 20vw;
-			    display: inline-block;
-			    width: 100%;
-			    text-align: center;
+				font-size: 20vw;
+				line-height: 20vw;
+				display: inline-block;
+				width: 100%;
+				text-align: center;
 
 			}
 
@@ -836,13 +836,13 @@
 			}
 
 			.timer.secondary {
-			    font-size: 6vw;
-			    line-height: 8vw;
+				font-size: 6vw;
+				line-height: 8vw;
 			}
 
 			h4 {
 				font-size: 2vw;
-    			line-height: 2vw;
+				line-height: 2vw;
 			}
 			
 			h1 {
@@ -875,17 +875,22 @@
 			}
 
 			.dialog-content p {
-			    font-size: 4vw;
-			    line-height: 6vw;
+				font-size: 4vw;
+				line-height: 6vw;
 			}
 
 			.dialog-buttons {
-			    gap: var(--gap-mid);
-			    flex-direction: row;
+				gap: var(--gap-mid);
+				flex-direction: row;
 			}
 
 			.dialog-buttons button {
-			    font-size: 2vw;
+				font-size: 2vw;
+			}
+
+
+			.about, .help, .settings {
+				padding: 4vw;
 			}
 
 		}
@@ -906,13 +911,13 @@
 			}
 
 			.menu-content {
-		        left: 56vw;
-		        right: 2vw;
-		        padding: 2vw;
-		        top: 8vw;
-		        bottom: auto;
-		        border-radius: var(--radius-outer);
-		    }
+				left: 56vw;
+				right: 2vw;
+				padding: 2vw;
+				top: 8vw;
+				bottom: auto;
+				border-radius: var(--radius-outer);
+			}
 
 
 		}
@@ -982,22 +987,22 @@
 			<div class="typo-block">
 				<h2 data-i18n="settings">Настройки</h2>
 					<div class="blink-settings">
-					    <h3 data-i18n="blinkIn">Мигать за</h3>
-					    <div class="chips-container">
-					        <div class="chip" data-i18n="sec30" data-seconds="30">30 c.</div>
-					        <div class="chip" data-i18n="min1" data-seconds="60">1 м.</div>
-					        <div class="chip" data-i18n="min15" data-seconds="90">1,5 м.</div>
-					        <div class="chip" data-i18n="off" data-seconds="0">Выкл</div>
-					    </div>
+						<h3 data-i18n="blinkIn">Мигать за</h3>
+						<div class="chips-container">
+							<div class="chip" data-i18n="sec30" data-seconds="30">30 c.</div>
+							<div class="chip" data-i18n="min1" data-seconds="60">1 м.</div>
+							<div class="chip" data-i18n="min15" data-seconds="90">1,5 м.</div>
+							<div class="chip" data-i18n="off" data-seconds="0">Выкл</div>
+						</div>
 						<p data-i18n="blinkhelp">Можно выбрать за сколько времени до конца трека таймер начнет мигать</p>
 					</div>
 					<hr>
 					<div class="night-settings">
-					    <h3 data-i18n="nightMode">Ночной режим</h3>
-					    <div class="chips-container">
-					        <div class="chip" data-i18n="off" data-night="false">Выкл</div>
-					        <div class="chip" data-i18n="on" data-night="true">Вкл</div>
-					    </div>
+						<h3 data-i18n="nightMode">Ночной режим</h3>
+						<div class="chips-container">
+							<div class="chip" data-i18n="off" data-night="false">Выкл</div>
+							<div class="chip" data-i18n="on" data-night="true">Вкл</div>
+						</div>
 						<p data-i18n="nightHelp">Можно выбрать за сколько времени до конца трека таймер начнет мигать</p>
 					</div>
 					
@@ -1056,7 +1061,7 @@
 					</div>
 					<div id="totalProgressContainer" class="progress-container total-pb">
 						<div class="tracks-progress">
-    						<div class="tracks-container" id="tracksContainer"></div>
+							<div class="tracks-container" id="tracksContainer"></div>
 						</div>
 						<div id="totalProgress" class="progress-bar" style="background: var(--red500);"></div>
 					</div>
@@ -1069,36 +1074,36 @@
 
 
 		<div class="dialog-overlay" id="dialogOverlay">
-		    <div class="dialog-container">
-		        <div class="dialog-content">
-		            <p id="dialogMessage"></p>
-		            <div class="dialog-buttons">
-		                <button id="dialogCancel"></button>
-		                <button id="dialogConfirm"></button>
-		            </div>
-		        </div>
-		    </div>
+			<div class="dialog-container">
+				<div class="dialog-content">
+					<p id="dialogMessage"></p>
+					<div class="dialog-buttons">
+						<button id="dialogCancel"></button>
+						<button id="dialogConfirm"></button>
+					</div>
+				</div>
+			</div>
 		</div>
 
 
 		<script>
 		// Словари переводов
 		const i18n = {
-		    en: {
-		        totalDuration: "Total duration",
-		        tracks: "Tracks",
-		        start: "Start",
-		        reset: "💀 Reset",
-		        skip: "Skip",
-		        currentTrack: "Current track",
-		        elapsed: "Elapsed",
-		        remaining: "Remaining",
-		        confirmReset: "Are you sure you want to reset?",
-		        performanceEnded: "Performance ended!",
-		        err_grater: "Enter value gratee than ZERO!",
-		        about: "About",
-		        help: "Help", 
-		        donate: "👍 Support me",
+			en: {
+				totalDuration: "Total duration",
+				tracks: "Tracks",
+				start: "Start",
+				reset: "💀 Reset",
+				skip: "Skip",
+				currentTrack: "Current track",
+				elapsed: "Elapsed",
+				remaining: "Remaining",
+				confirmReset: "Are you sure you want to reset?",
+				performanceEnded: "Performance ended!",
+				err_grater: "Enter value gratee than ZERO!",
+				about: "About",
+				help: "Help", 
+				donate: "👍 Support me",
 				about01: "Control the timing of each track and the entire performance",
 				about02: "Features",
 				about03: "Automatic division of total time into equal segments",
@@ -1116,88 +1121,88 @@
 				about14: "Developer", 
 				authorlink: "Annabiosis",
 				tips: "Tips", 
-		        help01: "Click if you want to finish the track early. No need to click otherwise",
-		        help02: "Completely resets the active timer and all saved data",
-		        statuses: "Statuses", 
-		        help03: "💡 — screen sleep-mode control status",
-		        help04: "📡 — internet connection status",
-		        tips01: "To track only the full session, input total time and select 1 track",
-		        tips02: "If performing where internet is unavailable, verify the app is cached and functions offline in advance",
-		        tips03: "The app is fully optimized for landscape mode usage", 
-		        lic01: "Typeface IBM Plex Sans © 2017-2020 IBM Corporation, under the SIL Open Font License 1.1. For details, see: https://github.com/IBM/plex",
-		        settings: "Settings",
-		        blinkIn: "Blink in",
-		        min2: "2′",
-		        min15: "1.5′",
-		        min1: "1′",
-		        sec30: "30′′",
-		        blinkhelp: "Set timer blink start time before track ends",
-		        off: "Off",
-		        on: "On",
-		        ok: "OK",
+				help01: "Click if you want to finish the track early. No need to click otherwise",
+				help02: "Completely resets the active timer and all saved data",
+				statuses: "Statuses", 
+				help03: "💡 — screen sleep-mode control status",
+				help04: "📡 — internet connection status",
+				tips01: "To track only the full session, input total time and select 1 track",
+				tips02: "If performing where internet is unavailable, verify the app is cached and functions offline in advance",
+				tips03: "The app is fully optimized for landscape mode usage", 
+				lic01: "Typeface IBM Plex Sans © 2017-2020 IBM Corporation, under the SIL Open Font License 1.1. For details, see: https://github.com/IBM/plex",
+				settings: "Settings",
+				blinkIn: "Blink in",
+				min2: "2′",
+				min15: "1.5′",
+				min1: "1′",
+				sec30: "30′′",
+				blinkhelp: "Set timer blink start time before track ends",
+				off: "Off",
+				on: "On",
+				ok: "OK",
 				confirm: "Confirm",
 				cancel: "Cancel",
 				each: "each",
 				nightMode: "Night Mode",
 				nightHelp: "Makes the interface red so it doesn't blind your eyes in the dark" 
-		    },
-		    ru: {
-		        totalDuration: "Длительность",
-		        tracks: "Треков",
-		        start: "Старт",
-		        reset: "💀 Сброс",
-		        skip: "Пропуск",
-		        currentTrack: "Текущий трек",
-		        elapsed: "Прошло",
-		        remaining: "Осталось",
-		        confirmReset: "Вы уверены, что хотите сбросить таймер?",
-		        performanceEnded: "Выступление завершено!",
-		        err_grater:"Введите значение больше НОЛЯ!",
-		        about:"О приложении",
-		        help: "Помощь", 
-		        donate: "👍 Поддержите меня",
-		        about01: "Контролируй время каждого трека и всего выступления целиком.",
-		        about02: "Возможности",
-		        about03: "Автоматическое разделение общего времени на равные отрезки",
-		        about04: "Пересчет продолжительности при досрочном переходе",
-		        about05: "Работа в фоне и оффлайн",
-		        about06: "Визуализация прогресса с подсказками",
-		        about15: "Ночной режим",
-		        about07: "Преимущества",
-		        about08: "Не требует установки — работает в браузере",
-		        about09: "Сохраняет данные при случайном закрытии",
-		        about10: "Автоматическая локализация",
-		        about11: "Блокировка спящего режима",
-		        about12: "Технологии",
-		        about13: "Использует современные PWA-стандарты для кроссплатформенной работы. Сохрани ярлык на главный экран — получишь полноценное приложение.",
-		        about14: "Разработка", 
-		        authorlink: "Annabiosis",
-		        tips: "Советы", 
-		        help01: "нажимайте, если решили закончить трек раньше. В других случаях нажимать не требуется",
-		        help02: "полностью сбрасывает активный таймер и все сохраненные данные",
-		        statuses: "Статусы",
-		        help03: "💡 — статус успешного управления подсветкой",
-		        help04: "📡 — статус интернет-соединения",  
-		        tips01: "Если вам нужен только прогресс всего лайва, вводите время лайва и 1 трек",
-		        tips02: "Если собираетесь выступать, где не ловит интернет, заранее убедитесь, что приложение закэшированно и работает оффлайн",
-		        tips03: "Приложение адаптировано и для горизонтального использования", 
-		        lic01: "Шрифт IBM Plex Sans © 2017-2020 IBM Corporation, используется в соответствии с лицензией SIL Open Font License 1.1. Подробнее. For details, see: https://github.com/IBM/plex",
-		        settings: "Настройки",
-		        blinkIn: "Мигать за",
-		        min2: "2′",
-		        min15: "1,5′",
-		        min1: "1′",
-		        sec30: "30′′",
-		        blinkhelp: "Можно выбрать за сколько времени до конца трека таймер начнет мигать",
-		        off: "Выкл",
-		        on: "Вкл",
-		        ok: "OK",
+			},
+			ru: {
+				totalDuration: "Длительность",
+				tracks: "Треков",
+				start: "Старт",
+				reset: "💀 Сброс",
+				skip: "Пропуск",
+				currentTrack: "Текущий трек",
+				elapsed: "Прошло",
+				remaining: "Осталось",
+				confirmReset: "Вы уверены, что хотите сбросить таймер?",
+				performanceEnded: "Выступление завершено!",
+				err_grater:"Введите значение больше НОЛЯ!",
+				about:"О приложении",
+				help: "Помощь", 
+				donate: "👍 Поддержите меня",
+				about01: "Контролируй время каждого трека и всего выступления целиком.",
+				about02: "Возможности",
+				about03: "Автоматическое разделение общего времени на равные отрезки",
+				about04: "Пересчет продолжительности при досрочном переходе",
+				about05: "Работа в фоне и оффлайн",
+				about06: "Визуализация прогресса с подсказками",
+				about15: "Ночной режим",
+				about07: "Преимущества",
+				about08: "Не требует установки — работает в браузере",
+				about09: "Сохраняет данные при случайном закрытии",
+				about10: "Автоматическая локализация",
+				about11: "Блокировка спящего режима",
+				about12: "Технологии",
+				about13: "Использует современные PWA-стандарты для кроссплатформенной работы. Сохрани ярлык на главный экран — получишь полноценное приложение.",
+				about14: "Разработка", 
+				authorlink: "Annabiosis",
+				tips: "Советы", 
+				help01: "нажимайте, если решили закончить трек раньше. В других случаях нажимать не требуется",
+				help02: "полностью сбрасывает активный таймер и все сохраненные данные",
+				statuses: "Статусы",
+				help03: "💡 — статус успешного управления подсветкой",
+				help04: "📡 — статус интернет-соединения",  
+				tips01: "Если вам нужен только прогресс всего лайва, вводите время лайва и 1 трек",
+				tips02: "Если собираетесь выступать, где не ловит интернет, заранее убедитесь, что приложение закэшированно и работает оффлайн",
+				tips03: "Приложение адаптировано и для горизонтального использования", 
+				lic01: "Шрифт IBM Plex Sans © 2017-2020 IBM Corporation, используется в соответствии с лицензией SIL Open Font License 1.1. Подробнее. For details, see: https://github.com/IBM/plex",
+				settings: "Настройки",
+				blinkIn: "Мигать за",
+				min2: "2′",
+				min15: "1,5′",
+				min1: "1′",
+				sec30: "30′′",
+				blinkhelp: "Можно выбрать за сколько времени до конца трека таймер начнет мигать",
+				off: "Выкл",
+				on: "Вкл",
+				ok: "OK",
 				confirm: "Подтвердить",
 				cancel: "Отмена",
 				each: "по",
 				nightMode: "Ночной режим",
 				nightHelp: "Сделает интерфейс красным, чтобы не слепить глаза в темноте"   
-		    }
+			}
 		};
 
 
@@ -1207,49 +1212,49 @@
 
 		// Диалоги
 		class Dialog {
-		    constructor() {
-		        this.overlay = document.getElementById('dialogOverlay');
-		        this.message = document.getElementById('dialogMessage');
-		        this.confirmBtn = document.getElementById('dialogConfirm');
-		        this.cancelBtn = document.getElementById('dialogCancel');
-		        this.initEvents();
-		    }
+			constructor() {
+				this.overlay = document.getElementById('dialogOverlay');
+				this.message = document.getElementById('dialogMessage');
+				this.confirmBtn = document.getElementById('dialogConfirm');
+				this.cancelBtn = document.getElementById('dialogCancel');
+				this.initEvents();
+			}
 
-		    initEvents() {
-		        this.overlay.addEventListener('click', e => {
-		            if(e.target === this.overlay) this.hide();
-		        });
-		        
-		        document.addEventListener('keydown', e => {
-		            if(e.key === 'Escape') this.hide();
-		        });
-		    }
+			initEvents() {
+				this.overlay.addEventListener('click', e => {
+					if(e.target === this.overlay) this.hide();
+				});
+				
+				document.addEventListener('keydown', e => {
+					if(e.key === 'Escape') this.hide();
+				});
+			}
 
-		    show(options) {
-		        return new Promise(resolve => {
-		            this.message.textContent = options.message;
-		            this.confirmBtn.textContent = options.confirmText || 'OK';
-		            this.cancelBtn.textContent = options.cancelText || 'Cancel';
+			show(options) {
+				return new Promise(resolve => {
+					this.message.textContent = options.message;
+					this.confirmBtn.textContent = options.confirmText || 'OK';
+					this.cancelBtn.textContent = options.cancelText || 'Cancel';
 
-		            this.confirmBtn.onclick = () => {
-		                this.hide();
-		                resolve(true);
-		            };
+					this.confirmBtn.onclick = () => {
+						this.hide();
+						resolve(true);
+					};
 
-		            this.cancelBtn.onclick = () => {
-		                this.hide();
-		                resolve(false);
-		            };
+					this.cancelBtn.onclick = () => {
+						this.hide();
+						resolve(false);
+					};
 
-		            this.cancelBtn.style.display = options.showCancel ? 'block' : 'none';
-		            this.overlay.style.display = 'flex';
-		            this.confirmBtn.focus();
-		        });
-		    }
+					this.cancelBtn.style.display = options.showCancel ? 'block' : 'none';
+					this.overlay.style.display = 'flex';
+					this.confirmBtn.focus();
+				});
+			}
 
-		    hide() {
-		        this.overlay.style.display = 'none';
-		    }
+			hide() {
+				this.overlay.style.display = 'none';
+			}
 		}
 
 
@@ -1271,37 +1276,37 @@
 
 		// Обработчики чипов
 		document.querySelectorAll('.blink-settings .chip').forEach(chip => {
-		    chip.addEventListener('click', function() {
-		        // Удаляем активный класс у всех чипов
-		        document.querySelectorAll('.blink-settings .chip').forEach(c => 
-		            c.classList.remove('active')
-		        );
-		        
-		        // Устанавливаем новое значение
-		        blinkThreshold = parseInt(this.dataset.seconds);
-		        localStorage.setItem('blinkThreshold', blinkThreshold);
-		        
-		        // Добавляем активный класс
-		        this.classList.add('active');
-		    });
+			chip.addEventListener('click', function() {
+				// Удаляем активный класс у всех чипов
+				document.querySelectorAll('.blink-settings .chip').forEach(c => 
+					c.classList.remove('active')
+				);
+				
+				// Устанавливаем новое значение
+				blinkThreshold = parseInt(this.dataset.seconds);
+				localStorage.setItem('blinkThreshold', blinkThreshold);
+				
+				// Добавляем активный класс
+				this.classList.add('active');
+			});
 		});
 
 		// Обработчики чипов
 		document.querySelectorAll('.night-settings .chip').forEach(chip => {
-		    chip.addEventListener('click', function() {
-		        // Удаляем активный класс у всех чипов
-		        document.querySelectorAll('.night-settings .chip').forEach(c => 
-		            c.classList.remove('active')
-		        );
-		        
-		        // Устанавливаем новое значение
+			chip.addEventListener('click', function() {
+				// Удаляем активный класс у всех чипов
+				document.querySelectorAll('.night-settings .chip').forEach(c => 
+					c.classList.remove('active')
+				);
+				
+				// Устанавливаем новое значение
 				isNightMode = (this.dataset.night === 'true');
 				localStorage.setItem('nightMode', isNightMode);
 				updateTheme();
-		        
-		        // Добавляем активный класс
-		        this.classList.add('active');
-		    });
+				
+				// Добавляем активный класс
+				this.classList.add('active');
+			});
 		});
 
 		document.getElementById('totalTime').addEventListener('input', updateTrackPresets);
@@ -1309,118 +1314,118 @@
 		// ТОЧКИ
 		// Инициализация треков
 		function initTracksProgress(totalTracks) {
-		    const container = document.getElementById('tracksContainer');
-		    container.innerHTML = '';
-		    
-		    for(let i = 1; i <= totalTracks; i++) {
-		        const dot = document.createElement('div');
-		        dot.className = 'track-dot';
-		        dot.dataset.track = i;
-		        container.appendChild(dot);
-		    }
+			const container = document.getElementById('tracksContainer');
+			container.innerHTML = '';
+			
+			for(let i = 1; i <= totalTracks; i++) {
+				const dot = document.createElement('div');
+				dot.className = 'track-dot';
+				dot.dataset.track = i;
+				container.appendChild(dot);
+			}
 		}
 
 		// Обновление состояния
 		function updateTracksProgress(currentTrack) {
-		    const dots = document.querySelectorAll('.track-dot');
-		    
-		    dots.forEach((dot, index) => {
-		        dot.classList.remove('past', 'current');
-		        
-		        if(index + 1 < currentTrack) {
-		            dot.classList.add('past');
-		        } else if(index + 1 === currentTrack) {
-		            dot.classList.add('current');
-		        }
-		    });
+			const dots = document.querySelectorAll('.track-dot');
+			
+			dots.forEach((dot, index) => {
+				dot.classList.remove('past', 'current');
+				
+				if(index + 1 < currentTrack) {
+					dot.classList.add('past');
+				} else if(index + 1 === currentTrack) {
+					dot.classList.add('current');
+				}
+			});
 		}
 
 		// Восстановление при загрузке
 		document.addEventListener('DOMContentLoaded', () => {
 			applyTranslations();
-		    addLanguageSwitcher();
+			addLanguageSwitcher();
 			updateTrackPresets();
 			
 			const initialValue = document.getElementById('numTracks').value;
-    		updateActivePreset(initialValue);
-		    
-		    document.querySelectorAll('.blink-settings .chip').forEach(chip => {
-		        if(parseInt(chip.dataset.seconds) === parseInt(blinkThreshold)) {
-		            chip.classList.add('active');
-		        }
-		    });
+			updateActivePreset(initialValue);
+			
+			document.querySelectorAll('.blink-settings .chip').forEach(chip => {
+				if(parseInt(chip.dataset.seconds) === parseInt(blinkThreshold)) {
+					chip.classList.add('active');
+				}
+			});
 
-		    document.querySelectorAll('.night-settings .chip').forEach(chip => {
-		        
-		    	var nightdata = (chip.dataset.night === "true");
-		        if(nightdata === isNightMode) {
-		            chip.classList.add('active');
-		        }
-		    });
+			document.querySelectorAll('.night-settings .chip').forEach(chip => {
+				
+				var nightdata = (chip.dataset.night === "true");
+				if(nightdata === isNightMode) {
+					chip.classList.add('active');
+				}
+			});
 		});
 
 
 		function calculateTrackPresets(totalMinutes) {
-		    const presets = {};
-		    
-		    [3, 4, 5, 6].forEach(minutes => {
-		        const count = Math.round(totalMinutes / minutes);
-		        presets[minutes] = count > 0 ? count : 1;
-		    });
+			const presets = {};
+			
+			[3, 4, 5, 6].forEach(minutes => {
+				const count = Math.round(totalMinutes / minutes);
+				presets[minutes] = count > 0 ? count : 1;
+			});
 
 
-		    return presets;
+			return presets;
 		}
 
 		document.getElementById('numTracks').addEventListener('input', function() {
-		    updateActivePreset(this.value);
+			updateActivePreset(this.value);
 		});
 
 		// Функция обновления активного пресета
 		function updateActivePreset(currentValue) {
-		    const chips = document.querySelectorAll('.preset[data-count]');
-		    
-		    // Удаляем класс active у всех чипов
-		    chips.forEach(chip => chip.classList.remove('active'));
-		    
-		    // Ищем чип с совпадающим значением
-		    const activeChip = Array.from(chips).find(chip => 
-		        parseInt(chip.dataset.count) === parseInt(currentValue)
-		    );
-		    
-		    if(activeChip) {
-		        activeChip.classList.add('active');
-		    }
+			const chips = document.querySelectorAll('.preset[data-count]');
+			
+			// Удаляем класс active у всех чипов
+			chips.forEach(chip => chip.classList.remove('active'));
+			
+			// Ищем чип с совпадающим значением
+			const activeChip = Array.from(chips).find(chip => 
+				parseInt(chip.dataset.count) === parseInt(currentValue)
+			);
+			
+			if(activeChip) {
+				activeChip.classList.add('active');
+			}
 		}
 
 
 		function calculateAverageTrackTime() {
-		    const totalMinutes = parseFloat(document.getElementById('totalTime').value) || 0;
-		    const numTracks = parseInt(document.getElementById('numTracks').value) || 1;
-		    
-		    // Расчет в секундах для точности
-		    const totalSeconds = totalMinutes * 60;
-		    const averageSeconds = totalSeconds / numTracks;
-		    
-		    // Форматирование времени
-		    const minutes = Math.floor(averageSeconds / 60);
-		    const seconds = Math.round(averageSeconds % 60);
-		    
-		    
-		    return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+			const totalMinutes = parseFloat(document.getElementById('totalTime').value) || 0;
+			const numTracks = parseInt(document.getElementById('numTracks').value) || 1;
+			
+			// Расчет в секундах для точности
+			const totalSeconds = totalMinutes * 60;
+			const averageSeconds = totalSeconds / numTracks;
+			
+			// Форматирование времени
+			const minutes = Math.floor(averageSeconds / 60);
+			const seconds = Math.round(averageSeconds % 60);
+			
+			
+			return `${minutes}:${seconds.toString().padStart(2, '0')}`;
 		}
 
 		// Функция обновления отображения
 		function updateAverageTimeDisplay() {
-		    const displayElement = document.getElementById('averageTimeDisplay');
-		    
-		    if(!displayElement) return;
-		    
-		    try {
-		        displayElement.textContent = calculateAverageTrackTime();
-		    } catch(e) {
-		        displayElement.textContent = '--:--';
-		    }
+			const displayElement = document.getElementById('averageTimeDisplay');
+			
+			if(!displayElement) return;
+			
+			try {
+				displayElement.textContent = calculateAverageTrackTime();
+			} catch(e) {
+				displayElement.textContent = '--:--';
+			}
 		}
 
 		function keepFirstUniqueValues(obj) {
@@ -1428,34 +1433,34 @@
 		  const result = {};
 
 		  for (const key in obj) {
-		    const value = obj[key];
-		    if (!seenValues.has(value)) {
-		      seenValues.add(value);
-		      result[key] = value;
-		    }
+			const value = obj[key];
+			if (!seenValues.has(value)) {
+			  seenValues.add(value);
+			  result[key] = value;
+			}
 		  }
 		  return result;
 		}
 
 		// Функция обновления пресетов
 		function updateTrackPresets() {
-		    const totalMinutes = parseInt(document.getElementById('totalTime').value) || 0;
-		    const totalTracks = parseInt(document.getElementById('numTracks').value) || 0;
-		    const presets = calculateTrackPresets(totalMinutes);
-		    const container = document.getElementById('trackPresets');
-		    
-		    const tempSet = keepFirstUniqueValues(presets);;
+			const totalMinutes = parseInt(document.getElementById('totalTime').value) || 0;
+			const totalTracks = parseInt(document.getElementById('numTracks').value) || 0;
+			const presets = calculateTrackPresets(totalMinutes);
+			const container = document.getElementById('trackPresets');
+			
+			const tempSet = keepFirstUniqueValues(presets);;
 		   
-		    if (totalMinutes > 0) {
+			if (totalMinutes > 0) {
 
-			    container.innerHTML = Object.entries(tempSet)
-			        .map(([minutes, count]) => `
-			            <div class="preset" 
-			                 data-minutes="${minutes}" 
-			                 data-count="${count}"
-			                 onclick="document.getElementById('numTracks').value = ${count}; updateAverageTimeDisplay(); updateActivePreset(${count});">${count}
-			            </div>
-			        `).join('');
+				container.innerHTML = Object.entries(tempSet)
+					.map(([minutes, count]) => `
+						<div class="preset" 
+							 data-minutes="${minutes}" 
+							 data-count="${count}"
+							 onclick="document.getElementById('numTracks').value = ${count}; updateAverageTimeDisplay(); updateActivePreset(${count});">${count}
+						</div>
+					`).join('');
 			} else {
 				container.innerHTML = '<div class="preset disabled">--</div>';
 			}
@@ -1472,8 +1477,8 @@
 
 		// Определяем язык системы
 		const getSystemLanguage = () => {
-		    const systemLang = navigator.language.split('-')[0];
-		    return Object.keys(i18n).includes(systemLang) ? systemLang : 'en';
+			const systemLang = navigator.language.split('-')[0];
+			return Object.keys(i18n).includes(systemLang) ? systemLang : 'en';
 		};
 
 		// Инициализация языка
@@ -1481,54 +1486,54 @@
 
 		// Функция применения переводов
 		function applyTranslations() {
-		    const elements = document.querySelectorAll('[data-i18n]');
-		    
-		    elements.forEach(el => {
-		        const key = el.dataset.i18n;
-		        el.textContent = i18n[currentLang][key] || key;
-		    });
+			const elements = document.querySelectorAll('[data-i18n]');
+			
+			elements.forEach(el => {
+				const key = el.dataset.i18n;
+				el.textContent = i18n[currentLang][key] || key;
+			});
 		}
 
 		// Переключатели языков в бургер-меню
 		function addLanguageSwitcher() {
-		    const menu = document.querySelector('.menu-panel');
-		    const html = `
-		        <div class="lang-switcher">
-		            <button class="lang-btn selector ${currentLang === 'en' ? 'active' : ''}" data-lang="en">EN</button>
-		            <button class="lang-btn selector ${currentLang === 'ru' ? 'active' : ''}" data-lang="ru">RU</button>
-		        </div>
-		    `;
-		    menu.insertAdjacentHTML('beforeend', html);
+			const menu = document.querySelector('.menu-panel');
+			const html = `
+				<div class="lang-switcher">
+					<button class="lang-btn selector ${currentLang === 'en' ? 'active' : ''}" data-lang="en">EN</button>
+					<button class="lang-btn selector ${currentLang === 'ru' ? 'active' : ''}" data-lang="ru">RU</button>
+				</div>
+			`;
+			menu.insertAdjacentHTML('beforeend', html);
 		}
 
 		// Обработчик смены языка
 		document.body.addEventListener('click', e => {
-		    if(e.target.classList.contains('lang-btn')) {
-		        currentLang = e.target.dataset.lang;
-		        localStorage.setItem('appLang', currentLang);
-		        applyTranslations();
-		        document.querySelectorAll('.lang-btn').forEach(btn => 
-		            btn.classList.toggle('active', btn.dataset.lang === currentLang)
-		        );
-		    }
+			if(e.target.classList.contains('lang-btn')) {
+				currentLang = e.target.dataset.lang;
+				localStorage.setItem('appLang', currentLang);
+				applyTranslations();
+				document.querySelectorAll('.lang-btn').forEach(btn => 
+					btn.classList.toggle('active', btn.dataset.lang === currentLang)
+				);
+			}
 		});
 
 		// Алерты
 		function showAlert(message) {
-		    return customDialog.show({
-		        message: i18n[currentLang][message],
-		        showCancel: false,
-		        confirmText: i18n[currentLang].ok
-		    });
+			return customDialog.show({
+				message: i18n[currentLang][message],
+				showCancel: false,
+				confirmText: i18n[currentLang].ok
+			});
 		}
 
 		function showConfirm(message) {
-		    return customDialog.show({
-		        message: i18n[currentLang][message],
-		        showCancel: true,
-		        confirmText: i18n[currentLang].confirm,
-		        cancelText: i18n[currentLang].cancel
-		    });
+			return customDialog.show({
+				message: i18n[currentLang][message],
+				showCancel: true,
+				confirmText: i18n[currentLang].confirm,
+				cancelText: i18n[currentLang].cancel
+			});
 		}
 
 		// Проверка поддержки Service Worker
@@ -1537,11 +1542,57 @@
 				try {
 					const registration = await navigator.serviceWorker.register('/sw.js');
 					console.log('ServiceWorker Registered');
+
+					 // Функция для получения версии кеша
+					 function getCacheVersion() {
+					   return new Promise((resolve, reject) => {
+							if (!navigator.serviceWorker.controller) {
+								reject('Service Worker не активен');
+							   	return;
+							}
+
+							const messageChannel = new MessageChannel();
+							messageChannel.port1.onmessage = event => {
+							resolve(event.data); // Версия кеша из Service Worker
+							};
+							messageChannel.port1.onerror = error => {
+								reject(error);
+							}
+							navigator.serviceWorker.controller.postMessage('GET_CACHE_VERSION', [messageChannel.port2]);
+					   });
+					 }
+
+					 // Вызываем функцию для получения версии кеша после регистрации Service Worker
+					 getCacheVersion()
+					 .then(version => {
+						console.log('Версия кеша:', version);
+						document.getElementById('cache-version').textContent = `Версия кеша: ${version}`; // Отображаем на странице
+					})
+						.catch(error => {
+							console.error('Ошибка получения версии кеша:', error);
+						 	document.getElementById('cache-version').textContent = 'Не удалось получить версию кеша';
+					});
+					
 				} catch (err) {
 					console.log('ServiceWorker Registration Error:', err);
 				}
 			});
 		}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 		// Обработчик обновлений
 		navigator.serviceWorker.addEventListener('controllerchange', () => {
@@ -1855,9 +1906,9 @@
 		function handleReset() {
 			toggleMenu(); // Закрываем меню
 			showConfirm('confirmReset').then(confirmed => {
-			    if(confirmed) {
-			        resetApp(); // Пользователь подтвердил
-			    }
+				if(confirmed) {
+					resetApp(); // Пользователь подтвердил
+				}
 			});
 		}
 
@@ -1895,11 +1946,11 @@
 
 		// Восстановление при загрузке
 		window.addEventListener('load', () => {
-		    // updateConnectionStatus();
-		    
-		    // События изменения состояния
-		    // window.addEventListener('online', updateConnectionStatus);
-		    // window.addEventListener('offline', updateConnectionStatus);
+			// updateConnectionStatus();
+			
+			// События изменения состояния
+			// window.addEventListener('online', updateConnectionStatus);
+			// window.addEventListener('offline', updateConnectionStatus);
 
 			restoreState();
 			

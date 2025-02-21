@@ -1,5 +1,6 @@
 // sw.js
 const CACHE_NAME = 'muTimer-ver-1.3.16';
+const NETWORK_TIMEOUT = 800;
 const OFFLINE_URL = '/timer/index.html';
 const ASSETS = [
     '/timer/',
@@ -32,21 +33,40 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
-    // Для всех запросов сначала пробуем сеть, потом кэш
     event.respondWith((async () => {
+        const cache = await caches.open(CACHE_NAME);
+        const cachedPromise = cache.match(event.request);
+        const networkPromise = fetch(event.request);
+
+        // Создаем таймаут для сети
+        const networkTimeout = new Promise((resolve) => {
+            setTimeout(resolve, NETWORK_TIMEOUT);
+        });
+
         try {
-            // Пытаемся получить свежую версию из сети
-            const networkResponse = await fetch(event.request);
-            
-            // Обновляем кэш для будущих офлайн-запросов
-            const cache = await caches.open(CACHE_NAME);
-            cache.put(event.request, networkResponse.clone());
-            
-            return networkResponse;
+            // Параллельно проверяем кэш и сеть
+            const response = await Promise.race([
+                networkPromise,
+                networkTimeout.then(() => 'timeout')
+            ]);
+
+            if (response !== 'timeout') {
+                // Обновляем кэш если получили ответ
+                cache.put(event.request, response.clone());
+                return response;
+            }
         } catch (error) {
-            // Если сеть недоступна - используем кэш
-            const cachedResponse = await caches.match(event.request);
-            return cachedResponse || caches.match('/timer/index.html');
+            // Игнорируем ошибки сети
         }
+
+        // Если сеть не ответила за timeout или ошибка - возвращаем кэш
+        return (await cachedPromise) || cache.match('/timer/index.html');
     })());
+});
+
+// Отправляем сообщение в основной поток с версией кеша
+self.addEventListener('message', event => {
+    if (event.data === 'GET_CACHE_VERSION') {
+        event.ports[0].postMessage(CACHE_VERSION);
+    }
 });
