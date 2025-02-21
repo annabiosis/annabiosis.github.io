@@ -1558,7 +1558,7 @@
 							messageChannel.port1.onerror = error => {
 								reject(error);
 							}
-							navigator.serviceWorker.controller.postMessage('GET_CACHE_VERSION', [messageChannel.port2]);
+							navigator.serviceWorker.controller.postMessage('CACHE_NAME', [messageChannel.port2]);
 					   });
 					 }
 
@@ -1566,11 +1566,11 @@
 					 getCacheVersion()
 					 .then(version => {
 						console.log('Версия кеша:', version);
-						document.getElementById('cache-version').textContent = `Версия кеша: ${version}`; // Отображаем на странице
+						// document.getElementById('cache-version').textContent = `Версия кеша: ${version}`; // Отображаем на странице
 					})
 						.catch(error => {
 							console.error('Ошибка получения версии кеша:', error);
-						 	document.getElementById('cache-version').textContent = 'Не удалось получить версию кеша';
+						 	// document.getElementById('cache-version').textContent = 'Не удалось получить версию кеша';
 					});
 					
 				} catch (err) {
