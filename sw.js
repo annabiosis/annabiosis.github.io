@@ -67,6 +67,6 @@ self.addEventListener('fetch', (event) => {
 // Отправляем сообщение в основной поток с версией кеша
 self.addEventListener('message', event => {
     if (event.data === 'CACHE_NAME') {
-        event.ports[0].postMessage(CACHE_VERSION);
+        event.ports[0].postMessage(CACHE_NAME);
     }
 });
