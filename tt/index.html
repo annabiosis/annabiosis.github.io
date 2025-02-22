@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+
+  	:root {
+  		--prim: #E9E9E9;
+  		--sec: #777777;
+  		--tri: #515151;
+  		--quad: #333333;
+  		--green: #9DFF00;
+  		--accent: #FF9500;
+
+  		--gap1: 12px;
+  		--gap2: 24px;
+  	}
+
+	body {
+	  font-family: 'tttr', monospace;
+	  font-size: 16px;
+	  line-height: 16px;
+	  margin: 0;
+	  padding: 48px;
+	}
+
+	.screen {
+	  width: 480px;
+	  height: 320px;
+	  background-color: black;
+	  color: white;
+	  padding: 0 12px;
+	  box-sizing: border-box;
+	}
+
+	/* Наследование шрифта для всех элементов внутри экрана */
+	.screen * {
+	  font-family: inherit;
+	  font-size: inherit;
+	  line-height: inherit;
+	}
+
+	.status-bar {
+	  display: flex;
+	  flex-direction: row;
+	}
+
+	.screen-title {
+		color: var(--accent);
+	  width: 100%;
+	}
+
+	.bars .bar {
+		color: var(--quad);
+	}
+
+	.bar.active {
+		color: var(--accent);
+	}
+
+	.bpm {
+		color: var(--sec);
+		margin-left: var(--gap1);
+	}
+
+	.bpm span {
+		color: var(--tri);
+	}
+
+	.bars {
+	  display: flex;
+	  width: fit-content;
+	}
+
+	.bat {
+		color: var(--green);
+		margin-left: var(--gap1);
+	}
+
+	.bat span {
+		color: var(--tri);
+	}
+
+	.hordiv {
+		background-color: var(--tri);
+		height: 1px;
+		margin: 6px 0 5px 0;
+		width: 100%;
+	}
+
+
+	.main {
+		display: flex;
+		flex-direction: row;
+		gap: var(--gap1);
+	}
+
+	.left {
+		width: 372px;
+	}
+
+	.side-bar {
+		width: 72px;
+	}
+
+	.trk {
+		color: var(--sec);
+	}
+
+	.trk.active {
+		color: var(--prim);
+	}
+
+	.trk.active .trk-num {
+		color: var(--accent);
+	}
+
+	.table .header, .table .row {
+		display: flex;
+		flex-direction: row;
+	}
+
+	.table .header .cell,
+	.table .row .cell {
+		margin-left: var(--gap1);
+		color: var(--sec);		
+	}
+
+	.table .header .cell:first-letter {
+		color: var(--tri);
+	}
+
+	.table .header .cell.space2,
+	.table .row .cell.num {
+		width: var(--gap2);
+		margin-left: 0;
+	}
+
+	.table .row .cell.num {
+		color: var(--tri);
+	}
+
+  </style>
+</head>
+<body>
+  <div class="screen">
+	<!-- Ваш контент здесь -->
+	<section class="status-bar">
+		<div class="screen-title">Песня</div>
+		<div class="bars">
+			<div class="bar">•</div>
+			<div class="bar active">•</div>
+			<div class="bar">•</div>
+			<div class="bar">•</div>
+		</div>
+		<div class="bpm"><span>T</span>120.00</div>
+		<div class="bat">
+			<span>▊</span>▊▊
+		</div>
+	</section>
+	<div class="hordiv"></div>
+	<section class="main">
+		<section class="left song">
+			<div class="table">
+				<div class="header">
+					<div class="cell space2"></div>
+					<div class="cell">01</div>
+					<div class="cell">02</div>
+					<div class="cell">03</div>
+					<div class="cell">04</div>
+					<div class="cell">05</div>
+					<div class="cell">06</div>
+					<div class="cell">07</div>
+					<div class="cell">08</div>
+					<div class="cell">»</div>
+				</div>
+				<div class="row">
+					<div class="cell num">00</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+				</div>
+				<div class="row">
+					<div class="cell num">01</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+				</div>
+				<div class="row">
+					<div class="cell num">02</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+				</div>
+				<div class="row">
+					<div class="cell num">03</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+				</div>
+				<div class="row">
+					<div class="cell num">04</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+				</div>
+				<div class="row">
+					<div class="cell num">05</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+				</div>
+				<div class="row">
+					<div class="cell num">06</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+				</div>
+				<div class="row">
+					<div class="cell num">07</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+				</div>
+				<div class="row">
+					<div class="cell num">08</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+				</div>
+				<div class="row">
+					<div class="cell num">09</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+				</div>
+				<div class="row">
+					<div class="cell num">0A</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+				</div>
+				<div class="row">
+					<div class="cell num">0B</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+				</div>
+				<div class="row">
+					<div class="cell num">0C</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+				</div>
+				<div class="row">
+					<div class="cell num">0D</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+				</div>
+				<div class="row">
+					<div class="cell num">0E</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+				</div>
+				<div class="row">
+					<div class="cell num">0F</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+					<div class="cell">``</div>
+				</div>
+			</div>
+		</section>
+		<section class="side-bar">
+			<div class="trk active"><span class="trk-num">01</span> D#4</div>
+			<div class="trk"><span class="trk-num">02</span> ```</div>
+			<div class="trk"><span class="trk-num">03</span> ```</div>
+			<div class="trk"><span class="trk-num">04</span> ```</div>
+			<div class="trk"><span class="trk-num">05</span> ```</div>
+			<div class="trk"><span class="trk-num">06</span> ```</div>
+			<div class="trk"><span class="trk-num">07</span> ```</div>
+			<div class="trk"><span class="trk-num">08</span> ```</div>
+		</section>
+	</section>
+  </div>
+</body>
+</html>

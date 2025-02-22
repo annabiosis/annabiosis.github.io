@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Карточная игра с анимациями</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 0 20px;
+            background: #f0f0f0;
+        }
+
+        #cardContainer {
+		    display: flex;
+		    flex-wrap: wrap;
+		    gap: 15px;
+		    padding: 20px 0;
+		    justify-content: center;
+		    align-items: flex-start;
+		}
+
+		.card {
+		    --card-width: 160px;
+		    --card-height: calc(var(--card-width) * 1.4);
+		    --corner-radius: 8px;
+		    --card-font-size: 14px;
+
+		    width: var(--card-width);
+		    min-height: var(--card-height);
+		    padding: 20px 15px;
+		    margin: 10px;
+		    border-radius: var(--corner-radius);
+		    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+		    transform-style: preserve-3d;
+		    animation: cardAppear 0.5s ease-out forwards;
+		    opacity: 0;
+		    cursor: pointer;
+		    position: relative;
+		    transition: 
+		        transform 0.3s ease,
+		        box-shadow 0.3s ease;
+		    display: flex;
+		    align-items: center;
+		    justify-content: center;
+		    text-align: center;
+		    font-size: var(--card-font-size);
+		    line-height: 1.4;
+		    word-wrap: break-word;
+		    hyphens: auto;
+		    animation: cardAppear 0.4s ease-out both;
+		    opacity: 0;
+		    margin: 0;
+		}
+
+        .card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        .advice {
+            background: linear-gradient(145deg, #fff3e0, #ffe0b2);
+            color: #333;
+        }
+
+        .action {
+            background: linear-gradient(145deg, #616161, #424242);
+            color: white;
+            animation: actionAppear 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        button {
+            padding: 12px 25px;
+            margin: 10px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 
+                transform 0.2s ease,
+                box-shadow 0.2s ease,
+                background 0.2s ease;
+            background: #2196F3;
+            color: white;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 12px rgba(0,0,0,0.2);
+            background: #1976D2;
+        }
+
+        button:active {
+            transform: translateY(1px);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        button:disabled {
+            background: #90caf9;
+            cursor: not-allowed;
+        }
+
+        .status {
+            margin: 20px 0;
+            padding: 10px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+            animation: statusAppear 0.4s ease-out;
+        }
+
+        /* Последовательные задержки для анимаций */
+		.card:nth-child(1) { animation-delay: 0.1s; }
+		.card:nth-child(2) { animation-delay: 0.2s; }
+		.card:nth-child(3) { animation-delay: 0.3s; }
+		.card:nth-child(4) { animation-delay: 0.4s; }
+		.card:nth-child(5) { animation-delay: 0.5s; }
+
+		@keyframes cardAppear {
+		    from {
+		        opacity: 0;
+		        transform: translateY(20px) rotate(-5deg);
+		    }
+		    to {
+		        opacity: 1;
+		        transform: translateY(0) rotate(0);
+		    }
+		}
+
+		/* Измененная анимация для действий */
+		@keyframes actionAppear {
+		    0% {
+		        opacity: 0;
+		        transform: translateY(20px) rotate(3deg);
+		    }
+		    70% {
+		        opacity: 1;
+		        transform: translateY(-5px) rotate(-1deg);
+		    }
+		    100% {
+		        opacity: 1;
+		        transform: translateY(0) rotate(0);
+		    }
+		}
+
+        @keyframes cardShake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(5px); }
+            50% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+            100% { transform: translateX(0); }
+        }
+
+        @keyframes statusAppear {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .game-over {
+            animation: gameOverPulse 1.5s ease-in-out infinite;
+            font-size: 24px;
+            text-align: center;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+
+
+		/* Соотношение 1:1.4 (стандарт игральных карт) */
+		@media (min-width: 768px) {
+		    .card {
+		        --card-width: 180px;
+		        --card-font-size: 15px;
+		    }
+		}
+
+		.advice {
+		    background: linear-gradient(160deg, #f8f5f0 0%, #ffffff 100%);
+		    color: #333;
+		    border: 1px solid #e0d7cc;
+		}
+
+		.action {
+		    background: linear-gradient(160deg, #2c2c2c 0%, #404040 100%);
+		    color: #fff;
+		    border: 1px solid #555;
+		}
+
+		/* Угловые декоративные элементы */
+		.card::before,
+		.card::after {
+		    content: attr(data-content);
+		    position: absolute;
+		    font-size: 0.8em;
+		    font-weight: bold;
+		    padding: 2px;
+		}
+
+		.card::before {
+		    top: 5px;
+		    left: 5px;
+		}
+
+		.card::after {
+		    bottom: 5px;
+		    right: 5px;
+		    transform: rotate(180deg);
+		}
+
+		.advice::before,
+		.advice::after {
+		    content: "?";
+		    color: #666;
+		}
+
+		.action::before,
+		.action::after {
+		    content: "!";
+		    color: #fff;
+		}
+
+		@keyframes cardAppear {
+		    from {
+		        opacity: 0;
+		        transform: translateY(20px) rotateX(15deg) rotateZ(-2deg);
+		    }
+		    to {
+		        opacity: 1;
+		        transform: translateY(0) rotateX(0) rotateZ(0);
+		    }
+		}
+
+		.card:hover {
+		    transform: translateY(-5px) rotateZ(1deg);
+		    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+		}
+
+        @keyframes gameOverPulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.8; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .deck-status {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 60px;
+            height: 80px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            animation: deckBreathe 2s ease-in-out infinite;
+        }
+
+        @keyframes deckBreathe {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+            100% { transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="deck-status"></div>
+    <div id="status" class="status"></div>
+    <div id="cardContainer"></div>
+    <div id="controls">
+        <button id="dealBtn" onclick="dealCard()">Сдать</button>
+        <button id="newGameBtn" onclick="newGame()">Новая игра</button>
+    </div>
+
+<script>
+const adviceCards = [
+	"Что, если ты вернешься к началу?",
+	"Что, если ты дойдешь до крайности, а потом слегка отступишь?",
+	"Что, если ты начнешь поиск?",
+	"Что, если ты бросишь кость?",
+	"Что, если ты создашь что-то из ничего?",
+	"Что, если у тебя будет ограничение по времени?",
+	"Что, если ты найдешь неожиданную связь?",
+	"Что, если ты добавишь что-то новое?",
+	"Что, если ты будешь более экстравагантным?",
+	"Что, если ты добавишь что-то?",
+	"Что, если ты нарушишь правило?",
+	"Что, если ты выберешь оба варианта?",
+	"Что, если ты вернешься к основам?",
+	"Что, если это будет в другое время или место?",
+	"Что, если ты превратишь это во что-то другое?",
+	"Что, если ты установишь творческие ограничения?",
+	"Что, если ты выйдешь за рамки?",
+	"Что, если ты посмотришь со стороны?",
+	"Что, если ты добавишь хаос?",
+	"Что, если ты продолжишь это?",
+	"Что, если ты нарушишь жанровые условности?",
+	"Что, если ты будешь более дисциплинированным?",
+	"Что, если у тебя будет позитивный настрой?",
+	"Что, если у тебя будет критический настрой?",
+	"Что, если ты найдешь искусство в шуме?",
+	"Что, если ты перейдешь к сути?",
+	"Что, если это изменится очень медленно?",
+	"Что, если что-то нужно уничтожить?",
+	"Что, если что-то нужно отключить?",
+	"Что, если ты сделаешь то, что в тайниках твоего разума?",
+	"Что, если это сделал кто-то другой?",
+	"Что, если ты сгруппируешь их и будешь работать с целым?",
+	"Что, если изменится только одна вещь за раз?",
+	"Что, если ты переключишь скорость?",
+	"Что, если ты посвятишь время экспериментам?",
+	"Что, если никто не наблюдает?",
+	"Что, если ты оставишь это как есть как можно дольше?",
+	"Что, если ты сосредоточишься на недостатках?",
+	"Что, если ты спросишь другого профессионала?",
+	"Что, если ты объединишь две вещи?",
+	"Что, если ты сделаешь что-то нехарактерное?",
+	"Что, если ты внесешь небольшие изменения?",
+	"Что, если ты перевернешь это?",
+	"Что, если ты поиграешь со временем?",
+	"Что, если ты добавишь больше деталей?",
+	"Что, если ты сделаешь что-то смелое?",
+	"Что, если это будет более органичным?",
+	"Что, если это будет более механистичным?",
+	"Что, если нужно больше времени?",
+	"Что, если будет только по одному экземпляру каждого типа?",
+	"Что, если ты сделаешь ошибки выглядящими намеренными?",
+	"Что, если ты соединишь две вещи?",
+	"Что, если ты вернешься к старым методам?",
+	"Что, если ты сосредоточишься на проблеме?",
+	"Что, если ты поменяешь местами?",
+	"Что, если ты подчеркнешь различия?",
+	"Что, если ты попробуешь что-то невозможное?",
+	"Что, если ты спросишь мнение?",
+	"Что, если ты начнешь с чистого листа?",
+	"Что, если ты сосредоточишься на повторениях?",
+	"Что, если ты упростишь это?",
+	"Что, если ты просто сделаешь простое?",
+	"Что, если чего-то не хватает?",
+	"Что, если ты используешь свои таланты?",
+	"Что, если ты учтешь аудиторию?",
+	"Что, если ты уберешь что-то значимое?",
+	"Что, если ты сосредоточишься на переходах?",
+	"Что, если ты позаимствуешь из чего-то другого?",
+	"Что, если ты пойдешь дальше?",
+	"Что, если ты исследуешь противоположное?",
+	"Что, если ты сменишь роли?",
+	"Что, если ты сделаешь последнее первым?"
+];
+
+const actionCards = [
+	{text: "Возьми следующие две карты и объедини их.", count: 2},
+	{text: "Возьми следующие две карты и используй их последовательно.", count: 2},
+	{text: "Попроси кого-нибудь интерпретировать следующую карту для тебя.", count: 1},
+	{text: "Возьми карту и прочитай её, когда проснешься в следующий раз.", count: 1},
+	{text: "Вытяни три карты и выбери самую сложную.", count: 3},
+	{text: "Используй следующую карту в начале следующей сессии.", count: 1},
+	{text: "Сделай следующую карту темой своего проекта.", count: 1},
+	{text: "Возьми следующую карту с собой на работу, чтобы обдумать.", count: 1}
+];
+
+let deck = [];
+let pendingAction = null;
+let remainingActionCards = 0;
+
+function createDeck() {
+    const newDeck = [
+        ...adviceCards.map(text => ({type: 'advice', text})),
+        ...actionCards.map(card => ({type: 'action', ...card}))
+    ];
+    shuffle(newDeck);
+    return newDeck;
+}
+
+function shuffle(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+}
+
+function newGame() {
+    deck = createDeck();
+    pendingAction = null;
+    document.getElementById('dealBtn').disabled = false;
+    document.getElementById('cardContainer').innerHTML = '';
+    updateStatus();
+}
+
+function createCardElement(card) {
+    const div = document.createElement('div');
+    div.className = `card ${card.type}`;
+    div.textContent = card.text;
+    div.dataset.content = card.type === 'action' ? '!' : '?'; // Для угловых символов
+    return div;
+}
+
+function updateStatus() {
+    const remaining = deck.length + (pendingAction?.count || 0);
+    document.getElementById('status').textContent = `Осталось карт: ${remaining}`;
+}
+
+function getValidCards(count) {
+    const result = [];
+    let attempts = 0;
+    
+    while(result.length < count && deck.length > 0 && attempts < 100) {
+        const card = deck.shift();
+        
+        if (card.type === 'action') {
+            // Возвращаем карту действия в колоду
+            deck.push(card);
+            shuffle(deck); // Перемешиваем чтобы избежать зацикливания
+        } else {
+            result.push(card);
+        }
+        
+        attempts++;
+    }
+    
+    return result;
+}
+
+function displayCards(cards) {
+    const container = document.getElementById('cardContainer');
+    container.innerHTML = ''; // Очищаем предыдущие карты
+    
+    cards.forEach((card, index) => {
+        const cardElement = createCardElement(card);
+        cardElement.style.animationDelay = `${index * 0.1}s`;
+        container.appendChild(cardElement);
+    });
+}
+
+function dealCard() {
+    const container = document.getElementById('cardContainer');
+    container.innerHTML = '';
+
+    if (pendingAction) {
+        // Получаем карты советов, пропуская действия
+        const cards = getValidCards(pendingAction.count);
+        cards.forEach(card => {
+            container.appendChild(createCardElement(card));
+        });
+        pendingAction = null;
+    } else {
+        if (deck.length === 0) {
+            container.innerHTML = '<div class="card advice">Игра окончена!</div>';
+            document.getElementById('dealBtn').disabled = true;
+            return;
+        }
+
+        const card = deck.shift();
+        container.appendChild(createCardElement(card));
+        
+        if (card.type === 'action') {
+            pendingAction = card;
+        }
+    }
+
+    // Обновление статуса и проверка окончания
+    if (deck.length === 0 && !pendingAction) {
+        document.getElementById('dealBtn').disabled = true;
+    }
+    
+    updateStatus();
+}
+
+// Инициализация новой игры при загрузке
+window.onload = newGame;
+</script>
+</body>
+</html>
