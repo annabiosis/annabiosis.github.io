@@ -5,14 +5,18 @@
 
   	:root {
   		--prim: #E9E9E9;
+  		--prim-inv: #000000;
   		--sec: #777777;
   		--tri: #515151;
   		--quad: #333333;
   		--green: #9DFF00;
   		--accent: #FF9500;
+  		--accent-mute: #794700;
 
   		--gap1: 12px;
   		--gap2: 24px;
+
+  		--beat-duration: 1ms;
   	}
 
 	body {
@@ -55,6 +59,7 @@
 
 	.bar.active {
 		color: var(--accent);
+		animation: CurrentBar var(--beat-duration) infinite;
 	}
 
 	.bpm {
@@ -139,6 +144,51 @@
 		color: var(--tri);
 	}
 
+	.table .row.playing .cell {
+		position: relative;
+	}
+
+	.table .row.playing .cell.num:before {
+		content: "";
+	}
+
+	.table .row.playing .cell:before {
+		content: "‣";
+		color: var(--green);
+		position: absolute;
+		left: -12px
+	}
+
+	.cell .data {
+		color: var(--prim);
+	}
+
+	.cell .data.sel {
+		background-color: var(--accent);
+		color: var(--prim-inv);
+		animation: SelBlink 1s infinite;
+	}
+
+	@keyframes SelBlink {
+		0%, 100% {
+			background-color: var(--accent);
+		}
+		50% {
+			background-color: var(--accent-mute);
+		}
+		
+	}
+
+	@keyframes CurrentBar {
+		0%, 100% {
+			color: var(--accent);
+		}
+		50% {
+			color: var(--accent-mute);
+		}
+		
+	}
+
   </style>
 </head>
 <body>
@@ -147,8 +197,8 @@
 	<section class="status-bar">
 		<div class="screen-title">Песня</div>
 		<div class="bars">
-			<div class="bar">•</div>
 			<div class="bar active">•</div>
+			<div class="bar">•</div>
 			<div class="bar">•</div>
 			<div class="bar">•</div>
 		</div>
@@ -173,9 +223,9 @@
 					<div class="cell">08</div>
 					<div class="cell">»</div>
 				</div>
-				<div class="row">
+				<div class="row playing">
 					<div class="cell num">00</div>
-					<div class="cell">``</div>
+					<div class="cell"><div class="data">AA</div></div>
 					<div class="cell">``</div>
 					<div class="cell">``</div>
 					<div class="cell">``</div>
@@ -186,10 +236,10 @@
 				</div>
 				<div class="row">
 					<div class="cell num">01</div>
-					<div class="cell">``</div>
-					<div class="cell">``</div>
-					<div class="cell">``</div>
-					<div class="cell">``</div>
+					<div class="cell"><div class="data">AA</div></div>
+					<div class="cell"><div class="data">AA</div></div>
+					<div class="cell"><div class="data">AA</div></div>
+					<div class="cell"><div class="data sel">AA</div></div>
 					<div class="cell">``</div>
 					<div class="cell">``</div>
 					<div class="cell">``</div>
@@ -197,11 +247,11 @@
 				</div>
 				<div class="row">
 					<div class="cell num">02</div>
-					<div class="cell">``</div>
-					<div class="cell">``</div>
-					<div class="cell">``</div>
-					<div class="cell">``</div>
-					<div class="cell">``</div>
+					<div class="cell"><div class="data">AA</div></div>
+					<div class="cell"><div class="data">AA</div></div>
+					<div class="cell"><div class="data">AA</div></div>
+					<div class="cell"><div class="data">AA</div></div>
+					<div class="cell"><div class="data">AA</div></div>
 					<div class="cell">``</div>
 					<div class="cell">``</div>
 					<div class="cell">``</div>
@@ -355,7 +405,7 @@
 			<div class="trk active"><span class="trk-num">01</span> D#4</div>
 			<div class="trk"><span class="trk-num">02</span> ```</div>
 			<div class="trk"><span class="trk-num">03</span> ```</div>
-			<div class="trk"><span class="trk-num">04</span> ```</div>
+			<div class="trk active"><span class="trk-num">04</span> C 5</div>
 			<div class="trk"><span class="trk-num">05</span> ```</div>
 			<div class="trk"><span class="trk-num">06</span> ```</div>
 			<div class="trk"><span class="trk-num">07</span> ```</div>
@@ -363,5 +413,78 @@
 		</section>
 	</section>
   </div>
+  <script>
+
+
+function bpmToMs(bpm, stepsPerBar) {
+  if (isNaN(bpm) || isNaN(stepsPerBar) || bpm <= 0 || stepsPerBar <= 0) {
+    throw new Error('Некорректные параметры');
+  }
+  
+  // Рассчитываем длительность для размера такта 4/4
+  const msPerStep = (60 * 1000 * 4) / (bpm * stepsPerBar) * stepsPerBar;
+  return Math.round(msPerStep);
+}
+
+
+
+const table = document.querySelector('.table');
+const bars = document.querySelector('.bars');
+
+
+if (!bars) {
+  console.error('Контейнер .bars не найден');
+} else {
+  let currentIndex = -1;
+  const interval = bpmToMs(120, 16) * 4; // Интервал в миллисекундах (настройте под свои нужды)
+    duration = (interval / 16) +"ms";
+	document.documentElement.style.setProperty('--beat-duration', duration);	
+  	
+  	const updatePlayingClass = () => {
+    const bar = bars.querySelectorAll('.bar');
+    if (bar.length === 0) return;
+
+
+
+    // Удаляем класс у предыдущего элемента
+    if (currentIndex >= 0 && currentIndex < bar.length) {
+      bar[currentIndex].classList.remove('active');
+    }
+
+    // Обновляем индекс и добавляем класс новому элементу
+    currentIndex = (currentIndex + 1) % bar.length;
+    bar[currentIndex].classList.add('active');
+  };
+
+  // Запускаем интервал
+  setInterval(updatePlayingClass, interval);
+}
+
+
+if (!table) {
+  console.error('Контейнер .table не найден');
+} else {
+  let currentIndex = -1;
+  const interval = bpmToMs(120, 16); // Интервал в миллисекундах (настройте под свои нужды)
+
+  const updatePlayingClass = () => {
+    const rows = table.querySelectorAll('.row');
+    if (rows.length === 0) return;
+
+    // Удаляем класс у предыдущего элемента
+    if (currentIndex >= 0 && currentIndex < rows.length) {
+      rows[currentIndex].classList.remove('playing');
+    }
+
+    // Обновляем индекс и добавляем класс новому элементу
+    currentIndex = (currentIndex + 1) % rows.length;
+    rows[currentIndex].classList.add('playing');
+  };
+
+  // Запускаем интервал
+  setInterval(updatePlayingClass, interval);
+}
+
+  </script>
 </body>
 </html>
