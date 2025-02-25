@@ -48,6 +48,8 @@
             padding: 0 24px;
             background: var(--bg-color);
             color: var(--text-color);
+            display: flex;
+            flex-direction: column;
         }
 
         #cardContainer {
@@ -57,6 +59,8 @@
 		    padding: 24px 0;
 		    justify-content: center;
 		    align-items: flex-start;
+		    overflow: hidden;
+		    height: 100%;
 		}
 
 		.card {
@@ -74,7 +78,6 @@
 
 		    background-color: var(--bg-color-alt);
 		    transform-style: preserve-3d;
-		    animation: cardAppear 0.5s ease-out forwards;
 		    opacity: 0;
 		    position: relative;
 		    transition: 
@@ -96,7 +99,10 @@
 
 		    border: 5px solid;
 
-		    animation: cardAppear 0.4s ease-out both;
+		    transform-origin: center center;
+		    animation: cardAppear 0.3s ease-out both;
+
+
 		}
 
 		.card p u {
@@ -196,21 +202,10 @@
 
         /* Последовательные задержки для анимаций */
 		.card:nth-child(1) { animation-delay: 0.1s; }
-		.card:nth-child(2) { animation-delay: 0.2s; }
-		.card:nth-child(3) { animation-delay: 0.3s; }
-		.card:nth-child(4) { animation-delay: 0.4s; }
-		.card:nth-child(5) { animation-delay: 0.5s; }
-
-		@keyframes cardAppear {
-		    from {
-		        opacity: 0;
-		        transform: translateY(20px) rotate(-5deg);
-		    }
-		    to {
-		        opacity: 1;
-		        transform: translateY(0) rotate(0);
-		    }
-		}
+		.card:nth-child(2) { animation-delay: 0.3s; }
+		.card:nth-child(3) { animation-delay: 0.6s; }
+		.card:nth-child(4) { animation-delay: 0.9s; }
+		.card:nth-child(5) { animation-delay: 0.12s; }
 
 		/* Измененная анимация для действий */
 		@keyframes actionAppear {
@@ -260,12 +255,27 @@
 
 		@keyframes cardAppear {
 		    from {
-		        opacity: 0;
-		        transform: translateY(20px) rotateX(15deg) rotateZ(-2deg);
+		        opacity: 1;
+		        transform: translateX(-70vw) rotateX(10deg) rotateY(45deg);
 		    }
 		    to {
 		        opacity: 1;
 		        transform: translateY(0) rotateX(0) rotateZ(0);
+		    }
+		}
+
+		.card.fade-out {
+		    animation: fadeOut .3s ease-in-out forwards;
+		}
+
+		@keyframes fadeOut {
+		    from {
+		        opacity: 1;
+		        transform: translateY(0) rotateX(0) rotateZ(0);
+		    }
+		    to {
+		        opacity: 1;
+		        transform: translateX(70vw) rotateX(-10deg) rotateY(45deg);
 		    }
 		}
 
@@ -281,14 +291,14 @@
         }
 
 
+		
+
+
     </style>
 </head>
 <body>
-    <div class="status"><span id="status"></span><button id="newGameBtn" onclick="newGame()">🆕</button></div>
+    <div class="status"><span id="status"></span><button id="dealBtn" onclick="dealCard()">Сдать</button><button id="newGameBtn" onclick="newGame()">🆕</button></div>
     <div id="cardContainer"></div>
-    <div id="controls">
-        <button id="dealBtn" onclick="dealCard()">Сдать</button>
-    </div>
 
 <script>
 const adviceCards = [
@@ -383,6 +393,8 @@ const adviceCards = [
 	"Что, если ты превратишь <u>ограничения</u> в главный элемент?"
 ];
 
+const animTime = 400;
+
 const actionCards = [
 	{text: "Возьми следующие две карты и <u>объедини</u> их.", count: 2},
 	{text: "Возьми следующие две карты и используй их <u>после&shy;довательно</u>.", count: 2},
@@ -472,6 +484,31 @@ function getValidCards(count) {
     return result;
 }
 
+function removeCardWithAnimation(cardElement) {
+    // Добавляем класс с анимацией
+    cardElement.classList.add('fade-out');
+    
+    // Удаляем элемент после завершения анимации
+    setTimeout(() => {
+        cardElement.remove();
+    }, animTime); // Время должно совпадать с длительностью анимации
+}
+
+// Модифицированная функция удаления карт
+function clearCards() {
+    const container = document.getElementById('cardContainer');
+    const cards = container.querySelectorAll('.card');
+    
+    cards.forEach((card, i) => {
+        
+        setTimeout(() => {
+        	removeCardWithAnimation(card);
+        }, i * animTime);
+
+    });
+
+}
+
 function displayCards(cards) {
     const container = document.getElementById('cardContainer');
     container.innerHTML = ''; // Очищаем предыдущие карты
@@ -485,13 +522,16 @@ function displayCards(cards) {
 
 function dealCard() {
     const container = document.getElementById('cardContainer');
-    container.innerHTML = '';
+    // container.innerHTML = '';
+    clearCards();
 
     if (pendingAction) {
         // Получаем карты советов, пропуская действия
         const cards = getValidCards(pendingAction.count);
         cards.forEach(card => {
-            container.appendChild(createCardElement(card));
+            setTimeout(() => { 
+            	container.appendChild(createCardElement(card));
+            }, animTime);
         });
         pendingAction = null;
     } else {
@@ -500,13 +540,13 @@ function dealCard() {
             document.getElementById('dealBtn').disabled = true;
             return;
         }
-
-        const card = deck.shift();
-        container.appendChild(createCardElement(card));
-        
-        if (card.type === 'action') {
-            pendingAction = card;
-        }
+			const card = deck.shift();
+	        setTimeout(() => { 
+	        	container.appendChild(createCardElement(card));
+		        if (card.type === 'action') {
+		            pendingAction = card;
+		        }
+	        }, animTime);
     }
 
     // Обновление статуса и проверка окончания
@@ -520,7 +560,7 @@ function dealCard() {
 // Инициализация новой игры при загрузке
 window.addEventListener('load', async () => {
 	newGame();
-	dealCard();
+	// dealCard();
 });
 </script>
 </body>
