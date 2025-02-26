@@ -255,7 +255,7 @@
 
 		@keyframes cardAppear {
 		    from {
-		        opacity: 1;
+		        opacity: 0;
 		        transform: translateX(-70vw) rotateX(10deg) rotateY(45deg);
 		    }
 		    to {
@@ -274,7 +274,7 @@
 		        transform: translateY(0) rotateX(0) rotateZ(0);
 		    }
 		    to {
-		        opacity: 1;
+		        opacity: 0;
 		        transform: translateX(70vw) rotateX(-10deg) rotateY(45deg);
 		    }
 		}
@@ -393,7 +393,7 @@ const adviceCards = [
 	"Что, если ты превратишь <u>ограничения</u> в главный элемент?"
 ];
 
-const animTime = 400;
+const animTime = 300;
 
 const actionCards = [
 	{text: "Возьми следующие две карты и <u>объедини</u> их.", count: 2},
@@ -487,7 +487,6 @@ function getValidCards(count) {
 function removeCardWithAnimation(cardElement) {
     // Добавляем класс с анимацией
     cardElement.classList.add('fade-out');
-    
     // Удаляем элемент после завершения анимации
     setTimeout(() => {
         cardElement.remove();
@@ -503,7 +502,7 @@ function clearCards() {
         
         setTimeout(() => {
         	removeCardWithAnimation(card);
-        }, i * animTime);
+        }, i * animTime / cards.length);
 
     });
 
