@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Annabiosis и Проекты</title>
+<!-- Шрифты -->
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+	<style>
+		:root {
+			--bg-color: #000;
+			--bg-color-alt: #011b1c;
+			--bg-color-alt-2: #1c0101;
+			--text-color: #fff;
+			--red900: #7A0919;
+			--red600: #DB3323;
+			--red500: #FF5230;
+			--red100: #FFCCAC;
+			--green600: #30DA98;
+			--green400: #71FEAB;
+			--green900: #0C7970;
+			--green1000: #042d29;
+			--border-color: rgba(255,255,255,.2);
+			--border-red: var(--red900);
+			--border-green: var(--green900);
+			--grey40: rgba(255,255,255,.4);
+			--menu-bg: var(--bg-color-alt);
+			--divider: rgba(255,255,255,.1);
+			--divider2: rgba(255,255,255,.15);
+			--shadow: rgba(0,0,0,.5);
+			--radius-outer: 24px;
+			--gap: 4vw;
+			--gap-mid: 2vw;
+
+			--card-padding:48px;
+		}
+
+		* {
+			box-sizing: border-box;
+		}
+
+		body {
+			background: var(--bg-color-alt);
+			color: var(--text-color);
+			font-family: "IBM Plex Sans", sans-serif;
+			font-weight: 300;
+			line-height: 1.6;
+			padding: 2em 2em;
+		}
+
+		h1 {
+			font-size: 6em;
+			font-weight: 100;
+			margin: 0;
+		}
+
+		h2 {
+			font-size: 3em;
+			line-height: 1.6;
+			font-weight: 200;
+			margin: 0.6em 0;
+		}
+
+		h1, h2 {
+			color: var(--green400);
+		}
+
+		.container {
+			max-width: 1200px;
+		}
+
+		.hero {
+			
+		}
+
+		.hero p {
+			font-size: 2em;
+		}
+
+		.project-card {
+
+		}
+
+		.project-grid {
+			display: grid;
+			grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+			gap: var(--gap);
+		}
+
+		.badge {
+			display: inline-block;
+			padding: 8px 16px;
+			border-radius: 20px;
+			font-size: 0.9em;
+			margin: 10px 0;
+		}
+
+		.music-badge {
+			background: var(--green900);
+			color: var(--green400);
+		}
+
+		.tool-badge {
+			background: var(--red900);
+			color: var(--red100);
+		}
+
+		.cta-button {
+			display: inline-block;
+			padding: 15px 35px;
+			border-radius: var(--radius-outer);
+			text-decoration: none;
+			font-weight: bold;
+			margin-top: 20px;
+			transition: all 0.3s ease;
+		}
+
+		.primary-cta {
+			background: var(--green400);
+			color: var(--green1000);
+		}
+
+		.secondary-cta {
+			background: var(--red500);
+			color: var(--bg-color);
+		}
+	</style>
+</head>
+<body>
+	<header class="hero">
+		<div class="container">
+			<h1>Annabiosis и Проекты</h1>
+			<p>Иногда я беру и делаю какой-нибудь проект на JS, Python или C#</p>
+		</div>
+	</header>
+
+	<main class="container">
+		<section class="project-grid">
+			<article class="project-card">
+				<h2>muTimer</h2>
+				<p>Таймер для лайв-выступлений. Помогает контролировать время каждого трека и всего выступления. Подходит тем, у кого время во время лайва летит незаметно.</p>
+				<h3>Возможности</h3>
+				<ul>
+					<li>Автоматическое разделение общего времени на равные отрезки</li>
+					<li>Пересчет продолжительности при досрочном переходе</li>
+					<li>Работа в фоне и оффлайн</li>
+					<li>Визуализация прогресса с подсказками</li>
+					<li>Ночной режим</li>
+				</ul>
+				<p>Преимущества</p>
+				<ul>
+					<li>Не требует установки — работает в браузере</li>
+					<li>Сохраняет данные при случайном закрытии</li>
+					<li>Автоматическая локализация</li>
+					<li>Блокировка спящего режима</li>
+				</ul>               
+				<h3>Технологии</h3>
+				<p>Использует современные PWA-стандарты для кроссплатформенной работы. Сохрани ярлык на главный экран — получишь полноценное приложение.</p>
+				<a href="timer/index.html" class="cta-button primary-cta">Открыть</a>
+			</article>
+			<article class="project-card">
+				<h2>ANB OBS theme</h2>
+				<p>Приятная глазу тема для Open Broadcast Software</p>
+				<ul>
+					<li>Собственные SVG иконки</li>
+					<li>Читаемые шрифты</li>
+					<li>Комфортные размеры элементов</li>
+				</ul>               
+				<h3>Технологии</h3>
+				<p>Адаптировано для версии 31</p>
+				<a href="timer/index.html" class="cta-button primary-cta">Скачать</a>
+			</article>
+		</section>
+	</main>
+</body>
+</html>
