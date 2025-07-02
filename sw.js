@@ -1,5 +1,5 @@
 // sw.js
-const CACHE_NAME = 'muTimer-ver-1.4.00';
+const CACHE_NAME = 'muTimer-ver-1.4.02';
 const NETWORK_TIMEOUT = 800;
 const OFFLINE_URL = '/timer/index.html';
 const ASSETS = [
