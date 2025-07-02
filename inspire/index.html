@@ -499,11 +499,9 @@ function clearCards() {
     const cards = container.querySelectorAll('.card');
     
     cards.forEach((card, i) => {
-        
         setTimeout(() => {
         	removeCardWithAnimation(card);
         }, i * animTime / cards.length);
-
     });
 
 }

@@ -43,7 +43,9 @@
 			--menu-bg: var(--bg-color-alt);
 			--divider: rgba(255,255,255,.1);
 			--divider2: rgba(255,255,255,.15);
+			--divider-dark: rgba(0,0,0,.2);
 			--shadow: rgba(0,0,0,.5);
+			--grad-progressive: linear-gradient(to right, rgb(82, 0, 136) 0%, rgb(157, 10, 130) 15.6667%, rgb(205, 19, 80) 15.6667%, rgb(254, 103, 44) 43.3333%, rgb(133, 5, 156) 43.3333%, rgb(253, 29, 29) 55%, rgb(254, 78, 39) 55%, rgb(255, 216, 130) 61.3333%, rgb(255, 255, 200) 61.3333%, rgb(255, 216, 130) 74.3333%, rgb(255, 196, 94) 74.3333%, rgb(255, 152, 54) 90.3333%, rgb(205, 19, 80) 90.3333%, rgb(0, 0, 0) 100%);;
 
 			--radius-outer: 24px;
 			--gap: 4vw;
@@ -70,6 +72,7 @@
 			--menu-bg: var(--bg-color-alt);
 			--divider: rgba(255,0,0,.1);
 			--divider2: rgba(255,0,0,.15);
+			--divider-dark: rgba(0,0,0,.2);
 			--shadow: rgba(0,0,0,.5);
 		}
 
@@ -368,12 +371,57 @@
 
 		#trackProgress {
 			background: var(--green400);
+			border-right: 1px solid var(--bg-color);
 		}
 
 		#currentTrack {
 			margin: 16px 0;
 			color: var(--green400);
 		}
+
+		.heatmap {
+			position: absolute;
+			height: 100%;
+			top: 0;
+			left: 0; 
+			right: 0;
+			z-index: -1;
+			
+			background: var(--grad-progressive);
+		}
+
+		.legend {
+			position: absolute;
+			height: 100%;
+			top: 0;
+			left: 0; 
+			right: 0;
+			z-index: 1;
+			display:flex;
+			flex-direction: row;
+			align-items: center;
+		}
+
+		.legend .part {
+			display: flex;
+			height: 24px;
+			text-align: center;
+			overflow: hidden;
+			font-size: 12px;
+			align-items: center;
+			justify-content: center;
+			color: var(--bg-color);
+			border-right: 1px solid var(--divider-dark);
+		}
+
+		.legend .part:nth-child(1) {width: 15.6667%;}
+		.legend .part:nth-child(2) {width: 27.6667%;}
+		.legend .part:nth-child(3) {width: 11.6667%;}
+		.legend .part:nth-child(4) {width: 6.33333%;}
+		.legend .part:nth-child(5) {width: 13%;}
+		.legend .part:nth-child(6) {width: 16%;}
+		.legend .part:nth-child(7) {width: 9.66667%;}
+
 
 		/*Кнопки*/
 		#resetBtn {
@@ -1045,7 +1093,19 @@
 					<div><span id="trackTimer" class="timer main"></span></div>
 					<div id="trackProgressContainer" class="progress-container">
 						<div id="trackProgress" class="progress-bar"></div>
+						<div class="heatmap"></div>
+						<div class="legend">
+							<div class="part">Int</div>
+							<div class="part">Grv</div>
+							<div class="part">Brd</div>
+							<div class="part">Bld</div>
+							<div class="part">Drp</div>
+							<div class="part">Grv</div>
+							<div class="part">Out</div>
+						</div>						
 					</div>
+
+
 				</div>
 
 				
