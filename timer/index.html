@@ -74,6 +74,7 @@
 			--divider2: rgba(255,0,0,.15);
 			--divider-dark: rgba(0,0,0,.2);
 			--shadow: rgba(0,0,0,.5);
+			--grad-progressive: linear-gradient(to right, rgb(86, 0, 0) 0%, rgb(116, 0, 0) 15.6667%, rgb(136, 0, 0) 15.6667%, rgb(157, 30, 0) 43.3333%, rgb(106, 0, 0) 43.3333%, rgb(156, 0, 0) 55%, rgb(156, 20, 0) 55%, rgb(158, 80, 0) 61.3333%, rgb(158, 100, 0) 61.3333%, rgb(158, 80, 0) 74.3333%, rgb(157, 70, 0) 74.3333%, rgb(157, 50, 0) 90.3333%, rgb(136, 0, 0) 90.3333%, rgb(56, 0, 0) 100%);
 		}
 
 		html {
@@ -998,6 +999,7 @@
 				  <li data-i18n="about04">Пересчет продолжительности при досрочном переходе</li>
 				  <li data-i18n="about05">Работа в фоне и оффлайн</li>
 				  <li data-i18n="about06">Визуализация прогресса с подсказками</li>
+				  <li data-i18n="about16">Визуализация частей трека и ожидаемая энергия</li>
 				  <li data-i18n="about15">Ночная тема</li>
 				</ul>
 				<h3 data-i18n="about07">Преимущества</h3>
@@ -1095,17 +1097,15 @@
 						<div id="trackProgress" class="progress-bar"></div>
 						<div class="heatmap"></div>
 						<div class="legend">
-							<div class="part">Int</div>
-							<div class="part">Grv</div>
-							<div class="part">Brd</div>
-							<div class="part">Bld</div>
-							<div class="part">Drp</div>
-							<div class="part">Grv</div>
-							<div class="part">Out</div>
+							<div data-i18n="intr" class="part">Int</div>
+							<div data-i18n="gruv" class="part">Grv</div>
+							<div data-i18n="brkd" class="part">Brd</div>
+							<div data-i18n="bldp" class="part">Bld</div>
+							<div data-i18n="drop" class="part">Drp</div>
+							<div data-i18n="gruv" class="part">Grv</div>
+							<div data-i18n="outr" class="part">Out</div>
 						</div>						
 					</div>
-
-
 				</div>
 
 				
@@ -1171,6 +1171,7 @@
 				about04: "Recalculation of duration during early transitions",
 				about05: "Background and offline operation",
 				about06: "Progress visualization with cues",
+				about16: "Track parts and estimated energy",
 				about15: "Night Mode",
 				about07: "Advantages",
 				about08: "No installation required — works in the browser",
@@ -1205,7 +1206,13 @@
 				cancel: "Cancel",
 				each: "each",
 				nightMode: "Night Mode",
-				nightHelp: "Makes the interface red so it doesn't blind your eyes in the dark" 
+				nightHelp: "Makes the interface red so it doesn't blind your eyes in the dark",
+				intr: "INTR",
+				gruv: "GRV",
+				brkd: "BRKD",
+				bldp: "BLD",
+				drop: "DRP",
+				outr: "OUT" 
 			},
 			ru: {
 				totalDuration: "Длительность",
@@ -1228,6 +1235,7 @@
 				about04: "Пересчет продолжительности при досрочном переходе",
 				about05: "Работа в фоне и оффлайн",
 				about06: "Визуализация прогресса с подсказками",
+				about16: "Визуализация частей трека и ожидаемая энергия",
 				about15: "Ночной режим",
 				about07: "Преимущества",
 				about08: "Не требует установки — работает в браузере",
@@ -1262,7 +1270,13 @@
 				cancel: "Отмена",
 				each: "по",
 				nightMode: "Ночной режим",
-				nightHelp: "Сделает интерфейс красным, чтобы не слепить глаза в темноте"   
+				nightHelp: "Сделает интерфейс красным, чтобы не слепить глаза в темноте",
+				intr: "ИНТР",
+				gruv: "ГРУВ",
+				brkd: "ЯМА",
+				bldp: "НАГН",
+				drop: "ДРОП",
+				outr: "ЗАКЛ"    
 			}
 		};
 
