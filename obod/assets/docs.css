@@ -269,6 +269,14 @@ a:hover { color: var(--green600); }
 .tree .kids a { font-size: 13px; color: var(--grey40); }
 .tree .kids .kids a { font-size: 12.5px; }
 
+/* Второй уровень вложенности: заливки у строки нет ни при наведении, ни у текущего
+   пункта — меняется только цвет текста. Третий уровень и верхний остаются как были. */
+.tree > .node > .kids > .node > .row > a:hover,
+.tree > .node > .kids > .node.on > .row > a,
+.tree > .node > .kids > .node.on > .row > .here {
+  background: none;
+}
+
 .tree .tag {
   margin-left: 6px;
   font-size: 10px;
