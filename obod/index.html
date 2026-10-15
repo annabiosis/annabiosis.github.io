@@ -213,6 +213,26 @@
 
   .scr ul { display: block; }
 
+  /* Раздел с длинным текстом: в две колонки идут только абзацы, всё остальное —
+     заголовки, списки, таблицы, врезки, карточки экранов и картинки — остаётся во всю
+     ширину, иначе оно разорвалось бы между колонками. Сколько таких разделов и какие
+     именно, решает тот же скрипт в конце страницы: он считает длину текста в абзацах и
+     ставит data-prose. */
+  @media (min-width: 1000px) {
+    section[data-prose="2"] { columns: 2; column-gap: 40px; }
+
+    section[data-prose="2"] > * {
+      column-span: all;
+      break-inside: avoid;
+    }
+
+    /* Меру строки здесь задают сами колонки. */
+    section[data-prose="2"] > p {
+      column-span: none;
+      max-width: none;
+    }
+  }
+
   li { position: relative; padding-left: 20px; margin-bottom: 8px; }
 
   li::before {
@@ -1596,18 +1616,24 @@ var REF = [
 
 <script>
   /*
-   * Колонки в списках разделов: их число зависит от длины пунктов и ширины окна.
+   * Колонки в разделе: их число зависит от длины текста и ширины окна.
    *
-   * Строка длиннее примерно девяноста знаков читается хуже, поэтому длинные пункты
-   * остаются одной колонкой, средние идут по две, короткие по три. Число колонок
-   * упирается и в ширину: меньше 340 пикселей на колонку не ставим, иначе обратно
-   * получаются узкие длинные строки. Списки внутри карточек экранов не трогаем:
+   * У списков самый длинный пункт решает, сколько колонок выдержит строка, а общая
+   * длина — сколько колонок нужно, чтобы список не вытянулся в полотно: длинные пункты
+   * остаются одной колонкой, средние идут по две, короткие по три. Раздел, в котором
+   * много текста в абзацах, получает data-prose: абзацы идут в две колонки, а списки,
+   * таблицы, врезки и картинки — во всю ширину, иначе они рвутся между колонками.
+   *
+   * Число колонок упирается и в ширину: меньше 340 пикселей на колонку не ставим, иначе
+   * обратно получаются узкие длинные строки. Списки внутри карточек экранов не трогаем:
    * в разметке они лежат не прямыми детьми раздела и под выборку не попадают.
    */
   (function () {
     var MIN_COL = 340;
     var WIDE = 260;
     var NARROW = 130;
+    var LIST_TOTAL = 900;
+    var PROSE_TOTAL = 1000;
 
     function layout() {
       var lists = document.querySelectorAll('section > ul');
@@ -1618,16 +1644,37 @@ var REF = [
         if (!items.length) { continue; }
 
         var longest = 0;
+        var total = 0;
         for (var j = 0; j < items.length; j++) {
           var len = (items[j].textContent || '').trim().length;
+          total += len;
           if (len > longest) { longest = len; }
         }
 
-        var cols = longest > WIDE ? 1 : (longest > NARROW ? 2 : 3);
+        var cols = 1;
+        if (longest <= NARROW) { cols = 3; }
+        else if (longest <= WIDE || total >= LIST_TOTAL) { cols = 2; }
+
         var room = Math.floor(ul.clientWidth / MIN_COL);
         if (room < cols) { cols = room; }
         if (cols < 1) { cols = 1; }
         ul.setAttribute('data-cols', String(cols));
+      }
+
+      var sections = document.querySelectorAll('section');
+      for (var k = 0; k < sections.length; k++) {
+        var section = sections[k];
+        var ps = section.querySelectorAll(':scope > p');
+        var prose = 0;
+        for (var m = 0; m < ps.length; m++) {
+          prose += (ps[m].textContent || '').trim().length;
+        }
+
+        if (prose >= PROSE_TOTAL && section.clientWidth >= 2 * MIN_COL) {
+          section.setAttribute('data-prose', '2');
+        } else {
+          section.removeAttribute('data-prose');
+        }
       }
     }
 
