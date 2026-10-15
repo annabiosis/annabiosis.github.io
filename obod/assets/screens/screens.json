@@ -1,0 +1,156 @@
+[
+  {
+    "index": 0,
+    "label": "DRONE",
+    "file": "drone.png",
+    "family": "Тело",
+    "page": "DRONE"
+  },
+  {
+    "index": 1,
+    "label": "DRONE FLTR",
+    "file": "drone-fltr.png",
+    "family": "Тело",
+    "page": "DRONE FLTR"
+  },
+  {
+    "index": 2,
+    "label": "DRONE MOD",
+    "file": "drone-mod.png",
+    "family": "Тело",
+    "page": "DRONE MOD"
+  },
+  {
+    "index": 3,
+    "label": "LEAD",
+    "file": "lead.png",
+    "family": "Голос",
+    "page": "LEAD"
+  },
+  {
+    "index": 4,
+    "label": "LEAD TONE",
+    "file": "lead-tone.png",
+    "family": "Голос",
+    "page": "LEAD TONE"
+  },
+  {
+    "index": 5,
+    "label": "LEAD ENV",
+    "file": "lead-env.png",
+    "family": "Голос",
+    "page": "LEAD ENV"
+  },
+  {
+    "index": 6,
+    "label": "LEAD GEN",
+    "file": "lead-gen.png",
+    "family": "Время",
+    "page": "LEAD GEN"
+  },
+  {
+    "index": 7,
+    "label": "LEAD EUCLID",
+    "file": "lead-euclid.png",
+    "family": "Время",
+    "page": "LEAD EUCLID"
+  },
+  {
+    "index": 8,
+    "label": "LEAD ARP",
+    "file": "lead-arp.png",
+    "family": "Время",
+    "page": "LEAD ARP"
+  },
+  {
+    "index": 9,
+    "label": "PERC",
+    "file": "perc.png",
+    "family": "Перкуссия",
+    "page": "PERC"
+  },
+  {
+    "index": 10,
+    "label": "PERC SEQ",
+    "file": "perc-seq.png",
+    "family": "Перкуссия",
+    "page": "PERC SEQ"
+  },
+  {
+    "index": 11,
+    "label": "CHORUS",
+    "file": "chorus.png",
+    "family": "Рэк",
+    "page": "CHORUS"
+  },
+  {
+    "index": 12,
+    "label": "DELAY",
+    "file": "delay.png",
+    "family": "Рэк",
+    "page": "DELAY"
+  },
+  {
+    "index": 13,
+    "label": "VERB",
+    "file": "verb.png",
+    "family": "Рэк",
+    "page": "VERB"
+  },
+  {
+    "index": 14,
+    "label": "MASTER",
+    "file": "master.png",
+    "family": "Микшеры",
+    "page": "MASTER"
+  },
+  {
+    "index": 15,
+    "label": "LEVELS",
+    "file": "levels.png",
+    "family": "Микшеры",
+    "page": "LEVELS"
+  },
+  {
+    "index": 16,
+    "label": "SENDS",
+    "file": "sends.png",
+    "family": "Микшеры",
+    "page": "SENDS"
+  },
+  {
+    "index": 17,
+    "label": "DRONE SENDS",
+    "file": "drone-sends.png",
+    "family": "Микшеры",
+    "page": "DRONE SENDS"
+  },
+  {
+    "index": 18,
+    "label": "PRESET",
+    "file": "preset.png",
+    "family": "Пресеты",
+    "page": "PRESET"
+  },
+  {
+    "index": 19,
+    "label": "STATUS",
+    "file": "status.png",
+    "family": "Пресеты",
+    "page": "STATUS"
+  },
+  {
+    "index": 20,
+    "label": "SYSTEM",
+    "file": "system.png",
+    "family": "Настройки",
+    "page": "SYSTEM"
+  },
+  {
+    "index": 21,
+    "label": "OPTIONS",
+    "file": "options.png",
+    "family": "Настройки",
+    "page": "OPTIONS"
+  }
+]

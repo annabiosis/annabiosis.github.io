@@ -309,6 +309,39 @@ var REF_ACTIONS = {
  */
 var REF_ACTIONS_LINK = {};
 
+/*
+ * Снимок каждого экрана: метка экрана → файл рядом с набором документации. Снимки сняты с
+ * самого прибора (раздел «Снимки экранов» в web/README.md), поэтому страницы открываются и с
+ * диска, без сервера, и картинка всегда та же, что на стекле.
+ *
+ * Метки и имена сверяет tools/screens-check.js: пропавшая метка, чужой файл или лишняя запись
+ * роняют проверку. Так снимок не может тихо переехать на соседний экран.
+ */
+var SHOTS = {
+  'DRONE':       'drone.png',
+  'DRONE FLTR':  'drone-fltr.png',
+  'DRONE MOD':   'drone-mod.png',
+  'LEAD':        'lead.png',
+  'LEAD TONE':   'lead-tone.png',
+  'LEAD ENV':    'lead-env.png',
+  'LEAD GEN':    'lead-gen.png',
+  'LEAD EUCLID': 'lead-euclid.png',
+  'LEAD ARP':    'lead-arp.png',
+  'PERC':        'perc.png',
+  'PERC SEQ':    'perc-seq.png',
+  'CHORUS':      'chorus.png',
+  'DELAY':       'delay.png',
+  'VERB':        'verb.png',
+  'MASTER':      'master.png',
+  'LEVELS':      'levels.png',
+  'SENDS':       'sends.png',
+  'DRONE SENDS': 'drone-sends.png',
+  'PRESET':      'preset.png',
+  'STATUS':      'status.png',
+  'SYSTEM':      'system.png',
+  'OPTIONS':     'options.png'
+};
+
 var Ref = (function () {
   var SUBTABS = [
     ['knobs', 'Ручки'],
@@ -501,8 +534,23 @@ var Ref = (function () {
     panel.appendChild(more);
   }
 
-  /* Экран целиком: описание, затем три вкладки — ручки, списки, действия. */
+  /* Экран целиком: снимок с прибора, описание, затем три вкладки — ручки, списки, действия. */
   function renderScreen(panel, cat, scr) {
+    var shot = SHOTS[scr.n];
+    if (shot) {
+      var figure = el('figure', 'shot');
+      var image = el('img');
+      image.setAttribute('src', 'assets/screens/' + shot);
+      image.setAttribute('alt', 'Экран ' + scr.n + ' на приборе');
+      image.setAttribute('width', '360');
+      image.setAttribute('height', '360');
+      image.setAttribute('loading', 'lazy');
+      figure.appendChild(image);
+      figure.appendChild(el('figcaption', null,
+        'Экран ' + scr.n + ' — снимок с самого прибора, без дорисовки.'));
+      panel.appendChild(figure);
+    }
+
     if (scr.d) { panel.appendChild(el('p', 'screen-desc', scr.d)); }
 
     renderTabs(panel, SUBTABS.map(function (sub) {

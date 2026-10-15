@@ -522,6 +522,21 @@ a.fam-card:hover { background: var(--green1000); }
 
 .screen-desc { color: var(--grey70); margin-bottom: 18px; }
 
+/*
+ * Снимок экрана прибора. Стекло круглое, поэтому кадр обрезан по кругу: углы снимка лежат вне
+ * стекла. Ширина ровно 360 — точка в точку с прибором; на узком экране картинка сжимается.
+ */
+.shot { margin: 0 0 20px; }
+.shot img {
+  display: block;
+  width: min(360px, 100%);
+  height: auto;
+  border-radius: 50%;
+  border: 1px solid var(--divider);
+  background: #000;
+}
+.shot figcaption { margin-top: 10px; font-size: 13px; color: var(--grey70); }
+
 /* Подпись со списком ручек экрана: цвет семейства ставит скрипт. */
 .knobs { margin: 0 0 12px; font-size: 13px; letter-spacing: .04em; }
 
