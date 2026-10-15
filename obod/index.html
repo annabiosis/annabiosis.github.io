@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+<title>OBOD — прошивка из браузера</title>
+<!--
+  Запись прошивки прибора OBOD из браузера, страница сайта annabiosis.github.io.
+
+  Кнопку и диалог записи рисует компонент esp-web-install-button из esp-web-tools:
+  он подключается с unpkg, локальных копий нет — при первом открытии нужна сеть.
+  Манифест лежит рядом и указывает на firmware/OBOD.bin: единый образ, собранный из
+  загрузчика, таблицы разделов, данных OTA и приложения.
+
+  Страница работает только по защищённому адресу: Web Serial доступен на https или
+  на localhost. GitHub Pages отдаёт её по https, поэтому здесь кнопка есть.
+
+  Оформление — как у остальных страниц сайта и у справочника OBOD: чёрный фон,
+  панели #011b1c, скругление 24 px, IBM Plex Sans, мятная зелень акцентом,
+  красный для предупреждений.
+-->
+<style>
+  :root {
+    --bg:        #000;
+    --panel:     #011b1c;
+    --text:      #fff;
+    --grey40:    rgba(255,255,255,.4);
+    --grey70:    rgba(255,255,255,.7);
+    --green600:  #30DA98;
+    --green400:  #71FEAB;
+    --red500:    #FF5230;
+    --red900:    #7A0919;
+    --divider:   rgba(255,255,255,.1);
+    --radius:    24px;
+    --sans: "IBM Plex Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --mono: ui-monospace, SFMono-Regular, "Cascadia Mono", Consolas, monospace;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-wrap: break-word;
+  }
+
+  .wrap { max-width: 720px; margin: 0 auto; padding: 32px 24px 80px; }
+
+  .back { display: inline-block; margin-bottom: 24px; color: var(--grey40); font-size: 14px; letter-spacing: .08em; text-transform: uppercase; }
+  .back:hover { color: var(--green400); }
+
+  h1 { font-size: 32px; font-weight: 500; line-height: 1.25; margin: 0 0 12px; }
+
+  h2 {
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--red500);
+    margin: 0 0 12px;
+  }
+
+  p { margin: 0 0 12px; }
+  p:last-child { margin-bottom: 0; }
+
+  .lead { font-size: 17px; color: var(--grey70); }
+
+  section { margin-top: 40px; }
+
+  ul, ol { margin: 0; padding-left: 22px; }
+  li { margin-bottom: 8px; }
+  li:last-child { margin-bottom: 0; }
+
+  a { color: var(--green400); }
+
+  code {
+    font-family: var(--mono);
+    font-size: 13.5px;
+    background: rgba(48,218,152,.12);
+    border-radius: 6px;
+    padding: 1px 6px;
+  }
+
+  .panel {
+    background: var(--panel);
+    border-radius: var(--radius);
+    padding: 24px 28px;
+  }
+
+  .panel.warn { border-left: 3px solid var(--red900); }
+
+  /* ---------- установка ---------- */
+
+  .install { text-align: center; }
+
+  esp-web-install-button {
+    display: inline-block;
+    --esp-tools-button-color: var(--green600);
+    --esp-tools-button-text-color: #00201c;
+    --esp-tools-button-border-radius: 9999px;
+  }
+
+  esp-web-install-button button {
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: 500;
+    padding: 14px 32px;
+    color: #00201c;
+    background: var(--green600);
+    border: none;
+    border-radius: 9999px;
+    cursor: pointer;
+  }
+
+  esp-web-install-button button:hover { background: var(--green400); }
+
+  esp-web-install-button [slot="unsupported"],
+  esp-web-install-button [slot="not-allowed"] {
+    display: block;
+    color: var(--red500);
+    font-weight: 400;
+  }
+
+  .meta {
+    margin-top: 16px;
+    color: var(--grey40);
+    font-size: 14px;
+  }
+
+  /* ---------- таблица адресов ---------- */
+
+  table { width: 100%; border-collapse: collapse; margin-bottom: 16px; }
+  th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--divider); }
+  th { color: var(--grey40); font-weight: 500; font-size: 14px; }
+  td:first-child { font-family: var(--mono); font-size: 14px; white-space: nowrap; width: 90px; }
+
+  footer {
+    margin-top: 48px;
+    padding-top: 20px;
+    border-top: 1px solid var(--divider);
+    color: var(--grey40);
+    font-size: 14px;
+  }
+
+  @media (max-width: 560px) {
+    .wrap { padding: 24px 18px 64px; }
+    h1 { font-size: 26px; }
+    .panel { padding: 20px 18px; }
+  }
+
+  :focus-visible { outline: 2px solid var(--green400); outline-offset: 3px; border-radius: 6px; }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; animation: none !important; }
+  }
+</style>
+</head>
+<body>
+<main class="wrap">
+
+  <a class="back" href="../index.html">← Все проекты</a>
+
+  <header>
+    <h1>Прошивка OBOD</h1>
+    <p class="lead">Прибор OBOD прошивается из браузера по USB. Страница сама передаёт прибору готовый образ — командная строка и Python не нужны.</p>
+  </header>
+
+  <section class="panel install">
+    <esp-web-install-button manifest="manifest.json">
+      <button slot="activate" type="button">Установить прошивку</button>
+      <span slot="unsupported">Браузер не поддерживает Web Serial. Откройте страницу в Chrome или Edge на компьютере.</span>
+      <span slot="not-allowed">Страница открыта не по защищённому адресу. Web Serial работает только по https или на localhost.</span>
+    </esp-web-install-button>
+    <p class="meta" id="meta">Образ: <code>firmware/OBOD.bin</code>, версия <span id="ver">…</span>.</p>
+  </section>
+
+  <section>
+    <h2>Что нужно</h2>
+    <ul>
+      <li>Chrome или Edge на компьютере. Firefox и браузеры на телефонах Web Serial не поддерживают — кнопки установки на них не будет.</li>
+      <li>Прибор подключён по USB и определяется системой как COM-порт. Если включён приём нот (MIDI IN), COM-порта не будет: разъём отдан MIDI-интерфейсу. Выключите приём нот на странице OPTIONS и перезагрузите прибор — после этого порт снова отладочный.</li>
+      <li>Порт свободен: закройте serial-монитор и всё остальное, что держит этот COM-порт.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Как проходит установка</h2>
+    <ol>
+      <li>Нажмите «Установить прошивку».</li>
+      <li>Выберите COM-порт прибора в диалоге браузера. Порт выбирается вручную.</li>
+      <li>Дождитесь конца записи — диалог показывает ход. После записи прибор перезагружается сам.</li>
+    </ol>
+  </section>
+
+  <section class="panel warn">
+    <h2>Настройки и пресеты при перепрошивке теряются</h2>
+    <p>Объединённый образ записывается подряд от адреса 0 и перекрывает область NVS, где хранятся настройки и пресеты. После прошивки прибор включается с заводскими значениями. Галочка стирания в диалоге на это не влияет: область настроек закрывается образом и без неё.</p>
+    <p>Запишите нужные звуки заранее — имена пресетов и их значения после прошивки не восстановить.</p>
+  </section>
+
+  <section>
+    <h2>Если не работает</h2>
+    <ul>
+      <li>Кнопки нет, вместо неё «браузер не поддерживает Web Serial» — откройте страницу в Chrome или Edge на компьютере.</li>
+      <li>Порт не открывается или не виден в списке — его держит другая программа либо выбран не тот COM-порт. Закройте монитор порта, отключите и подключите прибор, попробуйте снова.</li>
+      <li>Прибор не отвечает на запрос — попробуйте другой кабель и другой USB-разъём.</li>
+      <li>Запись обрывается на середине — не отключайте прибор до конца записи и не переводите компьютер в сон: образ больше мегабайта, а окно прошивки короткое.</li>
+    </ul>
+  </section>
+
+  <section class="panel">
+    <h2>Что записывается</h2>
+    <table>
+      <thead><tr><th>Адрес</th><th>Часть</th></tr></thead>
+      <tbody>
+        <tr><td>0x0</td><td>загрузчик</td></tr>
+        <tr><td>0x8000</td><td>таблица разделов</td></tr>
+        <tr><td>0xf000</td><td>данные OTA</td></tr>
+        <tr><td>0x20000</td><td>приложение</td></tr>
+      </tbody>
+    </table>
+    <p class="meta">Эти части склеены в один образ <code>firmware/OBOD.bin</code>, он записывается с адреса 0. Режим flash — <code>dio</code>, частота <code>80m</code>, размер <code>16MB</code>: те же значения, что у записи из командной строки.</p>
+  </section>
+
+  <footer>
+    <p>Запись выполняет esp-web-tools 10.4.0 (подключается с unpkg). Чип: ESP32-S3, версия прошивки 1.0.0. Лицензия MIT.</p>
+  </footer>
+
+</main>
+
+<script type="module" src="https://unpkg.com/esp-web-tools@10.4.0/dist/web/install-button.js?module"></script>
+<script>
+  /*
+   * Свой работник на область /obod/.
+   *
+   * Корневой sw.js таймера получает запросы всего сайта: он ждёт сеть 800 мс и при
+   * задержке отдаёт из кэша страницу таймера. Образ прошивки — больше мегабайта, и
+   * на медленном канале такой ответ вернул бы вместо него HTML. Работник в этой
+   * папке регистрируется с более длинным охватом и забирает её страницы себе,
+   * поэтому таймер продолжает работать как работал.
+   */
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js', { scope: './' }).catch(function () {
+      /* Без работника страница всё равно открывается: он нужен только как щит. */
+    });
+  }
+
+  /*
+   * Версия и размер — из манифеста и из самого файла, чтобы страница не расходилась
+   * с тем, что лежит рядом. Если что-то не прочиталось, строка просто короче.
+   */
+  (async function () {
+    var verEl = document.getElementById('ver');
+    var metaEl = document.getElementById('meta');
+    var manifest;
+    try {
+      manifest = await fetch('manifest.json', { cache: 'no-store' }).then(function (r) { return r.json(); });
+      verEl.textContent = manifest.version;
+    } catch (e) {
+      verEl.textContent = 'не прочитана';
+      return;
+    }
+    try {
+      var path = manifest.builds[0].parts[0].path;
+      var head = await fetch(path, { method: 'HEAD', cache: 'no-store' });
+      var size = head.headers.get('content-length');
+      if (size) {
+        metaEl.insertAdjacentHTML('beforeend', ' Размер: ' + Number(size).toLocaleString('ru-RU') + ' байт.');
+      }
+    } catch (e) { /* размер не показать — не важно */ }
+  })();
+</script>
+</body>
+</html>
