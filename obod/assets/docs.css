@@ -537,6 +537,49 @@ a.fam-card:hover { background: var(--green1000); }
 }
 .shot figcaption { margin-top: 10px; font-size: 13px; color: var(--grey70); }
 
+/*
+ * Складка: раздел «Под капотом» раскрывается нажатием на свой заголовок. Заголовок остаётся
+ * h2 внутри summary, поэтому оглавление страницы и ссылки на раздел работают как раньше.
+ * Содержимое получает отступы от рамки, сам summary — вид строки, по которой нажимают.
+ */
+.fold {
+  margin: 0 0 12px;
+  background: rgba(255,255,255,.03);
+  border: 1px solid var(--divider2);
+  border-radius: var(--radius-s);
+}
+.fold > summary {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 18px;
+  list-style: none;
+  cursor: pointer;
+  border-radius: var(--radius-s);
+}
+.fold > summary::-webkit-details-marker { display: none; }
+.fold > summary:hover { background: rgba(255,255,255,.05); }
+.fold > summary:focus-visible { outline: 2px solid var(--green600); outline-offset: 2px; }
+.fold > summary > h2 { margin: 0; }
+.fold > summary::after {
+  content: '';
+  flex: none;
+  width: 8px;
+  height: 8px;
+  margin-left: auto;
+  border-right: 2px solid var(--grey40);
+  border-bottom: 2px solid var(--grey40);
+  transform: rotate(45deg) translate(-2px, -2px);
+  transition: transform .15s ease;
+}
+.fold[open] > summary::after { transform: rotate(-135deg) translate(-2px, -2px); }
+.fold[open] > summary {
+  border-bottom: 1px solid var(--divider);
+  border-radius: var(--radius-s) var(--radius-s) 0 0;
+}
+.fold > *:not(summary) { margin-right: 18px; margin-left: 18px; }
+.fold > *:not(summary):last-child { margin-bottom: 16px; }
+
 /* Подпись со списком ручек экрана: цвет семейства ставит скрипт. */
 .knobs { margin: 0 0 12px; font-size: 13px; letter-spacing: .04em; }
 

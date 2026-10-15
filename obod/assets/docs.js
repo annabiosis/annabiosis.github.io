@@ -419,6 +419,24 @@
     renderTree();
     renderCrumbs();
     renderToc();
+    openFoldsAt(raw.split('.')[0]);
+  }
+
+  /*
+   * Цель ссылки может лежать внутри свёрнутого раздела «Под капотом»: закрытый раздел не
+   * отрисован, и браузеру некуда прокручивать. Раскрываем складки на пути к цели и только
+   * потом прокручиваем. Имена разделам даёт renderToc, поэтому вызов идёт после него.
+   */
+  function openFoldsAt(id) {
+    var target = id ? document.getElementById(id) : null;
+    if (!target) { return; }
+    var opened = false;
+    var node = target;
+    while (node && node !== document.documentElement) {
+      if (node.tagName === 'DETAILS' && !node.open) { node.open = true; opened = true; }
+      node = node.parentElement;
+    }
+    if (opened) { target.scrollIntoView(); }
   }
 
   function activeTabTitle() {
