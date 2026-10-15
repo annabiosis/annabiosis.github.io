@@ -342,6 +342,24 @@ var SHOTS = {
   'OPTIONS':     'options.png'
 };
 
+/*
+ * Дополнительные кадры экрана: метка экрана → список кадров, каждый с файлом и подписью. Это
+ * тот же экран в другом состоянии — например, страница без арпеджиатора, — и на вкладке экрана
+ * он показывается следом за основным снимком такой же фигурой.
+ *
+ * Имена и подписи сверяет tools/screens-check.js: кадр без файла, кадр без подписи, ссылка на
+ * метку, которой нет в SHOTS, и файл, на который не ссылается ни одна страница, роняют проверку.
+ */
+var SHOTS_MORE = {
+  'LEAD EUCLID': [
+    {
+      file: 'lead-euclid-no-arp.png',
+      caption: 'Тот же экран с выключенным арпеджиатором: сетка шагов видна, заглушки про арп ' +
+               'нет — она появляется только когда арп включён.'
+    }
+  ]
+};
+
 var Ref = (function () {
   var SUBTABS = [
     ['knobs', 'Ручки'],
@@ -550,6 +568,21 @@ var Ref = (function () {
         'Экран ' + scr.n + ' — снимок с самого прибора, без дорисовки.'));
       panel.appendChild(figure);
     }
+
+    /* Дополнительные кадры того же экрана — тем же оформлением, чтобы подпись читалась как
+     * часть снимка, а не как отдельная картинка. */
+    (SHOTS_MORE[scr.n] || []).forEach(function (extra) {
+      var more = el('figure', 'shot');
+      var moreImg = el('img');
+      moreImg.setAttribute('src', 'assets/screens/' + extra.file);
+      moreImg.setAttribute('alt', 'Экран ' + scr.n + ' — дополнительный кадр');
+      moreImg.setAttribute('width', '360');
+      moreImg.setAttribute('height', '360');
+      moreImg.setAttribute('loading', 'lazy');
+      more.appendChild(moreImg);
+      more.appendChild(el('figcaption', null, extra.caption));
+      panel.appendChild(more);
+    });
 
     if (scr.d) { panel.appendChild(el('p', 'screen-desc', scr.d)); }
 
