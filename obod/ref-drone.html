@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/docs.css">
+<title>OBOD — Справочник — Тело</title>
+<!--
+  Семейство «Тело»: Регистры дрона и их фильтр.
+
+  Разметку собирает assets/ref.js из таблицы REF (assets/ref.js) — той же, что была
+  встроена в promo.html: данные перенесены дословно, ни одна строка не правилась.
+
+  Вкладка на каждый экран семейства; на вкладке экрана — «Ручки» (имя и описание каждой
+  ручки), «Списочные значения» (расписанные позиции списочных параметров) и «Действия»
+  (что делают удержание, поворот и нажатия; где в текстах об этом ничего нет, там так и
+  сказано). Адрес вкладки — метка экрана, вложенной вкладки — «метка.подвкладка».
+-->
+</head>
+
+<body>
+
+<a class="skip" href="#main">К содержимому</a>
+
+<header class="topbar">
+  <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="sidebar">Разделы</button>
+  <a class="brand" href="index.html">OBOD</a>
+  <nav class="crumbs" id="crumbs" aria-label="Хлебные крошки"></nav>
+</header>
+
+<div class="shell">
+
+  <nav class="sidebar" id="sidebar" aria-label="Разделы документации">
+    <div class="sidebar-head">
+      <p class="sidebar-title">Документация</p>
+      <button class="nav-close" type="button">Закрыть</button>
+    </div>
+    <div id="tree"></div>
+  </nav>
+
+  <div class="backdrop" id="backdrop" hidden></div>
+
+  <main class="content" id="main">
+
+    <p class="kicker">Справочник · семейство</p>
+    <h1>Тело</h1>
+    <p class="lead">Регистры дрона и их фильтр.</p>
+    <p class="muted">Вкладка на каждый экран семейства; на вкладке экрана — «Ручки»,
+      «Списочные значения» и «Действия».</p>
+
+    <div data-ref="family" data-family="Тело"></div>
+
+    <nav class="pager" id="pager" aria-label="Соседние страницы"></nav>
+  </main>
+
+  <aside class="toc" aria-label="На этой странице">
+    <p class="toc-title">На этой странице</p>
+    <ul id="toc-list"></ul>
+  </aside>
+
+</div>
+
+<footer class="footer">
+  <p><b>OBOD</b> — дрон-синтезатор на ESP32-S3. 75 параметров, 22 страницы, 128 пресетов.</p>
+  <p>Обзор семейств — на странице <a href="ref.html">«Справочник»</a>; что делают общие жесты —
+    на странице <a href="ui.html">«Управление»</a>.</p>
+</footer>
+
+<script src="assets/pages.js"></script>
+<script src="assets/ref.js"></script>
+<script src="assets/docs.js"></script>
+<script>
+  // Работник таймера раньше стоял в корне сайта и получал запросы всех разделов: он
+  // ждёт сеть 800 мс и при задержке отдаёт из кэша свою страницу, а образ прошивки
+  // больше мегабайта и в этот срок не укладывается. Свой работник с более длинным
+  // охватом перекрывает старую регистрацию для этой папки.
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function () {
+      navigator.serviceWorker.register('sw.js', { scope: './' }).catch(function () {});
+    });
+  }
+</script></body>
+</html>

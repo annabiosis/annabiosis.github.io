@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/docs.css">
+<title>OBOD — Справочник</title>
+<!--
+  Обзор справочника: порядок разбора и восемь семейств. Список семейств рисует
+  assets/ref.js из той же таблицы REF, что и страницы семейств, поэтому карточка и
+  страница не могут разойтись. Каждая карточка ведёт на страницу своего семейства.
+
+  Тексты — с промо-страницы, без правок.
+-->
+</head>
+
+<body>
+
+<a class="skip" href="#main">К содержимому</a>
+
+<header class="topbar">
+  <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="sidebar">Разделы</button>
+  <a class="brand" href="index.html">OBOD</a>
+  <nav class="crumbs" id="crumbs" aria-label="Хлебные крошки"></nav>
+</header>
+
+<div class="shell">
+
+  <nav class="sidebar" id="sidebar" aria-label="Разделы документации">
+    <div class="sidebar-head">
+      <p class="sidebar-title">Документация</p>
+      <button class="nav-close" type="button">Закрыть</button>
+    </div>
+    <div id="tree"></div>
+  </nav>
+
+  <div class="backdrop" id="backdrop" hidden></div>
+
+  <main class="content" id="main">
+
+    <p class="kicker">Раздел</p>
+    <h1>Справочник</h1>
+    <p class="muted">Категория → экран → параметр → описание; у списочных параметров описана каждая позиция.</p>
+
+    <p>Порядок тот же, что на инструменте. Всего 75 параметров, на экранах 82 ручки: уровни
+      перкуссии, трёх регистров дрона и лида показаны дважды — на своих экранах и вместе на
+      экране LEVELS, — а ENV перкуссии и ACCENT показаны по два раза каждый (ENV на PERC и
+      PERC SEQ, ACCENT на PERC SEQ и LEAD EUCLID). ACCENT — это один параметр на двух экранах,
+      а не второй: в патче ровно 64 параметра из 64. Две последние ручки — настройки, а не
+      параметры патча: восемьдесят первая <b>WEAK VEL</b> на странице OPTIONS и восемьдесят
+      вторая <b>MIDI IN</b> там же, поэтому параметров 75, а в пресеты ни та, ни другая не
+      попадают. Темп живёт на экране транспорта и ручки не
+      имеет, поэтому в списках его нет. Ноты и лады не расписываются: их задают положения ручек
+      SCALE и ROOT, а сами таблицы лежат в прошивке. Ладов шестнадцать, и последние пять
+      дописаны в конец списка — положение в списке и есть сохранённое значение параметра,
+      поэтому старые позиции не сдвинулись; <b>CHROMATIC</b>, последний, — все двенадцать
+      ступеней, то есть лад, который не квантует ничего.</p>
+
+    <p class="muted" id="ref-list-note">У всех списочных параметров описана каждая позиция. Одно
+      исключение — <b>WEAK VEL</b>: у неё не позиции, а целые числа от 0 до 127, и описан не
+      список, а шкала: 127 — разницы нет, 80 — заводское значение, 0 — слабых ударов нет.</p>
+
+    <section>
+      <h2>Семейства</h2>
+      <p class="muted">Восемь семейств идут подряд, от тела к настройкам. На странице семейства
+        вкладка на каждый его экран, а внутри экрана — «Ручки», «Списочные значения» и
+        «Действия».</p>
+      <div data-ref="list"></div>
+    </section>
+
+    <nav class="pager" id="pager" aria-label="Соседние страницы"></nav>
+  </main>
+
+  <aside class="toc" aria-label="На этой странице">
+    <p class="toc-title">На этой странице</p>
+    <ul id="toc-list"></ul>
+  </aside>
+
+</div>
+
+<footer class="footer">
+  <p><b>OBOD</b> — дрон-синтезатор на ESP32-S3. 75 параметров, 22 страницы, 128 пресетов.</p>
+  <p>Проверяется набор командой <code>node tools/promo-check.js</code>: она сверяет данные
+    справочника и текст схемы тракта с прошивкой.</p>
+</footer>
+
+<script src="assets/pages.js"></script>
+<script src="assets/ref.js"></script>
+<script src="assets/docs.js"></script>
+<script>
+  // Работник таймера раньше стоял в корне сайта и получал запросы всех разделов: он
+  // ждёт сеть 800 мс и при задержке отдаёт из кэша свою страницу, а образ прошивки
+  // больше мегабайта и в этот срок не укладывается. Свой работник с более длинным
+  // охватом перекрывает старую регистрацию для этой папки.
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function () {
+      navigator.serviceWorker.register('sw.js', { scope: './' }).catch(function () {});
+    });
+  }
+</script></body>
+</html>
