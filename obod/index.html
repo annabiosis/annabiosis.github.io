@@ -3,44 +3,76 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="color-scheme" content="dark">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@200;300;400;500;600&display=swap" rel="stylesheet">
-<title>OBOD — прошивка из браузера</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+<title>OBOD — справочник по инструменту</title>
 <!--
-  Запись прошивки прибора OBOD из браузера, страница сайта annabiosis.github.io.
+  Справочник по инструменту: категория → экран → параметр → описание,
+  и описание каждого пункта у списочных параметров.
 
-  Кнопку и диалог записи рисует компонент esp-web-install-button из esp-web-tools:
-  он подключается с unpkg, локальных копий нет — при первом открытии нужна сеть.
-  Манифест лежит рядом и указывает на firmware/OBOD.bin: единый образ, собранный из
-  загрузчика, таблицы разделов, данных OTA и приложения.
+  Одна страница, без внешних файлов: открывается двойным щелчком,
+  печатается и сохраняется целиком. Текст — IBM Plex Sans из Google Fonts, поэтому для
+  первого открытия нужна сеть; дальше шрифт берётся из кеша браузера. Технические вставки
+  набраны тем же шрифтом и отличаются мятной плашкой.
 
-  Страница работает только по защищённому адресу: Web Serial доступен на https или
-  на localhost. GitHub Pages отдаёт её по https, поэтому здесь кнопка есть.
+  Оформление взято из проекта annabiosis/timer: чёрный фон, панели #011b1c со скруглением
+  24 px, IBM Plex Sans светлых начертаний, мятная зелень акцентом и красный для
+  подзаголовков блоков. Цвета семейств остались данными из GROUP_COLOR в
+  components/synth_ui/src/synth_ui.c. Названия экранов, ручек и позиций списков — из таблиц
+  KNOBS_* и synth_app_param_text(). Числа сверены с прошивкой: 22 страницы, 82 ручки на
+  экранах, 75 разных органов управления за ними — семь параметров показаны дважды (пять
+  уровней на LEVELS, ENV перкуссии на PERC и PERC SEQ, ACCENT на PERC SEQ и LEAD EUCLID),
+  а темп транспорта своей ручки не имеет, поэтому в списках его нет: 75 параметров. В
+  перечислении движка 77 значений: 64 параметра патча, три значения страницы MOD и десять
+  настроек — пять на SYSTEM (яркость, кольцо, режим кольца, виброотклик, микрофон) и пять на
+  OPTIONS (память звука, SLIDE, RND DEL, WEAK VEL, MIDI IN). Ни одна настройка в патч не
+  входит, и ACCENT — это один параметр на двух экранах, а не два: в патче ровно 64 параметра
+  из 64, и добавить к ним нельзя.
 
-  Оформление — как у остальных страниц сайта и у справочника OBOD: чёрный фон,
-  панели #011b1c, скругление 24 px, IBM Plex Sans, мятная зелень акцентом,
-  красный для предупреждений.
+  Круги со страницы убраны и лежат отдельным файлом: tools/promo-rings.js.
 -->
 <style>
+  /*
+    Оформление взято из проекта annabiosis/timer: чёрный фон, панели цвета #011b1c со
+    скруглением 24 px, IBM Plex Sans светлых начертаний, мятная зелень единственным
+    акцентом, красный для подзаголовков блоков. Оттуда же шкала размеров и шаг сетки
+    в vw. Данные страницы — цвета семейств, имена экранов и ручек — по-прежнему из
+    прошивки и к оформлению не относятся.
+  */
   :root {
     --bg:        #000;
     --panel:     #011b1c;
     --text:      #fff;
     --grey40:    rgba(255,255,255,.4);
-    --grey70:    rgba(255,255,255,.7);
     --green600:  #30DA98;
     --green400:  #71FEAB;
-    --red500:    #FF5230;
+    --green900:  #0C7970;
+    --green1000: #042d29;
     --red900:    #7A0919;
+    --red600:    #DB3323;
+    --red500:    #FF5230;
+    --red100:    #FFCCAC;
+    --border:    rgba(255,255,255,.2);
     --divider:   rgba(255,255,255,.1);
+    --divider2:  rgba(255,255,255,.15);
     --radius:    24px;
+    --gap:       clamp(16px, 4vw, 48px);
+    --wrap:      1440px;
+    --measure:   72ch;
     --sans: "IBM Plex Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-    --mono: ui-monospace, SFMono-Regular, "Cascadia Mono", Consolas, monospace;
   }
 
   * { box-sizing: border-box; }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+    scroll-padding-top: 72px;
+    color-scheme: dark;
+  }
+
+  :focus-visible { outline: 2px solid var(--green400); outline-offset: 3px; border-radius: 6px; }
 
   body {
     margin: 0;
@@ -53,229 +85,1505 @@
     overflow-wrap: break-word;
   }
 
-  .wrap { max-width: 720px; margin: 0 auto; padding: 32px 24px 80px; }
+  .wrap { max-width: var(--wrap); margin: 0 auto; padding: 0 var(--gap) 96px; }
 
-  .back { display: inline-block; margin-bottom: 24px; color: var(--grey40); font-size: 14px; letter-spacing: .08em; text-transform: uppercase; }
-  .back:hover { color: var(--green400); }
+  /* Текстовые блоки на широком экране не растягиваются на всю ширину: строка
+     длиннее семидесяти знаков читается хуже. Колонками становятся списки,
+     карточки и справочник. */
+  .wrap > header,
+  .wrap > section > h2,
+  .wrap > section > p { max-width: var(--measure); }
 
-  h1 { font-size: 32px; font-weight: 500; line-height: 1.25; margin: 0 0 12px; }
+  img, svg { max-width: 100%; height: auto; }
+
+  a { color: var(--green400); text-decoration: none; transition: color .2s ease; }
+  a:hover { color: var(--green600); }
+
+  /* ---------- навигатор ---------- */
+
+  .topnav {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: rgba(0, 0, 0, .92);
+    border-bottom: 1px solid var(--divider);
+    backdrop-filter: blur(6px);
+  }
+
+  .topnav-inner {
+    max-width: var(--wrap);
+    margin: 0 auto;
+    padding: 8px var(--gap);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 8px;
+    justify-content: center;
+  }
+
+  /* На узком экране навигатор не переносится на несколько строк, а едет вбок:
+     до раздела один жест, и шапка не занимает пол-экрана. */
+  @media (max-width: 760px) {
+    .topnav-inner {
+      flex-wrap: nowrap;
+      justify-content: flex-start;
+      overflow-x: auto;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .topnav-inner::-webkit-scrollbar { display: none; }
+  }
+
+  .topnav a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 36px;
+    white-space: nowrap;
+    color: var(--grey40);
+    font-size: 12px;
+    line-height: 24px;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    padding: 0 12px;
+    border-radius: var(--radius);
+    transition: all .2s ease;
+  }
+
+  .topnav a:hover { color: var(--green400); }
+  .topnav a.on { background: var(--green1000); color: var(--green400); }
+
+  section { margin-top: 72px; scroll-margin-top: 68px; }
+
+  /* ---------- шапка ---------- */
+
+  header { padding: 56px 0 0; }
+
+  h1 {
+    margin: 0 0 20px;
+    font-size: clamp(64px, 14vw, 118px);
+    line-height: .95;
+    font-weight: 100;
+    letter-spacing: .06em;
+    text-indent: .06em;
+    color: var(--green400);
+    text-shadow: 0 0 16px var(--green400);
+  }
+
+  /* ---------- текст ---------- */
 
   h2 {
-    font-size: 18px;
-    font-weight: 500;
-    color: var(--red500);
     margin: 0 0 12px;
+    font-size: clamp(34px, 5vw, 48px);
+    line-height: 1.15;
+    font-weight: 300;
+    letter-spacing: .02em;
+    color: var(--green400);
   }
 
-  p { margin: 0 0 12px; }
-  p:last-child { margin-bottom: 0; }
+  h3 { margin: 40px 0 12px; font-size: 24px; line-height: 1.3; font-weight: 400; color: var(--green400); }
 
-  .lead { font-size: 17px; color: var(--grey70); }
+  h4 { margin: 0 0 8px; font-size: 20px; line-height: 1.35; font-weight: 400; color: var(--red600); }
 
-  section { margin-top: 40px; }
+  p { margin: 0 0 14px; }
 
-  ul, ol { margin: 0; padding-left: 22px; }
-  li { margin-bottom: 8px; }
-  li:last-child { margin-bottom: 0; }
+  .muted { color: var(--grey40); }
 
-  a { color: var(--green400); }
+  ul { margin: 0 0 14px; padding: 0; list-style: none; }
+
+  /* Списки в разделах раскладываются в колонки: на широком экране это
+     экономит прокрутку и укорачивает строку. Списки внутри карточек экранов
+     остаются одноколоночными. */
+  @media (min-width: 1000px) {
+    section > ul {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+      gap: 0 32px;
+      align-items: start;
+    }
+  }
+
+  .scr ul { display: block; }
+
+  li { position: relative; padding-left: 20px; margin-bottom: 8px; }
+
+  li::before {
+    content: "";
+    position: absolute;
+    left: 2px;
+    top: .65em;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--green900);
+  }
+
+  b, strong { font-weight: 500; color: var(--text); }
 
   code {
-    font-family: var(--mono);
-    font-size: 13.5px;
-    background: rgba(48,218,152,.12);
-    border-radius: 6px;
-    padding: 1px 6px;
+    font-family: inherit;
+    font-size: .94em;
+    padding: 2px 9px;
+    border-radius: var(--radius);
+    background: var(--green1000);
+    color: var(--green400);
   }
 
-  .panel {
+  .figures {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(132px, 1fr));
+    gap: 12px;
+    margin: 28px 0 0;
+  }
+
+  .fig {
+    padding: 18px 20px;
     background: var(--panel);
     border-radius: var(--radius);
-    padding: 24px 28px;
   }
 
-  .panel.warn { border-left: 3px solid var(--red900); }
+  .fig .n { display: block; font-size: 32px; line-height: 1.1; font-weight: 100; color: var(--green400); }
+  .fig .l { display: block; margin-top: 6px; font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--grey40); }
 
-  /* ---------- установка ---------- */
+  table { width: 100%; border-collapse: collapse; margin: 8px 0 24px; }
 
-  .install { text-align: center; }
+  th, td { text-align: left; padding: 12px 16px; border-bottom: 1px solid var(--divider); vertical-align: top; }
 
-  esp-web-install-button {
+  th { font-size: 12px; font-weight: 400; letter-spacing: .1em; text-transform: uppercase; color: var(--grey40); }
+
+  tr:last-child td { border-bottom: none; }
+  td:first-child { color: var(--grey40); white-space: nowrap; }
+
+  .families { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+
+  .fam-card {
+    display: flex;
+    gap: 12px;
+    align-items: baseline;
+    padding: 14px 16px;
+    background: var(--panel);
+    border-radius: var(--radius);
+  }
+
+  .dot { flex: 0 0 auto; width: 12px; height: 12px; border-radius: 50%; transform: translateY(1px); }
+
+  .fam-card .nm { color: var(--text); font-weight: 400; }
+  .fam-card .ds { color: var(--grey40); font-size: 13px; }
+
+  .note {
+    margin: 24px 0;
+    padding: 20px 24px;
+    background: var(--panel);
+    border-left: 3px solid var(--red900);
+    border-radius: var(--radius);
+    color: var(--grey40);
+    font-size: 15px;
+  }
+
+  .note b { color: var(--red100); font-weight: 500; }
+
+  /* ---------- прошивка ---------- */
+
+  /* Кнопку и диалог записи рисует esp-web-tools. До загрузки скрипта на месте
+     кнопки виден текст запасного слота, поэтому отступы заданы и ему. */
+  .flash #flash-meta { margin: 10px 0 0; color: var(--grey40); font-size: 14px; }
+
+  .flash .btn {
     display: inline-block;
-    --esp-tools-button-color: var(--green600);
-    --esp-tools-button-text-color: #00201c;
-    --esp-tools-button-border-radius: 9999px;
-  }
-
-  esp-web-install-button button {
-    font-family: inherit;
+    margin: 22px 0 0;
+    padding: 14px 26px;
+    background: var(--green400);
+    color: #04120c;
+    border: 0;
+    border-radius: var(--radius);
+    font: inherit;
     font-size: 16px;
     font-weight: 500;
-    padding: 14px 32px;
-    color: #00201c;
-    background: var(--green600);
-    border: none;
-    border-radius: 9999px;
     cursor: pointer;
+    transition: filter .2s ease;
   }
 
-  esp-web-install-button button:hover { background: var(--green400); }
+  .flash .btn:hover { filter: brightness(1.08); }
+  .flash .btn:active { transform: translateY(1px); }
+  .flash [slot] { color: var(--grey40); font-size: 15px; }
 
-  esp-web-install-button [slot="unsupported"],
-  esp-web-install-button [slot="not-allowed"] {
-    display: block;
-    color: var(--red500);
+  .flash table td:first-child { white-space: nowrap; }
+
+  /* ---------- схема тракта ---------- */
+
+  .chain { margin: 28px 0 0; }
+
+  /* Схема вставлена прямо в страницу, без айфрейма: свои правила она несёт с
+     собой, в сгенерированном блоке между маркерами signal diagram. */
+
+  .chain p { margin: 12px 0 0; color: var(--grey40); font-size: 14px; }
+
+  /* ---------- справочник ---------- */
+
+  /* Справочник — сетка карточек: заголовки категории занимают всю строку,
+     карточки экранов ложатся в две-три колонки по ширине окна. */
+  .cat {
+    margin-top: 56px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+    gap: 18px 20px;
+  }
+
+  .cat > h3,
+  .cat > .cat-sub { grid-column: 1 / -1; }
+
+  .cat > h3 {
+    margin: 0 0 4px;
+    padding: 4px 0 4px 16px;
+    border-left: 3px solid var(--green900);
+    font-size: 24px;
     font-weight: 400;
+    color: var(--green400);
+    scroll-margin-top: 68px;
   }
 
-  .meta {
-    margin-top: 16px;
-    color: var(--grey40);
-    font-size: 14px;
+  .cat > .cat-sub { margin: 0 0 4px 19px; color: var(--grey40); font-size: 13px; letter-spacing: .06em; }
+
+  .scr {
+    margin-top: 0;
+    padding: 20px 24px;
+    background: var(--panel);
+    border-radius: var(--radius);
   }
 
-  /* ---------- таблица адресов ---------- */
+  .scr h4 .tag { color: var(--grey40); font-weight: 400; font-size: 12px; letter-spacing: .12em; text-transform: uppercase; }
 
-  table { width: 100%; border-collapse: collapse; margin-bottom: 16px; }
-  th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--divider); }
-  th { color: var(--grey40); font-weight: 500; font-size: 14px; }
-  td:first-child { font-family: var(--mono); font-size: 14px; white-space: nowrap; width: 90px; }
+  .scr .knobs { margin: 0 0 12px; font-size: 13px; letter-spacing: .04em; }
+
+  .scr ul { margin-bottom: 0; }
+
+  .scr li { margin-bottom: 7px; }
+
+  .scr li::before { background: var(--green900); }
+
+  .pos { margin: 8px 0 4px; padding-left: 20px; border-left: 1px solid var(--divider); }
+  .pos li { margin-bottom: 5px; padding-left: 18px; font-size: 14px; color: var(--grey40); }
+  .pos li::before { width: 4px; height: 4px; background: var(--green900); }
+  .pos b { color: var(--text); font-weight: 400; }
 
   footer {
-    margin-top: 48px;
-    padding-top: 20px;
+    margin-top: 80px;
+    padding-top: 28px;
     border-top: 1px solid var(--divider);
     color: var(--grey40);
-    font-size: 14px;
+    font-size: 13px;
+  }
+
+  footer p { margin: 0 0 8px; }
+
+  /* Точки перелома: телефон, планшет, широкий экран. */
+  @media (max-width: 900px) {
+    .figures { grid-template-columns: repeat(auto-fit, minmax(min(100%, 140px), 1fr)); }
+    table { font-size: 14px; }
+    th, td { padding: 10px 12px; }
   }
 
   @media (max-width: 560px) {
-    .wrap { padding: 24px 18px 64px; }
-    h1 { font-size: 26px; }
-    .panel { padding: 20px 18px; }
+    body { font-size: 15px; }
+    html { scroll-padding-top: 64px; }
+    header { padding-top: 40px; }
+    section { margin-top: 56px; scroll-margin-top: 60px; }
+    .scr { padding: 16px 18px; }
+    h3 { font-size: 21px; }
+    h1 { font-size: clamp(52px, 20vw, 96px); }
+    .note { padding: 16px 18px; }
+    /* Первая колонка таблиц перестаёт держать одну строку: иначе таблица
+       вылезает за экран. */
+    td:first-child { white-space: normal; }
   }
 
-  :focus-visible { outline: 2px solid var(--green400); outline-offset: 3px; border-radius: 6px; }
+  @media (min-width: 1600px) {
+    :root { --wrap: 1560px; }
+  }
 
   @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
     * { transition: none !important; animation: none !important; }
+  }
+
+  /* Крупные цели для пальца. */
+  @media (pointer: coarse) {
+    .topnav a { min-height: 44px; }
   }
 </style>
 </head>
+
 <body>
-<main class="wrap">
 
-  <a class="back" href="../index.html">← Все проекты</a>
+<nav class="topnav" id="topnav">
+  <div class="topnav-inner">
+    <a href="#what">Что это</a>
+    <a href="#sound">Звук</a>
+    <a href="#ui">Управление</a>
+    <a href="#ref">Справочник</a>
+    <a href="#presets">Пресеты</a>
+    <a href="#hw">Железо</a>
+    <a href="#flash">Прошивка</a>
+    <a href="#under">Под капотом</a>
+  </div>
+</nav>
 
-  <header>
-    <h1>Прошивка OBOD</h1>
-    <p class="lead">Прибор OBOD прошивается из браузера по USB. Страница сама передаёт прибору готовый образ — командная строка и Python не нужны.</p>
-  </header>
+<div class="wrap">
 
-  <section class="panel install">
-    <esp-web-install-button manifest="manifest.json">
-      <button slot="activate" type="button">Установить прошивку</button>
-      <span slot="unsupported">Браузер не поддерживает Web Serial. Откройте страницу в Chrome или Edge на компьютере.</span>
-      <span slot="not-allowed">Страница открыта не по защищённому адресу. Web Serial работает только по https или на localhost.</span>
-    </esp-web-install-button>
-    <p class="meta" id="meta">Образ: <code>firmware/OBOD.bin</code>, версия <span id="ver">…</span>.</p>
-  </section>
+<header>
+  <h1>OBOD</h1>
+  <p>Дрон-синтезатор на ESP32-S3. Круглый экран 360 × 360, обод с секторами вокруг него,
+    энкодер и ёмкостный тач. Внутри дрон из трёх регистров, лид с генератором нот и
+    арпеджиатором, три голоса перкуссии, рэк эффектов и микшеры.</p>
 
-  <section>
-    <h2>Что нужно</h2>
-    <ul>
-      <li>Chrome или Edge на компьютере. Firefox и браузеры на телефонах Web Serial не поддерживают — кнопки установки на них не будет.</li>
-      <li>Прибор подключён по USB и определяется системой как COM-порт. Если включён приём нот (MIDI IN), COM-порта не будет: разъём отдан MIDI-интерфейсу. Выключите приём нот на странице OPTIONS и перезагрузите прибор — после этого порт снова отладочный.</li>
-      <li>Порт свободен: закройте serial-монитор и всё остальное, что держит этот COM-порт.</li>
-    </ul>
-  </section>
+  <div class="figures">
+    <div class="fig"><span class="n">75</span><span class="l">параметров</span></div>
+    <div class="fig"><span class="n">22</span><span class="l">страницы</span></div>
+    <div class="fig"><span class="n">128</span><span class="l">пресетов</span></div>
+    <div class="fig"><span class="n">24</span><span class="l">голоса</span></div>
+    <div class="fig"><span class="n">6</span><span class="l">шин</span></div>
+    <div class="fig"><span class="n">48</span><span class="l">кГц</span></div>
+  </div>
+</header>
 
-  <section>
-    <h2>Как проходит установка</h2>
-    <ol>
-      <li>Нажмите «Установить прошивку».</li>
-      <li>Выберите COM-порт прибора в диалоге браузера. Порт выбирается вручную.</li>
-      <li>Дождитесь конца записи — диалог показывает ход. После записи прибор перезагружается сам.</li>
-    </ol>
-  </section>
+<section id="what">
+  <h2>Что это</h2>
 
-  <section class="panel warn">
-    <h2>Настройки и пресеты при перепрошивке теряются</h2>
-    <p>Объединённый образ записывается подряд от адреса 0 и перекрывает область NVS, где хранятся настройки и пресеты. После прошивки прибор включается с заводскими значениями. Галочка стирания в диалоге на это не влияет: область настроек закрывается образом и без неё.</p>
-    <p>Запишите нужные звуки заранее — имена пресетов и их значения после прошивки не восстановить.</p>
-  </section>
+  <p>У инструмента один орган управления: обод вокруг экрана. Обод делится на секторы по числу
+    ручек текущей страницы — один, два, три, четыре или пять. Тап по сектору выбирает ручку,
+    энкодер её крутит, свайп листает страницы. Значение меняет только энкодер — и у ручек, и у
+    настроек, включая MIDI IN на странице OPTIONS. Второй орган — сам экран: тап по нему даёт
+    макрос, долгое нажатие сводит параметры в связку.</p>
 
-  <section>
-    <h2>Если не работает</h2>
-    <ul>
-      <li>Кнопки нет, вместо неё «браузер не поддерживает Web Serial» — откройте страницу в Chrome или Edge на компьютере.</li>
-      <li>Порт не открывается или не виден в списке — его держит другая программа либо выбран не тот COM-порт. Закройте монитор порта, отключите и подключите прибор, попробуйте снова.</li>
-      <li>Прибор не отвечает на запрос — попробуйте другой кабель и другой USB-разъём.</li>
-      <li>Запись обрывается на середине — не отключайте прибор до конца записи и не переводите компьютер в сон: образ больше мегабайта, а окно прошивки короткое.</li>
-    </ul>
-  </section>
+  <p>Страницы собраны в восемь цветовых семейств и идут подряд, от тела к настройкам. Цвет
+    семейства стоит на ободе, на плитке в шторке и на подписи раздела. Настройки инструмента
+    вынесены из карусели: они открываются только через шторку, чтобы листание во время игры
+    не приводило к ним.</p>
 
-  <section class="panel">
-    <h2>Что записывается</h2>
-    <table>
-      <thead><tr><th>Адрес</th><th>Часть</th></tr></thead>
-      <tbody>
-        <tr><td>0x0</td><td>загрузчик</td></tr>
-        <tr><td>0x8000</td><td>таблица разделов</td></tr>
-        <tr><td>0xf000</td><td>данные OTA</td></tr>
-        <tr><td>0x20000</td><td>приложение</td></tr>
-      </tbody>
-    </table>
-    <p class="meta">Эти части склеены в один образ <code>firmware/OBOD.bin</code>, он записывается с адреса 0. Режим flash — <code>dio</code>, частота <code>80m</code>, размер <code>16MB</code>: те же значения, что у записи из командной строки.</p>
-  </section>
+  <p>Звук хранится в 128 слотах и переживает выключение. Все параметры видны в справочнике
+    ниже — тот же порядок, те же названия и те же позиции списков, что на экране.</p>
+</section>
 
-  <footer>
-    <p>Запись выполняет esp-web-tools 10.4.0 (подключается с unpkg). Чип: ESP32-S3, версия прошивки 1.0.0. Лицензия MIT.</p>
-  </footer>
+<section id="sound">
+  <h2>Звук</h2>
+  <p class="muted">Движок: 48 кГц, 24 голоса, 6 шин, управление 500 Гц, блок 128 сэмплов.</p>
 
-</main>
+  <h3>Дрон</h3>
+  <p>Три регистра — LOW, MID, HIGH — каждый со своим выбором волны, общим фильтром со свипом
+    (срез, резонанс, скорость, глубина) и модуляцией. Шесть волн: SIN, TRI, SAW, PLS, SPR, NOI.
+    SIN и TRI — генераторы движка. SAW и PLS — таблицы PolyBLEP с антиалиасингом: встроенная
+    пила движка наивная и алиасит заметно, а дрон держат минутами. SPR — те же три пилы с
+    расстройкой, раздвинутой втрое. NOI — шум движка, по независимому потоку на голос, поэтому
+    девять голосов дрона дают плотный шум вместо одного шипа; он тоже идёт через фильтр и огибающую
+    своей части.</p>
+  <p class="muted">Заводская волна — SAW. Смена волны ничего не перезапускает, поэтому выбирать
+    её можно на звучащем дроне.</p>
 
-<script type="module" src="https://unpkg.com/esp-web-tools@10.4.0/dist/web/install-button.js?module"></script>
-<script>
-  /*
-   * Свой работник на область /obod/.
-   *
-   * Корневой sw.js таймера получает запросы всего сайта: он ждёт сеть 800 мс и при
-   * задержке отдаёт из кэша страницу таймера. Образ прошивки — больше мегабайта, и
-   * на медленном канале такой ответ вернул бы вместо него HTML. Работник в этой
-   * папке регистрируется с более длинным охватом и забирает её страницы себе,
-   * поэтому таймер продолжает работать как работал.
-   */
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('sw.js', { scope: './' }).catch(function () {
-      /* Без работника страница всё равно открывается: он нужен только как щит. */
-    });
+  <h3>Лид</h3>
+  <p>Те же шесть волн, свой фильтр с огибающей, огибающая ноты, генератор нот, эвклидова сетка
+    и арпеджиатор. Направление и скорость арпеджиатора, лад, тоника и шаги сетки вынесены на
+    отдельные ручки. Когда арпеджиатор забирает сетку себе, по центру страницы появляется
+    надпись <code>ARP IS ACTIVE</code>: сетка в это время не играет, и её ручки ничего не
+    меняют.</p>
+
+  <h3>Перкуссия</h3>
+  <p>Три голоса на полосовом фильтре, своя эвклидова сетка, посыл в реверб. Пик удара
+    выравнивается по длине дикея, поэтому длинные хвосты держатся ниже потолка. Высоту
+    удара, ENV и DECAY может двигать модуляция со страницы MOD.</p>
+
+  <h3>Модуляция</h3>
+  <p>Страница MOD решает пять вопросов: куда идёт модуляция, какой формы, насколько глубоко,
+    с какой скоростью и когда начинается заново. Приёмников девять: FILTER, PAN, FILT+PAN,
+    четыре связки перкуссии и две для высоты шага лида. Форм семь: пять волн и пара
+    экспоненциальных. Глубина идёт до ста процентов, скорость считается по шагам перкуссии,
+    а перезапуск бывает свободным, по ноте лида и с удержанием на ноте.</p>
+  <p class="muted">Генератор модуляции живёт в приложении: до фазы LFO в движке из
+    приложения не дотянуться. Экспоненциальные формы принадлежат ему же, фильтровый LFO
+    движка знает первые пять и на экспоненте играет RANDOM. Сдвиги относительные: значение
+    ручки плюс сдвиг, а высота шага лида — умножение частоты ноты на интервал в полутонах.</p>
+
+  <h3>Эффекты</h3>
+  <ul>
+    <li><b>Хорус</b> — квадратурный LFO, своя ширина и скорость.</li>
+    <li><b>Дилей</b> — пинг-понг, до четырёх секунд на сторону, синхронизация с темпом. Вход
+      суммируется в моно и идёт только в левую линию, левый повтор питает правую, поэтому
+      повторы идут по стерео полю, а не стоят в середине.</li>
+    <li><b>Реверб</b> — пять алгоритмов: ROOM, HALL, CATH, HOLD, PLAT. Первые четыре — четыре
+      набора настроек одного Freeverb: длины линий, обратная связь, демпфирование и вход.
+      PLAT — плита Dattorro: другая топология, свой блок в памяти и своя устойчивость, при
+      тринадцати обращениях к линиям против двадцати четырёх у Freeverb.</li>
+  </ul>
+  <div class="note">
+    <b>MIX у реверба работает как баланс.</b> Сухой сигнал идёт раз (1 − mix), влажный раз mix,
+    поэтому на половине они равны, а на ста процентах остаётся только реверб. Микс применяется
+    в одном месте, на выходе рэка, а оба движка отдают чистый влажный сигнал. Хорус и дилей
+    попадают <b>в</b> реверб: на полном миксе реверб и есть выход, поэтому повторы дилея и
+    ширину хоруса слышно только через него.
+  </div>
+
+  <h3>Мастер-компрессор</h3>
+  <p>Одна ручка ведёт порог и степень вместе. Атака и релиз фиксированы — 25 и 250 мс, мягкое
+    колено 6 дБ, сайдчейн-фильтр 150 Гц. Внизу ручки компрессор выключен, и выходной каскад
+    остаётся прежним.</p>
+
+  <div class="chain" id="signal">
+    <!-- BEGIN signal diagram -->
+<style>
+  .signal .bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0 0 12px;
   }
 
-  /*
-   * Версия и размер — из манифеста и из самого файла, чтобы страница не расходилась
-   * с тем, что лежит рядом. Если что-то не прочиталось, строка просто короче.
-   */
-  (async function () {
-    var verEl = document.getElementById('ver');
-    var metaEl = document.getElementById('meta');
-    var manifest;
-    try {
-      manifest = await fetch('manifest.json', { cache: 'no-store' }).then(function (r) { return r.json(); });
-      verEl.textContent = manifest.version;
-    } catch (e) {
-      verEl.textContent = 'не прочитана';
-      return;
+  .signal .bar .hint {
+    margin: 0 0 0 4px;
+    color: var(--grey40);
+    font-size: 13px;
+  }
+
+  .signal .bar button {
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    color: var(--text);
+    font: inherit;
+    font-size: 17px;
+    line-height: 1;
+    background: rgba(255,255,255,.06);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    cursor: pointer;
+  }
+
+  .signal .bar button:hover { background: rgba(255,255,255,.12); }
+  .signal .bar button:active { transform: translateY(1px); }
+  .signal .bar button.wide { width: auto; padding: 0 12px; font-size: 14px; }
+
+  /* Сцена держит рисунок и обрезает его, когда тот увеличен. */
+  .signal .stage {
+    position: relative;
+    min-height: 200px;
+    overflow: hidden;
+    touch-action: none;
+    cursor: grab;
+  }
+
+  .signal .stage.dragging { cursor: grabbing; }
+
+  .signal .stage .mermaid {
+    display: block;
+    margin: 0;
+    background: transparent;
+  }
+
+  /* Ширина по сцене, высота по пропорции: рисунок заполняет блок. */
+  .signal .stage svg {
+    display: block;
+    max-width: 100% !important;
+    height: auto !important;
+    transform-origin: 0 0;
+  }
+
+  /* Развёрнутый вид: блок накрывает окно страницы, сцена забирает остаток
+     высоты, рисунок подгоняется сразу при развороте. Это не полноэкранный
+     режим браузера, а разворот внутри самой страницы. */
+  .signal.expanded {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+    background: var(--bg, #000);
+  }
+
+  .signal.expanded .stage {
+    flex: 1 1 auto;
+    min-height: 0;
+  }
+
+  .signal.expanded .stage svg {
+    max-height: 100%;
+  }
+</style>
+
+<div class="signal">
+  <p class="fallback" id="fallback" hidden>Схема не отрисовалась: библиотека
+    mermaid.min.js не загрузилась или текст схемы не разобран. Текст схемы лежит
+    ниже, в блоке с исходником.</p>
+
+  <div class="bar">
+    <button type="button" id="zoom-out" aria-label="Уменьшить" title="Уменьшить">&#8722;</button>
+    <button type="button" id="zoom-in" aria-label="Увеличить" title="Увеличить">+</button>
+    <button type="button" id="zoom-reset" class="wide" title="Показать схему целиком">Сброс</button>
+    <button type="button" id="zoom-full" class="wide" title="Развернуть схему на всё окно">Развернуть</button>
+    <p class="hint">Колесо мыши — масштаб, перетаскивание — сдвиг, двойной щелчок — показать целиком.</p>
+  </div>
+
+  <div class="stage" id="stage">
+<pre class="mermaid">
+%% OBOD — сигнальный тракт и триггеры. Канонический вид схемы — этот файл; страница
+%% obod-signal-chain.html собирается из него командой python docs/signal-chain/gen_html.py.
+%% Сплошная стрелка — сигнал; пунктирная — управление и модуляция.
+%% SEND BUS и VERB SEND — один буфер s_send_bus (synth_rack.cpp:154, 231, 541-546, 570, 613, 625-628); GATE стоит между ними.
+%% Макросы UI звук не запускают: они только пишут параметры (synth_ui.c:6181-6186).
+%% Темп от часов подменяет ручку в seq_tempo_now() и в параметр патча не пишется (synth_app.cpp:3337-3343, 3357-3370).
+
+flowchart LR
+
+  subgraph SRC["Источники"]
+    LOW["LOW"]
+    MID["MID"]
+    HIGH["HIGH"]
+    LEAD["LEAD"]
+    PERC["PERC"]
+    MIC["MIC"]
+  end
+
+  subgraph PRE["Пре-процессинг"]
+    DRONE_FLTR["DRONE FLTR"]
+    LEAD_TONE["LEAD TONE"]
+    MIC_IN["MIC IN"]
+    PAN_CAPTURE["PAN CAPTURE"]
+  end
+
+  subgraph CTL["Управление и триггеры"]
+    UI_TRANSPORT["UI · ТРАНСПОРТ"]
+    TRANSPORT["ТРАНСПОРТ"]
+    TEMPO["ТЕМП"]
+    MIDI_IN["MIDI IN"]
+    MIDI_TRANSPORT["MIDI TRANSPORT"]
+    MIDI_CLOCK["MIDI CLOCK"]
+    EUCLID_LEAD["EUCLID LEAD"]
+    SEQ_TRIGGER["SEQ TRIGGER"]
+    ARP["АРПЕДЖИАТОР"]
+    PERC_SEQ["ПЕРК-СЕКВЕНСОР"]
+    DRONE_TUNE["DRONE TUNE"]
+    SCALE["КВАНТОВАНИЕ ПО ЛАДУ"]
+    MOD_LFO["MOD LFO"]
+    UI_IND["UI · ИНДИКАЦИЯ"]
+  end
+
+  subgraph MIXG["Микширование и Шины"]
+    SUM["SUM"]
+    SEND_BUS["SEND BUS"]
+    GATE["GATE"]
+  end
+
+  subgraph FX["Эффекты"]
+    CHORUS["CHORUS"]
+    DELAY["DELAY"]
+  end
+
+  subgraph RVB["Реверберация"]
+    VERB_SEND["VERB SEND"]
+    VERB["VERB"]
+    VERB_MIX["VERB MIX"]
+  end
+
+  subgraph MST["Мастер-цепочка"]
+    COMP["COMP"]
+    VOL["VOL"]
+    SOFT_CLIP["SOFT CLIP"]
+    PCM5100A["PCM5100A"]
+  end
+
+  %% сигнал: источники в пре-процессинг
+  LOW --&gt; DRONE_FLTR
+  MID --&gt; DRONE_FLTR
+  HIGH --&gt; DRONE_FLTR
+  LEAD --&gt; LEAD_TONE
+  MIC --&gt; MIC_IN
+
+  %% пре-процессинг: панорама и уровни
+  DRONE_FLTR --&gt; PAN_CAPTURE
+  LEAD_TONE --&gt; PAN_CAPTURE
+
+  %% микширование: сухая сумма и шина отправок
+  PAN_CAPTURE --&gt; SUM
+  PAN_CAPTURE --&gt;|"pre-fader"| SEND_BUS
+  PERC --&gt;|"post-fader"| SUM
+  PERC --&gt;|"post-fader"| SEND_BUS
+  MIC_IN --&gt;|"AUX level 0"| SEND_BUS
+
+  %% гейт входа, затем эффекты и посылка
+  SUM --&gt; GATE
+  SEND_BUS --&gt; GATE
+  GATE --&gt; CHORUS
+  GATE --&gt;|"посылка"| VERB_SEND
+  CHORUS --&gt; DELAY
+  CHORUS --&gt;|"wet"| VERB_SEND
+  DELAY --&gt;|"wet"| VERB_SEND
+
+  %% реверберация: посылка/возврат и баланс
+  VERB_SEND --&gt;|"ALGO: ROOM · HALL · CATHEDRAL · PLATE · HOLD"| VERB
+  VERB --&gt;|"wet"| VERB_MIX
+  DELAY --&gt;|"сухой"| VERB_MIX
+
+  %% мастер-цепочка
+  VERB_MIX --&gt; COMP
+  COMP --&gt; VOL
+  VOL --&gt; SOFT_CLIP
+  SOFT_CLIP --&gt;|"INT16 · I2S"| PCM5100A
+
+  %% управление: транспорт
+  UI_TRANSPORT -.-&gt;|"пуск/стоп"| TRANSPORT
+  UI_TRANSPORT -.-&gt;|"темп вручную"| TEMPO
+  TRANSPORT -.-&gt;|"гейт входа"| GATE
+  TRANSPORT -.-&gt;|"стоп: нот нет"| EUCLID_LEAD
+  TRANSPORT -.-&gt;|"стоп: нот нет"| ARP
+  TRANSPORT -.-&gt;|"стоп: удара нет"| PERC_SEQ
+  TRANSPORT -.-&gt;|"индикация"| UI_IND
+
+  %% управление: MIDI по каналам
+  MIDI_IN -.-&gt;|"канал 1: нота"| LEAD
+  MIDI_IN -.-&gt;|"канал 1: аккорд"| ARP
+  MIDI_IN -.-&gt;|"канал 2: удар"| PERC
+  MIDI_IN -.-&gt;|"удержание/хвост"| GATE
+  MIDI_IN -.-&gt;|"самая новая нота"| DRONE_TUNE
+
+  %% управление: транспорт и часы с провода
+  MIDI_IN -.-&gt;|"0xFA/0xFB/0xFC"| MIDI_TRANSPORT
+  MIDI_IN -.-&gt;|"0xF8: 24 тика на четверть"| MIDI_CLOCK
+  MIDI_TRANSPORT -.-&gt;|"пуск/продолжение: открыт · стоп: закрыт"| GATE
+  MIDI_TRANSPORT -.-&gt;|"пуск: с начала фразы · стоп: нот нет"| EUCLID_LEAD &amp; PERC_SEQ
+  MIDI_TRANSPORT -.-&gt;|"стоп: своя фигура молчит · удержанные клавиши звучат"| ARP
+  MIDI_CLOCK -.-&gt;|"темп подменяет ручку · в параметр патча не пишется"| EUCLID_LEAD &amp; PERC_SEQ &amp; ARP &amp; MOD_LFO
+  MIDI_CLOCK -.-&gt;|"арка и подпись BPM: фактический темп"| UI_TRANSPORT
+
+  %% управление: генераторы и их ноты
+  TEMPO -.-&gt; EUCLID_LEAD &amp; PERC_SEQ &amp; ARP &amp; DELAY &amp; MOD_LFO
+  EUCLID_LEAD -.-&gt;|"шаги (onset)"| SEQ_TRIGGER
+  SEQ_TRIGGER -.-&gt;|"нота"| LEAD
+  ARP -.-&gt;|"своя группа голосов"| LEAD
+  PERC_SEQ -.-&gt;|"удар"| PERC
+
+  %% управление: лад, настройка дрона, модуляция
+  SCALE -.-&gt;|"лад"| LEAD
+  SCALE -.-&gt;|"лад"| ARP
+  SCALE -.-&gt;|"лад"| DRONE_TUNE
+  DRONE_TUNE -.-&gt;|"транспонирование"| LOW &amp; MID &amp; HIGH
+  LEAD -.-&gt;|"перезапуск по ноте"| MOD_LFO
+  MOD_LFO -.-&gt;|"срез"| DRONE_FLTR
+  MOD_LFO -.-&gt;|"дрейф"| PAN_CAPTURE
+  MOD_LFO -.-&gt;|"PITCH/ENV/DECAY"| PERC
+  MOD_LFO -.-&gt;|"высота"| LEAD
+  MIC_IN -.-&gt;|"огибающая: срез"| DRONE_FLTR
+  MIC_IN -.-&gt;|"огибающая: дрейф"| PAN_CAPTURE
+
+  %% управление: индикация трёх ритмических плиток
+  EUCLID_LEAD -.-&gt;|"шаги"| UI_IND
+  PERC_SEQ -.-&gt;|"шаги"| UI_IND
+  ARP -.-&gt;|"шаги"| UI_IND
+
+  classDef cSrc    fill:#0a1030,stroke:#1976D2,color:#90CAF9
+  classDef cPre    fill:#07130a,stroke:#2E7D32,color:#A5D6A7
+  classDef cCtl    fill:#1a1300,stroke:#FFB300,color:#FFE082
+  classDef cMix    fill:#160f0c,stroke:#8D6E63,color:#D7CCC8
+  classDef cFx     fill:#1a0410,stroke:#E91E63,color:#F48FB1
+  classDef cVerb   fill:#120a22,stroke:#7E57C2,color:#B39DDB
+  classDef cMaster fill:#04211a,stroke:#30DA98,color:#A7F3D0
+
+  class LOW,MID,HIGH,LEAD,PERC,MIC cSrc
+  class DRONE_FLTR,LEAD_TONE,MIC_IN,PAN_CAPTURE cPre
+  class UI_TRANSPORT,TRANSPORT,TEMPO,MIDI_IN,MIDI_TRANSPORT,MIDI_CLOCK,EUCLID_LEAD,SEQ_TRIGGER,ARP,PERC_SEQ,DRONE_TUNE,SCALE,MOD_LFO,UI_IND cCtl
+  class SUM,SEND_BUS,GATE cMix
+  class CHORUS,DELAY cFx
+  class VERB_SEND,VERB,VERB_MIX cVerb
+  class COMP,VOL,SOFT_CLIP,PCM5100A cMaster
+</pre>
+  </div>
+</div>
+
+<script src="vendor/mermaid.min.js"></script>
+
+<!-- Кнопку и диалог записи рисует esp-web-tools: тот же модуль, что использует
+     страница tools/webflash. Подпись к образу собирается из манифеста, который указан
+     у самой кнопки, поэтому путь к манифесту задан в одном месте в разметке выше.
+
+     У копии этой страницы на сайте (obod/index.html) путь к манифесту — manifest.json:
+     образ и манифест лежат в той же папке. Больше отличий у копии нет. -->
+<script type="module" src="https://unpkg.com/esp-web-tools@10.4.0/dist/web/install-button.js?module"></script>
+<script type="module">
+  var btn = document.querySelector('#flash esp-web-install-button');
+  var meta = document.getElementById('flash-meta');
+  if (btn && meta) {
+    var manifest = btn.getAttribute('manifest');
+    fetch(manifest)
+      .then(function (r) { return r.json(); })
+      .then(function (m) {
+        var part = m.builds[0].parts[0];
+        meta.textContent = 'Образ ' + part.path + ', версия ' + m.version + '.';
+        return fetch(part.path, { method: 'HEAD' }).then(function (h) {
+          var n = h.headers.get('content-length');
+          if (n) {
+            meta.textContent = 'Образ ' + part.path + ', версия ' + m.version + ', ' +
+              Number(n).toLocaleString('ru-RU') + ' байт.';
+          }
+        });
+      })
+      .catch(function () {
+        meta.textContent = 'Образ: ' + manifest + '.';
+      });
+  }
+</script>
+<script>
+mermaid.initialize({
+  startOnLoad: false,
+  securityLevel: 'strict',
+  theme: 'dark',
+  fontFamily: '"IBM Plex Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif',
+  flowchart: { curve: 'basis', useMaxWidth: true, htmlLabels: true },
+  themeVariables: {
+    darkMode: true,
+    background: '#000000',
+    primaryColor: '#011b1c',
+    primaryTextColor: '#ffffff',
+    primaryBorderColor: '#0C7970',
+    lineColor: '#30DA98',
+    textColor: '#ffffff',
+    fontSize: '14px'
+  }
+});
+
+(function () {
+  var MIN_SCALE = 0.5;
+  var MAX_SCALE = 6;
+  var STEP = 1.25;
+
+  function fail() {
+    var el = document.getElementById('fallback');
+    if (el) { el.hidden = false; }
+  }
+
+  function setupPanZoom() {
+    var stage = document.getElementById('stage');
+    var svg = stage ? stage.querySelector('svg') : null;
+    if (!stage || !svg) { return; }
+
+    var scale = 1, tx = 0, ty = 0, drag = null;
+
+    function clamp(s) { return Math.min(MAX_SCALE, Math.max(MIN_SCALE, s)); }
+
+    function apply() {
+      svg.style.transform = 'translate(' + tx + 'px,' + ty + 'px) scale(' + scale + ')';
     }
-    try {
-      var path = manifest.builds[0].parts[0].path;
-      var head = await fetch(path, { method: 'HEAD', cache: 'no-store' });
-      var size = head.headers.get('content-length');
-      if (size) {
-        metaEl.insertAdjacentHTML('beforeend', ' Размер: ' + Number(size).toLocaleString('ru-RU') + ' байт.');
+
+    function reset() {
+      scale = 1;
+      tx = 0;
+      ty = 0;
+      apply();
+    }
+
+    /* Показать рисунок целиком: сперва вернуть исходный вид, затем измерить его
+       и, если он не помещается в сцену, уменьшить и поставить по центру. */
+    function fit() {
+      reset();
+      var r = stage.getBoundingClientRect();
+      var b = svg.getBoundingClientRect();
+      if (!r.width || !r.height || !b.width || !b.height) { return; }
+      var k = clamp(Math.min(r.width / b.width, r.height / b.height, 1));
+      scale = k;
+      tx = (r.width - b.width * k) / 2;
+      ty = (r.height - b.height * k) / 2;
+      apply();
+    }
+
+    function zoomAt(clientX, clientY, factor) {
+      var r = stage.getBoundingClientRect();
+      var px = clientX - r.left;
+      var py = clientY - r.top;
+      var next = clamp(scale * factor);
+      if (next === scale) { return; }
+      var k = next / scale;
+      tx = px - k * (px - tx);
+      ty = py - k * (py - ty);
+      scale = next;
+      apply();
+    }
+
+    function zoomCenter(factor) {
+      var r = stage.getBoundingClientRect();
+      zoomAt(r.left + r.width / 2, r.top + r.height / 2, factor);
+    }
+
+    stage.addEventListener('wheel', function (e) {
+      e.preventDefault();
+      zoomAt(e.clientX, e.clientY, e.deltaY < 0 ? 1.15 : 1 / 1.15);
+    }, { passive: false });
+
+    stage.addEventListener('pointerdown', function (e) {
+      if (e.button !== 0) { return; }
+      drag = { x: e.clientX, y: e.clientY, tx: tx, ty: ty };
+      stage.classList.add('dragging');
+      try { stage.setPointerCapture(e.pointerId); } catch (err) { }
+      e.preventDefault();
+    });
+
+    stage.addEventListener('pointermove', function (e) {
+      if (!drag) { return; }
+      tx = drag.tx + (e.clientX - drag.x);
+      ty = drag.ty + (e.clientY - drag.y);
+      apply();
+    });
+
+    function endDrag(e) {
+      if (!drag) { return; }
+      drag = null;
+      stage.classList.remove('dragging');
+      try { stage.releasePointerCapture(e.pointerId); } catch (err) { }
+    }
+
+    stage.addEventListener('pointerup', endDrag);
+    stage.addEventListener('pointercancel', endDrag);
+
+    stage.addEventListener('dblclick', fit);
+
+    var zin = document.getElementById('zoom-in');
+    var zout = document.getElementById('zoom-out');
+    var zres = document.getElementById('zoom-reset');
+    var zfull = document.getElementById('zoom-full');
+    if (zin) { zin.addEventListener('click', function () { zoomCenter(STEP); }); }
+    if (zout) { zout.addEventListener('click', function () { zoomCenter(1 / STEP); }); }
+    if (zres) { zres.addEventListener('click', fit); }
+
+    var wrap = stage.closest ? stage.closest('.signal') : null;
+    var expanded = false;
+
+    /* Разворот внутри страницы: блок накрывает окно, прокрутка страницы под ним
+       выключается, выход по кнопке или по Esc. */
+    function setExpanded(on) {
+      if (!wrap) { return; }
+      expanded = on;
+      if (on) { wrap.classList.add('expanded'); } else { wrap.classList.remove('expanded'); }
+      if (zfull) { zfull.textContent = on ? 'Свернуть' : 'Развернуть'; }
+      if (document.body) { document.body.style.overflow = on ? 'hidden' : ''; }
+      /* Раскладка после смены режима успевает измениться не сразу. */
+      setTimeout(fit, 60);
+    }
+
+    if (zfull) {
+      zfull.addEventListener('click', function () { setExpanded(!expanded); });
+    }
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && expanded) { setExpanded(false); }
+    });
+
+    fit();
+  }
+
+  function run() {
+    var done = mermaid.run({ querySelector: '.mermaid' });
+    if (done && typeof done.then === 'function') {
+      done.then(setupPanZoom).catch(fail);
+    } else {
+      setupPanZoom();
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', run);
+  } else {
+    run();
+  }
+})();
+</script>
+<!-- END signal diagram -->
+    <p>Схема показывает путь сигнала от источников до выхода: дрон, лид, перкуссия и микрофон
+      идут через фильтры и микшеры в эффекты, дальше в реверб и мастер-цепочку до ЦАП.
+      Сплошная стрелка — сигнал, пунктирная — управление и модуляция. Схему можно приблизить
+      колесом мыши и сдвинуть перетаскиванием, двойной щелчок возвращает исходный вид. Тот же
+      рисунок есть <a href="diagram.html">отдельной страницей</a>.</p>
+  </div>
+</section>
+
+<section id="ui">
+  <h2>Управление</h2>
+  <p class="muted">Восемь цветовых семейств; обод — единственный орган управления, кроме тача.</p>
+
+  <div class="families">
+    <div class="fam-card"><span class="dot" style="background:#1976D2"></span><span><span class="nm">Тело</span><br><span class="ds">регистры дрона и их фильтр</span></span></div>
+    <div class="fam-card"><span class="dot" style="background:#AB47BC"></span><span><span class="nm">Голос</span><br><span class="ds">лид: волна, тон, огибающая</span></span></div>
+    <div class="fam-card"><span class="dot" style="background:#00796B"></span><span><span class="nm">Время</span><br><span class="ds">ноты, сетка, арпеджиатор</span></span></div>
+    <div class="fam-card"><span class="dot" style="background:#2E7D32"></span><span><span class="nm">Перкуссия</span><br><span class="ds">удары и их сетка</span></span></div>
+    <div class="fam-card"><span class="dot" style="background:#E91E63"></span><span><span class="nm">Рэк</span><br><span class="ds">хорус, дилей, реверб</span></span></div>
+    <div class="fam-card"><span class="dot" style="background:#5D4037"></span><span><span class="nm">Микшеры</span><br><span class="ds">уровни и посылы</span></span></div>
+    <div class="fam-card"><span class="dot" style="background:#37474F"></span><span><span class="nm">Пресеты</span><br><span class="ds">хранение звука</span></span></div>
+    <div class="fam-card"><span class="dot" style="background:#546E7A"></span><span><span class="nm">Настройки</span><br><span class="ds">свет, кольцо, отклик, память</span></span></div>
+  </div>
+
+  <h3>Макрос</h3>
+  <p>Долгое нажатие на сектор сводит параметр в <b>макрос</b> — связку, в которой несколько
+    параметров ведёт одна ручка. Каждый участник помечается красным на секторе и на плитке
+    своего раздела. В макрос входят параметры тембра; настройки железа — яркость, кольцо,
+    отклик, приём нот — остаются в стороне.</p>
+  <p><b>Двойной тап</b> по параметру, который уже в макросе, включает <b>инверсию</b>: параметр
+    едет против макроса, и все его метки становятся жёлтыми.</p>
+
+  <h3>Кольцо и экран</h3>
+  <ul>
+    <li>Обод разбит на секторы по числу ручек страницы; выделенный сектор залит формой своего сектора в цвете семейства.</li>
+    <li><b>Кольцо индикации</b> по периметру работает в четырёх режимах: значение выбранной ручки, стереокартина, выключено и свет по звуку.</li>
+    <li><b>Точки пагинации</b> над заголовком показывают, где страница внутри своего семейства.</li>
+    <li>Свайп вниз открывает <b>шторку</b> — карту разделов кольцами цветных плиток: 21 плитка, выбранная растёт.</li>
+    <li>Свайп снизу вверх открывает <b>экран транспорта</b>: кнопка стоп/плей, темп и заряд батареи.</li>
+    <li>Кнопка транспорта держит цвет состояния: зелёная на ходу, красная на остановке.</li>
+    <li><b>Экран транспорта зеркалит фактический темп</b>: арка и подпись BPM показывают темп, которым инструмент играет, — темп с провода, пока идут часы, и значение ручки, когда часы пропали. Ручка и запись темпа в патч работают как раньше.</li>
+    <li><b>Страница STATUS</b> показывает загрузку процессора, время DSP, пропущенные блоки, ошибки записи и свободную память.</li>
+  </ul>
+
+  <h3>Дисплей при включении</h3>
+  <p>Панель поднимается тёмной и остаётся тёмной, пока не построен экран приложения. Затем
+    подсветка выезжает за 200 мс до выставленной яркости. Так при включении не показывается
+    белое поле, которое раньше держалось около секунды.</p>
+
+  <h3>Батарея</h3>
+  <p>Состояние заряда показано цветом: зелёный, когда узел банки держит зарядник, красный,
+    когда прибор работает от банки, и приглушённый с <code>--</code>, когда по пину нет чтения.
+    <code>--</code> отдельно от нуля процентов, который означает пустую банку. Это вывод из
+    напряжения: отдельного пина состояния заряда на плате нет, выход <code>STAT</code> зарядника
+    идёт на светодиод и до микроконтроллера не доходит. Решение
+    принимается по сырому измерению с двумя порогами, поэтому переключается за одно чтение,
+    то есть за пять секунд, в обе стороны.</p>
+</section>
+
+<section id="ref">
+  <h2>Справочник</h2>
+  <p class="muted">Категория → экран → параметр → описание; у списочных параметров описана каждая позиция.</p>
+
+  <p>Порядок тот же, что на инструменте. Всего 75 параметров, на экранах 82 ручки: уровни
+    перкуссии, трёх регистров дрона и лида показаны дважды — на своих экранах и вместе на
+    экране LEVELS, — а ENV перкуссии и ACCENT показаны по два раза каждый (ENV на PERC и
+    PERC SEQ, ACCENT на PERC SEQ и LEAD EUCLID). ACCENT — это один параметр на двух экранах,
+    а не второй: в патче ровно 64 параметра из 64. Две последние ручки — настройки, а не
+    параметры патча: восемьдесят первая <b>WEAK VEL</b> на странице OPTIONS и восемьдесят
+    вторая <b>MIDI IN</b> там же, поэтому параметров 75, а в пресеты ни та, ни другая не
+    попадают. Темп живёт на экране транспорта и ручки не
+    имеет, поэтому в списках его нет. Ноты и лады не расписываются: их задают положения ручек
+    SCALE и ROOT, а сами таблицы лежат в прошивке. Ладов шестнадцать, и последние пять
+    дописаны в конец списка — положение в списке и есть сохранённое значение параметра,
+    поэтому старые позиции не сдвинулись; <b>CHROMATIC</b>, последний, — все двенадцать
+    ступеней, то есть лад, который не квантует ничего.</p>
+  <p class="muted" id="ref-list-note">У всех списочных параметров описана каждая позиция. Одно
+    исключение — <b>WEAK VEL</b>: у неё не позиции, а целые числа от 0 до 127, и описан не
+    список, а шкала: 127 — разницы нет, 80 — заводское значение, 0 — слабых ударов нет.</p>
+
+  <div id="ref-body"></div>
+</section>
+
+<section id="presets">
+  <h2>Пресеты</h2>
+  <ul>
+    <li><b>LOAD / SAVE / RND</b> на странице PRESET со списком по центру; кнопка SAVE мигает, пока звук отличается от слота.</li>
+    <li><b>Случайный звук в двух глубинах</b>: короткое нажатие рандомизирует тембр, долгое — тембр вместе со структурой, то есть сетками, арпеджиатором и посылами.</li>
+    <li><b>SLIDE</b> — OFF / 0.2 / 0.5 / 1.5 / 3 с: сколько времени новые значения доезжают. Загрузка пресета и случайный звук ведут звук к новому вместо подмены. Заводское значение — 0.5 с.</li>
+    <li>Списочные параметры и настройки переключаются мгновенно: режим не бывает наполовину, а настройка не входит в звук.</li>
+    <li><b>RND DEL</b> решает, трогает ли случайный звук время и синхронизацию дилея. Заводское значение — ON.</li>
+    <li><b>WEAK VEL</b> — сила удара, который акцент не пометил: целые 0..127, заводское 80. Это настройка: она хранится отдельно от звука, в пресеты не входит и случайным звуком не двигается. 127 — разницы нет вовсе, 0 — слабых ударов нет.</li>
+    <li><b>MIDI IN</b> — приём нот по USB, заводское OFF. Настройка про порт, а не про звук: включение на ходу делает USB-разъём на компьютере MIDI-устройством — появляется порт «OBOD MIDI IN», а отладочный порт (COM) с компьютера пропадает, и перезагрузка для этого не нужна. Выключение на ходу убирает MIDI-устройство, снимает драйвер и освобождает USB-контроллер, но отладочный порт на ходу не возвращает: он снова на месте только после перезагрузки прибора с выключенным приёмом нот. Прошивка без кнопок идёт так: выключить приём нот, передёрнуть USB — после загрузки порт на месте, и esptool входит в загрузчик сам. В пресеты не входит, случайным звуком не двигается; значение меняет энкодер, как у всех настроек и ручек. Приём нот приносит и транспорт с часами: 0xFA — старт, 0xFB — продолжение, 0xFC — стоп, 0xF8 — часы, двадцать четыре тика на четверть, остальные байты отбрасываются. Транспорт открывает и закрывает входной гейт, на старте ставит секвенсоры в начало фразы, на стопе не даёт им открывать ноты; арпеджиатор по удержанным MIDI-клавишам звучит и на стопе. Часы задают темп двум евклидовым секвенсорам, арпеджиатору и генератору модуляции: темп оценивается по окну в один бит со сглаживанием, ограничен 30..300 BPM, подменяет значение ручки, в параметр патча не пишется и примерно через секунду без тиков возвращается к ручке. Новых настроек и параметров патча у этого нет.</li>
+    <li>Звук запоминается <b>по изменению</b>: пометку ставит любая ручка, макрос или загрузка пресета, а в память значение уходит через 2 с после последнего движения — один жест даёт одну запись.</li>
+    <li>Настройка <b>PATCH</b>: FORGET, STORE, RANDOM. Заводское значение — RANDOM: инструмент при каждом включении собирает новый звук.</li>
+    <li>Пресеты <b>переживают смену прошивки</b>: хранилище больше не очищается по отпечатку образа. Версия формата хранится отдельной записью; слот, записанный несовместимым форматом, не читается и остаётся на месте — прибор пишет об этом в журнал, а не стирает его.</li>
+    <li>Стирание прибора при обновлении не предлагается: страница браузерной прошивки не трогает ни настройки, ни пресеты. Полное стирание при необходимости делается отдельно, командой <code>esptool erase-flash</code>.</li>
+  </ul>
+</section>
+
+<section id="hw">
+  <h2>Железо</h2>
+  <table>
+    <tr><td>Микроконтроллер</td><td>ESP32-S3, 240 МГц, 8 МБ PSRAM, 16 МБ flash</td></tr>
+    <tr><td>Экран</td><td>круглый LCD 360 × 360, ST77916 по QSPI, ёмкостный тач CST816S</td></tr>
+    <tr><td>Звук</td><td>ЦАП PCM5100A на выход, PDM-микрофон на вход, 48 кГц</td></tr>
+    <tr><td>Обратная связь</td><td>RGB-кольцо по периметру, виброотклик на DRV2605L</td></tr>
+    <tr><td>Питание</td><td>одна банка лития, зарядник ETA6003 с power-path: пока воткнут кабель, узел банки держит зарядник</td></tr>
+    <tr><td>Отладка</td><td>USB-Serial-JTAG: журнал и прошивка по одному кабелю, без переходников</td></tr>
+  </table>
+</section>
+
+<section id="flash" class="flash">
+  <h2>Прошивка</h2>
+
+  <p>Прибор прошивается по USB. Основной способ — прямо из браузера: страница сама
+    передаёт прибору готовый образ, командная строка и Python не нужны. Ниже — то же
+    самое командой, для тех случаев, когда браузерная запись не подходит.</p>
+
+  <!-- Кнопку и диалог записи рисует esp-web-tools. Манифест, образ и эта страница
+       лежат в одной папке: при обновлении прошивки меняются только они. -->
+  <esp-web-install-button manifest="manifest.json">
+    <button slot="activate" class="btn" type="button">Установить прошивку</button>
+    <span slot="unsupported">Браузер не поддерживает Web Serial. Откройте страницу
+      в Chrome или Edge на компьютере.</span>
+    <span slot="not-allowed">Страница открыта не по защищённому адресу: запись
+      работает только по https или на localhost.</span>
+  </esp-web-install-button>
+
+  <p id="flash-meta">Образ: firmware/OBOD.bin.</p>
+
+  <div class="note">
+    <p><b>При этой прошивке пресеты и настройки теряются.</b> Склеенный образ
+      записывается подряд от нулевого адреса и перекрывает область NVS, где лежат
+      настройки и пресеты: прибор включится с заводскими значениями. Галочка стирания
+      в диалоге на это не влияет — область настроек закрывается образом и без неё.
+      Запишите нужные звуки заранее. Прошивка из командной строки, описанная ниже,
+      настройки сохраняет.</p>
+  </div>
+
+  <h3>Что нужно</h3>
+
+  <ul>
+    <li>Chrome или Edge на компьютере. Firefox, Safari и браузеры телефонов Web Serial
+      не поддерживают — кнопки на них не будет.</li>
+    <li>Прибор подключён кабелем и виден системе как COM-порт.</li>
+    <li>Порт свободен: закройте монитор порта и всё остальное, что его держит.</li>
+    <li>Приём нот выключен. Если на странице OPTIONS включён <b>MIDI IN</b>, разъём отдан
+      MIDI-интерфейсу и COM-порта нет: выключите приём, перезагрузите прибор — порт снова
+      станет отладочным.</li>
+  </ul>
+
+  <h3>Другие способы</h3>
+
+  <table>
+    <tr>
+      <td>Из командной строки</td>
+      <td><code>pwsh -File tools/idf.ps1 -p COM4 flash</code> — записывает загрузчик,
+        таблицу разделов, данные OTA и приложение, каждое по своему адресу. Настройки и
+        пресеты остаются на месте, менять формат разделов не нужно.</td>
+    </tr>
+    <tr>
+      <td>Только приложение</td>
+      <td><code>idf.py -p COM4 app-flash</code> — когда загрузчик и таблица разделов уже
+        на месте. Перезаписывает один раздел приложения, это заметно быстрее полной
+        прошивки.</td>
+    </tr>
+    <tr>
+      <td>Склеенный образ</td>
+      <td><code>esptool.py -p COM4 write_flash 0x0 firmware/OBOD.bin</code> —
+        один файл от нулевого адреса. Так пишет и браузерная страница: загрузчик, таблица
+        разделов, данные OTA и приложение подряд. Настройки при этом стираются.</td>
+    </tr>
+    <tr>
+      <td>Свежий образ и своя страница</td>
+      <td><code>pwsh -File tools/webflash/merge.ps1</code> склеивает четыре части в один
+        файл и пересчитывает манифест, <code>pwsh -File tools/webflash/serve.ps1</code>
+        поднимает страницу записи локально. Годится, когда браузерная прошивка нужна без
+        выхода в сеть или на свежей сборке.</td>
+    </tr>
+    <tr>
+      <td>Журнал после прошивки</td>
+      <td><code>pwsh -File tools/capture_boot.ps1 -Port COM4 -Seconds 18</code> — пишет
+        загрузку в файл: видно версию, состояние пресетов, нагрузку и уровень батареи.</td>
+    </tr>
+  </table>
+</section>
+
+<section id="under">
+  <h2>Под капотом</h2>
+  <ul>
+    <li>Бюджет реального времени — <b>2,67 мс</b> на блок; в типичном режиме блок считается за <b>1,27–1,33 мс</b>, то есть с двойным запасом.</li>
+    <li>Кривая мастера-компрессора считается раз в 16 сэмплов с интерполяцией между ними. Расчёт на каждый сэмпл стоил 1,1 мс из 2,67: <code>log2f</code> и <code>exp2f</code> на этом чипе программные.</li>
+    <li>Все длинные буферы эффектов лежат в PSRAM: хорус, дилей-пинг-понг на 72000 сэмплов и хвосты реверба.</li>
+    <li>Приложение занимает 1 008 560 байт, склеенный образ для прошивки — 1 139 632; в разделе приложения свободно 76%.</li>
+    <li>ESP-IDF 6.1, LVGL 9.6.</li>
+    <li>Целостность таблиц страниц и раскладок обода проверяется статическими утверждениями в коде и скриптом перед сборкой.</li>
+  </ul>
+</section>
+
+<footer>
+  <p><b>OBOD</b> — дрон-синтезатор на ESP32-S3. 75 параметров, 22 страницы, 128 пресетов.</p>
+  <p>Справочник собран из прошивки: названия и позиции взяты из таблиц ручек и из форматтера
+    значений, поэтому страница и инструмент называют одно и то же одинаково.</p>
+  <p><b>Голос синтеза</b> — библиотека <b>ESP32Synth 2.5.0</b>, автор Danilo Gabriel, лицензия
+    MIT (Copyright (c) 2025 danilogcrf2-oss),
+    <a href="https://github.com/danilogcrf2-oss/ESP32Synth">danilogcrf2-oss/ESP32Synth</a>.
+    Из неё движок голосов, шины и антиалиасинговые таблицы SAW и PLS.</p>
+  <p><b>Наш слой</b> — стерео после движка, фильтры дрона и лида со своими LFO, перкуссия,
+    генератор модуляции, рэк эффектов, интерфейс и приложение — написан нами.</p>
+  <p>Прошивка — <a href="#flash">из браузера или командой</a>. Это выпуск 1.0.0.</p>
+</footer>
+
+</div>
+
+<script>
+/*
+ * Справочник строится из одной таблицы: категория → экран → параметр.
+ *
+ * Формат записи параметра: имя, описание и, если параметр списочный, массив позиций —
+ * каждая строкой «ИМЯ — описание». Цвет категории стоит на её заголовке и на подписи
+ * со списком ручек, поэтому семейство видно до чтения названия.
+ */
+var REF = [
+  { n: 'Тело', c: '#1976D2', s: [
+    { n: 'DRONE', tag: 'DRONE', d: 'Регистры дрона и форма волны.', p: [
+      ['LOW',  'уровень нижнего регистра'],
+      ['MID',  'уровень среднего регистра'],
+      ['HIGH', 'уровень верхнего регистра'],
+      ['WAVE', 'форма волны всех трёх регистров сразу', [
+        ['SIN', 'синус, генератор движка'],
+        ['TRI', 'треугольник, генератор движка'],
+        ['SAW', 'пила из таблицы PolyBLEP с антиалиасингом; заводская форма'],
+        ['PLS', 'прямоугольник из таблицы PolyBLEP'],
+        ['SPR', 'три пилы с расстройкой, раздвинутой втрое'],
+        ['NOI', 'шум, свой поток на голос']]],
+      ['WIDTH', 'глубина дрейфа панорамы и блуждания, а также прибавка к глубине LFO фильтра: добавляет к ней до двух октав, вместе с DEPTH сумма доходит до шести октав на LOW'],
+    ]},
+    { n: 'DRONE FLTR', tag: 'FLTR', d: 'Фильтр и его свип, общие для трёх регистров.', p: [
+      ['CUTOFF', 'базовая частота среза, одна на все три регистра'],
+      ['RES',    'добротность фильтра'],
+      ['RATE',   'скорость свипа; внизу ручки 0,050 Гц, то есть двадцать секунд на цикл, наверху ровно 6,000 Гц у LOW, у MID 8,400, у HIGH 4,800'],
+      ['DEPTH',  'глубина свипа; сама ручка даёт до четырёх октав на LOW, с прибавкой WIDTH — до шести'],
+    ]},
+    { n: 'DRONE MOD', tag: 'MOD', d: 'Модуляция: приёмник, форма, глубина, скорость и перезапуск.', p: [
+      ['DEST', 'куда идёт модуляция', [
+        ['FILTER',    'глубина LFO фильтра; складывается с ручкой DEPTH на экране DRONE FLTR: сама DEPTH даёт до четырёх октав на LOW, WIDTH добавляет до двух, вместе до шести'],
+        ['PAN',       'дрейф панорамы и блуждание'],
+        ['FILT+PAN',  'и фильтр, и панорама; заводское значение'],
+        ['PERC PIT',  'высота удара перкуссии'],
+        ['PIT+ENV',   'высота удара и его ENV'],
+        ['PIT+DEC',   'высота удара и его DECAY'],
+        ['PIT+E+D',   'высота удара, его ENV и его DECAY'],
+        ['LEAD PIT',  'высота шага секвенсора лида'],
+        ['LEAD+PERC', 'высота шага лида и высота удара перкуссии']]],
+      ['SHAPE', 'форма модуляции', [
+        ['SINE',     'синус'],
+        ['TRI',      'треугольник'],
+        ['SQUARE',   'прямоугольник'],
+        ['SAW',      'пила'],
+        ['RANDOM',   'случайные значения'],
+        ['EXP+',     'спад: от нуля вниз к минус единице; обе экспоненциальные формы ниже нуля'],
+        ['EXP-',     'рост: из минус единицы вверх к нулю; у генератора приложения'],
+        ['MIC',      'не форма, а источник: фильтр и панораму двигает огибающая микрофона, а не генератор; DEPTH задаёт глубину, SPEED не значит ничего, потому что у комнаты нет фазы']]],
+      ['DEPTH', 'глубина модуляции для перкуссии и высоты шага лида, в процентах; заводское значение — 100'],
+      ['SPEED', 'скорость модуляции: внизу заводские 0,031 Гц у LOW, то есть тридцать две секунды на цикл, наверху ровно 6,000 Гц у LOW, у MID 7,161, у HIGH 5,613 — тем же множителем ускоряется дрейф панорамы и блуждание; фаза генератора модуляции идёт по шагам перкуссии, один шаг равен одной доле'],
+      ['TRIG', 'когда форма начинается заново; нотой считается нота лида, то есть шаг его секвенсора', [
+        ['FREE', 'форма идёт сама по себе, каждый удар берёт текущее значение; заводское значение'],
+        ['NOTE', 'форма начинается заново на каждой ноте лида'],
+        ['HOLD', 'значение берётся на ноте и держится до следующей, фаза в это время стоит']]],
+    ]},
+  ]},
+
+  { n: 'Голос', c: '#AB47BC', s: [
+    { n: 'LEAD', tag: 'LEAD', d: 'Уровень лида, длина ноты и скольжение.', p: [
+      ['GATE',  'какую долю шага держится нота'],
+      ['LEVEL', 'уровень слоя лида, в процентах от его максимума'],
+      ['PORTA', 'скольжение к следующей ноте: OFF или время в миллисекундах'],
+      ['WAVE',  'форма волны лида, те же шесть', [
+        ['SIN', 'синус, генератор движка'],
+        ['TRI', 'треугольник, генератор движка'],
+        ['SAW', 'пила из таблицы PolyBLEP с антиалиасингом'],
+        ['PLS', 'прямоугольник из таблицы PolyBLEP'],
+        ['SPR', 'три пилы с расстройкой'],
+        ['NOI', 'шум, свой поток на голос']]],
+    ]},
+    { n: 'LEAD TONE', tag: 'TONE', d: 'Фильтр лида и его огибающая.', p: [
+      ['CUTOFF', 'частота среза фильтра лида'],
+      ['RES',    'резонанс фильтра лида'],
+      ['ENV',    'на сколько октав огибающая открывает фильтр; значение со знаком'],
+    ]},
+    { n: 'LEAD ENV', tag: 'ENV', d: 'Огибающая ноты лида. Время показывается в миллисекундах до секунды и в секундах выше.', p: [
+      ['ATTACK',  'время нарастания'],
+      ['DECAY',   'время спада до уровня SUSTAIN'],
+      ['SUSTAIN', 'уровень, который держится, пока нота звучит'],
+      ['RELEASE', 'время затухания после отпускания'],
+    ]},
+  ]},
+
+  { n: 'Время', c: '#00796B', s: [
+    { n: 'LEAD GEN', tag: 'GEN', d: 'Ноты лида: лад, тоника, плотность, октава.', p: [
+      ['SCALE',   'лад, из которого берутся ноты; список из шестнадцати ладов задан в прошивке, и по нему же притягиваются ноты, присланные по USB-MIDI: берётся ближайшая ступень лада, а при равном расстоянии — нижняя. Последний в списке, CHROMATIC, — все двенадцать ступеней, и он не квантует ничего'],
+      ['ROOT',    'тоника, вокруг которой берутся ноты; имя ноты с номером октавы'],
+      ['DENSITY', 'как часто шаг звучит вообще'],
+      ['OCTAVE',  'как охотно нота уходит в дальний регистр; на экране вероятность в процентах, до 50'],
+    ]},
+    { n: 'LEAD EUCLID', tag: 'EUCL', d: 'Эвклидова сетка нот. Когда сетку забирает арпеджиатор, по центру страницы появляется ARP IS ACTIVE: сетка не играет, и её ручки ничего не меняют. ACCENT здесь тот же параметр, что и на PERC SEQ: в патче ровно 64 параметра из 64, поэтому один рисунок акцента обслуживает обе части, каждая по своей сетке.', p: [
+      ['STEPS',   'сколько шагов сетки в такте, n'],
+      ['PULSES',  'сколько из них звучит, k; на экране действующее k/n'],
+      ['ROTATE',  'на сколько шагов фигура сдвинута относительно доли'],
+      ['SCATTER', 'насколько начало ноты может уехать от своей линии, в процентах шага'],
+      ['ACCENT',  'рисунок акцента: ноты, попавшие на помеченные доли, открываются на полной громкости своих голосов (70/70/55), остальные — на велосити настройки WEAK VEL со страницы OPTIONS (заводское значение — 80 из 127, то есть почти на 4 дБ тише). Это тот же параметр, что на PERC SEQ, и рисунок считается по сетке ЛИДА: свои STEPS, свои PULSES, свой ROTATE, те же доли такта. Поэтому рисунок НЕ едет с ROTATE и не растягивается по числу шагов — что вышло за такт, не участвует. На экране помеченный шаг отмечен точкой крупнее. Арпеджиатора это не касается: у него своя фигура, и его ноты всегда идут на полной громкости', [
+        ['OFF',      'акцента нет: все ноты идут на своих заводских 70/70/55, как до этой ручки; заводское значение. WEAK VEL при OFF не читается вовсе'],
+        ['QUARTER',  'четверти: доли 1, 5, 9, 13'],
+        ['2&4',      'бэкбит, вторая и четвёртая: доли 5 и 13'],
+        ['OFFBEAT',  'оффбит, восьмые между долями: доли 3, 7, 11, 15'],
+        ['3-3-2',    'тресильо: доли 1, 7, 13'],
+        ['FUNK16',   'шестнадцатый фанк-акцент: доли 1, 4, 7, 10, 13, 16'],
+        ['RUMBA',    'румба-клава, первый такт: доли 1, 4, 7'],
+        ['BOSSA',    'босса-нова, первый такт: доли 1, 4, 7, 10, 13']]],
+    ]},
+    { n: 'LEAD ARP', tag: 'ARP', d: 'Арпеджиатор: направление, скорость, длина фигуры и диапазон.', p: [
+      ['DIR', 'направление фигуры; OFF выключает арпеджиатор и возвращает сетке голос', [
+        ['OFF',    'арпеджиатор выключен, сетка играет сама'],
+        ['UP',     'снизу вверх'],
+        ['DN',     'сверху вниз'],
+        ['UP-DN',  'вверх и вниз; крайние ноты звучат по одному разу за оборот'],
+        ['DN-UP',  'то же зеркально'],
+        ['UP-DN+', 'вверх и вниз с задержкой на краях: верхняя и нижняя ноты держатся по два шага'],
+        ['DN-UP+', 'то же зеркально'],
+        ['RAND',   'случайная нота фигуры на каждом шаге']]],
+      ['SPEED', 'шаг арпеджиатора; выключателя здесь нет, арпеджиатор выключается из DIR', [
+        ['4/1',   'четыре целых: шестнадцать долей на ноту'],
+        ['2/1',   'две целых: восемь долей'],
+        ['1/1',   'целая: четыре доли'],
+        ['1/2.',  'пунктирная половинная: три доли'],
+        ['1/2',   'половинная: две доли'],
+        ['1/4.',  'пунктирная четверть: полторы доли'],
+        ['1/4',   'четверть'],
+        ['1/8.',  'пунктирная восьмая: три четверти доли'],
+        ['1/8',   'восьмая'],
+        ['1/16.', 'пунктирная шестнадцатая'],
+        ['1/8T',  'восьмая триоль'],
+        ['1/16',  'шестнадцатая'],
+        ['1/32',  'тридцать вторая']]],
+      ['LEN',   'сколько нот в фигуре'],
+      ['RANGE', 'насколько далеко от тоники уходит фигура', [
+        ['-3',   'на три октавы вниз'],
+        ['-2',   'на две октавы вниз'],
+        ['-1',   'на октаву вниз'],
+        ['+1',   'диапазон уходит на октаву вверх'],
+        ['+2',   'на две октавы вверх'],
+        ['+3',   'на три октавы вверх'],
+        ['+/-1', 'на октаву в обе стороны'],
+        ['+/-2', 'на две октавы в обе стороны'],
+        ['+/-3', 'на три октавы в обе стороны']]],
+    ]},
+  ]},
+
+  { n: 'Перкуссия', c: '#2E7D32', s: [
+    { n: 'PERC', tag: 'PERC', d: 'Голоса перкуссии: уровень, высота, падение высоты, длина и баланс тела и шума. Высоту, ENV и DECAY удара может двигать модуляция со страницы MOD.', p: [
+      ['LEVEL', 'уровень части'],
+      ['PITCH', 'центр полосового фильтра, то есть нота удара'],
+      ['ENV',   'на сколько октав высота удара падает за удар; это и есть удар кика'],
+      ['DECAY', 'длина удара'],
+      ['BODY',  'баланс шума и тона: внизу шумовой удар, наверху чистый тон на высоте удара, следящий за её падением; в середине — смесь того и другого'],
+    ]},
+    { n: 'PERC SEQ', tag: 'PSEQ', d: 'Своя сетка перкуссии: одна доля, два рисунка, полиритмия против лида и рисунок акцента.', p: [
+      ['STEPS',  'сколько шагов сетки в такте, n'],
+      ['PULSES', 'сколько из них звучит, k'],
+      ['ROTATE', 'на сколько шагов фигура сдвинута относительно доли'],
+      ['ENV',    'на сколько октав фильтр падает за удар'],
+      ['ACCENT', 'рисунок акцента: удары, попавшие на помеченные доли, остаются на 127, остальные ослабляются до велосити настройки WEAK VEL со страницы OPTIONS — заводское значение 80 из 127, то есть почти на 4 дБ ниже; 127 там означает, что разницы нет, а 0 — что слабых ударов нет вовсе. Это тот же параметр, что на LEAD EUCLID: в патче ровно 64 параметра из 64, поэтому рисунок акцента один на обе части, но у перкуссии он считается по ЕЁ сетке — своим STEPS, PULSES и ROTATE. Доли считаются от первой доли такта, поэтому рисунок НЕ едет с ROTATE: акцент стоит на доле, а фигура под ним поворачивается. По числу шагов он тоже не растягивается — что вышло за такт, просто не участвует. На экране помеченный шаг отмечен точкой крупнее', [
+        ['OFF',      'акцента нет: все удары идут на 127, как до этой ручки; заводское значение. WEAK VEL при OFF не читается вовсе'],
+        ['QUARTER',  'четверти: доли 1, 5, 9, 13'],
+        ['2&4',      'бэкбит, вторая и четвёртая: доли 5 и 13'],
+        ['OFFBEAT',  'оффбит, восьмые между долями: доли 3, 7, 11, 15'],
+        ['3-3-2',    'тресильо: доли 1, 7, 13'],
+        ['FUNK16',   'шестнадцатый фанк-акцент: доли 1, 4, 7, 10, 13, 16'],
+        ['RUMBA',    'румба-клава, первый такт: доли 1, 4, 7'],
+        ['BOSSA',    'босса-нова, первый такт: доли 1, 4, 7, 10, 13']]],
+    ]},
+  ]},
+
+  { n: 'Рэк', c: '#E91E63', s: [
+    { n: 'CHORUS', tag: 'CHOR', d: 'Ширина. Стоит перед дилеем и ревербом и попадает в них.', p: [
+      ['MIX',   'доля влажного сигнала'],
+      ['RATE',  'скорость LFO, в герцах с двумя знаками'],
+      ['DEPTH', 'глубина модуляции'],
+    ]},
+    { n: 'DELAY', tag: 'DLY', d: 'Пинг-понг до четырёх секунд на сторону — целая нота на 60 bpm, и ниже 60 bpm время упирается в буфер. Повторы идут по стерео полю: первый слева, второй справа, третий снова слева.', p: [
+      ['SYNC', 'привязка времени к темпу с транспорта', [
+        ['FREE',  'время задаётся ручкой TIME'],
+        ['1/1',   'целая: четыре доли, четыре секунды на 60 bpm'],
+        ['1/2.',  'пунктирная половинная: три доли'],
+        ['1/2',   'половинная: две доли'],
+        ['1/4.',  'пунктирная четверть: полторы доли'],
+        ['1/4',   'четверть'],
+        ['1/8.',  'пунктирная восьмая: три четверти доли'],
+        ['1/8',   'восьмая'],
+        ['1/16.', 'пунктирная шестнадцатая'],
+        ['1/8T',  'восьмая триоль'],
+        ['1/16',  'шестнадцатая'],
+        ['1/32',  'тридцать вторая']]],
+      ['MIX',  'доля влажного сигнала'],
+      ['TIME', 'время повтора; работает при FREE, а при SYNC показывает время, которое действует — с учётом ограничения буфером'],
+      ['FDBK', 'сколько повтора возвращается в линию; выше 0,95 не поднимается'],
+    ]},
+    { n: 'VERB', tag: 'VERB', d: 'Ревербератор. Хорус и дилей стоят перед ним и попадают в него.', p: [
+      ['ALGO', 'алгоритм', [
+        ['ROOM', 'первый из четырёх наборов настроек одного Freeverb'],
+        ['HALL', 'второй набор того же движка'],
+        ['CATH', 'третий набор того же движка'],
+        ['HOLD', 'хвост, который не затухает: петля обратной связи чуть ниже единицы'],
+        ['PLAT', 'плита Dattorro: другая топология, свой блок в памяти, тринадцать обращений к линиям против двадцати четырёх']]],
+      ['MIX',  'баланс сухого и влажного: на половине они равны, на ста процентах остаётся только реверб'],
+      ['SIZE', 'размер помещения'],
+      ['DAMP', 'демпфирование'],
+    ]},
+  ]},
+
+  { n: 'Микшеры', c: '#5D4037', s: [
+    { n: 'MASTER', tag: 'MSTR', d: 'Выход и мастер-компрессор.', p: [
+      ['VOL',  'общая громкость выхода'],
+      ['COMP', 'одна ручка ведёт порог и степень вместе; на экране отношение, внизу OFF. Атака и релиз фиксированы: 25 и 250 мс, мягкое колено 6 дБ, сайдчейн-фильтр 150 Гц'],
+    ]},
+    { n: 'LEVELS', tag: 'LVLS', d: 'Уровни частей в одном списке: сравнение двух чисел, которые значат что-то только вместе.', p: [
+      ['LEAD', 'уровень лида; тот же параметр, что LEVEL на экране LEAD'],
+      ['PERC', 'уровень перкуссии; тот же параметр, что LEVEL на экране PERC'],
+      ['LOW',  'уровень нижнего регистра дрона; тот же параметр, что LOW на экране DRONE'],
+      ['MID',  'уровень среднего регистра; тот же параметр, что MID на экране DRONE'],
+      ['HIGH', 'уровень верхнего регистра; тот же параметр, что HIGH на экране DRONE'],
+    ]},
+    { n: 'SENDS', tag: 'SNDS', d: 'Посылы в реверб. Посылы дрона живут на следующем экране.', p: [
+      ['LEAD', 'сколько лида идёт в реверб'],
+      ['PERC', 'сколько перкуссии идёт в реверб'],
+      ['MIC',  'сколько микрофона идёт в реверб; микрофон не идёт в сухой выход никогда, и это единственная дверь, через которую его вообще слышно'],
+    ]},
+    { n: 'DRONE SENDS', tag: 'DRMX', d: 'Посылы трёх регистров дрона в реверб: одна комната с тремя разными количествами.', p: [
+      ['LOW',  'посыл нижнего регистра'],
+      ['MID',  'посыл среднего регистра'],
+      ['HIGH', 'посыл верхнего регистра'],
+    ]},
+  ]},
+
+  { n: 'Пресеты', c: '#37474F', s: [
+    { n: 'PRESET', tag: 'PRST', d: 'Слоты и действия со звуком. Ручек у экрана нет, поэтому обод целый.', p: [] },
+    { n: 'STATUS', tag: 'STAT', d: 'Служебные показания: загрузка процессора, время DSP, пропущенные блоки, ошибки записи, свободная память. Ручек нет, поэтому на шторке двадцать одна плитка при двадцати двух страницах.', p: [] },
+  ]},
+
+  { n: 'Настройки', c: '#546E7A', s: [
+    { n: 'SYSTEM', tag: 'SYS', d: 'Свет и отклик. Эти экраны стоят вне карусели и открываются через шторку.', p: [
+      ['SCREEN', 'яркость подсветки, в процентах'],
+      ['RING',   'яркость кольца, в процентах'],
+      ['RING FX', 'режим кольца индикации', [
+        ['PARAM',    'значение выбранной ручки'],
+        ['STEREO',   'стереокартина: где стоят части'],
+        ['OFF',      'кольцо не горит'],
+        ['REACTIVE', 'свет по звуку: яркость части по её огибающей, а повтор дилея идёт по кольцу по одному светодиоду за повтор']]],
+      ['HAPTIC', 'отдача', [
+        ['OFF',  'нет'],
+        ['TURN', 'на вращение'],
+        ['TAP',  'на нажатие'],
+        ['BOTH', 'на то и другое']]],
+      ['MIC',    'чувствительность микрофона, в процентах; это программное усиление до 6× после среза постоянной составляющей, потому что драйверного усиления приёма PDM у этого чипа нет вовсе; оно же нормирует огибающую, которой двигаются фильтр и панорама; ноль выключает микрофон целиком, и тогда вход не читается вовсе; настройка хранится отдельно от звука, потому что это факт про комнату, а не про тембр'],
+    ]},
+    { n: 'OPTIONS', tag: 'OPT', d: 'Память и поведение звука при загрузке, насколько слабо звучит удар, который акцент не пометил, и приём нот по USB.', p: [
+      ['PATCH', 'что делать со звуком при выключении', [
+        ['FORGET', 'не помнить звук'],
+        ['STORE',  'вернуться к тому звуку, с которым инструмент выключили'],
+        ['RANDOM', 'новый звук при каждом включении; заводское значение']]],
+      ['SLIDE', 'сколько времени новые значения доезжают', [
+        ['OFF',   'значения меняются сразу'],
+        ['0.2 S', 'двести миллисекунд'],
+        ['0.5 S', 'полсекунды; заводское значение'],
+        ['1.5 S', 'полторы секунды'],
+        ['3 S',   'три секунды']]],
+      ['RND DEL', 'трогает ли случайный звук время и синхронизацию дилея', [
+        ['OFF', 'время и синхронизация остаются как были'],
+        ['ON',  'случайный звук может их сменить; заводское значение']]],
+      ['WEAK VEL', 'велосити удара, который акцент не пометил: целые числа от 0 до 127, и каждое — это своя сила удара, поэтому у ручки одно деление на одно число, всего 127 делений; 127 — разницы нет вовсе: рисунок акцента выбран, а слышно его не будет; заводское 80 — это 4,01 дБ ниже помеченного удара (20·log10(127/80)); 0 — слабых ударов нет, движок читает нулевую велосити как «удара не было», и звучат только помеченные доли. Это настройка, а не параметр патча: она хранится отдельно от звука и в пресеты не попадает'],
+      ['MIDI IN', 'приём нот по USB, заводское OFF: включён — USB-разъём на компьютере становится MIDI-устройством, появляется порт «OBOD MIDI IN», и присланные ноты играют; выключен — MIDI-устройство исчезает. Это не про звук, а про порт: USB-Serial-JTAG и USB-OTG — два контроллера за одним PHY у этого чипа, поэтому пока приложение поднимает USB-MIDI, USB-разъём на компьютере — MIDI-порт, а отладочный порт (COM) и журнал оттуда пропадают. Оба переключения идут на ходу, без перезагрузки: включение тут же отдаёт разъём MIDI-устройству, а выключение снимает драйвер и освобождает USB-контроллер, но отладочный порт на ходу не возвращает — он снова на месте только после перезагрузки прибора с выключенным приёмом нот. Прошивка без кнопок идёт так: выключить приём нот, передёрнуть USB — после загрузки порт на месте, и esptool входит в загрузчик сам; ROM-загрузчик и esptool от режима MIDI не зависят. Настройка хранится отдельно от звука, в пресеты не входит и случайным звуком не двигается; значение меняет энкодер, как у всех настроек и ручек. Приём нот приносит и транспорт с часами: 0xFA — старт, 0xFB — продолжение, 0xFC — стоп, 0xF8 — часы, двадцать четыре тика на четверть, остальные байты отбрасываются; транспорт открывает и закрывает входной гейт, на старте ставит секвенсоры в начало фразы, на стопе не даёт им открывать ноты, а арпеджиатор по удержанным MIDI-клавишам звучит и на стопе; часы задают темп двум евклидовым секвенсорам, арпеджиатору и генератору модуляции, темп подменяет значение ручки, в параметр патча не пишется и примерно через секунду без тиков возвращается к ручке. Новых настроек и параметров патча у этого нет', [
+        ['OFF', 'приём нот выключен; после перезагрузки USB-разъём снова отладочный порт — заводское значение'],
+        ['ON',  'ноты с компьютера играют на инструменте; отладочный порт (COM) по USB отдан USB-MIDI, а MIDI-устройство занимает разъём сразу']]],
+    ]},
+  ]}
+];
+
+(function () {
+  var body = document.getElementById('ref-body');
+
+  function el(tag, cls) {
+    var e = document.createElement(tag);
+    if (cls) { e.className = cls; }
+    return e;
+  }
+
+  REF.forEach(function (cat) {
+    var block = el('div', 'cat');
+    var head = el('h3');
+    var sub = el('p', 'cat-sub');
+    var screens = cat.s.length;
+
+    head.setAttribute('id', 'cat-' + cat.n);
+    head.style.borderLeftColor = cat.c;
+    head.textContent = cat.n;
+    sub.textContent = screens + ' ' + (screens === 1 ? 'экран' : 'экрана');
+    block.appendChild(head);
+    block.appendChild(sub);
+
+    cat.s.forEach(function (scr) {
+      var s = el('div', 'scr');
+      var h = el('h4');
+      var knobs = el('p', 'knobs');
+
+      h.innerHTML = scr.n + ' <span class="tag">' + scr.tag + '</span>';
+      knobs.textContent = scr.p.length ? scr.p.map(function (p) { return p[0]; }).join(' · ')
+                                       : 'ручек нет';
+      knobs.style.color = cat.c;
+      s.appendChild(h);
+      s.appendChild(knobs);
+
+      if (scr.d) {
+        s.appendChild(el('p')).innerHTML = scr.d;
       }
-    } catch (e) { /* размер не показать — не важно */ }
-  })();
+
+      if (scr.p.length) {
+        var list = el('ul');
+
+        scr.p.forEach(function (p) {
+          var li = el('li');
+          li.innerHTML = '<b>' + p[0] + '</b> — ' + p[1];
+
+          if (p[2] && p[2].length) {
+            var pos = el('ul', 'pos');
+            p[2].forEach(function (q) {
+              var qli = el('li');
+              qli.innerHTML = '<b>' + q[0] + '</b> — ' + q[1];
+              pos.appendChild(qli);
+            });
+            li.appendChild(pos);
+          }
+
+          list.appendChild(li);
+        });
+
+        s.appendChild(list);
+      }
+
+      block.appendChild(s);
+    });
+
+    body.appendChild(block);
+  });
+
+  /* Подсветка раздела в навигаторе, если браузер умеет наблюдать за пересечениями. */
+  if (typeof IntersectionObserver !== 'function') { return; }
+
+  var links = {};
+  Array.prototype.forEach.call(document.querySelectorAll('#topnav a'), function (a) {
+    links[a.getAttribute('href').slice(1)] = a;
+  });
+
+  var observer = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      var link = links[entry.target.id];
+      if (!link) { return; }
+      if (entry.isIntersecting) {
+        Object.keys(links).forEach(function (id) { links[id].className = ''; });
+        link.className = 'on';
+      }
+    });
+  }, { rootMargin: '-68px 0px -70% 0px' });
+
+  Object.keys(links).forEach(function (id) {
+    var s = document.getElementById(id);
+    if (s) { observer.observe(s); }
+  });
+})();
+</script>
+
+<script>
+  // Работник таймера раньше стоял в корне сайта и получал запросы всех разделов: он
+  // ждёт сеть 800 мс и при задержке отдаёт из кэша свою страницу, а образ прошивки
+  // больше мегабайта и в этот срок не укладывается. Свой работник с более длинным
+  // охватом перекрывает старую регистрацию для этой папки.
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function () {
+      navigator.serviceWorker.register('sw.js', { scope: './' }).catch(function () {});
+    });
+  }
 </script>
 </body>
 </html>

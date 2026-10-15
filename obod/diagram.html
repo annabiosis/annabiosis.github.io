@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OBOD — путь сигнала</title>
+<!--
+  Источник схемы — obod-signal-chain.mmd. Его текст вставлен в блок
+  <pre class="mermaid"> ниже при генерации: страница открывается по file://, а в
+  этом режиме браузер не даёт читать соседний файл запросом. При правке .mmd
+  страницу надо перегенерировать:
+
+      python docs/signal-chain/gen_html.py
+
+  Та же схема, тем же текстом, вставлена в promo.html между маркерами
+  BEGIN/END signal diagram: отдельного айфрейма для неё больше нет.
+
+  Рисует локальная копия vendor/mermaid.min.js (mermaid 11.17.2, лицензия MIT).
+  Внешних адресов у страницы нет, поэтому она работает без интернета.
+-->
+<style>
+  :root {
+    --bg:       #000;
+    --panel:    #011b1c;
+    --text:     #fff;
+    --grey40:   rgba(255,255,255,.4);
+    --green400: #71FEAB;
+    --border:   rgba(255,255,255,.2);
+    --radius:   24px;
+    --sans: "IBM Plex Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  body { padding: 16px; }
+
+  .wrap {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 14px 20px 18px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+  }
+
+  .signal .bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0 0 12px;
+  }
+
+  .signal .bar .hint {
+    margin: 0 0 0 4px;
+    color: var(--grey40);
+    font-size: 13px;
+  }
+
+  .signal .bar button {
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    color: var(--text);
+    font: inherit;
+    font-size: 17px;
+    line-height: 1;
+    background: rgba(255,255,255,.06);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    cursor: pointer;
+  }
+
+  .signal .bar button:hover { background: rgba(255,255,255,.12); }
+  .signal .bar button:active { transform: translateY(1px); }
+  .signal .bar button.wide { width: auto; padding: 0 12px; font-size: 14px; }
+
+  /* Сцена держит рисунок и обрезает его, когда тот увеличен. */
+  .signal .stage {
+    position: relative;
+    min-height: 200px;
+    overflow: hidden;
+    touch-action: none;
+    cursor: grab;
+  }
+
+  .signal .stage.dragging { cursor: grabbing; }
+
+  .signal .stage .mermaid {
+    display: block;
+    margin: 0;
+    background: transparent;
+  }
+
+  /* Ширина по сцене, высота по пропорции: рисунок заполняет блок. */
+  .signal .stage svg {
+    display: block;
+    max-width: 100% !important;
+    height: auto !important;
+    transform-origin: 0 0;
+  }
+
+  /* Развёрнутый вид: блок накрывает окно страницы, сцена забирает остаток
+     высоты, рисунок подгоняется сразу при развороте. Это не полноэкранный
+     режим браузера, а разворот внутри самой страницы. */
+  .signal.expanded {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+    background: var(--bg, #000);
+  }
+
+  .signal.expanded .stage {
+    flex: 1 1 auto;
+    min-height: 0;
+  }
+
+  .signal.expanded .stage svg {
+    max-height: 100%;
+  }
+  .fallback {
+    margin: 0 0 12px;
+    color: var(--grey40);
+    font-size: 13px;
+  }
+
+  .fallback[hidden] { display: none; }
+
+  a { color: var(--green400); }
+</style>
+</head>
+
+<body>
+
+<div class="wrap">
+<div class="signal">
+  <p class="fallback" id="fallback" hidden>Схема не отрисовалась: библиотека
+    mermaid.min.js не загрузилась или текст схемы не разобран. Текст схемы лежит
+    ниже, в блоке с исходником.</p>
+
+  <div class="bar">
+    <button type="button" id="zoom-out" aria-label="Уменьшить" title="Уменьшить">&#8722;</button>
+    <button type="button" id="zoom-in" aria-label="Увеличить" title="Увеличить">+</button>
+    <button type="button" id="zoom-reset" class="wide" title="Показать схему целиком">Сброс</button>
+    <button type="button" id="zoom-full" class="wide" title="Развернуть схему на всё окно">Развернуть</button>
+    <p class="hint">Колесо мыши — масштаб, перетаскивание — сдвиг, двойной щелчок — показать целиком.</p>
+  </div>
+
+  <div class="stage" id="stage">
+<pre class="mermaid">
+%% OBOD — сигнальный тракт и триггеры. Канонический вид схемы — этот файл; страница
+%% obod-signal-chain.html собирается из него командой python docs/signal-chain/gen_html.py.
+%% Сплошная стрелка — сигнал; пунктирная — управление и модуляция.
+%% SEND BUS и VERB SEND — один буфер s_send_bus (synth_rack.cpp:154, 231, 541-546, 570, 613, 625-628); GATE стоит между ними.
+%% Макросы UI звук не запускают: они только пишут параметры (synth_ui.c:6181-6186).
+%% Темп от часов подменяет ручку в seq_tempo_now() и в параметр патча не пишется (synth_app.cpp:3337-3343, 3357-3370).
+
+flowchart LR
+
+  subgraph SRC["Источники"]
+    LOW["LOW"]
+    MID["MID"]
+    HIGH["HIGH"]
+    LEAD["LEAD"]
+    PERC["PERC"]
+    MIC["MIC"]
+  end
+
+  subgraph PRE["Пре-процессинг"]
+    DRONE_FLTR["DRONE FLTR"]
+    LEAD_TONE["LEAD TONE"]
+    MIC_IN["MIC IN"]
+    PAN_CAPTURE["PAN CAPTURE"]
+  end
+
+  subgraph CTL["Управление и триггеры"]
+    UI_TRANSPORT["UI · ТРАНСПОРТ"]
+    TRANSPORT["ТРАНСПОРТ"]
+    TEMPO["ТЕМП"]
+    MIDI_IN["MIDI IN"]
+    MIDI_TRANSPORT["MIDI TRANSPORT"]
+    MIDI_CLOCK["MIDI CLOCK"]
+    EUCLID_LEAD["EUCLID LEAD"]
+    SEQ_TRIGGER["SEQ TRIGGER"]
+    ARP["АРПЕДЖИАТОР"]
+    PERC_SEQ["ПЕРК-СЕКВЕНСОР"]
+    DRONE_TUNE["DRONE TUNE"]
+    SCALE["КВАНТОВАНИЕ ПО ЛАДУ"]
+    MOD_LFO["MOD LFO"]
+    UI_IND["UI · ИНДИКАЦИЯ"]
+  end
+
+  subgraph MIXG["Микширование и Шины"]
+    SUM["SUM"]
+    SEND_BUS["SEND BUS"]
+    GATE["GATE"]
+  end
+
+  subgraph FX["Эффекты"]
+    CHORUS["CHORUS"]
+    DELAY["DELAY"]
+  end
+
+  subgraph RVB["Реверберация"]
+    VERB_SEND["VERB SEND"]
+    VERB["VERB"]
+    VERB_MIX["VERB MIX"]
+  end
+
+  subgraph MST["Мастер-цепочка"]
+    COMP["COMP"]
+    VOL["VOL"]
+    SOFT_CLIP["SOFT CLIP"]
+    PCM5100A["PCM5100A"]
+  end
+
+  %% сигнал: источники в пре-процессинг
+  LOW --&gt; DRONE_FLTR
+  MID --&gt; DRONE_FLTR
+  HIGH --&gt; DRONE_FLTR
+  LEAD --&gt; LEAD_TONE
+  MIC --&gt; MIC_IN
+
+  %% пре-процессинг: панорама и уровни
+  DRONE_FLTR --&gt; PAN_CAPTURE
+  LEAD_TONE --&gt; PAN_CAPTURE
+
+  %% микширование: сухая сумма и шина отправок
+  PAN_CAPTURE --&gt; SUM
+  PAN_CAPTURE --&gt;|"pre-fader"| SEND_BUS
+  PERC --&gt;|"post-fader"| SUM
+  PERC --&gt;|"post-fader"| SEND_BUS
+  MIC_IN --&gt;|"AUX level 0"| SEND_BUS
+
+  %% гейт входа, затем эффекты и посылка
+  SUM --&gt; GATE
+  SEND_BUS --&gt; GATE
+  GATE --&gt; CHORUS
+  GATE --&gt;|"посылка"| VERB_SEND
+  CHORUS --&gt; DELAY
+  CHORUS --&gt;|"wet"| VERB_SEND
+  DELAY --&gt;|"wet"| VERB_SEND
+
+  %% реверберация: посылка/возврат и баланс
+  VERB_SEND --&gt;|"ALGO: ROOM · HALL · CATHEDRAL · PLATE · HOLD"| VERB
+  VERB --&gt;|"wet"| VERB_MIX
+  DELAY --&gt;|"сухой"| VERB_MIX
+
+  %% мастер-цепочка
+  VERB_MIX --&gt; COMP
+  COMP --&gt; VOL
+  VOL --&gt; SOFT_CLIP
+  SOFT_CLIP --&gt;|"INT16 · I2S"| PCM5100A
+
+  %% управление: транспорт
+  UI_TRANSPORT -.-&gt;|"пуск/стоп"| TRANSPORT
+  UI_TRANSPORT -.-&gt;|"темп вручную"| TEMPO
+  TRANSPORT -.-&gt;|"гейт входа"| GATE
+  TRANSPORT -.-&gt;|"стоп: нот нет"| EUCLID_LEAD
+  TRANSPORT -.-&gt;|"стоп: нот нет"| ARP
+  TRANSPORT -.-&gt;|"стоп: удара нет"| PERC_SEQ
+  TRANSPORT -.-&gt;|"индикация"| UI_IND
+
+  %% управление: MIDI по каналам
+  MIDI_IN -.-&gt;|"канал 1: нота"| LEAD
+  MIDI_IN -.-&gt;|"канал 1: аккорд"| ARP
+  MIDI_IN -.-&gt;|"канал 2: удар"| PERC
+  MIDI_IN -.-&gt;|"удержание/хвост"| GATE
+  MIDI_IN -.-&gt;|"самая новая нота"| DRONE_TUNE
+
+  %% управление: транспорт и часы с провода
+  MIDI_IN -.-&gt;|"0xFA/0xFB/0xFC"| MIDI_TRANSPORT
+  MIDI_IN -.-&gt;|"0xF8: 24 тика на четверть"| MIDI_CLOCK
+  MIDI_TRANSPORT -.-&gt;|"пуск/продолжение: открыт · стоп: закрыт"| GATE
+  MIDI_TRANSPORT -.-&gt;|"пуск: с начала фразы · стоп: нот нет"| EUCLID_LEAD &amp; PERC_SEQ
+  MIDI_TRANSPORT -.-&gt;|"стоп: своя фигура молчит · удержанные клавиши звучат"| ARP
+  MIDI_CLOCK -.-&gt;|"темп подменяет ручку · в параметр патча не пишется"| EUCLID_LEAD &amp; PERC_SEQ &amp; ARP &amp; MOD_LFO
+  MIDI_CLOCK -.-&gt;|"арка и подпись BPM: фактический темп"| UI_TRANSPORT
+
+  %% управление: генераторы и их ноты
+  TEMPO -.-&gt; EUCLID_LEAD &amp; PERC_SEQ &amp; ARP &amp; DELAY &amp; MOD_LFO
+  EUCLID_LEAD -.-&gt;|"шаги (onset)"| SEQ_TRIGGER
+  SEQ_TRIGGER -.-&gt;|"нота"| LEAD
+  ARP -.-&gt;|"своя группа голосов"| LEAD
+  PERC_SEQ -.-&gt;|"удар"| PERC
+
+  %% управление: лад, настройка дрона, модуляция
+  SCALE -.-&gt;|"лад"| LEAD
+  SCALE -.-&gt;|"лад"| ARP
+  SCALE -.-&gt;|"лад"| DRONE_TUNE
+  DRONE_TUNE -.-&gt;|"транспонирование"| LOW &amp; MID &amp; HIGH
+  LEAD -.-&gt;|"перезапуск по ноте"| MOD_LFO
+  MOD_LFO -.-&gt;|"срез"| DRONE_FLTR
+  MOD_LFO -.-&gt;|"дрейф"| PAN_CAPTURE
+  MOD_LFO -.-&gt;|"PITCH/ENV/DECAY"| PERC
+  MOD_LFO -.-&gt;|"высота"| LEAD
+  MIC_IN -.-&gt;|"огибающая: срез"| DRONE_FLTR
+  MIC_IN -.-&gt;|"огибающая: дрейф"| PAN_CAPTURE
+
+  %% управление: индикация трёх ритмических плиток
+  EUCLID_LEAD -.-&gt;|"шаги"| UI_IND
+  PERC_SEQ -.-&gt;|"шаги"| UI_IND
+  ARP -.-&gt;|"шаги"| UI_IND
+
+  classDef cSrc    fill:#0a1030,stroke:#1976D2,color:#90CAF9
+  classDef cPre    fill:#07130a,stroke:#2E7D32,color:#A5D6A7
+  classDef cCtl    fill:#1a1300,stroke:#FFB300,color:#FFE082
+  classDef cMix    fill:#160f0c,stroke:#8D6E63,color:#D7CCC8
+  classDef cFx     fill:#1a0410,stroke:#E91E63,color:#F48FB1
+  classDef cVerb   fill:#120a22,stroke:#7E57C2,color:#B39DDB
+  classDef cMaster fill:#04211a,stroke:#30DA98,color:#A7F3D0
+
+  class LOW,MID,HIGH,LEAD,PERC,MIC cSrc
+  class DRONE_FLTR,LEAD_TONE,MIC_IN,PAN_CAPTURE cPre
+  class UI_TRANSPORT,TRANSPORT,TEMPO,MIDI_IN,MIDI_TRANSPORT,MIDI_CLOCK,EUCLID_LEAD,SEQ_TRIGGER,ARP,PERC_SEQ,DRONE_TUNE,SCALE,MOD_LFO,UI_IND cCtl
+  class SUM,SEND_BUS,GATE cMix
+  class CHORUS,DELAY cFx
+  class VERB_SEND,VERB,VERB_MIX cVerb
+  class COMP,VOL,SOFT_CLIP,PCM5100A cMaster
+</pre>
+  </div>
+</div>
+</div>
+
+<script src="vendor/mermaid.min.js"></script>
+<script>
+mermaid.initialize({
+  startOnLoad: false,
+  securityLevel: 'strict',
+  theme: 'dark',
+  fontFamily: '"IBM Plex Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif',
+  flowchart: { curve: 'basis', useMaxWidth: true, htmlLabels: true },
+  themeVariables: {
+    darkMode: true,
+    background: '#000000',
+    primaryColor: '#011b1c',
+    primaryTextColor: '#ffffff',
+    primaryBorderColor: '#0C7970',
+    lineColor: '#30DA98',
+    textColor: '#ffffff',
+    fontSize: '14px'
+  }
+});
+
+(function () {
+  var MIN_SCALE = 0.5;
+  var MAX_SCALE = 6;
+  var STEP = 1.25;
+
+  function fail() {
+    var el = document.getElementById('fallback');
+    if (el) { el.hidden = false; }
+  }
+
+  function setupPanZoom() {
+    var stage = document.getElementById('stage');
+    var svg = stage ? stage.querySelector('svg') : null;
+    if (!stage || !svg) { return; }
+
+    var scale = 1, tx = 0, ty = 0, drag = null;
+
+    function clamp(s) { return Math.min(MAX_SCALE, Math.max(MIN_SCALE, s)); }
+
+    function apply() {
+      svg.style.transform = 'translate(' + tx + 'px,' + ty + 'px) scale(' + scale + ')';
+    }
+
+    function reset() {
+      scale = 1;
+      tx = 0;
+      ty = 0;
+      apply();
+    }
+
+    /* Показать рисунок целиком: сперва вернуть исходный вид, затем измерить его
+       и, если он не помещается в сцену, уменьшить и поставить по центру. */
+    function fit() {
+      reset();
+      var r = stage.getBoundingClientRect();
+      var b = svg.getBoundingClientRect();
+      if (!r.width || !r.height || !b.width || !b.height) { return; }
+      var k = clamp(Math.min(r.width / b.width, r.height / b.height, 1));
+      scale = k;
+      tx = (r.width - b.width * k) / 2;
+      ty = (r.height - b.height * k) / 2;
+      apply();
+    }
+
+    function zoomAt(clientX, clientY, factor) {
+      var r = stage.getBoundingClientRect();
+      var px = clientX - r.left;
+      var py = clientY - r.top;
+      var next = clamp(scale * factor);
+      if (next === scale) { return; }
+      var k = next / scale;
+      tx = px - k * (px - tx);
+      ty = py - k * (py - ty);
+      scale = next;
+      apply();
+    }
+
+    function zoomCenter(factor) {
+      var r = stage.getBoundingClientRect();
+      zoomAt(r.left + r.width / 2, r.top + r.height / 2, factor);
+    }
+
+    stage.addEventListener('wheel', function (e) {
+      e.preventDefault();
+      zoomAt(e.clientX, e.clientY, e.deltaY < 0 ? 1.15 : 1 / 1.15);
+    }, { passive: false });
+
+    stage.addEventListener('pointerdown', function (e) {
+      if (e.button !== 0) { return; }
+      drag = { x: e.clientX, y: e.clientY, tx: tx, ty: ty };
+      stage.classList.add('dragging');
+      try { stage.setPointerCapture(e.pointerId); } catch (err) { }
+      e.preventDefault();
+    });
+
+    stage.addEventListener('pointermove', function (e) {
+      if (!drag) { return; }
+      tx = drag.tx + (e.clientX - drag.x);
+      ty = drag.ty + (e.clientY - drag.y);
+      apply();
+    });
+
+    function endDrag(e) {
+      if (!drag) { return; }
+      drag = null;
+      stage.classList.remove('dragging');
+      try { stage.releasePointerCapture(e.pointerId); } catch (err) { }
+    }
+
+    stage.addEventListener('pointerup', endDrag);
+    stage.addEventListener('pointercancel', endDrag);
+
+    stage.addEventListener('dblclick', fit);
+
+    var zin = document.getElementById('zoom-in');
+    var zout = document.getElementById('zoom-out');
+    var zres = document.getElementById('zoom-reset');
+    var zfull = document.getElementById('zoom-full');
+    if (zin) { zin.addEventListener('click', function () { zoomCenter(STEP); }); }
+    if (zout) { zout.addEventListener('click', function () { zoomCenter(1 / STEP); }); }
+    if (zres) { zres.addEventListener('click', fit); }
+
+    var wrap = stage.closest ? stage.closest('.signal') : null;
+    var expanded = false;
+
+    /* Разворот внутри страницы: блок накрывает окно, прокрутка страницы под ним
+       выключается, выход по кнопке или по Esc. */
+    function setExpanded(on) {
+      if (!wrap) { return; }
+      expanded = on;
+      if (on) { wrap.classList.add('expanded'); } else { wrap.classList.remove('expanded'); }
+      if (zfull) { zfull.textContent = on ? 'Свернуть' : 'Развернуть'; }
+      if (document.body) { document.body.style.overflow = on ? 'hidden' : ''; }
+      /* Раскладка после смены режима успевает измениться не сразу. */
+      setTimeout(fit, 60);
+    }
+
+    if (zfull) {
+      zfull.addEventListener('click', function () { setExpanded(!expanded); });
+    }
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && expanded) { setExpanded(false); }
+    });
+
+    fit();
+  }
+
+  function run() {
+    var done = mermaid.run({ querySelector: '.mermaid' });
+    if (done && typeof done.then === 'function') {
+      done.then(setupPanZoom).catch(fail);
+    } else {
+      setupPanZoom();
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', run);
+  } else {
+    run();
+  }
+})();
+</script>
+
+</body>
+</html>
