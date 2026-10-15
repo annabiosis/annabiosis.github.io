@@ -1615,7 +1615,14 @@
 		if ('serviceWorker' in navigator) {
 			window.addEventListener('load', async () => {
 				try {
-					const registration = await navigator.serviceWorker.register('/sw.js');
+					// Работник переехал в эту папку. Раньше он лежал в корне сайта и получал запросы
+					// всех разделов, включая папки других проектов: снимаем старую регистрацию
+					// с охватом "/", иначе она переживёт переезд и продолжит отвечать за них.
+					const rootScope = location.origin + '/';
+					const stale = await navigator.serviceWorker.getRegistrations();
+					await Promise.all(stale.filter((r) => r.scope === rootScope).map((r) => r.unregister()));
+
+					const registration = await navigator.serviceWorker.register('sw.js', { scope: './' });
 					console.log('ServiceWorker Registered');
 
 					 // Функция для получения версии кеша
