@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/docs.css">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <title>OBOD — Прошивка</title>
 <!--
   Раздел «Прошивка» с промо-страницы, разложенный по трём вкладкам: «Из браузера»,
@@ -80,6 +81,11 @@
           </esp-web-install-button>
 
           <p id="flash-meta">Образ: firmware/OBOD.bin.</p>
+
+          <div id="changes" data-source="changelog.json" hidden>
+            <h3 id="changes-title">Что нового</h3>
+            <div id="changes-body"></div>
+          </div>
 
           <h3>Что нужно</h3>
 
@@ -163,7 +169,7 @@
 </div>
 
 <footer class="footer">
-  <p><b>OBOD</b> — дрон-синтезатор на ESP32-S3. 75 параметров, 22 страницы, 128 пресетов.</p>
+  <p><b>OBOD</b> — дрон-синтезатор на ESP32-S3. 76 параметров, 22 страницы, 128 пресетов.</p>
   <p>Порядок и проверки при выпуске — в инструкции по выпуску,
     сборка образа и своя страница записи — в
     описании tools/webflash.</p>
@@ -198,6 +204,63 @@
         meta.textContent = 'Образ: ' + manifest + '.';
       });
   }
+</script>
+
+<script>
+  // Что нового: разделы и пункты последней версии из changelog.json, который
+  // пересобирает tools/webflash/merge.ps1 из CHANGELOG.md. Путь задан в разметке
+  // и на сайте переписывается на соседний файл — как у манифеста.
+  (async function () {
+    var box = document.getElementById('changes');
+    var body = document.getElementById('changes-body');
+    var title = document.getElementById('changes-title');
+    if (!box || !body || !title) return;
+
+    var data;
+    try {
+      var src = box.getAttribute('data-source') || 'changelog.json';
+      var reply = await fetch(src, { cache: 'no-store' });
+      if (!reply.ok) return;
+      data = await reply.json();
+    } catch (e) { return; }
+
+    var sections = (data && data.sections) || [];
+    if (!sections.length) return;
+
+    if (data.version) title.textContent = 'Что нового в ' + data.version;
+
+    // Обратные кавычки в пункте — врезка кода. Всё остальное кладётся текстом:
+    // разметка из файла сюда не попадает.
+    function fill(host, text) {
+      var parts = String(text).split('`');
+      for (var i = 0; i < parts.length; i++) {
+        if (!parts[i]) continue;
+        if (i % 2 === 1) {
+          var code = document.createElement('code');
+          code.textContent = parts[i];
+          host.appendChild(code);
+        } else {
+          host.appendChild(document.createTextNode(parts[i]));
+        }
+      }
+    }
+
+    sections.forEach(function (section) {
+      var head = document.createElement('h3');
+      head.textContent = section.title;
+      body.appendChild(head);
+
+      var list = document.createElement('ul');
+      (section.items || []).forEach(function (item) {
+        var li = document.createElement('li');
+        fill(li, item);
+        list.appendChild(li);
+      });
+      body.appendChild(list);
+    });
+
+    box.hidden = false;
+  })();
 </script>
 <script>
   // Работник таймера раньше стоял в корне сайта и получал запросы всех разделов: он

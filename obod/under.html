@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/docs.css">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <title>OBOD — Под капотом</title>
 <!--
   Раздел «Под капотом» с промо-страницы: тот же список и та же схема тракта.
@@ -106,7 +107,7 @@
       <p>Дилей — пинг-понг, до четырёх секунд на сторону, синхронизация с темпом. Вход
         суммируется в моно и идёт только в левую линию, левый повтор питает правую, поэтому
         повторы идут по стерео полю, а не стоят в середине.</p>
-      <p>Реверб — пять алгоритмов: ROOM, HALL, CATH, HOLD, PLAT. Первые четыре — четыре набора
+      <p>Реверб — четыре алгоритма: ROOM, HALL, CATH, PLAT. Первые три — три набора
         настроек одного Freeverb: длины линий, обратная связь, демпфирование и вход. PLAT —
         плита Dattorro: другая топология, свой блок в памяти и своя устойчивость, при
         тринадцати обращениях к линиям против двадцати четырёх у Freeverb.</p>
@@ -356,7 +357,7 @@ flowchart LR
   DELAY --&gt;|"wet"| VERB_SEND
 
   %% реверберация: посылка/возврат и баланс
-  VERB_SEND --&gt;|"ALGO: ROOM · HALL · CATHEDRAL · PLATE · HOLD"| VERB
+  VERB_SEND --&gt;|"ALGO: ROOM · HALL · CATHEDRAL · PLATE"| VERB
   VERB --&gt;|"wet"| VERB_MIX
   DELAY --&gt;|"сухой"| VERB_MIX
 
@@ -620,7 +621,7 @@ mermaid.initialize({
 </div>
 
 <footer class="footer">
-  <p><b>OBOD</b> — дрон-синтезатор на ESP32-S3. 75 параметров, 22 страницы, 128 пресетов.</p>
+  <p><b>OBOD</b> — дрон-синтезатор на ESP32-S3. 76 параметров, 22 страницы, 128 пресетов.</p>
   <p>Устройство приложения и сборка описаны в
     описании framework; проверка набора документации —
     <code>node tools/docs-check.js</code>.</p>
