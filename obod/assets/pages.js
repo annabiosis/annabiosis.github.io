@@ -26,9 +26,11 @@
  * браузер из соседних файлов в этом режиме не отдаёт.
  */
 var DOCS_PAGES = [
-  { file: 'index.html', title: 'Что это' },
+  { file: 'index.html', title: 'Обзор' },
 
-  { file: 'ref.html', title: 'Обзор прибора' },
+  { file: 'start.html', title: 'С чего начать' },
+
+  { file: 'ref.html', title: 'Разделы и термины' },
 
   { file: 'ref-drone.html', title: 'Тело', family: 'Тело', tabs: [
     { id: 'DRONE', title: 'DRONE' },
