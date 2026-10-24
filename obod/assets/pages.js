@@ -56,7 +56,7 @@ var DOCS_PAGES = [
   { file: 'ref-fx.html', title: 'Рэк', family: 'Рэк', tabs: [
     { id: 'CHOR', title: 'CHORUS' },
     { id: 'DLY',  title: 'DELAY' },
-    { id: 'VERB', title: 'VERB' }
+    { id: 'REV',  title: 'REVERB' }
   ] },
 
   { file: 'ref-mix.html', title: 'Микшеры', family: 'Микшеры', tabs: [
@@ -67,8 +67,7 @@ var DOCS_PAGES = [
   ] },
 
   { file: 'ref-preset.html', title: 'Пресеты', family: 'Пресеты', tabs: [
-    { id: 'PRST', title: 'PRESET' },
-    { id: 'STAT', title: 'STATUS' }
+    { id: 'PRST', title: 'PRESET' }
   ] },
 
   { file: 'ref-system.html', title: 'Настройки', family: 'Настройки', tabs: [

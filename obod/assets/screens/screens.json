@@ -92,10 +92,10 @@
   },
   {
     "index": 13,
-    "label": "VERB",
-    "file": "verb.png",
+    "label": "REVERB",
+    "file": "reverb.png",
     "family": "Рэк",
-    "page": "VERB"
+    "page": "REVERB"
   },
   {
     "index": 14,
@@ -134,20 +134,13 @@
   },
   {
     "index": 19,
-    "label": "STATUS",
-    "file": "status.png",
-    "family": "Пресеты",
-    "page": "STATUS"
-  },
-  {
-    "index": 20,
     "label": "SYSTEM",
     "file": "system.png",
     "family": "Настройки",
     "page": "SYSTEM"
   },
   {
-    "index": 21,
+    "index": 20,
     "label": "OPTIONS",
     "file": "options.png",
     "family": "Настройки",
