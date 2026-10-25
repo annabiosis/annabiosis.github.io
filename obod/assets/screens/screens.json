@@ -113,34 +113,41 @@
   },
   {
     "index": 16,
-    "label": "SENDS",
-    "file": "sends.png",
+    "label": "REV SENDS",
+    "file": "rev-sends.png",
     "family": "Микшеры",
-    "page": "SENDS"
+    "page": "REV SENDS"
   },
   {
     "index": 17,
-    "label": "DRONE SENDS",
-    "file": "drone-sends.png",
+    "label": "CHR SENDS",
+    "file": "chr-sends.png",
     "family": "Микшеры",
-    "page": "DRONE SENDS"
+    "page": "CHR SENDS"
   },
   {
     "index": 18,
+    "label": "DEL SENDS",
+    "file": "del-sends.png",
+    "family": "Микшеры",
+    "page": "DEL SENDS"
+  },
+  {
+    "index": 19,
     "label": "PRESET",
     "file": "preset.png",
     "family": "Пресеты",
     "page": "PRESET"
   },
   {
-    "index": 19,
+    "index": 20,
     "label": "SYSTEM",
     "file": "system.png",
     "family": "Настройки",
     "page": "SYSTEM"
   },
   {
-    "index": 20,
+    "index": 21,
     "label": "OPTIONS",
     "file": "options.png",
     "family": "Настройки",

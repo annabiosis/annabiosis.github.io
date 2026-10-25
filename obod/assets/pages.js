@@ -64,8 +64,9 @@ var DOCS_PAGES = [
   { file: 'ref-mix.html', title: 'Микшеры', family: 'Микшеры', tabs: [
     { id: 'MSTR', title: 'MASTER' },
     { id: 'LVLS', title: 'LEVELS' },
-    { id: 'SNDS', title: 'SENDS' },
-    { id: 'DRMX', title: 'DRONE SENDS' }
+    { id: 'REVS', title: 'REV SENDS' },
+    { id: 'CHRS', title: 'CHR SENDS' },
+    { id: 'DELS', title: 'DEL SENDS' }
   ] },
 
   { file: 'ref-preset.html', title: 'Пресеты', family: 'Пресеты', tabs: [

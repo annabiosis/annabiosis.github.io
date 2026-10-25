@@ -70,8 +70,8 @@
           <li>Длинные буферы эффектов лежат во внешней памяти (PSRAM): хорус, дилей-пинг-понг на
             72 000 сэмплов и хвосты реверба. Внутренняя память держит рабочие структуры и
             составляет около 137 КБ.</li>
-          <li>Приложение занимает 1 019 792 байта, склеенный образ для прошивки — 1 150 864 байта;
-            в разделе приложения свободно 76%.</li>
+          <li>Приложение занимает 1 041 040 байт, склеенный образ для прошивки — 1 172 112 байт;
+            в разделе приложения свободно 75%.</li>
           <li>ESP-IDF 6.1, LVGL 9.6.</li>
         </ul>
       </details>
@@ -295,7 +295,10 @@
 %% OBOD — сигнальный тракт и триггеры. Канонический вид схемы — этот файл; страница
 %% obod-signal-chain.html собирается из него командой python docs/signal-chain/gen_html.py.
 %% Сплошная стрелка — сигнал; пунктирная — управление и модуляция.
-%% SEND BUS и VERB SEND — один буфер s_send_bus (synth_rack.cpp:154, 231, 541-546, 570, 613, 625-628); GATE стоит между ними.
+%% Три посыла — три буфера: s_send_bus (реверб, моно), s_chr_l/r, s_dly_l/r (synth_rack.cpp: 1164-1177).
+%% Эффекты работают параллельно, каждый на своём посыле, и возвращаются рядом с сухим звуком.
+%% Драйв стоит либо до эффектов — на сухом пути и на трёх посылах, либо после них, на готовом
+%% миксе; положение задаёт ручка DRIVE на странице SYSTEM (synth_rack.cpp: 1180-1191, 1265-1275).
 %% Макросы UI звук не запускают: они только пишут параметры (synth_ui.c:6181-6186).
 %% Темп от часов подменяет ручку в seq_tempo_now() и в параметр патча не пишется (synth_app.cpp:3337-3343, 3357-3370).
 
@@ -334,21 +337,25 @@ flowchart LR
     UI_IND["UI · ИНДИКАЦИЯ"]
   end
 
-  subgraph MIXG["Микширование и Шины"]
-    SUM["SUM"]
-    SEND_BUS["SEND BUS"]
+  subgraph MIXG["Микширование, шины и гейт"]
+    SUM["SUM · сухой путь"]
+    CHR_BUS["CHR BUS"]
+    DLY_BUS["DLY BUS"]
+    SEND_BUS["REV BUS"]
     GATE["GATE"]
   end
 
-  subgraph FX["Эффекты"]
-    CHORUS["CHORUS"]
-    DELAY["DELAY"]
+  subgraph DRV["Драйв"]
+    DRIVE["DRIVE · до эффектов"]
+    DRIVE_POST["DRIVE · после эффектов"]
+    DRIVE_POS["DRIVE: BEFORE FX · AFTER FX"]
   end
 
-  subgraph RVB["Реверберация"]
-    VERB_SEND["VERB SEND"]
-    VERB["VERB"]
-    VERB_MIX["VERB MIX"]
+  subgraph FX["Эффекты, возвраты и микс"]
+    CHORUS["CHORUS"]
+    DELAY["DELAY"]
+    VERB["REVERB"]
+    MIX["ДРАЙ + ТРИ ВОЗВРАТА"]
   end
 
   subgraph MST["Мастер-цепочка"]
@@ -369,29 +376,43 @@ flowchart LR
   DRONE_FLTR --&gt; PAN_CAPTURE
   LEAD_TONE --&gt; PAN_CAPTURE
 
-  %% микширование: сухая сумма и шина отправок
+  %% микширование: сухая сумма и три посыла, по весу на каждую часть
   PAN_CAPTURE --&gt; SUM
-  PAN_CAPTURE --&gt;|"pre-fader"| SEND_BUS
-  PERC --&gt;|"post-fader"| SUM
+  PAN_CAPTURE --&gt;|"вес части"| CHR_BUS
+  PAN_CAPTURE --&gt;|"вес части"| DLY_BUS
+  PAN_CAPTURE --&gt;|"вес части · моно"| SEND_BUS
+  MIC_IN --&gt;|"AUX level 0"| SUM
+  MIC_IN --&gt;|"вес части"| CHR_BUS
+  MIC_IN --&gt;|"вес части"| DLY_BUS
+  MIC_IN --&gt;|"вес части · моно"| SEND_BUS
+
+  %% драйв до эффектов: сухой путь и все три посыла
+  SUM --&gt; DRIVE
+  CHR_BUS --&gt; DRIVE
+  DLY_BUS --&gt; DRIVE
+  SEND_BUS --&gt; DRIVE
+
+  %% удар приходит после драйва и остаётся чистым
+  DRIVE --&gt;|"сухой"| GATE
+  PERC --&gt;|"post-fader"| GATE
+  PERC --&gt;|"post-fader"| CHR_BUS
+  PERC --&gt;|"post-fader"| DLY_BUS
   PERC --&gt;|"post-fader"| SEND_BUS
-  MIC_IN --&gt;|"AUX level 0"| SEND_BUS
 
-  %% гейт входа, затем эффекты и посылка
-  SUM --&gt; GATE
-  SEND_BUS --&gt; GATE
-  GATE --&gt; CHORUS
-  GATE --&gt;|"посылка"| VERB_SEND
-  CHORUS --&gt; DELAY
-  CHORUS --&gt;|"wet"| VERB_SEND
-  DELAY --&gt;|"wet"| VERB_SEND
+  %% эффекты параллельно: каждый обрабатывает только свой посыл
+  GATE --&gt;|"посыл хоруса"| CHORUS
+  GATE --&gt;|"посыл дилея"| DELAY
+  GATE --&gt;|"посылка · ALGO: ROOM · HALL · CATHEDRAL · PLATE"| VERB
+  CHORUS --&gt;|"wet"| MIX
+  DELAY --&gt;|"wet"| MIX
+  VERB --&gt;|"wet"| MIX
+  GATE --&gt;|"сухой"| MIX
 
-  %% реверберация: посылка/возврат и баланс
-  VERB_SEND --&gt;|"ALGO: ROOM · HALL · CATHEDRAL · PLATE"| VERB
-  VERB --&gt;|"wet"| VERB_MIX
-  DELAY --&gt;|"сухой"| VERB_MIX
+  %% драйв после эффектов: один раз на готовый микс
+  MIX --&gt; DRIVE_POST
 
   %% мастер-цепочка
-  VERB_MIX --&gt; COMP
+  DRIVE_POST --&gt; COMP
   COMP --&gt; VOL
   VOL --&gt; SOFT_CLIP
   SOFT_CLIP --&gt;|"INT16 · I2S"| PCM5100A
@@ -404,6 +425,8 @@ flowchart LR
   TRANSPORT -.-&gt;|"стоп: нот нет"| ARP
   TRANSPORT -.-&gt;|"стоп: удара нет"| PERC_SEQ
   TRANSPORT -.-&gt;|"индикация"| UI_IND
+  DRIVE_POS -.-&gt;|"положение перегруза"| DRIVE
+  DRIVE_POS -.-&gt;|"положение перегруза"| DRIVE_POST
 
   %% управление: MIDI по каналам
   MIDI_IN -.-&gt;|"канал 1: нота"| LEAD
@@ -453,13 +476,14 @@ flowchart LR
   classDef cFx     fill:#1a0410,stroke:#E91E63,color:#F48FB1
   classDef cVerb   fill:#120a22,stroke:#7E57C2,color:#B39DDB
   classDef cMaster fill:#04211a,stroke:#30DA98,color:#A7F3D0
+  classDef cDrv    fill:#1f1206,stroke:#FF7043,color:#FFAB91
 
   class LOW,MID,HIGH,LEAD,PERC,MIC cSrc
   class DRONE_FLTR,LEAD_TONE,MIC_IN,PAN_CAPTURE cPre
   class UI_TRANSPORT,TRANSPORT,TEMPO,MIDI_IN,MIDI_TRANSPORT,MIDI_CLOCK,EUCLID_LEAD,SEQ_TRIGGER,ARP,PERC_SEQ,DRONE_TUNE,SCALE,MOD_LFO,UI_IND cCtl
-  class SUM,SEND_BUS,GATE cMix
-  class CHORUS,DELAY cFx
-  class VERB_SEND,VERB,VERB_MIX cVerb
+  class SUM,CHR_BUS,DLY_BUS,SEND_BUS,GATE cMix
+  class DRIVE,DRIVE_POST,DRIVE_POS cDrv
+  class CHORUS,DELAY,VERB,MIX cFx
   class COMP,VOL,SOFT_CLIP,PCM5100A cMaster
 </pre>
   </div>
@@ -650,8 +674,8 @@ mermaid.initialize({
 </div>
 
 <footer class="footer">
-  <p><b>OBOD</b> — дрон-синтезатор на ESP32-S3 с круглым экраном 360 × 360. 77 параметров,
-    21 страница, 128 пресетов.</p>
+  <p><b>OBOD</b> — дрон-синтезатор на ESP32-S3 с круглым экраном 360 × 360. 82 параметра,
+    22 страницы, 128 пресетов.</p>
   <p>Начало работы — <a href="start.html">с чего начать</a>. Жесты и обод — на странице
     <a href="ui.html">«Управление»</a>, обновление прибора — на странице
     <a href="flash.html">«Прошивка»</a>, точные технические подробности — в разделе
