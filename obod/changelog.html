@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/docs.css">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<title>OBOD — История изменений</title>
+<!--
+  История изменений: все выпуски, от нового к старому.
+
+  Данные не записаны в разметку: их отдаёт changelog.json, собранный из CHANGELOG.md
+  скриптом tools/make-changelog-json.ps1. Отсюда, из папки web/, файл лежит в
+  changelog.json; сборка сайта переписывает путь на соседний
+  changelog.json — так же, как у манифеста и образа на странице прошивки.
+
+  Записи в файле: versions, в каждой version, date и sections. Дата берётся из тега
+  выпуска: в CHANGELOG.md дат нет, и придумывать их нельзя.
+
+  Заголовки версий появляются после чтения файла, поэтому оглавление справа сначала
+  пустое: заполнив страницу, скрипт просит docs.js собрать его заново — тем же
+  событием hashchange, на которое тот уже слушает.
+-->
+</head>
+
+<body>
+
+<a class="skip" href="#main">К содержимому</a>
+
+<header class="topbar">
+  <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="sidebar">Разделы</button>
+  <a class="brand" href="index.html">OBOD</a>
+  <nav class="crumbs" id="crumbs" aria-label="Хлебные крошки"></nav>
+</header>
+
+<div class="shell">
+
+  <nav class="sidebar" id="sidebar" aria-label="Разделы документации">
+    <div class="sidebar-head">
+      <p class="sidebar-title">Документация</p>
+      <button class="nav-close" type="button">Закрыть</button>
+    </div>
+    <div id="tree"></div>
+  </nav>
+
+  <div class="backdrop" id="backdrop" hidden></div>
+
+  <main class="content" id="main">
+
+    <p class="kicker">Раздел</p>
+    <h1>История изменений</h1>
+
+    <p class="lead">Все выпуски прибора, от нового к старому: что появилось, что
+      исправлено, что поменялось в поведении.</p>
+
+    <p>Список собирается из <code>CHANGELOG.md</code> в репозитории прошивки при каждом
+      выпуске, поэтому здесь ровно то, что записано в истории проекта, — без отдельной
+      копии для сайта. Номер выпуска служит ссылкой: адрес <code>changelog.html#v1.2.0</code>
+      открывает сразу нужную версию. Дата рядом с номером — день выпуска.</p>
+
+    <nav aria-label="Версии">
+      <ul class="cl-index" id="cl-index"></ul>
+    </nav>
+
+    <div id="history" data-source="changelog.json"></div>
+
+    <noscript>
+      <p class="cl-note">Список изменений собирается в браузере из файла
+        <a href="changelog.json">changelog.json</a>: без JavaScript он не отрисуется.
+        Тот же список есть в репозитории прошивки — <code>CHANGELOG.md</code>.</p>
+    </noscript>
+
+    <nav class="pager" id="pager" aria-label="Соседние страницы"></nav>
+  </main>
+
+  <aside class="toc" aria-label="На этой странице">
+    <p class="toc-title">На этой странице</p>
+    <ul id="toc-list"></ul>
+  </aside>
+
+</div>
+
+<footer class="footer">
+  <p><b>OBOD</b> — дрон-синтезатор на ESP32-S3 с круглым экраном 360 × 360. 82 параметра,
+    22 страницы, 128 пресетов.</p>
+  <p>Начало работы — <a href="start.html">с чего начать</a>. Обновление прибора — на странице
+    <a href="flash.html">«Прошивка»</a>, точные технические подробности — в разделе
+    <a href="under.html">«Под капотом»</a>.</p>
+  <p>Движок голосов — <a href="https://github.com/danilogcrf2-oss/ESP32Synth">ESP32Synth 2.5.0</a>
+    (MIT, © 2025 Danilo Gabriel). Остальное написано для этого прибора.</p>
+</footer>
+
+<script src="assets/pages.js"></script>
+<script src="assets/docs.js"></script>
+<script src="assets/changelog.js"></script>
+
+<script>
+  // Заполнение страницы: список версий для перехода и сами версии с разделами.
+  // Путь к файлу задан в разметке, в data-source у #history: на сайте сборка
+  // заменяет его на соседний changelog.json — как у манифеста на странице прошивки.
+  (async function () {
+    var host = document.getElementById('history');
+    var index = document.getElementById('cl-index');
+    if (!host || !index) return;
+
+    var versions = await ObodChangelog.load(
+      host.getAttribute('data-source') || 'changelog.json');
+
+    if (!versions.length) {
+      var miss = document.createElement('p');
+      miss.className = 'cl-note';
+      miss.textContent = 'Список изменений не загрузился. Файл с ним лежит рядом со ' +
+        'страницей: changelog.json.';
+      host.appendChild(miss);
+      return;
+    }
+
+    versions.forEach(function (entry) {
+      var id = 'v' + entry.version;
+
+      // Пункт списка версий: номер и дата.
+      var li = document.createElement('li');
+      var a = document.createElement('a');
+      a.setAttribute('href', '#' + id);
+      a.textContent = entry.version;
+      var when = ObodChangelog.date(entry.date);
+      if (when) {
+        var d = document.createElement('span');
+        d.className = 'd';
+        d.textContent = when;
+        a.appendChild(d);
+      }
+      li.appendChild(a);
+      index.appendChild(li);
+
+      // Сама версия: заголовок с якорем, затем разделы и пункты.
+      var head = document.createElement('h2');
+      head.id = id;
+      head.textContent = entry.version;
+      if (when) {
+        var stamp = document.createElement('span');
+        stamp.className = 'cl-date';
+        stamp.textContent = when;
+        head.appendChild(stamp);
+      }
+      host.appendChild(head);
+
+      ObodChangelog.sections(host, entry.sections);
+    });
+
+    // Заголовки появились после сборки оглавления: просим docs.js собрать его
+    // заново и, если в адресе есть версия, прокрутить к ней.
+    window.dispatchEvent(new Event('hashchange'));
+  })();
+</script>
+
+<script>
+  // Работник таймера раньше стоял в корне сайта и получал запросы всех разделов: он
+  // ждёт сеть 800 мс и при задержке отдаёт из кэша свою страницу, а образ прошивки
+  // больше мегабайта и в этот срок не укладывается. Свой работник с более длинным
+  // охватом перекрывает старую регистрацию для этой папки.
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function () {
+      navigator.serviceWorker.register('sw.js', { scope: './' }).catch(function () {});
+    });
+  }
+</script></body>
+</html>

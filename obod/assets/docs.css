@@ -770,3 +770,56 @@ a.fam-card:hover { background: var(--green1000); }
   .tab { min-height: 44px; }
   .tree a { padding-top: 8px; padding-bottom: 8px; }
 }
+
+/* ---------- история изменений ---------- */
+
+/*
+ * Страница истории выпусков. Версия — обычный h2, поэтому её вид и якорь
+ * достались ей от остальных страниц; дата стоит рядом с номером приглушённо.
+ * Раздел внутри версии — не заголовок, а подпись: в оглавлении справа нужны
+ * номера версий, а не все разделы всех выпусков.
+ */
+
+.cl-index {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 10px;
+  margin: 16px 0 6px;
+  padding: 0;
+  list-style: none;
+}
+
+.cl-index li { padding: 0; margin: 0; }
+.cl-index li::before { content: none; }
+
+.cl-index a {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 5px 12px 6px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  font-size: 14px;
+  color: var(--text);
+}
+
+.cl-index a:hover { background: var(--green1000); color: var(--text); }
+.cl-index .d { font-size: 12px; color: var(--grey40); }
+
+.cl-date {
+  margin-left: 12px;
+  font-size: 14px;
+  font-weight: 300;
+  letter-spacing: .02em;
+  color: var(--grey40);
+}
+
+.cl-section {
+  margin: 30px 0 8px;
+  font-size: 12px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--grey40);
+}
+
+.cl-note { color: var(--grey40); font-size: 14px; }

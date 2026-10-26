@@ -86,6 +86,8 @@ var DOCS_PAGES = [
     { id: 'lost',    title: 'Что теряется' }
   ] },
 
+  { file: 'changelog.html', title: 'История изменений' },
+
   { file: 'hw.html', title: 'Железо' },
 
   { file: 'under.html', title: 'Под капотом' }

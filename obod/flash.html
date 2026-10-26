@@ -99,6 +99,9 @@
             <div id="changes-body"></div>
           </div>
 
+          <p>Здесь — только последний выпуск. Что менялось раньше, по версиям и разделам:
+            <a href="changelog.html">история изменений</a>.</p>
+
           <h3>Что нужно</h3>
 
           <ul>
@@ -193,6 +196,7 @@
 
 <script src="assets/pages.js"></script>
 <script src="assets/docs.js"></script>
+<script src="assets/changelog.js"></script>
 
 <script type="module" src="https://unpkg.com/esp-web-tools@10.4.0/dist/web/install-button.js?module"></script>
 <script>
@@ -224,60 +228,33 @@
 
 <script>
   // Что нового: разделы и пункты последней версии из changelog.json, который
-  // пересобирает tools/webflash/merge.ps1 из CHANGELOG.md. Путь задан в разметке
-  // и на сайте переписывается на соседний файл — как у манифеста.
+  // собирает tools/make-changelog-json.ps1 из CHANGELOG.md. Там же лежит вся
+  // история, поэтому страница истории читает этот же файл и берёт из него все
+  // записи, а не только первую. Путь задан в разметке и на сайте переписывается
+  // на соседний файл — как у манифеста.
   (async function () {
     var box = document.getElementById('changes');
     var body = document.getElementById('changes-body');
     var title = document.getElementById('changes-title');
     if (!box || !body || !title) return;
 
-    var data;
-    try {
-      var src = box.getAttribute('data-source') || 'changelog.json';
-      var reply = await fetch(src, { cache: 'no-store' });
-      if (!reply.ok) return;
-      data = await reply.json();
-    } catch (e) { return; }
+    var versions = await ObodChangelog.load(
+      box.getAttribute('data-source') || 'changelog.json');
+    var latest = versions[0];
+    if (!latest) return;
 
-    var sections = (data && data.sections) || [];
+    var sections = latest.sections || [];
     if (!sections.length) return;
 
-    if (data.version) title.textContent = 'Что нового в ' + data.version;
+    title.textContent = 'Что нового в ' + latest.version;
 
-    // Обратные кавычки в пункте — врезка кода. Всё остальное кладётся текстом:
-    // разметка из файла сюда не попадает.
-    function fill(host, text) {
-      var parts = String(text).split('`');
-      for (var i = 0; i < parts.length; i++) {
-        if (!parts[i]) continue;
-        if (i % 2 === 1) {
-          var code = document.createElement('code');
-          code.textContent = parts[i];
-          host.appendChild(code);
-        } else {
-          host.appendChild(document.createTextNode(parts[i]));
-        }
-      }
-    }
-
-    sections.forEach(function (section) {
-      var head = document.createElement('h3');
-      head.textContent = section.title;
-      body.appendChild(head);
-
-      var list = document.createElement('ul');
-      (section.items || []).forEach(function (item) {
-        var li = document.createElement('li');
-        fill(li, item);
-        list.appendChild(li);
-      });
-      body.appendChild(list);
-    });
+    // Разделы рисует общий скрипт: та же разметка, что на странице истории.
+    ObodChangelog.sections(body, sections);
 
     box.hidden = false;
   })();
 </script>
+
 <script>
   // Работник таймера раньше стоял в корне сайта и получал запросы всех разделов: он
   // ждёт сеть 800 мс и при задержке отдаёт из кэша свою страницу, а образ прошивки
