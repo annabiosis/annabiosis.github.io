@@ -70,7 +70,7 @@
           <li>Длинные буферы эффектов лежат во внешней памяти (PSRAM): хорус, дилей-пинг-понг на
             72 000 сэмплов и хвосты реверба. Внутренняя память держит рабочие структуры и
             составляет около 137 КБ.</li>
-          <li>Приложение занимает 1 041 040 байт, склеенный образ для прошивки — 1 172 112 байт;
+          <li>Приложение занимает 1 045 072 байт, склеенный образ для прошивки — 1 176 144 байт;
             в разделе приложения свободно 75%.</li>
           <li>ESP-IDF 6.1, LVGL 9.6.</li>
         </ul>
@@ -295,12 +295,22 @@
 %% OBOD — сигнальный тракт и триггеры. Канонический вид схемы — этот файл; страница
 %% obod-signal-chain.html собирается из него командой python docs/signal-chain/gen_html.py.
 %% Сплошная стрелка — сигнал; пунктирная — управление и модуляция.
-%% Три посыла — три буфера: s_send_bus (реверб, моно), s_chr_l/r, s_dly_l/r (synth_rack.cpp: 1164-1177).
-%% Эффекты работают параллельно, каждый на своём посыле, и возвращаются рядом с сухим звуком.
+%% Три посыла — три буфера: s_send_bus (реверб, моно), s_chr_l/r, s_dly_l/r. Шины собираются
+%% в цикле по частям в synth_rack_process(), вес каждой части — s_send_rev/chr/dly[].
+%% Эффекты работают параллельно, каждый на своём посыле, и возвращаются в сухую пару, которая
+%% остаётся целой: MIX реверба — уровень возврата, а не баланс (synth_rack_process).
 %% Драйв стоит либо до эффектов — на сухом пути и на трёх посылах, либо после них, на готовом
-%% миксе; положение задаёт ручка DRIVE на странице SYSTEM (synth_rack.cpp: 1180-1191, 1265-1275).
-%% Макросы UI звук не запускают: они только пишут параметры (synth_ui.c:6181-6186).
-%% Темп от часов подменяет ручку в seq_tempo_now() и в параметр патча не пишется (synth_app.cpp:3337-3343, 3357-3370).
+%% миксе; положение задаёт synth_rack_set_drive_pos(). Величин у него две: усиление до
+%% формирователя (1..24 по ручке DRIVE, drive_prepare) и компенсация уровня после него по
+%% измеренному RMS блока (drive_post_for). Алгоритмов формирователя четыре — SOFT, HARD,
+%% FOLD, TUBE (drive_shape).
+%% Гейт закрывает генераторную сторону целиком, вместе с ударом, и хвостов эффектов не
+%% трогает: он множит шины до них (synth_rack_set_gate, gate_step).
+%% Огибающая удара приглушает LOW целиком и MID наполовину до суммы, и те же посылы вместе с
+%% сухим путём (duck_low_gain, synth_rack_process).
+%% Макросы UI звук не запускают: они только пишут параметры, и только в пределах патча
+%% (синхронный цикл в synth_ui.c рядом с write_param).
+%% Темп от часов подменяет ручку в seq_tempo_now() и в параметр патча не пишется (synth_app.cpp).
 
 flowchart LR
 
@@ -334,6 +344,7 @@ flowchart LR
     DRONE_TUNE["DRONE TUNE"]
     SCALE["КВАНТОВАНИЕ ПО ЛАДУ"]
     MOD_LFO["MOD LFO"]
+    ACCENT["АКЦЕНТ: фигуры SEQ и PERC"]
     UI_IND["UI · ИНДИКАЦИЯ"]
   end
 
@@ -349,6 +360,7 @@ flowchart LR
     DRIVE["DRIVE · до эффектов"]
     DRIVE_POST["DRIVE · после эффектов"]
     DRIVE_POS["DRIVE: BEFORE FX · AFTER FX"]
+    DRIVE_ALGO["ALGO: SOFT · HARD · FOLD · TUBE"]
   end
 
   subgraph FX["Эффекты, возвраты и микс"]
@@ -392,12 +404,16 @@ flowchart LR
   DLY_BUS --&gt; DRIVE
   SEND_BUS --&gt; DRIVE
 
-  %% удар приходит после драйва и остаётся чистым
+  %% удар входит после драйва, когда тот стоит до эффектов, и проходит через него, когда тот
+  %% стоит после них: в положении AFTER FX драйв обрабатывает готовый микс вместе с ударом
   DRIVE --&gt;|"сухой"| GATE
   PERC --&gt;|"post-fader"| GATE
   PERC --&gt;|"post-fader"| CHR_BUS
   PERC --&gt;|"post-fader"| DLY_BUS
-  PERC --&gt;|"post-fader"| SEND_BUS
+  PERC --&gt;|"post-fader · моно"| SEND_BUS
+
+  %% огибающая удара: приглушение до суммы, вместе с посылами
+  PERC -.-&gt;|"огибающая: LOW целиком · MID наполовину"| SUM
 
   %% эффекты параллельно: каждый обрабатывает только свой посыл
   GATE --&gt;|"посыл хоруса"| CHORUS
@@ -416,6 +432,7 @@ flowchart LR
   COMP --&gt; VOL
   VOL --&gt; SOFT_CLIP
   SOFT_CLIP --&gt;|"INT16 · I2S"| PCM5100A
+  SOFT_CLIP -.-&gt;|"осциллограмма мастера"| UI_IND
 
   %% управление: транспорт
   UI_TRANSPORT -.-&gt;|"пуск/стоп"| TRANSPORT
@@ -427,6 +444,8 @@ flowchart LR
   TRANSPORT -.-&gt;|"индикация"| UI_IND
   DRIVE_POS -.-&gt;|"положение перегруза"| DRIVE
   DRIVE_POS -.-&gt;|"положение перегруза"| DRIVE_POST
+  DRIVE_ALGO -.-&gt;|"форма формирователя"| DRIVE
+  DRIVE_ALGO -.-&gt;|"форма формирователя"| DRIVE_POST
 
   %% управление: MIDI по каналам
   MIDI_IN -.-&gt;|"канал 1: нота"| LEAD
@@ -455,12 +474,15 @@ flowchart LR
   SCALE -.-&gt;|"лад"| LEAD
   SCALE -.-&gt;|"лад"| ARP
   SCALE -.-&gt;|"лад"| DRONE_TUNE
+  SCALE -.-&gt;|"высота удара при PERC QUANT"| PERC
   DRONE_TUNE -.-&gt;|"транспонирование"| LOW &amp; MID &amp; HIGH
   LEAD -.-&gt;|"перезапуск по ноте"| MOD_LFO
   MOD_LFO -.-&gt;|"срез"| DRONE_FLTR
   MOD_LFO -.-&gt;|"дрейф"| PAN_CAPTURE
-  MOD_LFO -.-&gt;|"PITCH/ENV/DECAY"| PERC
+  MOD_LFO -.-&gt;|"PITCH/ENV/DECAY/BODY"| PERC
   MOD_LFO -.-&gt;|"высота"| LEAD
+  ACCENT -.-&gt;|"сила ноты: фигура SEQ · WEAK VEL"| LEAD
+  ACCENT -.-&gt;|"сила удара: фигура PERC"| PERC
   MIC_IN -.-&gt;|"огибающая: срез"| DRONE_FLTR
   MIC_IN -.-&gt;|"огибающая: дрейф"| PAN_CAPTURE
 
@@ -480,9 +502,9 @@ flowchart LR
 
   class LOW,MID,HIGH,LEAD,PERC,MIC cSrc
   class DRONE_FLTR,LEAD_TONE,MIC_IN,PAN_CAPTURE cPre
-  class UI_TRANSPORT,TRANSPORT,TEMPO,MIDI_IN,MIDI_TRANSPORT,MIDI_CLOCK,EUCLID_LEAD,SEQ_TRIGGER,ARP,PERC_SEQ,DRONE_TUNE,SCALE,MOD_LFO,UI_IND cCtl
+  class UI_TRANSPORT,TRANSPORT,TEMPO,MIDI_IN,MIDI_TRANSPORT,MIDI_CLOCK,EUCLID_LEAD,SEQ_TRIGGER,ARP,PERC_SEQ,DRONE_TUNE,SCALE,MOD_LFO,ACCENT,UI_IND cCtl
   class SUM,CHR_BUS,DLY_BUS,SEND_BUS,GATE cMix
-  class DRIVE,DRIVE_POST,DRIVE_POS cDrv
+  class DRIVE,DRIVE_POST,DRIVE_POS,DRIVE_ALGO cDrv
   class CHORUS,DELAY,VERB,MIX cFx
   class COMP,VOL,SOFT_CLIP,PCM5100A cMaster
 </pre>
