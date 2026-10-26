@@ -198,21 +198,28 @@
   var meta = document.getElementById('flash-meta');
   if (btn && meta) {
     var manifest = btn.getAttribute('manifest');
+    /* Размер и хеш берутся из манифеста, а не из заголовка ответа на HEAD:
+       GitHub Pages отдаёт образ сжатым, и Content-Length описывает поток, а не
+       файл — страница показывала 701 697 байт вместо 1 176 144. Манифест
+       собирает tools/webflash/merge.ps1 из самого образа, поэтому число на
+       странице совпадает с числом скачанных байт. */
     fetch(manifest)
       .then(function (r) { return r.json(); })
       .then(function (m) {
         var part = m.builds[0].parts[0];
-        meta.textContent = 'Образ ' + part.path + ', версия ' + m.version + '.';
-        /* Путь к образу отсчитывается от манифеста, а не от страницы: манифест лежит
-           в tools/webflash, образ — рядом с ним. */
-        var url = new URL(part.path, new URL(manifest, window.location.href));
-        return fetch(url, { method: 'HEAD' }).then(function (h) {
-          var n = h.headers.get('content-length');
-          if (n) {
-            meta.textContent = 'Образ ' + part.path + ', версия ' + m.version + ', ' +
-              Number(n).toLocaleString('ru-RU') + ' байт.';
-          }
-        });
+        var image = m.image || {};
+        var line = 'Образ ' + (image.path || part.path) + ', версия ' + m.version;
+        if (image.size) {
+          line += ', ' + Number(image.size).toLocaleString('ru-RU') + ' байт';
+        }
+        if (image.sha256) {
+          var h = String(image.sha256);
+          line += ', SHA-256 ' + h.slice(0, 8) + '…' + h.slice(-8);
+        }
+        meta.textContent = line + '.';
+        if (image.sha256) {
+          meta.setAttribute('title', 'SHA-256: ' + image.sha256);
+        }
       })
       .catch(function () {
         meta.textContent = 'Образ: ' + manifest + '.';

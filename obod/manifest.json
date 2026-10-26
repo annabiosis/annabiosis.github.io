@@ -2,6 +2,11 @@
   "name": "OBOD",
   "version": "1.2.0",
   "new_install_prompt_erase": false,
+  "image": {
+    "path": "firmware/OBOD.bin",
+    "size": 1176144,
+    "sha256": "F47A6D89596AF4C604EF767B9CCFD69C00AC58420ECE10D3EFF7E1343FA31C51"
+  },
   "builds": [
     {
       "chipFamily": "ESP32-S3",
