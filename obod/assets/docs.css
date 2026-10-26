@@ -415,6 +415,22 @@ td:first-child { color: var(--grey40); }
    запуска свой цвет, и перебивать его серым незачем. */
 .flash #flash-meta { margin: 10px 0 0; color: var(--grey40); font-size: 14px; }
 
+/* Ссылка на историю изменений — единственное, что осталось на этой странице от
+   списка «что нового»: сам список живёт на отдельной странице, здесь только вход
+   в него. Сделана панелью, а не строкой примечания: это другой раздел страницы, и
+   виден он должен сразу, до загрузки манифеста. */
+.flash .whats-new {
+  margin: 22px 0 0;
+  padding: 14px 18px;
+  background: var(--panel);
+  border-left: 3px solid var(--green900);
+  border-radius: var(--radius);
+  color: var(--grey40);
+  font-size: 15px;
+}
+
+.flash .whats-new a { font-size: 16px; font-weight: 500; }
+
 .flash .btn {
   display: inline-block;
   margin: 22px 0 0;

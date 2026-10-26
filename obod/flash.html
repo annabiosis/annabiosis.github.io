@@ -94,13 +94,8 @@
 
           <p id="flash-meta">Образ: firmware/OBOD.bin.</p>
 
-          <div id="changes" data-source="changelog.json" hidden>
-            <h3 id="changes-title">Что нового</h3>
-            <div id="changes-body"></div>
-          </div>
-
-          <p>Здесь — только последний выпуск. Что менялось раньше, по версиям и разделам:
-            <a href="changelog.html">история изменений</a>.</p>
+          <p class="whats-new"><a href="changelog.html#v1.2.0">Что нового в 1.2.0</a> —
+            разделы и пункты этого выпуска, а также история предыдущих версий.</p>
 
           <h3>Что нужно</h3>
 
@@ -196,7 +191,6 @@
 
 <script src="assets/pages.js"></script>
 <script src="assets/docs.js"></script>
-<script src="assets/changelog.js"></script>
 
 <script type="module" src="https://unpkg.com/esp-web-tools@10.4.0/dist/web/install-button.js?module"></script>
 <script>
@@ -224,35 +218,6 @@
         meta.textContent = 'Образ: ' + manifest + '.';
       });
   }
-</script>
-
-<script>
-  // Что нового: разделы и пункты последней версии из changelog.json, который
-  // собирает tools/make-changelog-json.ps1 из CHANGELOG.md. Там же лежит вся
-  // история, поэтому страница истории читает этот же файл и берёт из него все
-  // записи, а не только первую. Путь задан в разметке и на сайте переписывается
-  // на соседний файл — как у манифеста.
-  (async function () {
-    var box = document.getElementById('changes');
-    var body = document.getElementById('changes-body');
-    var title = document.getElementById('changes-title');
-    if (!box || !body || !title) return;
-
-    var versions = await ObodChangelog.load(
-      box.getAttribute('data-source') || 'changelog.json');
-    var latest = versions[0];
-    if (!latest) return;
-
-    var sections = latest.sections || [];
-    if (!sections.length) return;
-
-    title.textContent = 'Что нового в ' + latest.version;
-
-    // Разделы рисует общий скрипт: та же разметка, что на странице истории.
-    ObodChangelog.sections(body, sections);
-
-    box.hidden = false;
-  })();
 </script>
 
 <script>

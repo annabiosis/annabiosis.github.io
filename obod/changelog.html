@@ -154,6 +154,18 @@
     // Заголовки появились после сборки оглавления: просим docs.js собрать его
     // заново и, если в адресе есть версия, прокрутить к ней.
     window.dispatchEvent(new Event('hashchange'));
+
+    /*
+     * Прокрутка к версии из адреса. Сюда приходят по ссылке со страницы прошивки —
+     * changelog.html#v1.2.0, — но заголовок этой версии появляется только теперь,
+     * когда файл прочитан. К этому моменту браузер уже попытался найти цель, не
+     * нашёл её и остался наверху, поэтому прокручиваем сами.
+     */
+    var wanted = window.location.hash.charAt(0) === '#'
+      ? decodeURIComponent(window.location.hash.slice(1))
+      : '';
+    var target = wanted ? document.getElementById(wanted) : null;
+    if (target) { target.scrollIntoView({ block: 'start' }); }
   })();
 </script>
 
