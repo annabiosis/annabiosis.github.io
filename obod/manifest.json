@@ -1,11 +1,11 @@
 {
   "name": "OBOD",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "new_install_prompt_erase": false,
   "image": {
     "path": "firmware/OBOD.bin",
-    "size": 1176144,
-    "sha256": "F47A6D89596AF4C604EF767B9CCFD69C00AC58420ECE10D3EFF7E1343FA31C51"
+    "size": 1178176,
+    "sha256": "5C36A48EDA5A98BB8AE2F48E35C1F62BA1B44E4120981BD95D90BACB9E399E21"
   },
   "builds": [
     {

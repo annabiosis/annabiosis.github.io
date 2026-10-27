@@ -45,7 +45,7 @@ var DOCS_PAGES = [
   ] },
 
   { file: 'ref-time.html', title: 'Время', family: 'Время', tabs: [
-    { id: 'GEN',  title: 'LEAD GEN' },
+    { id: 'SCL',  title: 'SCALE' },
     { id: 'EUCL', title: 'LEAD EUCLID' },
     { id: 'ARP',  title: 'LEAD ARP' }
   ] },
