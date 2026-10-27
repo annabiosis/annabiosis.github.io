@@ -36,21 +36,51 @@ var ObodChangelog = (function () {
   }
 
   /*
-   * Текст пункта. Обратные кавычки — врезка кода, как в документации; всё
-   * остальное кладётся текстом, поэтому разметка из файла на страницу не попадает.
+   * Текст пункта. Две вещи размечаются: обратные кавычки — врезка кода, как в
+   * документации, и двойные звёздочки — жирное название, с которого начинается
+   * пункт. Всё остальное кладётся текстом, поэтому прочая разметка из файла на
+   * страницу не попадает.
    */
   function fill(host, text) {
-    var parts = String(text == null ? '' : text).split('`');
-    for (var i = 0; i < parts.length; i++) {
-      if (!parts[i]) { continue; }
-      if (i % 2 === 1) {
-        var code = document.createElement('code');
-        code.textContent = parts[i];
-        host.appendChild(code);
-      } else {
-        host.appendChild(document.createTextNode(parts[i]));
+    var source = String(text == null ? '' : text);
+    var plain = '';
+    var i = 0;
+
+    while (i < source.length) {
+      var codeAt = source.indexOf('`', i);
+      var boldAt = source.indexOf('**', i);
+
+      var at = -1;
+      if (codeAt >= 0 && (boldAt < 0 || codeAt < boldAt)) { at = codeAt; }
+      else if (boldAt >= 0) { at = boldAt; }
+
+      if (at < 0) { plain += source.slice(i); break; }
+
+      plain += source.slice(i, at);
+      if (plain) {
+        host.appendChild(document.createTextNode(plain));
+        plain = '';
       }
+
+      if (at === codeAt) {
+        var codeEnd = source.indexOf('`', at + 1);
+        if (codeEnd < 0) { plain += source.slice(at); break; }
+        var code = document.createElement('code');
+        code.textContent = source.slice(at + 1, codeEnd);
+        host.appendChild(code);
+        i = codeEnd + 1;
+        continue;
+      }
+
+      var boldEnd = source.indexOf('**', at + 2);
+      if (boldEnd < 0) { plain += source.slice(at); break; }
+      var strong = document.createElement('strong');
+      strong.textContent = source.slice(at + 2, boldEnd);
+      host.appendChild(strong);
+      i = boldEnd + 2;
     }
+
+    if (plain) { host.appendChild(document.createTextNode(plain)); }
   }
 
   /* Разделы одной версии: подпись раздела и список пунктов. */
