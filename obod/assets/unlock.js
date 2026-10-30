@@ -99,7 +99,7 @@
     })
     .then(function (manifest) {
       var image = manifest.image || {};
-      var line = 'Образ: ' + (image.path || 'OBOD.bin') + ', версия ' + manifest.version;
+      var line = 'Образ выпуска, версия ' + manifest.version;
       if (image.size) {
         line += ', ' + Number(image.size).toLocaleString('ru-RU') + ' байт';
       }
@@ -108,13 +108,13 @@
         line += ', SHA-256 ' + hash.slice(0, 8) + '…' + hash.slice(-8);
         meta.setAttribute('title', 'SHA-256: ' + image.sha256);
       }
-      meta.textContent = line + '. Он лежит на сайте запечатанным: страница расшифрует его после кода.';
+      meta.textContent = line + '. На сайте он лежит зашифрованным: страница откроет его после кода.';
     })
     .catch(function () {
-      meta.textContent = 'Образ выпуска лежит рядом со страницей запечатанным.';
+      meta.textContent = 'Образ выпуска лежит на сайте зашифрованным.';
     });
 
-  function reveal(manifestUrl, sealedSize) {
+  function reveal(manifestUrl, plainSize) {
     /* Манифест подставляется и свойством, и атрибутом: у компонента esp-web-tools
        атрибут — это то, что он читает при подключении, а свойство — то, что он слушает
        после. Ставим оба, чтобы порядок загрузки скриптов не решал, сработает ли запись. */
@@ -128,9 +128,8 @@
       input.disabled = true;
       var codeButton = form.querySelector('button');
       if (codeButton) { codeButton.disabled = true; }
-      say('Ключ выведен, образ расшифрован: ' + Number(sealedSize).toLocaleString('ru-RU') +
-          ' байт замка раскрыты в памяти страницы. Кнопка записи ниже — образ уйдёт в прибор ' +
-          'открытым, на диск ничего не сохраняется.', 'ok');
+      say('Код подошёл, образ расшифрован: ' + Number(plainSize).toLocaleString('ru-RU') +
+          ' байт. Кнопка записи ниже — образ уйдёт в прибор, на диск ничего не сохраняется.', 'ok');
     }
 
     /* Манифест ставится сразу, не дожидаясь, пока браузер поднимет компонент: если
@@ -151,7 +150,7 @@
 
     var code = input.value.trim();
     if (!code) {
-      fail('Нужен код выпуска: без него замок не открывается.');
+      fail('Нужен код выпуска: без него образ не откроется.');
       return;
     }
 
@@ -162,14 +161,14 @@
     }
 
     form.classList.add('busy');
-    say('Читаю замок и файл образа…', 'work');
+    say('Читаю образ…', 'work');
 
     var lock = null;
     var sealed = null;
 
     fetch(LOCK, { cache: 'no-store' })
       .then(function (response) {
-        if (!response.ok) { throw new Error('замок: ' + response.status); }
+        if (!response.ok) { throw new Error('файл образа: ' + response.status); }
         return response.json();
       })
       .then(function (json) {
@@ -203,7 +202,7 @@
         );
       })
       .then(function (plain) {
-        say('Проверяю образ по хешу из замка…', 'work');
+        say('Проверяю образ по контрольной сумме…', 'work');
         return window.crypto.subtle.digest('SHA-256', plain).then(function (digest) {
           var want = String(lock.plain.sha256 || '').toUpperCase();
           var got = hexOf(digest);
@@ -222,7 +221,7 @@
 
         return fetch(MANIFEST, { cache: 'no-store' })
           .then(function (response) {
-            if (!response.ok) { throw new Error('манифест: ' + response.status); }
+            if (!response.ok) { throw new Error('список файлов: ' + response.status); }
             return response.json();
           })
           .then(function (manifest) {
@@ -244,14 +243,14 @@
 
             var manifestBlob = new Blob([JSON.stringify(manifest)],
                                         { type: 'application/json' });
-            reveal(URL.createObjectURL(manifestBlob), sealed.length);
+            reveal(URL.createObjectURL(manifestBlob), plain.byteLength);
           });
       })
       .catch(function (error) {
         var message = String((error && error.message) || error);
         if (message === 'hash') {
-          fail('Файл расшифровался, но не сошёлся с замком: образ на сайте не тот, что ' +
-               'записан в выпуске. Скажите об этом — это ошибка выпуска, а не ваш код.');
+          fail('Файл расшифровался, но контрольная сумма не сошлась: образ на сайте не тот, ' +
+               'что записан в выпуске. Сообщите об этом — это ошибка выпуска, а не ваш код.');
         } else if (/decrypt|operation|tag/i.test(message)) {
           fail('Код не подошёл: образ не расшифрован. Проверьте код выпуска целиком — ' +
                'он чувствителен к регистру и знакам.');
