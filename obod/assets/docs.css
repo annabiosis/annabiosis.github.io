@@ -469,6 +469,27 @@ td:first-child { color: var(--muted); }
 .flash .btn:active { transform: translateY(1px); }
 .flash .btn[disabled] { cursor: default; filter: none; opacity: .55; }
 
+/* Подписка: код к актуальной прошивке приходит с ней, поэтому о подписке сказано там же,
+   где спрашивают код, — над полем, а не в подвале. Полоса слева зелёная: это не
+   предупреждение о чужой плате, а условие доступа к этой. */
+.flash .subscribe {
+  margin: 26px 0 0;
+  padding: 18px 20px 16px;
+  background: var(--panel);
+  border-left: 3px solid var(--green400);
+  border-radius: var(--radius);
+}
+
+.flash .subscribe p { margin: 0; font-size: 16px; }
+
+.flash .subscribe .btn { margin: 14px 0 0; }
+
+.flash .subscribe-url {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+
 /* ---------- замок выпуска ---------- */
 
 /* Поле кода и строка состояния. Это часть того же действия, что и кнопка записи:
