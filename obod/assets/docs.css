@@ -15,7 +15,10 @@
   --bg:        #000;
   --panel:     #011b1c;
   --text:      #fff;
-  --grey40:    rgba(255,255,255,.4);
+  /* Имя «muted», а не «grey40»: раньше здесь стояли сорок процентов белого, и
+     предупреждения в .note набирались этим цветом с контрастом 3,77:1. Пятьдесят
+     пять процентов дают 6,27:1 на панели и 5,98:1 на чёрном. */
+  --muted:     rgba(255,255,255,.55);
   --grey70:    rgba(255,255,255,.72);
   --green600:  #30DA98;
   --green400:  #71FEAB;
@@ -48,7 +51,7 @@ html {
   color-scheme: dark;
 }
 
-:focus-visible { outline: 2px solid var(--green400); outline-offset: 3px; border-radius: 6px; }
+:focus-visible { outline: 2px solid var(--green400); outline-offset: 3px; }
 
 body {
   margin: 0;
@@ -64,9 +67,18 @@ body {
 img, svg { max-width: 100%; height: auto; }
 
 a { color: var(--green400); text-decoration: none; transition: color .2s ease; }
+
+/* Подчёркивание — у ссылок внутри текста, а не у навигации: в дереве, в крошках и в
+   пейджере ссылку видно по месту, и линия там была бы шумом. */
+.content p a, .content li a, .content td a, .content .note a {
+  text-decoration: underline;
+  text-underline-offset: .18em;
+  text-decoration-thickness: .07em;
+  text-decoration-color: rgba(113, 254, 171, .5);
+}
 a:hover { color: var(--green600); }
 
-.muted { color: var(--grey40); }
+.muted { color: var(--muted); }
 
 .skip {
   position: absolute;
@@ -104,7 +116,6 @@ a:hover { color: var(--green600); }
   letter-spacing: .18em;
   text-transform: uppercase;
   color: var(--green400);
-  text-shadow: 0 0 12px rgba(113, 254, 171, .5);
 }
 
 .nav-toggle {
@@ -137,7 +148,7 @@ a:hover { color: var(--green600); }
   padding: 0;
   list-style: none;
   font-size: 13px;
-  color: var(--grey40);
+  color: var(--muted);
 }
 
 .crumbs li { display: flex; align-items: center; gap: 10px; }
@@ -146,12 +157,12 @@ a:hover { color: var(--green600); }
   content: "";
   width: 5px;
   height: 5px;
-  border-top: 1px solid var(--grey40);
-  border-right: 1px solid var(--grey40);
+  border-top: 1px solid var(--muted);
+  border-right: 1px solid var(--muted);
   transform: rotate(45deg);
 }
 
-.crumbs a { color: var(--grey40); }
+.crumbs a { color: var(--muted); }
 .crumbs a:hover { color: var(--green400); }
 .crumbs [aria-current="page"] { color: var(--text); }
 
@@ -186,7 +197,7 @@ a:hover { color: var(--green600); }
   font-size: 11px;
   letter-spacing: .16em;
   text-transform: uppercase;
-  color: var(--grey40);
+  color: var(--muted);
 }
 
 .nav-close {
@@ -229,8 +240,8 @@ a:hover { color: var(--green600); }
   top: 10px;
   width: 6px;
   height: 6px;
-  border-top: 1px solid var(--grey40);
-  border-right: 1px solid var(--grey40);
+  border-top: 1px solid var(--muted);
+  border-right: 1px solid var(--muted);
   transform: rotate(45deg);
   transition: transform .18s ease;
 }
@@ -266,7 +277,7 @@ a:hover { color: var(--green600); }
 
 .tree .kids { margin: 0 0 4px 10px; padding-left: 8px; border-left: 1px solid var(--divider); }
 
-.tree .kids a { font-size: 13px; color: var(--grey40); }
+.tree .kids a { font-size: 13px; color: var(--muted); }
 .tree .kids .kids a { font-size: 12.5px; }
 
 /* Второй уровень вложенности: заливки у строки нет ни при наведении, ни у текущего
@@ -297,23 +308,13 @@ a:hover { color: var(--green600); }
 
 .content { padding: 34px 0 0; min-width: 0; }
 
-.kicker {
-  margin: 0 0 10px;
-  font-size: 11px;
-  letter-spacing: .16em;
-  text-transform: uppercase;
-  color: var(--grey40);
-}
-
 h1 {
   margin: 0 0 18px;
   font-size: clamp(40px, 6.4vw, 68px);
   line-height: 1;
   font-weight: 100;
-  letter-spacing: .05em;
-  text-indent: .05em;
+  letter-spacing: -.02em;
   color: var(--green400);
-  text-shadow: 0 0 16px rgba(113,254,171,.45);
 }
 
 h2 {
@@ -345,7 +346,13 @@ h4 {
 
 p { margin: 0 0 14px; }
 
-.lead { font-size: 17px; color: var(--grey70); margin-bottom: 18px; }
+/* Ширина колонки — 796 px, и строка в ней набиралась до ста знаков: глаз терял
+   начало следующей. Переменная --measure была объявлена и ни разу не применена.
+   Ограничение стоит на абзацах и списках, а не на колонке: таблицы, снимки экранов
+   и плитки цифр остаются во всю ширину, у них своя сетка. */
+.content p, .content ul, .content ol, .content .note { max-width: var(--measure); }
+
+.lead { font-size: 18px; color: var(--grey70); margin-bottom: 18px; }
 
 ul { margin: 0 0 14px; padding: 0; list-style: none; }
 
@@ -365,34 +372,34 @@ li::before {
 b, strong { font-weight: 500; color: var(--text); }
 
 code {
-  font-family: inherit;
-  font-size: .94em;
-  padding: 2px 9px;
-  border-radius: var(--radius);
+  font-family: ui-monospace, "Cascadia Mono", "SF Mono", Consolas, "Liberation Mono", monospace;
+  font-size: .92em;
+  padding: 2px 7px;
+  border-radius: 4px;
   background: var(--green1000);
   color: var(--green400);
 }
 
 .figures {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(132px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(196px, 1fr));
   gap: 12px;
   margin: 28px 0 0;
 }
 
 .fig { padding: 18px 20px; background: var(--panel); border-radius: var(--radius); }
 
-.fig .n { display: block; font-size: 32px; line-height: 1.1; font-weight: 100; color: var(--green400); }
-.fig .l { display: block; margin-top: 6px; font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--grey40); }
+.fig .n { display: block; font-size: 34px; line-height: 1.1; font-weight: 100; color: var(--green400); }
+.fig .l { display: block; margin-top: 8px; font-size: 13px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
 
 table { width: 100%; border-collapse: collapse; margin: 8px 0 24px; }
 
 th, td { text-align: left; padding: 12px 16px; border-bottom: 1px solid var(--divider); vertical-align: top; }
 
-th { font-size: 12px; font-weight: 400; letter-spacing: .1em; text-transform: uppercase; color: var(--grey40); }
+th { font-size: 12px; font-weight: 400; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
 
 tr:last-child td { border-bottom: none; }
-td:first-child { color: var(--grey40); }
+td:first-child { color: var(--muted); }
 
 .note {
   margin: 24px 0;
@@ -400,8 +407,8 @@ td:first-child { color: var(--grey40); }
   background: var(--panel);
   border-left: 3px solid var(--red900);
   border-radius: var(--radius);
-  color: var(--grey40);
-  font-size: 15px;
+  color: var(--muted);
+  font-size: 16px;
 }
 
 .note b { color: var(--red100); font-weight: 500; }
@@ -413,7 +420,7 @@ td:first-child { color: var(--grey40); }
    кнопки виден текст запасного слота, поэтому отступы заданы и ему.
    Цвет подписи задан двум слотам отказа, а не всем слотам подряд: у кнопки
    запуска свой цвет, и перебивать его серым незачем. */
-.flash #flash-meta { margin: 10px 0 0; color: var(--grey40); font-size: 14px; }
+.flash #flash-meta { margin: 10px 0 0; color: var(--muted); font-size: 14px; }
 
 /* Ссылка на историю изменений — единственное, что осталось на этой странице от
    списка «что нового»: сам список живёт на отдельной странице, здесь только вход
@@ -425,7 +432,7 @@ td:first-child { color: var(--grey40); }
   background: var(--panel);
   border-left: 3px solid var(--green900);
   border-radius: var(--radius);
-  color: var(--grey40);
+  color: var(--muted);
   font-size: 15px;
 }
 
@@ -448,6 +455,64 @@ td:first-child { color: var(--grey40); }
 
 .flash .btn:hover { filter: brightness(1.08); }
 .flash .btn:active { transform: translateY(1px); }
+.flash .btn[disabled] { cursor: default; filter: none; opacity: .55; }
+
+/* ---------- замок выпуска ---------- */
+
+/* Поле кода и строка состояния. Это часть того же действия, что и кнопка записи:
+   без кода образа нет, поэтому поле стоит выше кнопки и отдельной панелью не
+   притворяется. */
+.unlock {
+  margin: 26px 0 0;
+  padding: 18px 20px 16px;
+  background: var(--panel);
+  border-radius: var(--radius);
+}
+
+.unlock label {
+  display: block;
+  margin: 0 0 10px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.unlock-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+
+.unlock input {
+  flex: 1 1 320px;
+  min-width: 0;
+  padding: 13px 16px;
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font: inherit;
+  font-size: 16px;
+}
+
+.unlock input:focus-visible { outline: 2px solid var(--green400); outline-offset: 2px; }
+
+.unlock .btn { margin: 0; }
+
+/* Источник ошибки — тот же, что у кнопки записи, и объясняет он то же: браузер или
+   адрес не годятся. */
+.unlock.busy .btn { opacity: .55; cursor: progress; }
+
+.unlock-note { margin: 12px 0 0; color: var(--muted); font-size: 14px; }
+
+.unlock.done { border-left: 3px solid var(--green900); padding-left: 17px; }
+
+.flash-status:empty { display: none; }
+
+.flash-status {
+  margin: 16px 0 0;
+  font-size: 15px;
+  color: var(--text);
+}
+
+.flash-status-bad { color: var(--red500); }
+.flash-status-ok { color: var(--green400); }
+.flash-status-work { color: var(--muted); }
 
 .flash [slot="unsupported"],
 .flash [slot="not-allowed"] { display: block; color: var(--red500); font-size: 15px; }
@@ -471,7 +536,7 @@ a.fam-card:hover { background: var(--green1000); }
 .dot { flex: 0 0 auto; width: 12px; height: 12px; border-radius: 50%; transform: translateY(1px); }
 
 .fam-card .nm { color: var(--text); font-weight: 400; }
-.fam-card .ds { color: var(--grey40); font-size: 13px; }
+.fam-card .ds { color: var(--muted); font-size: 13px; }
 
 /* ---------- вкладки ---------- */
 
@@ -492,7 +557,7 @@ a.fam-card:hover { background: var(--green1000); }
   gap: 8px;
   min-height: 38px;
   padding: 0 16px;
-  color: var(--grey40);
+  color: var(--muted);
   font: inherit;
   font-size: 13px;
   letter-spacing: .1em;
@@ -583,8 +648,8 @@ a.fam-card:hover { background: var(--green1000); }
   width: 8px;
   height: 8px;
   margin-left: auto;
-  border-right: 2px solid var(--grey40);
-  border-bottom: 2px solid var(--grey40);
+  border-right: 2px solid var(--muted);
+  border-bottom: 2px solid var(--muted);
   transform: rotate(45deg) translate(-2px, -2px);
   transition: transform .15s ease;
 }
@@ -597,7 +662,33 @@ a.fam-card:hover { background: var(--green1000); }
 .fold > *:not(summary):last-child { margin-bottom: 16px; }
 
 /* Подпись со списком ручек экрана: цвет семейства ставит скрипт. */
-.knobs { margin: 0 0 12px; font-size: 13px; letter-spacing: .04em; }
+.knobs { display: flex; align-items: baseline; gap: 9px; margin: 0 0 12px; font-size: 15px; }
+
+/* Метка семейства: цветом отмечен кружок, а текст набран основным цветом. */
+.knobs-dot {
+  flex: 0 0 auto;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  transform: translateY(-2px);
+}
+
+/* Заголовок списочного параметра: цвет — полосой слева, не буквами. */
+.list-head {
+  border-left: 3px solid;
+  padding-left: 12px;
+}
+
+/* Имя экрана внутри вкладки: у страниц-справочников это первый заголовок после h1,
+   поэтому h2, а не просто подпись. */
+.screen-title {
+  margin: 0 0 14px;
+  font-size: 21px;
+  line-height: 1.3;
+  font-weight: 400;
+  letter-spacing: .01em;
+  color: var(--text);
+}
 
 .more {
   display: inline;
@@ -614,7 +705,7 @@ a.fam-card:hover { background: var(--green1000); }
 .more:hover { color: var(--green600); }
 
 .pos { margin: 8px 0 18px; padding-left: 20px; border-left: 1px solid var(--divider); }
-.pos li { margin-bottom: 5px; padding-left: 18px; font-size: 14px; color: var(--grey40); }
+.pos li { margin-bottom: 5px; padding-left: 18px; font-size: 14px; color: var(--muted); }
 .pos li::before { width: 4px; height: 4px; }
 .pos b { color: var(--text); font-weight: 400; }
 
@@ -625,14 +716,14 @@ a.fam-card:hover { background: var(--green1000); }
   padding: 16px 20px;
   background: var(--panel);
   border-radius: var(--radius);
-  color: var(--grey40);
+  color: var(--muted);
   font-size: 15px;
 }
 
 /* ---------- схема тракта ---------- */
 
 .chain { margin: 28px 0 0; min-width: 0; }
-.chain p { margin: 12px 0 0; color: var(--grey40); font-size: 14px; }
+.chain p { margin: 12px 0 0; color: var(--muted); font-size: 14px; }
 
 /* ---------- переходы «Назад / Далее» ---------- */
 
@@ -664,7 +755,7 @@ a.fam-card:hover { background: var(--green1000); }
   font-size: 11px;
   letter-spacing: .14em;
   text-transform: uppercase;
-  color: var(--grey40);
+  color: var(--muted);
 }
 
 .pager .ttl { display: block; font-size: 15px; color: var(--text); }
@@ -688,7 +779,7 @@ a.fam-card:hover { background: var(--green1000); }
   font-size: 11px;
   letter-spacing: .16em;
   text-transform: uppercase;
-  color: var(--grey40);
+  color: var(--muted);
   font-weight: 400;
 }
 
@@ -703,14 +794,14 @@ a.fam-card:hover { background: var(--green1000); }
   border-left: 1px solid var(--divider);
   font-size: 13px;
   line-height: 1.4;
-  color: var(--grey40);
+  color: var(--muted);
 }
 
 .toc a:hover { color: var(--green400); border-left-color: var(--green900); }
 .toc a.on { color: var(--green400); border-left-color: var(--green400); }
 .toc .lvl3 a { padding-left: 20px; font-size: 12.5px; }
 
-.toc-empty { color: var(--grey40); font-size: 13px; }
+.toc-empty { color: var(--muted); font-size: 13px; }
 
 /* ---------- подвал ---------- */
 
@@ -719,7 +810,7 @@ a.fam-card:hover { background: var(--green1000); }
   margin: 0 auto;
   padding: 28px var(--gap) 64px;
   border-top: 1px solid var(--divider);
-  color: var(--grey40);
+  color: var(--muted);
   font-size: 13px;
 }
 
@@ -765,7 +856,6 @@ a.fam-card:hover { background: var(--green1000); }
 }
 
 @media (max-width: 560px) {
-  body { font-size: 15px; }
   h3 { font-size: 19px; }
   .tab { padding: 0 12px; font-size: 12px; letter-spacing: .06em; }
   .note { padding: 16px 18px; }
@@ -820,14 +910,14 @@ a.fam-card:hover { background: var(--green1000); }
 }
 
 .cl-index a:hover { background: var(--green1000); color: var(--text); }
-.cl-index .d { font-size: 12px; color: var(--grey40); }
+.cl-index .d { font-size: 12px; color: var(--muted); }
 
 .cl-date {
   margin-left: 12px;
   font-size: 14px;
   font-weight: 300;
   letter-spacing: .02em;
-  color: var(--grey40);
+  color: var(--muted);
 }
 
 .cl-section {
@@ -835,7 +925,7 @@ a.fam-card:hover { background: var(--green1000); }
   font-size: 12px;
   letter-spacing: .14em;
   text-transform: uppercase;
-  color: var(--grey40);
+  color: var(--muted);
 }
 
-.cl-note { color: var(--grey40); font-size: 14px; }
+.cl-note { color: var(--muted); font-size: 14px; }

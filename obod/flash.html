@@ -52,7 +52,6 @@
 
   <main class="content" id="main">
 
-    <p class="kicker">Раздел</p>
     <h1>Прошивка</h1>
 
     <p class="lead">Новая версия записывается по USB: из браузера или командой.</p>
@@ -84,7 +83,29 @@
         <div class="panel flash" role="tabpanel" data-panel="browser" id="flash">
           <h2>Из браузера</h2>
 
-          <esp-web-install-button manifest="manifest.json">
+          <p>Образ выпуска лежит на сайте <b>запечатанным</b>. Страница выводит ключ из кода
+            выпуска и расшифровывает файл здесь, в браузере: на прибор уходит уже открытый
+            образ, а на диск не сохраняется ничего. Код один на выпуск — он лежит в посте
+            Boosty этого выпуска, и он одинаковый для всех, кому выпуск доступен.</p>
+
+          <form class="unlock" id="unlock" autocomplete="off"
+                data-lock="lock.json"
+                data-sealed="firmware/OBOD.bin.enc"
+                data-manifest="manifest.json">
+            <label for="code">Код выпуска</label>
+            <div class="unlock-row">
+              <input id="code" name="code" type="text" spellcheck="false"
+                     autocapitalize="off" autocomplete="one-time-code" required
+                     aria-describedby="unlock-note">
+              <button class="btn" type="submit">Разблокировать</button>
+            </div>
+            <p class="unlock-note" id="unlock-note">Код чувствителен к регистру и знакам:
+              копируйте его из поста целиком, вместе с дефисами.</p>
+          </form>
+
+          <p id="flash-status" class="flash-status" role="status" aria-live="polite"></p>
+
+          <esp-web-install-button id="installer" hidden>
             <button slot="activate" class="btn" type="button">Установить прошивку</button>
             <span slot="unsupported">Браузер не поддерживает Web Serial. Откройте страницу
               в Chrome или Edge на компьютере.</span>
@@ -94,12 +115,14 @@
 
           <p id="flash-meta">Образ: firmware/OBOD.bin.</p>
 
-          <p class="whats-new"><a href="changelog.html#v1.2.1">Что нового в 1.2.1</a> —
+          <p class="whats-new"><a href="changelog.html#v1.2.2">Что нового в 1.2.2</a> —
             разделы и пункты этого выпуска, а также история предыдущих версий.</p>
 
           <h3>Что нужно</h3>
 
           <ul>
+            <li><b>Код выпуска</b> — из поста Boosty этого выпуска. Он один на выпуск и подходит
+              всем: поле для него выше кнопки записи. Без кода страница не расшифрует образ.</li>
             <li>Chrome или Edge на компьютере. Firefox, Safari и браузеры телефонов Web Serial
               не поддерживают — кнопки на них не будет.</li>
             <li>Прибор подключён кабелем и виден системе как COM-порт.</li>
@@ -132,6 +155,22 @@
           <p>GPIO0 — ещё и линия данных светодиодного кольца, поэтому при зажатом BOOT
             кольцо может вести себя странно. На запись это не влияет: состояние вывода
             читается только при сбросе.</p>
+
+          <h3>Что делает код</h3>
+
+          <p>Образ выпуска на сайте не лежит открытым: рядом со страницей лежит
+            <code>OBOD.bin.enc</code> — тот же образ, зашифрованный AES-256-GCM, — и
+            <code>lock.json</code> с параметрами замка. Страница выводит из кода ключ
+            (PBKDF2-SHA256, триста десять тысяч итераций, соль из замка), расшифровывает файл
+            в памяти и сверяет SHA-256 с записанным в замке. Кнопка записи после этого работает
+            как раньше: расшифрованный образ уходит в прибор, на диск не сохраняется ничего.
+            Неверный код не даёт мусор — GCM не отдаёт ничего, пока не сойдётся тег, поэтому
+            «код не подошёл» означает отказ, а не испорченную прошивку.</p>
+
+          <p>Замок нужен для того, чтобы выпуск можно было выкладывать на сайте, не раздавая
+            образ кому угодно: код выпуска общий, он живёт в посте для подписчиков. Сила замка
+            равна силе кода — перебор кода из восьми знаков дешевле, чем печать платы, поэтому
+            код выпуска длинный.</p>
         </div>
 
         <div class="panel" role="tabpanel" data-panel="command" hidden>
@@ -156,7 +195,11 @@
               <td>Склеенный образ</td>
               <td><code>esptool.py -p COM4 write_flash 0x0 tools/webflash/firmware/OBOD.bin</code> —
                 один файл от нулевого адреса. Так пишет и браузерная страница: загрузчик, таблица
-                разделов, данные OTA и приложение подряд. Настройки при этом стираются.</td>
+                разделов, данные OTA и приложение подряд. Настройки при этом стираются. Этот
+                файл есть только в репозитории: на сайте вместо него запечатанный
+                <code>OBOD.bin.enc</code>, и открыть его можно кодом выпуска — командой
+                <code>pwsh -File tools/webflash/seal.ps1 -Code '…' -Check</code> она только
+                проверяет замок, а расшифровывает его страница.</td>
             </tr>
             <tr>
               <td>Свежий образ и своя страница</td>
@@ -203,7 +246,7 @@
 </div>
 
 <footer class="footer">
-  <p><b>OBOD</b> — дрон-синтезатор на ESP32-S3 с круглым экраном 360 × 360. 83 параметра,
+  <p><b>OBOD</b> — дрон-синтезатор на ESP32-S3 с круглым экраном 360 × 360. 105 параметров,
     22 страницы, 128 пресетов.</p>
   <p>Начало работы — <a href="start.html">с чего начать</a>. Жесты и обод — на странице
     <a href="ui.html">«Управление»</a>, обновление прибора — на странице
@@ -217,39 +260,8 @@
 <script src="assets/docs.js"></script>
 
 <script type="module" src="https://unpkg.com/esp-web-tools@10.4.0/dist/web/install-button.js?module"></script>
-<script>
-  var btn = document.querySelector('#flash esp-web-install-button');
-  var meta = document.getElementById('flash-meta');
-  if (btn && meta) {
-    var manifest = btn.getAttribute('manifest');
-    /* Размер и хеш берутся из манифеста, а не из заголовка ответа на HEAD:
-       GitHub Pages отдаёт образ сжатым, и Content-Length описывает поток, а не
-       файл — страница показывала 701 697 байт вместо 1 176 144. Манифест
-       собирает tools/webflash/merge.ps1 из самого образа, поэтому число на
-       странице совпадает с числом скачанных байт. */
-    fetch(manifest)
-      .then(function (r) { return r.json(); })
-      .then(function (m) {
-        var part = m.builds[0].parts[0];
-        var image = m.image || {};
-        var line = 'Образ ' + (image.path || part.path) + ', версия ' + m.version;
-        if (image.size) {
-          line += ', ' + Number(image.size).toLocaleString('ru-RU') + ' байт';
-        }
-        if (image.sha256) {
-          var h = String(image.sha256);
-          line += ', SHA-256 ' + h.slice(0, 8) + '…' + h.slice(-8);
-        }
-        meta.textContent = line + '.';
-        if (image.sha256) {
-          meta.setAttribute('title', 'SHA-256: ' + image.sha256);
-        }
-      })
-      .catch(function () {
-        meta.textContent = 'Образ: ' + manifest + '.';
-      });
-  }
-</script>
+<script src="assets/unlock.js"></script>
+
 
 <script>
   // Работник таймера раньше стоял в корне сайта и получал запросы всех разделов: он

@@ -497,6 +497,10 @@
     if (!scope) { return []; }
     var list = Array.prototype.filter.call(scope.querySelectorAll('h2, h3'), function (h) {
       if (h.closest('[hidden]')) { return false; }
+      /* Заголовок, помеченный data-toc="skip", остаётся заголовком для чтения и для
+         порядка уровней, но в оглавление не идёт: у страницы-справочника имя экрана
+         повторяет название страницы, и справа оно стояло бы дважды. */
+      if (h.getAttribute('data-toc') === 'skip') { return false; }
       if (inside === undefined) { return true; }
       return !!h.closest('[data-panel]') === inside;
     });
