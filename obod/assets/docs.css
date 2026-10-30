@@ -371,6 +371,18 @@ li::before {
 
 b, strong { font-weight: 500; color: var(--text); }
 
+/* Исходники выпуска: ссылка на архив своей строкой, данные файла — под ней, полный хеш —
+   третьей строкой. Иначе хеш начинается с середины строки и ломается через два знака. */
+.sources-link { margin: 0 0 4px; }
+.sources-data { margin: 0 0 12px; color: var(--muted); font-size: 15px; }
+.sources-data .sources-size { display: block; }
+.sources-data .sources-hash { display: block; margin-top: 2px; }
+.sources-data .sources-hash code { font-size: 12px; color: var(--text); }
+
+/* Длинный хеш в строке текста: шестьдесят четыре знака не влезают в строку на телефоне, и
+   перенос внутри слова здесь лучше, чем строка, вылезшая за поле. */
+.content code { overflow-wrap: anywhere; }
+
 code {
   font-family: ui-monospace, "Cascadia Mono", "SF Mono", Consolas, "Liberation Mono", monospace;
   font-size: .92em;
