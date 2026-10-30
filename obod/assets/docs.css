@@ -469,26 +469,64 @@ td:first-child { color: var(--muted); }
 .flash .btn:active { transform: translateY(1px); }
 .flash .btn[disabled] { cursor: default; filter: none; opacity: .55; }
 
-/* Подписка: код к актуальной прошивке приходит с ней, поэтому о подписке сказано там же,
-   где спрашивают код, — над полем, а не в подвале. Полоса слева зелёная: это не
-   предупреждение о чужой плате, а условие доступа к этой. */
+/* Подписка. Это условие доступа к этой прошивке, а не объявление, поэтому блок стоит там,
+   где спрашивают код, и держится одним тоном: тёмно-зелёное поле вместо рамки, строка
+   утверждения, пояснение мельче, адрес крупно и кнопка напротив него. Крупный адрес — то,
+   ради чего блок и стоит: его читают, а не разглядывают в сноске. Ширина — как у панели с
+   полем кода под ним: две панели друг под другом должны стоять по одной линии. */
 .flash .subscribe {
-  margin: 26px 0 0;
-  padding: 18px 20px 16px;
-  background: var(--panel);
-  border-left: 3px solid var(--green400);
+  margin: 30px 0 0;
+  padding: 28px 30px;
+  background: var(--green1000);
   border-radius: var(--radius);
 }
 
-.flash .subscribe p { margin: 0; font-size: 16px; }
+.flash .subscribe-lead {
+  margin: 0;
+  max-width: 44ch;
+  color: var(--text);
+  font-size: 21px;
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -.005em;
+  text-wrap: balance;
+}
 
-.flash .subscribe .btn { margin: 14px 0 0; }
+.flash .subscribe-note {
+  margin: 10px 0 0;
+  max-width: 60ch;
+  color: var(--grey70);
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+/* Адрес и кнопка — одна строка: адрес отвечает на вопрос «куда», кнопка — «что нажать».
+   Разные концы строки не спорят друг с другом, а на узком экране строка складывается в
+   столбик сама. */
+.flash .subscribe-act {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px 28px;
+  margin: 26px 0 0;
+}
 
 .flash .subscribe-url {
-  margin: 8px 0 0;
-  color: var(--muted);
-  font-size: 14px;
+  color: var(--green400);
+  font-size: 28px;
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: -.01em;
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-underline-offset: .14em;
+  transition: text-decoration-color .2s ease;
 }
+
+.flash .subscribe-url:hover { text-decoration-color: currentColor; }
+
+.flash .subscribe .btn { margin: 0; }
 
 /* ---------- замок выпуска ---------- */
 
@@ -893,6 +931,11 @@ a.fam-card:hover { background: var(--green1000); }
   .tab { padding: 0 12px; font-size: 12px; letter-spacing: .06em; }
   .note { padding: 16px 18px; }
   .tabset-sub .tab { padding: 0 10px; }
+
+  .flash .subscribe { padding: 22px 20px; margin-top: 26px; }
+  .flash .subscribe-lead { font-size: 19px; }
+  .flash .subscribe-note { font-size: 15px; }
+  .flash .subscribe-url { font-size: 23px; }
 }
 
 @media (min-width: 1600px) {
