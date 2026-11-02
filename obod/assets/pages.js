@@ -52,7 +52,8 @@ var DOCS_PAGES = [
 
   { file: 'ref-perc.html', title: 'Перкуссия', family: 'Перкуссия', tabs: [
     { id: 'PERC', title: 'PERC' },
-    { id: 'PSEQ', title: 'PERC SEQ' }
+    { id: 'PSEQ', title: 'PERC SEQ' },
+    { id: 'PMX',  title: 'PERC MIX' }
   ] },
 
   { file: 'ref-fx.html', title: 'Рэк', family: 'Рэк', tabs: [

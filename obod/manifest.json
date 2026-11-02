@@ -4,8 +4,8 @@
   "new_install_prompt_erase": false,
   "image": {
     "path": "firmware/OBOD.bin",
-    "size": 1241152,
-    "sha256": "2556F7651401641F83346705E08C77CE79920F29C4C8BD18FB7A574B90E453B0"
+    "size": 1276000,
+    "sha256": "2FCF0DA90BC0A71E40BC058D08F74766633898889762A2F8473476C1685C43E4"
   },
   "builds": [
     {
