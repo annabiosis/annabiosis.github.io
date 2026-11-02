@@ -53,7 +53,7 @@
         открывается страница <b>DRONE</b>. Дрон в это время уже звучит: он держит ноту, пока
         прибор включён, и ждать нажатий не нужно.</p>
 
-      <p>Громкость на выходе задаёт ручка <b>VOL</b> на странице <span class="lab">MASTER</span> в разделе «Микшеры».
+      <p>Громкость на выходе задаёт ручка <b>VOL</b> на странице <span class="lab lab-mix">MASTER</span> в разделе «Микшеры».
         Пока к прибору подключён кабель, идёт заряд; без кабеля прибор работает от банки.
         Заряд виден на экране транспорта: свайп снизу вверх.</p>
     </section>
@@ -87,19 +87,19 @@
       <h2>Первый звук</h2>
 
       <ol>
-        <li><b>Дрон.</b> Страница <span class="lab">DRONE</span> в разделе «Тело»: форма волны каждого регистра
-          (<span class="lab">H.OSC</span>, <span class="lab">M.OSC</span>, <span class="lab">L.OSC</span>), ширина (<span class="lab">WIDTH</span>) и то, идёт ли дрон за лидом (<span class="lab">FOLLOW</span>; заводское
-          значение — <span class="lab">SCALE</span>, дальше по списку <span class="lab">CONS</span> и <span class="lab">FULL</span>). Уровни трёх регистров — на <span class="lab">LEVELS</span>,
+        <li><b>Дрон.</b> Страница <span class="lab lab-drone">DRONE</span> в разделе «Тело»: форма волны каждого регистра
+          (<span class="lab lab-drone">H.OSC</span>, <span class="lab lab-drone">M.OSC</span>, <span class="lab lab-drone">L.OSC</span>), ширина (<span class="lab lab-drone">WIDTH</span>) и то, идёт ли дрон за лидом (<span class="lab lab-drone">FOLLOW</span>; заводское
+          значение — <span class="lab lab-gen">SCALE</span>, дальше по списку <span class="lab lab-drone">CONS</span> и <span class="lab lab-drone">FULL</span>). Уровни трёх регистров — на <span class="lab lab-mix">LEVELS</span>,
           вместе с лидом и перкуссией.
-          Дальше <span class="lab">DRONE FLTR</span> — срез фильтра и его свип: срез решает, насколько гул глухой, свип
+          Дальше <span class="lab lab-drone">DRONE FLTR</span> — срез фильтра и его свип: срез решает, насколько гул глухой, свип
           двигает его сам.</li>
-        <li><b>Мелодия.</b> Страница <span class="lab">SCALE</span> в разделе «Время»: лид играет ноты сам, по ладу
-          (<span class="lab">SCALE</span>), тонике (ROOT), плотности (<span class="lab">DENSITY</span>) и октаве (<span class="lab">OCTAVE</span>). Период, через который
-          лид начинает фразу заново, — ручка <span class="lab">RESET</span> на странице рисунка <span class="lab">LEAD</span> EUCLID. Тон и
+        <li><b>Мелодия.</b> Страница <span class="lab lab-gen">SCALE</span> в разделе «Время»: лид играет ноты сам, по ладу
+          (<span class="lab lab-gen">SCALE</span>), тонике (ROOT), плотности (<span class="lab lab-gen">DENSITY</span>) и октаве (<span class="lab lab-gen">OCTAVE</span>). Период, через который
+          лид начинает фразу заново, — ручка <span class="lab lab-gen">RESET</span> на странице рисунка <span class="lab lab-gen">LEAD EUCLID</span>. Тон и
           огибающая — в разделе «Голос».</li>
-        <li><b>Удары.</b> Страница <span class="lab">PERC</span> в разделе «Перкуссия»: высота, длина удара и его тело.
-          Уровень перкуссии — на LEVELS. Рисунок задаёт собственный секвенсор на <span class="lab">PERC SEQ</span>, и там
-          же его <span class="lab">RESET</span> — свой, отдельный от лида.</li>
+        <li><b>Удары.</b> Страница <span class="lab lab-perc">PERC</span> в разделе «Перкуссия»: высота, длина удара и его тело.
+          Уровень перкуссии — на <span class="lab lab-mix">LEVELS</span>. Рисунок задаёт собственный секвенсор на <span class="lab lab-perc">PERC SEQ</span>, и там
+          же его <span class="lab lab-gen">RESET</span> — свой, отдельный от лида.</li>
         <li><b>Пространство.</b> Раздел «Рэк»: хорус, дилей и реверб. Посылы в реверб — в разделе
           «Микшеры».</li>
       </ol>
@@ -108,7 +108,7 @@
     <section>
       <h2>Сохранить пресет</h2>
 
-      <p>Страница <span class="lab">PRESET</span> в разделе «Пресеты» хранит 128 слотов. Выберите слот по центру страницы
+      <p>Страница <span class="lab lab-preset">PRESET</span> в разделе «Пресеты» хранит 128 слотов. Выберите слот по центру страницы
         и нажмите <b>SAVE</b>; кнопка мигает, пока звук отличается от того, что лежит в слоте.
         <b>LOAD</b> возвращает звук из слота, <b>RND</b> подбирает новый случайный звук.</p>
 
@@ -119,14 +119,14 @@
     <section>
       <h2>Клавиатура по USB</h2>
 
-      <p>Включите приём нот: страница <span class="lab">OPTIONS</span> в разделе «Настройки», ручка <b>MIDI IN</b>. Прибор
+      <p>Включите приём нот: страница <span class="lab lab-view">OPTIONS</span> в разделе «Настройки», ручка <b>MIDI IN</b>. Прибор
         появится на компьютере как MIDI-устройство <b>OBOD MIDI IN</b>: ноты по первому каналу
         играют лидом, аккорды уходят в арпеджиатор, второй канал играет ударами перкуссии. Вместе
         с нотами приходят транспорт и часы: пуск, продолжение, стоп и темп.</p>
 
       <div class="note">
         Пока приём нот включён, разъём занят MIDI и отладочного COM-порта на кабеле нет. Это не
-        поломка: выключите <span class="lab">MIDI IN</span> и перезагрузите прибор — порт вернётся.
+        поломка: выключите <span class="lab lab-view">MIDI IN</span> и перезагрузите прибор — порт вернётся.
       </div>
     </section>
 
@@ -142,14 +142,14 @@
       <h2>Если что-то не так</h2>
 
       <ul>
-        <li><b>Нет звука.</b> Проверьте <span class="lab">VOL</span> на странице <span class="lab">MASTER</span> и уровни на <span class="lab">LEVELS</span>: у каждой части
+        <li><b>Нет звука.</b> Проверьте <span class="lab lab-mix">VOL</span> на странице <span class="lab lab-mix">MASTER</span> и уровни на <span class="lab lab-mix">LEVELS</span>: у каждой части
           свой уровень, и любой из них может стоять на нуле.</li>
         <li><b>Значение не меняется.</b> Обод ведёт только выбранную ручку: коснитесь нужного
           сектора, тогда поворот начнёт его менять.</li>
-        <li><b>Нет COM-порта на компьютере.</b> Включён приём нот. Выключите <span class="lab">MIDI IN</span> и
+        <li><b>Нет COM-порта на компьютере.</b> Включён приём нот. Выключите <span class="lab lab-view">MIDI IN</span> и
           перезагрузите прибор.</li>
         <li><b>Не видно, что играет.</b> На транспорте темп, на кольце — значение выбранной ручки
-          или стереокартина: режим кольца меняется на странице SYSTEM.</li>
+          или стереокартина: режим кольца меняется на странице <span class="lab lab-view">SYSTEM</span>.</li>
       </ul>
     </section>
 
