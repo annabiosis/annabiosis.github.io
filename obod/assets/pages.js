@@ -82,7 +82,6 @@ var DOCS_PAGES = [
 
   { file: 'flash.html', title: 'Прошивка', tabs: [
     { id: 'browser', title: 'Из браузера' },
-    { id: 'command', title: 'Командой' },
     { id: 'lost',    title: 'Что теряется' }
   ] },
 
