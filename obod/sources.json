@@ -1,9 +1,9 @@
 {
-  "version": "1.2.2",
-  "tag": "v1.2.2",
-  "path": "firmware/OBOD-1.2.2-src.zip",
-  "size": 3127093,
-  "sha256": "C900BF1991A75C75DB0DC2D36B6CCDCE126F434E58CB3294AE573536D4C2FBDD",
-  "files": 378,
+  "version": "1.2.3",
+  "tag": "v1.2.3",
+  "path": "firmware/OBOD-1.2.3-src.zip",
+  "size": 3168887,
+  "sha256": "A73DCBBCC7C2BC9F1D59EC9BCD834645CE343FA6B9540AEC5002244A355D4D4E",
+  "files": 382,
   "note": "Исходники выпуска без защиты и без готового образа: код выпуска нужен только образу."
 }

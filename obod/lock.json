@@ -1,24 +1,24 @@
 {
-  "version": "1.2.2",
+  "version": "1.2.3",
   "cipher": {
     "name": "AES-256-GCM",
-    "iv": "1QnQgSbIClNbgygN",
+    "iv": "1OYt/NNN+NVhuClT",
     "tag": 16
   },
   "kdf": {
     "name": "PBKDF2-SHA256",
     "iterations": 310000,
-    "salt": "sebJ+b+QO1qYrJY4o544mg=="
+    "salt": "CsSXs/ES/TaRMDmhpcSaiA=="
   },
   "plain": {
     "path": "firmware/OBOD.bin",
-    "size": 1276000,
-    "sha256": "2FCF0DA90BC0A71E40BC058D08F74766633898889762A2F8473476C1685C43E4"
+    "size": 1279536,
+    "sha256": "4B7EB1C920C83DA4B8FDA06E58327CFC73C71826A55587ECF4AE4048DC706D37"
   },
   "sealed": {
     "path": "firmware/OBOD.bin.enc",
-    "size": 1276016,
-    "sha256": "D05DA7E0A4C0B0AE6AC70169290A156431D65DF0E8326D9A64D9B2C6D59CA496"
+    "size": 1279552,
+    "sha256": "7421586990ED138D29543F71350B0A8AFC7EF3F8E8BB5583FCD09F1406CCA541"
   },
   "note": "Образ ставится из замка: страница выводит ключ из кода выпуска и расшифровывает файл в браузере."
 }
