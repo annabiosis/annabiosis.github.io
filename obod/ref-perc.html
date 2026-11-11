@@ -1,78 +1,385 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" data-theme="dark">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/docs.css?v=20261112a">
-<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-<title>OBOD — Перкуссия</title>
-<!--
-  Голос удара, рисунок такта и микшер дорожек. Цвет семьи — зелёный.
--->
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#060A09" />
+<title>OBOD — Перкуссия · Справочник</title>
+<meta name="description" content="Перкуссия: PERC, PERC SEQ, PERC MIX." />
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="system/tokens.css?v=20261112c" />
+<link rel="stylesheet" href="system/base.css?v=20261112c" />
+<link rel="stylesheet" href="system/grid.css?v=20261112c" />
+<link rel="stylesheet" href="system/components.css?v=20261112c" />
+<script>
+  (function () {
+    try {
+      var t = localStorage.getItem('obod-theme');
+      if (!t) t = matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+      document.documentElement.dataset.theme = t;
+    } catch (e) { document.documentElement.dataset.theme = 'dark'; }
+  })();
+</script>
 </head>
-
 <body>
-
-<a class="skip" href="#main">К содержимому</a>
+<a class="skip-link" href="#main">К содержимому</a>
 
 <header class="topbar">
-  <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="sidebar">Разделы</button>
-  <a class="brand" href="index.html">OBOD</a>
-  <nav class="crumbs" id="crumbs" aria-label="Хлебные крошки"></nav>
+  <a class="brand" href="index.html">
+    <svg class="brand-ring" width="26" height="26" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="12" fill="none" stroke="currentColor" stroke-width="2.6" stroke-dasharray="56 20" stroke-linecap="round" transform="rotate(135 16 16)"/><circle cx="16" cy="16" r="4" fill="currentColor"/></svg>
+    OBOD
+  </a>
+  <nav class="topnav" aria-label="Документация">
+    <a href="index.html">Обзор</a>
+    <a href="start.html">Первый запуск</a>
+    <a href="ref-drone.html" aria-current="page">Справочник</a>
+    <a href="hw.html">Железо</a>
+    <a href="flash.html">Прошивка</a>
+    <a href="changelog.html">История</a>
+  </nav>
+  <div class="topbar-actions">
+    <button class="icon-btn" data-grid-toggle type="button" title="Показать сетку (G)" aria-label="Показать модульную сетку"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></button>
+    <button class="icon-btn theme-toggle" data-theme-toggle type="button" title="Переключить тему" aria-label="Переключить светлую и тёмную тему"><svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg><svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M19.1 4.9l-1.8 1.8M6.7 17.3l-1.8 1.8" stroke-linecap="round"/></svg></button>
+  </div>
 </header>
 
-<div class="shell">
+<main id="main">
+  <div class="wrap">
+    <div class="doc">
+      <div class="doc-tree">
+        <div class="search" style="margin-bottom:var(--sp-3)">
+          <svg class="search-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3" stroke-linecap="round"/></svg>
+          <input class="input" type="search" placeholder="Найти экран…" data-tree-filter=".tree" aria-label="Поиск по дереву разделов" />
+        </div>
+        <nav class="tree" aria-label="Разделы прибора">
+        <details class="tree-group fam-drn">
+          <summary><svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>Дрон<span class="grp-code">DRN</span></summary>
+          <ul class="tree-list">
+            <li><a class="tree-link" href="ref-drone.html#drn"><span class="tag">DRN</span>DRONE</a></li>
+            <li><a class="tree-link" href="ref-drone.html#dfl"><span class="tag">DFL</span>DRONE FLTR</a></li>
+          </ul>
+        </details>
+        <details class="tree-group fam-lfo">
+          <summary><svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>Модуляция<span class="grp-code">LFO</span></summary>
+          <ul class="tree-list">
+            <li><a class="tree-link" href="ref-lfo.html#lf1"><span class="tag">LF1</span>LFO 1</a></li>
+            <li><a class="tree-link" href="ref-lfo.html#lf2"><span class="tag">LF2</span>LFO 2</a></li>
+          </ul>
+        </details>
+        <details class="tree-group fam-ld">
+          <summary><svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>Лид<span class="grp-code">LD</span></summary>
+          <ul class="tree-list">
+            <li><a class="tree-link" href="ref-lead.html#ld"><span class="tag">LD</span>LEAD</a></li>
+            <li><a class="tree-link" href="ref-lead.html#ltn"><span class="tag">LTN</span>LEAD TONE</a></li>
+            <li><a class="tree-link" href="ref-lead.html#env"><span class="tag">ENV</span>LEAD ENV</a></li>
+          </ul>
+        </details>
+        <details class="tree-group fam-scl">
+          <summary><svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>Генераторы<span class="grp-code">GEN</span></summary>
+          <ul class="tree-list">
+            <li><a class="tree-link" href="ref-time.html#scl"><span class="tag">SCL</span>SCALE</a></li>
+            <li><a class="tree-link" href="ref-time.html#eql"><span class="tag">EQL</span>LEAD EUCLID</a></li>
+            <li><a class="tree-link" href="ref-time.html#arp"><span class="tag">ARP</span>LEAD ARP</a></li>
+          </ul>
+        </details>
+        <details class="tree-group fam-prc" open>
+          <summary><svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>Перкуссия<span class="grp-code">PRC</span></summary>
+          <ul class="tree-list">
+            <li><a class="tree-link" href="ref-perc.html#prc"><span class="tag">PRC</span>PERC</a></li>
+            <li><a class="tree-link" href="ref-perc.html#psq"><span class="tag">PSQ</span>PERC SEQ</a></li>
+            <li><a class="tree-link" href="ref-perc.html#pmx"><span class="tag">PMX</span>PERC MIX</a></li>
+          </ul>
+        </details>
+        <details class="tree-group fam-bas">
+          <summary><svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>Бас<span class="grp-code">BAS</span></summary>
+          <ul class="tree-list">
+            <li><a class="tree-link" href="ref-bass.html#bas"><span class="tag">BAS</span>BASS</a></li>
+            <li><a class="tree-link" href="ref-bass.html#bsq"><span class="tag">BSQ</span>RHYTHM</a></li>
+          </ul>
+        </details>
+        <details class="tree-group fam-fx">
+          <summary><svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>Эффекты<span class="grp-code">FX</span></summary>
+          <ul class="tree-list">
+            <li><a class="tree-link" href="ref-fx.html#fx"><span class="tag">FX</span>FX</a></li>
+            <li><a class="tree-link" href="ref-fx.html#del"><span class="tag">DEL</span>DELAY</a></li>
+            <li><a class="tree-link" href="ref-fx.html#rev"><span class="tag">REV</span>REVERB</a></li>
+          </ul>
+        </details>
+        <details class="tree-group fam-lvl">
+          <summary><svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>Микшер<span class="grp-code">LVL</span></summary>
+          <ul class="tree-list">
+            <li><a class="tree-link" href="ref-mix.html#mst"><span class="tag">MST</span>MASTER</a></li>
+            <li><a class="tree-link" href="ref-mix.html#lvl"><span class="tag">LVL</span>LEVELS</a></li>
+            <li><a class="tree-link" href="ref-mix.html#rvs"><span class="tag">RVS</span>REV SENDS</a></li>
+            <li><a class="tree-link" href="ref-mix.html#fxs"><span class="tag">FXS</span>FX SENDS</a></li>
+            <li><a class="tree-link" href="ref-mix.html#dls"><span class="tag">DLS</span>DEL SENDS</a></li>
+          </ul>
+        </details>
+        <details class="tree-group fam-prs">
+          <summary><svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>Пресеты и настройки<span class="grp-code">PRS</span></summary>
+          <ul class="tree-list">
+            <li><a class="tree-link" href="ref-store.html#prs"><span class="tag">PRS</span>PRESET</a></li>
+            <li><a class="tree-link" href="ref-store.html#set"><span class="tag">SET</span>SETUP</a></li>
+          </ul>
+        </details>
+        </nav>
+      </div>
 
-  <nav class="sidebar" id="sidebar" aria-label="Разделы документации">
-    <div class="sidebar-head">
-      <p class="sidebar-title">Руководство</p>
-      <button class="nav-close" type="button">Закрыть</button>
+      <article class="doc-main fam-prc">
+        <nav class="crumbs" aria-label="Хлебные крошки">
+          <a href="index.html">OBOD</a><span class="sep">/</span>
+          <a href="ref-drone.html">Справочник</a><span class="sep">/</span>
+          <span aria-current="page">Перкуссия</span>
+        </nav>
+
+        <div style="display:flex;align-items:center;gap:var(--sp-3);flex-wrap:wrap">
+          <h1 style="font-size:var(--fs-48);font-weight:300">Перкуссия</h1>
+          <span class="chip"><span class="dot"></span>PRC</span>
+        </div>
+        <p class="lead muted" style="font-size:var(--fs-18);margin-top:var(--sp-3);max-width:var(--measure)">Пять голосов удара, рисунок такта и баланс дорожек. Удар и его рисунок — разные экраны.</p>
+
+        <div data-tabs style="margin-top:var(--sp-6)">
+          <div class="tabs" role="tablist" aria-label="Экраны раздела Перкуссия">
+            <button class="tab" role="tab" id="tab-prc" aria-controls="panel-prc" aria-selected="true" type="button">PERC</button>
+            <button class="tab" role="tab" id="tab-psq" aria-controls="panel-psq" aria-selected="false" tabindex="-1" type="button">PERC SEQ</button>
+            <button class="tab" role="tab" id="tab-pmx" aria-controls="panel-pmx" aria-selected="false" tabindex="-1" type="button">PERC MIX</button>
+          </div>
+
+          <div class="tabpanel" role="tabpanel" id="panel-prc" aria-labelledby="tab-prc">
+            <section id="prc">
+              <h2 style="font-size:var(--fs-28);margin-bottom:var(--sp-2)">Экран PERC</h2>
+              <p class="muted" style="max-width:var(--measure);margin-bottom:var(--sp-5)">Звук ударных: набор, строй, длина, атака, жизнь. Уровень части стоит только на LEVELS. Высоту, ENV, DECAY и атаку удара двигает модуляция со страницы LFO.</p>
+              <div class="table-scroll">
+                <table class="param-table">
+                  <thead><tr><th>Ручка</th><th>Значения</th><th>Описание</th></tr></thead>
+                  <tbody>
+                    <tr>
+                      <td class="p-name"><span class="param-code">KIT</span></td>
+                      <td><ul class="opt-list">
+<li class="opt"><b>TIGHT</b><span>сухо и коротко, металла в хэтах нет</span></li>
+<li class="opt"><b>MINI</b><span>машинка, на которой озвучен инструмент; заводской</span></li>
+<li class="opt"><b>BROKEN</b><span>длинный, низкий и металлический, партия бродит</span></li>
+<li class="opt"><b>DUST</b><span>тёмная комната: мягкие атаки и хвост длиннее доли</span></li>
+<li class="opt"><b>TAPE</b><span>потёртая машина — всюду чуть длиннее MINI</span></li>
+<li class="opt"><b>DEEP</b><span>медленный и тяжёлый: низ конца</span></li>
+<li class="opt"><b>BRUSH</b><span>мягкие атаки, длинный шум, партия палочками из воздуха</span></li>
+<li class="opt"><b>MACHINE</b><span>самый жёсткий и ровный: короткие гейты, комнате ничего не остаётся</span></li>
+<li class="opt"><b>EIGHT</b><span>длинный суб и щёлкающий снейр машины, которая дала ему имя</span></li>
+<li class="opt"><b>NINE</b><span>панч и металл над ним</span></li>
+<li class="opt"><b>ROOM</b><span>тот же кит, услышанный из глубины зала</span></li>
+<li class="opt"><b>LOFI</b><span>глухие хэты, мягкая бочка, выше пяти килогерц ничего</span></li>
+<li class="opt"><b>TRAP</b><span>бочка, которая переживает такт, и снейр, которому негде спрятаться</span></li>
+<li class="opt"><b>CLUB</b><span>жёсткая маленькая комната: бочка короткая и вперёд, хэты тесные</span></li>
+<li class="opt"><b>JAZZ</b><span>щётка по снейру и низкий райд там, где были бы хэты</span></li>
+<li class="opt"><b>STEEL</b><span>кит, у которого шум оставлен сырым</span></li>
+<li class="opt"><b>GLASS</b><span>хрупкий металл: высокий тонкий центр на каждой дорожке, длинное кольцо у хэта, снизу ничего</span></li>
+<li class="opt"><b>BOX</b><span>картон: всё тело, ни низа, ни хвоста; звук коробки, ударенной рукой в маленькой комнате</span></li>
+<li class="opt"><b>NEON</b><span>восьмидесятые: гейтированный снейр на весь такт, щелчок у бочки и хэт с открытым верхом</span></li>
+<li class="opt"><b>SUB</b><span>бочка и обещание: самый низкий центр прибора с самым длинным падением, остальные три дорожки далеко позади</span></li>
+<li class="opt"><b>WOOD</b><span>палки по дереву: том с телом на всю ручку и снейр с деревянным призвуком под шумом</span></li>
+<li class="opt"><b>GRIME</b><span>всё в середине: снейр с рукой под ним, тусклый хэт и бочка из одного тела</span></li>
+<li class="opt"><b>TIN</b><span>игрушечный кит: высокие центры, короткие гейты, веса нигде</span></li>
+<li class="opt"><b>INDUS</b><span>металлический конец: длинная бьющая бочка, снейр на треть секунды и том в низкой середине</span></li>
+<li class="opt"><b>ABYSS</b><span>дно голоса: 35 Гц, гейт в секунду с четвертью и падение почти на всю ENV</span></li>
+<li class="opt"><b>SLUDGE</b><span>та же идея медленнее и толще: бочка 38 Гц на 1,46 с, снейр размазан, хэты опаздывают и остаются</span></li>
+<li class="opt"><b>MONK</b><span>обряд на металле: короткая бочка, снейр — ударенная пластина, хэт звенит внахлёст следующей доле</span></li>
+<li class="opt"><b>VOID</b><span>бочка 36 Гц на 1,38 с и воздух: снейр — дыхание, хэт — тик, том — отзвук</span></li>
+</ul></td>
+                      <td>набор: кит и есть звук раздела. Четыре дорожки — бочка, снейр, хэт, том, — у каждой свой рецепт и свой второй голос; кит меняет удар целиком, а не подкручивает его. Ставится от сухого к странному</td>
+                    </tr>
+                    <tr>
+                      <td class="p-name"><span class="param-code">TONE</span></td>
+                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
+                      <td>транспонирует весь кит: бочку, снейр, хэт и том вместе с их вторыми голосами</td>
+                    </tr>
+                    <tr>
+                      <td class="p-name"><span class="param-code">DECAY</span></td>
+                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
+                      <td>за сколько громкость опускается до уровня SUSTAIN; заводское — 250 мс</td>
+                    </tr>
+                    <tr>
+                      <td class="p-name"><span class="param-code">PUNCH</span></td>
+                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
+                      <td>атака удара: внизу длинная и мягкая, наверху короткая и щёлкающая</td>
+                    </tr>
+                    <tr>
+                      <td class="p-name"><span class="param-code">TIMBRE</span></td>
+                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
+                      <td>жизнь: насколько сильный удар ярче и длиннее, дрожь по высоте, уход строя по тактам</td>
+                    </tr>
+                    <tr>
+                      <td class="p-name"><span class="param-code">TUNE</span></td>
+                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
+                      <td>строй только бочки и тома: бочка попадает в тональность, а хэт остаётся хэтом</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+          </div>
+
+          <div class="tabpanel" role="tabpanel" id="panel-psq" aria-labelledby="tab-psq" hidden>
+            <section id="psq">
+              <h2 style="font-size:var(--fs-28);margin-bottom:var(--sp-2)">Экран PERC SEQ</h2>
+              <p class="muted" style="max-width:var(--measure);margin-bottom:var(--sp-5)">Партия ударных и то, как она живёт: рисунок, вторая часть, сбивка, качание, скорость часов и акцент. Высоты и ENV здесь нет: это голос, он на PERC.</p>
+              <div class="table-scroll">
+                <table class="param-table">
+                  <thead><tr><th>Ручка</th><th>Значения</th><th>Описание</th></tr></thead>
+                  <tbody>
+                    <tr>
+                      <td class="p-name"><span class="param-code">GROOVE</span></td>
+                      <td><ul class="opt-list">
+<li class="opt"><b>MINIPOP</b><span>бочка на раз и три с подхватом, снейр на бэкбите, хэты восьмыми; заводской</span></li>
+<li class="opt"><b>DISCO</b><span>четыре в пол, хэты на каждой восьмой</span></li>
+<li class="opt"><b>BOOGIE</b><span>бочка гуляет, снейр опаздывает, хэты не смолкают</span></li>
+<li class="opt"><b>ROCK</b><span>раз и три, бочка сдвинута на последнюю восьмую</span></li>
+<li class="opt"><b>FUNK</b><span>шестнадцать позиций бочки, призраки между бэкбитами</span></li>
+<li class="opt"><b>BREAK</b><span>бэкбит сдвинут, призрак перед тактовой чертой</span></li>
+<li class="opt"><b>HOUSE</b><span>четыре в пол с клэпом, открытые хэты на оффбитах</span></li>
+<li class="opt"><b>TECHNO</b><span>четыре в пол, клэп на последней доле, открытый хэт на каждом оффбит-восьмом</span></li>
+<li class="opt"><b>TRAP</b><span>редкая бочка, снейр на три, хэты каждой шестнадцатой</span></li>
+<li class="opt"><b>HALF</b><span>половинный темп: снейр на три, бочка поздно</span></li>
+<li class="opt"><b>TWOSTEP</b><span>бочка на раз и на последнюю восьмую, снейр на два и четыре</span></li>
+<li class="opt"><b>AFRO</b><span>бочка и том отвечают друг другу через такт</span></li>
+<li class="opt"><b>LATIN</b><span>редкая бочка, том на оффбитах</span></li>
+<li class="opt"><b>MARCH</b><span>снейр и хэт на каждой четверти, бочка на раз и три</span></li>
+<li class="opt"><b>BOSSA</b><span>бочка на раз, том на второй половине доли</span></li>
+<li class="opt"><b>GARAGE</b><span>бочка на второй шестнадцатой второй доли, хэт-призрак поздно</span></li>
+<li class="opt"><b>CLUB</b><span>четыре в пол, клэп на два и четыре, хэты восьмыми</span></li>
+<li class="opt"><b>SKIP</b><span>бочка заикается: три шага, дыра, два, и последняя восьмая там, где тактовая черта</span></li>
+<li class="opt"><b>STUT</b><span>снейр двоится — две шестнадцатых на второй доле и две на четвёртой</span></li>
+<li class="opt"><b>GRIT</b><span>бочка вне сетки, громкие хэты на оффбит-шестнадцатых, том отвечает один раз</span></li>
+<li class="opt"><b>WOBBLE</b><span>бочка и том ведут одну фигуру в шаге друг от друга — такт хромает</span></li>
+<li class="opt"><b>SPLIT</b><span>половинный темп со сдвинутым бэкбитом: снейр на шестнадцатую раньше</span></li>
+<li class="opt"><b>RUST</b><span>машина чинится на ходу: бочка оставила две доли из четырёх</span></li>
+<li class="opt"><b>DRILL</b><span>три-три-два через весь такт, бочка и том делят фигуру</span></li>
+<li class="opt"><b>FOUR</b><span>четыре в пол: ровная бочка на каждой доле</span></li>
+<li class="opt"><b>DRIVE</b><span>тот же техно-рисунок плотнее: хэты восьмыми, том на последней доле</span></li>
+<li class="opt"><b>ROLL</b><span>бочка галопом: доля и две шестнадцатых</span></li>
+<li class="opt"><b>PULSE</b><span>пульс: бочка и открытый хэт в шаге друг от друга</span></li>
+<li class="opt"><b>HYPN</b><span>гипнотический: редкие ноты через такт, много воздуха</span></li>
+<li class="opt"><b>STOMP</b><span>тяжёлый марш: бочка и снейр в один шаг</span></li>
+<li class="opt"><b>HATS</b><span>строка хэтов шестнадцатыми, бочка только на раз</span></li>
+<li class="opt"><b>SHAKE</b><span>шейкер шестнадцатыми поверх половинной бочки</span></li>
+</ul></td>
+                      <td>рисунок: тридцать записанных партий по шестнадцатой на шаг, у каждой свои призрачные ноты и свой цикл тактов</td>
+                    </tr>
+                    <tr>
+                      <td class="p-name"><span class="param-code">VAR</span></td>
+                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
+                      <td>вторая часть рисунка: насколько партия уходит от записанной на повторе</td>
+                    </tr>
+                    <tr>
+                      <td class="p-name"><span class="param-code">FILL</span></td>
+                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
+                      <td>сбивка перед тактовой чертой: чем выше, тем чаще и громче она вклинивается</td>
+                    </tr>
+                    <tr>
+                      <td class="p-name"><span class="param-code">SWING</span></td>
+                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
+                      <td>задерживает каждую вторую шестнадцатую: качание, а не смена сетки. Заводское — ровно</td>
+                    </tr>
+                    <tr>
+                      <td class="p-name"><span class="param-code">SPEED</span></td>
+                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
+                      <td>скорость; подпись называет целые доли, когда период на них попадает</td>
+                    </tr>
+                    <tr>
+                      <td class="p-name"><span class="param-code">ACCENT</span></td>
+                      <td><ul class="opt-list">
+<li class="opt"><b>OFF</b><span>акцента нет: все ноты идут на своих заводских 70/70/55; заводское значение. WEAK VEL при этом не читается</span></li>
+<li class="opt"><b>1/4</b><span>четверти: доли 1, 5, 9, 13</span></li>
+<li class="opt"><b>2&amp;4</b><span>бэкбит, вторая и четвёртая: доли 5 и 13</span></li>
+<li class="opt"><b>OFFB</b><span>оффбит, восьмые между долями: доли 3, 7, 11, 15</span></li>
+<li class="opt"><b>3-3-2</b><span>тресильо: доли 1, 7, 13</span></li>
+<li class="opt"><b>FUNK</b><span>шестнадцатый фанк-акцент: доли 1, 4, 7, 10, 13, 16</span></li>
+<li class="opt"><b>RMB</b><span>румба-клава, первый такт: доли 1, 4, 7</span></li>
+<li class="opt"><b>BOS</b><span>босса-нова, первый такт: доли 1, 4, 7, 10, 13</span></li>
+</ul></td>
+                      <td>рисунок акцента лида: ноты на помеченных долях звучат на полной громкости своих голосов, остальные — на силе WEAK VEL. Свой рисунок, независимый от перкуссии: считается по сетке лида, доли идут от первой доли такта, поэтому с ROTATE рисунок не едет и по числу шагов не растягивается. Помеченный шаг отмечен на экране точкой крупнее. Арпеджиатор читает этот же рисунок: velocity нажатой клавиши задаёт уровень, а фигура — акцент внутри него, поэтому акценты слышны и на удержанном аккорде. Панель печатает короткую форму — она и стоит в списке ниже, полное название осталось у рисунка в коде</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+          </div>
+
+          <div class="tabpanel" role="tabpanel" id="panel-pmx" aria-labelledby="tab-pmx" hidden>
+            <section id="pmx">
+              <h2 style="font-size:var(--fs-28);margin-bottom:var(--sp-2)">Экран PERC MIX</h2>
+              <p class="muted" style="max-width:var(--measure);margin-bottom:var(--sp-5)">Микшер четырёх дорожек: бочка, снейр, хэт, том. Здесь только уровень каждой дорожки в общей партии; голос и рисунок живут на PERC и PERC SEQ.</p>
+              <div class="table-scroll">
+                <table class="param-table">
+                  <thead><tr><th>Ручка</th><th>Значения</th><th>Описание</th></tr></thead>
+                  <tbody>
+                    <tr>
+                      <td class="p-name"><span class="param-code">KICK</span></td>
+                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
+                      <td>уровень бочки в партии</td>
+                    </tr>
+                    <tr>
+                      <td class="p-name"><span class="param-code">SNARE</span></td>
+                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
+                      <td>уровень снейра: сто — как записал кит</td>
+                    </tr>
+                    <tr>
+                      <td class="p-name"><span class="param-code">HAT</span></td>
+                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
+                      <td>уровень хэта, открытого и призрачного вместе</td>
+                    </tr>
+                    <tr>
+                      <td class="p-name"><span class="param-code">TOM</span></td>
+                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
+                      <td>уровень тома</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+          </div>
+        </div>
+      </article>
+
+      <div class="doc-toc">
+        <div class="toc-title">На этой странице</div>
+        <ul class="toc">
+          <li><a class="toc-link" href="#prc">Экран PERC</a></li>
+          <li><a class="toc-link" href="#psq">Экран PERC SEQ</a></li>
+          <li><a class="toc-link" href="#pmx">Экран PERC MIX</a></li>
+        </ul>
+      </div>
+
     </div>
-    <div id="tree"></div>
-  </nav>
-
-  <div class="backdrop" id="backdrop" hidden></div>
-
-  <main class="content" id="main">
-    <h1>    <h1>Перкуссия</h1>
-
-    <p class="lead">Голос удара, рисунок такта и баланс дорожек.</p>
-
-</h1>
-
-    <p class="lead"></p>
-
-    <p>PERC — сам удар: TONE, PUNCH, TIMBRE, TUNE и длина решают, как он звучит. Удар один на дорожку, и каждая дорожка настраивается отдельно.</p>
-    <p>PERC SEQ — рисунок такта: STEPS, PULSES, ROTATE, ACCENT и RESET. На кольце дорожки видны цветом: бочка жёлтая, снейр почти белый, том бирюзовый, хэт зелёным контуром, призрак приглушён, а заливка — горячее кольцо.</p>
-    <p>PERC MIX — уровень каждой дорожки и общий уровень ударки: четыре дорожки, каждая со своим показанием и своим посылом.</p>
-
-    <div data-ref="family" data-family="Перкуссия"></div>
-
-    <nav class="pager" id="pager" aria-label="Соседние страницы"></nav>
-  </main>
-
-  <aside class="toc" aria-label="На этой странице">
-    <p class="toc-title">На этой странице</p>
-    <ul id="toc-list"></ul>
-  </aside>
-
-</div>
+  </div>
+</main>
 
 <footer class="footer">
-  <p><b>OBOD</b> — синтезатор-контроллер на ESP32-S3 с круглым экраном 360 × 360.
-    Девять разделов, двадцать пять экранов, 137 ручек, 148 параметров, 128 пресетов.</p>
-  <p>Начало — <a href="start.html">первый запуск</a>, обновление — <a href="flash.html">прошивка</a>,
-    что менялось — <a href="changelog.html">история изменений</a>.</p>
-  <p>Движок голосов — <a href="https://github.com/danilogcrf2-oss/ESP32Synth">ESP32Synth 2.5.0</a>
-    (MIT, © 2025 Danilo Gabriel). Остальное написано для этого прибора.</p>
+  <div class="wrap">
+    <div class="f-col">
+      <span class="f-title">OBOD</span>
+      <p class="f-note">Синтезатор-контроллер на ESP32-S3 с круглым экраном 360 × 360. Голосовой движок — ESP32Synth 2.5.0 (MIT, © 2025 Danilo Gabriel); остальное написано для этого прибора.</p>
+    </div>
+    <div class="f-col">
+      <span class="f-title">Документация</span>
+      <a href="start.html">Первый запуск</a>
+      <a href="ref-drone.html">Справочник</a>
+      <a href="changelog.html">История изменений</a>
+    </div>
+    <div class="f-col">
+      <span class="f-title">Прибор</span>
+      <a href="hw.html">Железо</a>
+      <a href="flash.html">Прошивка</a>
+      <a href="hw.html">Железо</a>
+    </div>
+  </div>
 </footer>
 
-<script src="assets/pages.js?v=20261112a"></script>
-<script src="assets/ref.js?v=20261112a"></script>
-<script src="assets/docs.js?v=20261112a"></script>
+<script src="system/ui.js?v=20261112c"></script>
+<script src="assets/deep-link.js?v=20261112c"></script>
+
 <script>
   // Работник таймера раньше стоял в корне сайта и получал запросы всех разделов: он
   // ждёт сеть 800 мс и при задержке отдаёт из кэша свою страницу, а образ прошивки

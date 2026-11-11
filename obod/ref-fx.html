@@ -1,78 +1,319 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" data-theme="dark">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/docs.css?v=20261112a">
-<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-<title>OBOD — Эффекты</title>
-<!--
-  Машина эффектов, дилей и реверб — стойка после звука. Цвет семьи — розовый.
--->
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#060A09" />
+<title>OBOD — Эффекты · Справочник</title>
+<meta name="description" content="Эффекты: FX, DELAY, REVERB." />
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="system/tokens.css?v=20261112c" />
+<link rel="stylesheet" href="system/base.css?v=20261112c" />
+<link rel="stylesheet" href="system/grid.css?v=20261112c" />
+<link rel="stylesheet" href="system/components.css?v=20261112c" />
+<script>
+  (function () {
+    try {
+      var t = localStorage.getItem('obod-theme');
+      if (!t) t = matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+      document.documentElement.dataset.theme = t;
+    } catch (e) { document.documentElement.dataset.theme = 'dark'; }
+  })();
+</script>
 </head>
-
 <body>
-
-<a class="skip" href="#main">К содержимому</a>
+<a class="skip-link" href="#main">К содержимому</a>
 
 <header class="topbar">
-  <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="sidebar">Разделы</button>
-  <a class="brand" href="index.html">OBOD</a>
-  <nav class="crumbs" id="crumbs" aria-label="Хлебные крошки"></nav>
+  <a class="brand" href="index.html">
+    <svg class="brand-ring" width="26" height="26" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="12" fill="none" stroke="currentColor" stroke-width="2.6" stroke-dasharray="56 20" stroke-linecap="round" transform="rotate(135 16 16)"/><circle cx="16" cy="16" r="4" fill="currentColor"/></svg>
+    OBOD
+  </a>
+  <nav class="topnav" aria-label="Документация">
+    <a href="index.html">Обзор</a>
+    <a href="start.html">Первый запуск</a>
+    <a href="ref-drone.html" aria-current="page">Справочник</a>
+    <a href="hw.html">Железо</a>
+    <a href="flash.html">Прошивка</a>
+    <a href="changelog.html">История</a>
+  </nav>
+  <div class="topbar-actions">
+    <button class="icon-btn" data-grid-toggle type="button" title="Показать сетку (G)" aria-label="Показать модульную сетку"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></button>
+    <button class="icon-btn theme-toggle" data-theme-toggle type="button" title="Переключить тему" aria-label="Переключить светлую и тёмную тему"><svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg><svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M19.1 4.9l-1.8 1.8M6.7 17.3l-1.8 1.8" stroke-linecap="round"/></svg></button>
+  </div>
 </header>
 
-<div class="shell">
+<main id="main">
+  <div class="wrap">
+    <div class="doc">
+      <div class="doc-tree">
+        <div class="search" style="margin-bottom:var(--sp-3)">
+          <svg class="search-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3" stroke-linecap="round"/></svg>
+          <input class="input" type="search" placeholder="Найти экран…" data-tree-filter=".tree" aria-label="Поиск по дереву разделов" />
+        </div>
+        <nav class="tree" aria-label="Разделы прибора">
+        <details class="tree-group fam-drn">
+          <summary><svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>Дрон<span class="grp-code">DRN</span></summary>
+          <ul class="tree-list">
+            <li><a class="tree-link" href="ref-drone.html#drn"><span class="tag">DRN</span>DRONE</a></li>
+            <li><a class="tree-link" href="ref-drone.html#dfl"><span class="tag">DFL</span>DRONE FLTR</a></li>
+          </ul>
+        </details>
+        <details class="tree-group fam-lfo">
+          <summary><svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>Модуляция<span class="grp-code">LFO</span></summary>
+          <ul class="tree-list">
+            <li><a class="tree-link" href="ref-lfo.html#lf1"><span class="tag">LF1</span>LFO 1</a></li>
+            <li><a class="tree-link" href="ref-lfo.html#lf2"><span class="tag">LF2</span>LFO 2</a></li>
+          </ul>
+        </details>
+        <details class="tree-group fam-ld">
+          <summary><svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>Лид<span class="grp-code">LD</span></summary>
+          <ul class="tree-list">
+            <li><a class="tree-link" href="ref-lead.html#ld"><span class="tag">LD</span>LEAD</a></li>
+            <li><a class="tree-link" href="ref-lead.html#ltn"><span class="tag">LTN</span>LEAD TONE</a></li>
+            <li><a class="tree-link" href="ref-lead.html#env"><span class="tag">ENV</span>LEAD ENV</a></li>
+          </ul>
+        </details>
+        <details class="tree-group fam-scl">
+          <summary><svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>Генераторы<span class="grp-code">GEN</span></summary>
+          <ul class="tree-list">
+            <li><a class="tree-link" href="ref-time.html#scl"><span class="tag">SCL</span>SCALE</a></li>
+            <li><a class="tree-link" href="ref-time.html#eql"><span class="tag">EQL</span>LEAD EUCLID</a></li>
+            <li><a class="tree-link" href="ref-time.html#arp"><span class="tag">ARP</span>LEAD ARP</a></li>
+          </ul>
+        </details>
+        <details class="tree-group fam-prc">
+          <summary><svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>Перкуссия<span class="grp-code">PRC</span></summary>
+          <ul class="tree-list">
+            <li><a class="tree-link" href="ref-perc.html#prc"><span class="tag">PRC</span>PERC</a></li>
+            <li><a class="tree-link" href="ref-perc.html#psq"><span class="tag">PSQ</span>PERC SEQ</a></li>
+            <li><a class="tree-link" href="ref-perc.html#pmx"><span class="tag">PMX</span>PERC MIX</a></li>
+          </ul>
+        </details>
+        <details class="tree-group fam-bas">
+          <summary><svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>Бас<span class="grp-code">BAS</span></summary>
+          <ul class="tree-list">
+            <li><a class="tree-link" href="ref-bass.html#bas"><span class="tag">BAS</span>BASS</a></li>
+            <li><a class="tree-link" href="ref-bass.html#bsq"><span class="tag">BSQ</span>RHYTHM</a></li>
+          </ul>
+        </details>
+        <details class="tree-group fam-fx" open>
+          <summary><svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>Эффекты<span class="grp-code">FX</span></summary>
+          <ul class="tree-list">
+            <li><a class="tree-link" href="ref-fx.html#fx"><span class="tag">FX</span>FX</a></li>
+            <li><a class="tree-link" href="ref-fx.html#del"><span class="tag">DEL</span>DELAY</a></li>
+            <li><a class="tree-link" href="ref-fx.html#rev"><span class="tag">REV</span>REVERB</a></li>
+          </ul>
+        </details>
+        <details class="tree-group fam-lvl">
+          <summary><svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>Микшер<span class="grp-code">LVL</span></summary>
+          <ul class="tree-list">
+            <li><a class="tree-link" href="ref-mix.html#mst"><span class="tag">MST</span>MASTER</a></li>
+            <li><a class="tree-link" href="ref-mix.html#lvl"><span class="tag">LVL</span>LEVELS</a></li>
+            <li><a class="tree-link" href="ref-mix.html#rvs"><span class="tag">RVS</span>REV SENDS</a></li>
+            <li><a class="tree-link" href="ref-mix.html#fxs"><span class="tag">FXS</span>FX SENDS</a></li>
+            <li><a class="tree-link" href="ref-mix.html#dls"><span class="tag">DLS</span>DEL SENDS</a></li>
+          </ul>
+        </details>
+        <details class="tree-group fam-prs">
+          <summary><svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>Пресеты и настройки<span class="grp-code">PRS</span></summary>
+          <ul class="tree-list">
+            <li><a class="tree-link" href="ref-store.html#prs"><span class="tag">PRS</span>PRESET</a></li>
+            <li><a class="tree-link" href="ref-store.html#set"><span class="tag">SET</span>SETUP</a></li>
+          </ul>
+        </details>
+        </nav>
+      </div>
 
-  <nav class="sidebar" id="sidebar" aria-label="Разделы документации">
-    <div class="sidebar-head">
-      <p class="sidebar-title">Руководство</p>
-      <button class="nav-close" type="button">Закрыть</button>
+      <article class="doc-main fam-fx">
+        <nav class="crumbs" aria-label="Хлебные крошки">
+          <a href="index.html">OBOD</a><span class="sep">/</span>
+          <a href="ref-drone.html">Справочник</a><span class="sep">/</span>
+          <span aria-current="page">Эффекты</span>
+        </nav>
+
+        <div style="display:flex;align-items:center;gap:var(--sp-3);flex-wrap:wrap">
+          <h1 style="font-size:var(--fs-48);font-weight:300">Эффекты</h1>
+          <span class="chip"><span class="dot"></span>FX</span>
+        </div>
+        <p class="lead muted" style="font-size:var(--fs-18);margin-top:var(--sp-3);max-width:var(--measure)">Машина на десять эффектов, дилей на шесть алгоритмов и реверб. Стойка стоит после звука, до мастера.</p>
+
+        <div data-tabs style="margin-top:var(--sp-6)">
+          <div class="tabs" role="tablist" aria-label="Экраны раздела Эффекты">
+            <button class="tab" role="tab" id="tab-fx" aria-controls="panel-fx" aria-selected="true" type="button">FX</button>
+            <button class="tab" role="tab" id="tab-del" aria-controls="panel-del" aria-selected="false" tabindex="-1" type="button">DELAY</button>
+            <button class="tab" role="tab" id="tab-rev" aria-controls="panel-rev" aria-selected="false" tabindex="-1" type="button">REVERB</button>
+          </div>
+
+          <div class="tabpanel" role="tabpanel" id="panel-fx" aria-labelledby="tab-fx">
+            <section id="fx">
+              <h2 style="font-size:var(--fs-28);margin-bottom:var(--sp-2)">Экран FX</h2>
+              <p class="muted" style="max-width:var(--measure);margin-bottom:var(--sp-5)">ЭФФЕКТ-МАШИНА: одна позиция в стойке и несколько эффектов в ней. TYPE выбирает, что стоит сейчас: CHORUS — тот самый, что был; TREMOLO — качание громкости; AUTOPAN — качание между каналами; VIBRATO — качание высоты; TILT — наклон тембра; PHASER — качающаяся гребёнка; FLANGER — короткая задержка с обратной связью; STUTTER — повтор куска по такту; COMB — гребёнка-резонатор; RING — кольцевая модуляция; SRR — частота выборки вниз; BITCRUSH — разрядность вниз; DRIVE — перегруз. Порядок не случайный: чистое сверху, разрушающее снизу.MIX — уровень возврата, VERB — посыл возврата в реверб.</p>
+              <div class="table-scroll">
+                <table class="param-table">
+                  <thead><tr><th>Ручка</th><th>Значения</th><th>Описание</th></tr></thead>
+                  <tbody>
+                    <tr>
+                      <td class="p-name"><span class="param-code">TYPE</span></td>
+                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
+                      <td>Что стоит в машине</td>
+                    </tr>
+                    <tr>
+                      <td class="p-name"><span class="param-code">MIX</span></td>
+                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
+                      <td>Уровень возврата</td>
+                    </tr>
+                    <tr>
+                      <td class="p-name"><span class="param-code">A</span></td>
+                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
+                      <td>Первый параметр эффекта</td>
+                    </tr>
+                    <tr>
+                      <td class="p-name"><span class="param-code">B</span></td>
+                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
+                      <td>Второй параметр эффекта</td>
+                    </tr>
+                    <tr>
+                      <td class="p-name"><span class="param-code">C</span></td>
+                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
+                      <td>Третий параметр эффекта</td>
+                    </tr>
+                    <tr>
+                      <td class="p-name"><span class="param-code">VERB</span></td>
+                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
+                      <td>Посыл возврата в реверб</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+          </div>
+
+          <div class="tabpanel" role="tabpanel" id="panel-del" aria-labelledby="tab-del" hidden>
+            <section id="del">
+              <h2 style="font-size:var(--fs-28);margin-bottom:var(--sp-2)">Экран DELAY</h2>
+              <p class="muted" style="max-width:var(--measure);margin-bottom:var(--sp-5)">Пинг-понг до четырёх секунд на сторону — целая нота на 60 bpm, и ниже 60 bpm время упирается в буфер. Повторы идут по стерео полю: первый слева, второй справа, третий снова слева. TIME — одна ручка времени: сначала доли такта (1-1, 1-2., 1-2, 1-4. и дальше до 1-32, они подчинены темпу с транспорта), потом миллисекунды от двадцати до тысячи пятисот. DAMP — демпфирование повторов в цепи обратной связи, от 18 кГц до 700 Гц. VERB — посыл самих повторов в реверб.</p>
+              <div class="table-scroll">
+                <table class="param-table">
+                  <thead><tr><th>Ручка</th><th>Значения</th><th>Описание</th></tr></thead>
+                  <tbody>
+                    <tr>
+                      <td class="p-name"><span class="param-code">MIX</span></td>
+                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
+                      <td>Уровень возврата</td>
+                    </tr>
+                    <tr>
+                      <td class="p-name"><span class="param-code">FDBK</span></td>
+                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
+                      <td>сколько повтора возвращается в линию; выше 0,95 не поднимается</td>
+                    </tr>
+                    <tr>
+                      <td class="p-name"><span class="param-code">TIME</span></td>
+                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
+                      <td>одна ручка времени: сначала доли такта, потом миллисекунды</td>
+                    </tr>
+                    <tr>
+                      <td class="p-name"><span class="param-code">MODE</span></td>
+                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
+                      <td>форма угла: 0 — низ пропускает ниже среза и режет выше, 50 — полоса пропускает вокруг среза, 100 — верх режет ниже среза и пропускает выше; между ними смешение соседних форм, а не переключение. Заводское значение — 0, низ</td>
+                    </tr>
+                    <tr>
+                      <td class="p-name"><span class="param-code">DAMP</span></td>
+                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
+                      <td>насколько темнее каждый следующий повтор: от 18 кГц (прозрачно) до 700 Гц (глухо)</td>
+                    </tr>
+                    <tr>
+                      <td class="p-name"><span class="param-code">VERB</span></td>
+                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
+                      <td>Посыл возврата в реверб</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+          </div>
+
+          <div class="tabpanel" role="tabpanel" id="panel-rev" aria-labelledby="tab-rev" hidden>
+            <section id="rev">
+              <h2 style="font-size:var(--fs-28);margin-bottom:var(--sp-2)">Экран REVERB</h2>
+              <p class="muted" style="max-width:var(--measure);margin-bottom:var(--sp-5)">Ревербератор. Хорус и дилей стоят перед ним и попадают в него.</p>
+              <div class="table-scroll">
+                <table class="param-table">
+                  <thead><tr><th>Ручка</th><th>Значения</th><th>Описание</th></tr></thead>
+                  <tbody>
+                    <tr>
+                      <td class="p-name"><span class="param-code">ALGO</span></td>
+                      <td><ul class="opt-list">
+<li class="opt"><b>ROOM</b><span>небольшая комната: короткий и плотный хвост</span></li>
+<li class="opt"><b>HALL</b><span>зал: длинный и ровный хвост</span></li>
+<li class="opt"><b>CATH</b><span>собор: очень длинный хвост и высокие отражения</span></li>
+<li class="opt"><b>PLAT</b><span>плита: густой и тёмный хвост, свой характер</span></li>
+</ul></td>
+                      <td>алгоритм</td>
+                    </tr>
+                    <tr>
+                      <td class="p-name"><span class="param-code">MIX</span></td>
+                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
+                      <td>Уровень возврата</td>
+                    </tr>
+                    <tr>
+                      <td class="p-name"><span class="param-code">SIZE</span></td>
+                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
+                      <td>размер помещения</td>
+                    </tr>
+                    <tr>
+                      <td class="p-name"><span class="param-code">DAMP</span></td>
+                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
+                      <td>насколько темнее каждый следующий повтор: от 18 кГц (прозрачно) до 700 Гц (глухо)</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+          </div>
+        </div>
+      </article>
+
+      <div class="doc-toc">
+        <div class="toc-title">На этой странице</div>
+        <ul class="toc">
+          <li><a class="toc-link" href="#fx">Экран FX</a></li>
+          <li><a class="toc-link" href="#del">Экран DELAY</a></li>
+          <li><a class="toc-link" href="#rev">Экран REVERB</a></li>
+        </ul>
+      </div>
+
     </div>
-    <div id="tree"></div>
-  </nav>
-
-  <div class="backdrop" id="backdrop" hidden></div>
-
-  <main class="content" id="main">
-    <h1>    <h1>Эффекты</h1>
-
-    <p class="lead">Стойка после звука: машина, дилей и реверб.</p>
-
-</h1>
-
-    <p class="lead"></p>
-
-    <p>FX — машина на десять эффектов: TYPE выбирает, что стоит в позиции, MIX задаёт долю, A, B и C — параметры выбранного. Подписи меняются вместе с типом, а ручка, которой у эффекта нет, гаснет.</p>
-    <p>DELAY — шесть алгоритмов на ручке MODE: DIGITAL, PINGPONG, MULTI, TAPE, FILTER, DIFFUSE. TIME правит время, DAMP гасит повторы, FEEDBACK держит их число; у дилея одна ручка времени и посыл повторов в реверб.</p>
-    <p>REVERB — резервуар на четыре диффузора и четыре линии: MODE, TIME, DAMP и MIX. Плита Dattorro — самый длинный режим, зал — самый ровный.</p>
-
-    <div data-ref="family" data-family="Эффекты"></div>
-
-    <nav class="pager" id="pager" aria-label="Соседние страницы"></nav>
-  </main>
-
-  <aside class="toc" aria-label="На этой странице">
-    <p class="toc-title">На этой странице</p>
-    <ul id="toc-list"></ul>
-  </aside>
-
-</div>
+  </div>
+</main>
 
 <footer class="footer">
-  <p><b>OBOD</b> — синтезатор-контроллер на ESP32-S3 с круглым экраном 360 × 360.
-    Девять разделов, двадцать пять экранов, 137 ручек, 148 параметров, 128 пресетов.</p>
-  <p>Начало — <a href="start.html">первый запуск</a>, обновление — <a href="flash.html">прошивка</a>,
-    что менялось — <a href="changelog.html">история изменений</a>.</p>
-  <p>Движок голосов — <a href="https://github.com/danilogcrf2-oss/ESP32Synth">ESP32Synth 2.5.0</a>
-    (MIT, © 2025 Danilo Gabriel). Остальное написано для этого прибора.</p>
+  <div class="wrap">
+    <div class="f-col">
+      <span class="f-title">OBOD</span>
+      <p class="f-note">Синтезатор-контроллер на ESP32-S3 с круглым экраном 360 × 360. Голосовой движок — ESP32Synth 2.5.0 (MIT, © 2025 Danilo Gabriel); остальное написано для этого прибора.</p>
+    </div>
+    <div class="f-col">
+      <span class="f-title">Документация</span>
+      <a href="start.html">Первый запуск</a>
+      <a href="ref-drone.html">Справочник</a>
+      <a href="changelog.html">История изменений</a>
+    </div>
+    <div class="f-col">
+      <span class="f-title">Прибор</span>
+      <a href="hw.html">Железо</a>
+      <a href="flash.html">Прошивка</a>
+      <a href="hw.html">Железо</a>
+    </div>
+  </div>
 </footer>
 
-<script src="assets/pages.js?v=20261112a"></script>
-<script src="assets/ref.js?v=20261112a"></script>
-<script src="assets/docs.js?v=20261112a"></script>
+<script src="system/ui.js?v=20261112c"></script>
+<script src="assets/deep-link.js?v=20261112c"></script>
+
 <script>
   // Работник таймера раньше стоял в корне сайта и получал запросы всех разделов: он
   // ждёт сеть 800 мс и при задержке отдаёт из кэша свою страницу, а образ прошивки

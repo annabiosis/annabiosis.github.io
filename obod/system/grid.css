@@ -1,0 +1,164 @@
+/* ═══════════════════════════════════════════════════════════════
+   OBOD · Дизайн-система — Модульная сетка
+   12 колонок · модуль 8px · каркас документации «дерево / текст / оглавление»
+   Оверлей сетки: кнопка [data-grid-toggle] или клавиша G
+   ═══════════════════════════════════════════════════════════════ */
+
+.wrap {
+  width: 100%;
+  max-width: var(--wrap);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.wrap-narrow { max-width: 1080px; }
+
+/* ── 12-колоночная сетка ── */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
+  gap: var(--col-gap);
+}
+.grid-tight { gap: var(--sp-4); }
+.grid-loose { gap: var(--sp-6); }
+
+.col-1  { grid-column: span 1; }
+.col-2  { grid-column: span 2; }
+.col-3  { grid-column: span 3; }
+.col-4  { grid-column: span 4; }
+.col-5  { grid-column: span 5; }
+.col-6  { grid-column: span 6; }
+.col-7  { grid-column: span 7; }
+.col-8  { grid-column: span 8; }
+.col-9  { grid-column: span 9; }
+.col-10 { grid-column: span 10; }
+.col-11 { grid-column: span 11; }
+.col-12 { grid-column: span 12; }
+
+.start-1 { grid-column-start: 1; }
+.start-2 { grid-column-start: 2; }
+.start-3 { grid-column-start: 3; }
+.start-4 { grid-column-start: 4; }
+.start-5 { grid-column-start: 5; }
+
+/* Планшет: 6 колонок, широкие блоки делятся пополам */
+@media (max-width: 1024px) {
+  :root { --cols: 6; --col-gap: 20px; }
+  .col-7, .col-8, .col-9, .col-10, .col-11, .col-12 { grid-column: span 6; }
+  .col-4, .col-5, .col-6 { grid-column: span 3; }
+  .col-md-6 { grid-column: span 6; }
+  .col-md-3 { grid-column: span 3; }
+  .start-2, .start-3, .start-4, .start-5 { grid-column-start: auto; }
+}
+
+/* Телефон: одна колонка */
+@media (max-width: 640px) {
+  :root { --cols: 2; --col-gap: 16px; }
+  [class*="col-"] { grid-column: span 2; }
+  .col-sm-1 { grid-column: span 1; }
+}
+
+/* ── Каркас документации ── */
+.doc {
+  display: grid;
+  grid-template-columns: var(--tree-w) minmax(0, 1fr) var(--toc-w);
+  grid-template-areas: "tree main toc";
+  gap: var(--sp-6);
+  align-items: start;
+  padding-block: var(--sp-6) var(--sp-8);
+}
+.doc > .doc-tree { grid-area: tree; }
+.doc > .doc-main { grid-area: main; min-width: 0; }
+.doc > .doc-toc  { grid-area: toc; }
+
+@media (max-width: 1180px) {
+  .doc { grid-template-columns: var(--tree-w) minmax(0, 1fr); grid-template-areas: "tree main"; }
+  .doc > .doc-toc { display: none; }
+}
+@media (max-width: 900px) {
+  .doc { grid-template-columns: minmax(0, 1fr); grid-template-areas: "tree" "main"; gap: var(--sp-5); }
+}
+
+/* Вариант без дерева: руководство и история */
+.doc.doc--no-tree { grid-template-columns: minmax(0, 1fr) var(--toc-w); grid-template-areas: "main toc"; }
+@media (max-width: 1180px) {
+  .doc.doc--no-tree { grid-template-columns: minmax(0, 1fr); grid-template-areas: "main"; }
+}
+
+/* ── Вертикальный ритм секций ── */
+.section { padding-block: var(--sp-8); }
+.section + .section { border-top: 1px solid var(--line-1); }
+.section-head { margin-bottom: var(--sp-6); max-width: 760px; }
+.section-head .eyebrow { display: block; margin-bottom: var(--sp-3); }
+.section-head h2 { font-size: var(--fs-36); margin-bottom: var(--sp-3); }
+.section-head .lead { color: var(--ink-3); font-size: var(--fs-18); }
+
+.subsection { margin-top: var(--sp-7); }
+.subsection > h3 {
+  font-size: var(--fs-22);
+  margin-bottom: var(--sp-2);
+}
+.subsection > .sub-note {
+  color: var(--ink-3);
+  font-size: var(--fs-14);
+  margin-bottom: var(--sp-5);
+  max-width: var(--measure);
+}
+
+/* ── Оверлей сетки ── */
+.grid-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-grid);
+  pointer-events: none;
+  display: none;
+}
+html.show-grid .grid-overlay { display: block; }
+.grid-overlay .wrap { height: 100%; }
+.grid-overlay .grid { height: 100%; grid-template-columns: repeat(12, minmax(0, 1fr)); }
+.grid-overlay .g-col {
+  grid-column: span 1;
+  background: var(--accent-soft);
+  border-inline: 1px solid var(--accent-line);
+}
+.grid-badge {
+  position: fixed;
+  right: var(--sp-4);
+  bottom: var(--sp-4);
+  z-index: var(--z-grid);
+  display: none;
+  padding: var(--sp-2) var(--sp-3);
+  font-family: var(--font-mono);
+  font-size: var(--fs-12);
+  color: var(--accent-ink);
+  background: var(--accent);
+  border-radius: var(--r-s);
+}
+html.show-grid .grid-badge { display: block; }
+
+/* ── Демо-подложки витрины ── */
+.demo-cell {
+  min-height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: var(--fs-12);
+  color: var(--accent);
+  background: var(--accent-soft);
+  border: 1px dashed var(--accent-line);
+  border-radius: var(--r-s);
+}
+.demo-surface {
+  padding: var(--sp-5);
+  background: var(--surface-1);
+  border: 1px solid var(--line-1);
+  border-radius: var(--r-l);
+}
+.demo-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-3);
+  align-items: center;
+}
+.demo-row + .demo-row { margin-top: var(--sp-4); }

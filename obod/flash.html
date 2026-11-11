@@ -1,242 +1,236 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" data-theme="dark">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/docs.css?v=20261112a">
-<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-<title>OBOD — Прошивка</title>
-<!--
-  Раздел «Прошивка», разложенный по двум вкладкам: «Из браузера» и «Что теряется».
-
-  Кнопку и диалог записи рисует esp-web-tools: тот же модуль, что использует страница
-  tools/webflash. Подпись к образу собирается из манифеста, который указан у самой кнопки,
-  поэтому путь к манифесту задан в одном месте — в разметке ниже. Отсюда, из папки web/,
-  манифест лежит в manifest.json; образ указан в манифесте как
-  firmware/OBOD.bin и отсчитывается от самого манифеста.
-
-  У копии этой страницы на сайте путь к манифесту — manifest.json: образ и манифест лежат
-  в той же папке.
-
-  Заполнение #flash-meta открывает файл запросом, а по file:// браузер соседние файлы
-  читать не даёт: тогда в подписи остаётся то, что написано в разметке, — фраза о том, что
-  версия и размер появятся после проверки кода. Это ожидаемо и не мешает самой записи:
-  её делает esp-web-tools.
--->
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#060A09" />
+<title>OBOD — прошивка</title>
+<meta name="description" content="Запись прошивки OBOD из браузера: код выпуска, запечатанный образ, исходники и что при этом теряется." />
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="system/tokens.css?v=20261112c" />
+<link rel="stylesheet" href="system/base.css?v=20261112c" />
+<link rel="stylesheet" href="system/grid.css?v=20261112c" />
+<link rel="stylesheet" href="system/components.css?v=20261112c" />
+<script>
+  (function () {
+    try {
+      var t = localStorage.getItem('obod-theme');
+      if (!t) t = matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+      document.documentElement.dataset.theme = t;
+    } catch (e) { document.documentElement.dataset.theme = 'dark'; }
+  })();
+</script>
 </head>
-
 <body>
-
-<a class="skip" href="#main">К содержимому</a>
+<a class="skip-link" href="#main">К содержимому</a>
 
 <header class="topbar">
-  <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="sidebar">Разделы</button>
-  <a class="brand" href="index.html">OBOD</a>
-  <nav class="crumbs" id="crumbs" aria-label="Хлебные крошки"></nav>
+  <a class="brand" href="index.html">
+    <svg class="brand-ring" width="26" height="26" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="12" fill="none" stroke="currentColor" stroke-width="2.6" stroke-dasharray="56 20" stroke-linecap="round" transform="rotate(135 16 16)"/><circle cx="16" cy="16" r="4" fill="currentColor"/></svg>
+    OBOD
+  </a>
+  <nav class="topnav" aria-label="Документация">
+    <a href="index.html">Обзор</a>
+    <a href="start.html">Первый запуск</a>
+    <a href="ref-drone.html">Справочник</a>
+    <a href="hw.html">Железо</a>
+    <a href="flash.html" aria-current="page">Прошивка</a>
+    <a href="changelog.html">История</a>
+  </nav>
+  <div class="topbar-actions">
+    <button class="icon-btn" data-grid-toggle type="button" title="Показать сетку (G)" aria-label="Показать модульную сетку"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></button>
+    <button class="icon-btn theme-toggle" data-theme-toggle type="button" title="Переключить тему" aria-label="Переключить светлую и тёмную тему"><svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg><svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M19.1 4.9l-1.8 1.8M6.7 17.3l-1.8 1.8" stroke-linecap="round"/></svg></button>
+  </div>
 </header>
 
-<div class="shell">
-
-  <nav class="sidebar" id="sidebar" aria-label="Разделы документации">
-    <div class="sidebar-head">
-      <p class="sidebar-title">Документация</p>
-      <button class="nav-close" type="button">Закрыть</button>
-    </div>
-    <div id="tree"></div>
-  </nav>
-
-  <div class="backdrop" id="backdrop" hidden></div>
-
-  <main class="content" id="main">
-
-    <h1>Прошивка</h1>
-
-    <p class="lead">Новая версия записывается по USB из браузера.</p>
-
-    <p>Основной способ — прямо из браузера: страница сама передаёт прибору образ, командная
-      строка и Python не нужны.</p>
-
-    <div class="note">
-      <p><b>Прошивка только для Guition Knob JC3636K718C.</b> Это плата с круглым
-        экраном 360 × 360 и энкодером-ободом. На других устройствах образ не заработает,
-        а запись на них может сделать плату нерабочей: разметка памяти, распиновка и
-        экран у чужих плат свои. За последствия записи на другое устройство
-        ответственности не несём.</p>
-      <p>Микросхема, память, экран, кольцо и питание этой платы — в разделе
-        <a href="hw.html">«Железо»</a>.</p>
-    </div>
-
-    <div class="tabset" data-tabset="pages">
-
-      <div class="tabs" role="tablist">
-        <button class="tab" type="button" role="tab" data-tab="browser" aria-selected="true"><span class="tab-name">Из браузера</span></button>
-        <button class="tab" type="button" role="tab" data-tab="lost" aria-selected="false" tabindex="-1"><span class="tab-name">Что теряется</span></button>
-      </div>
-
-      <div class="panels">
-
-        <div class="panel flash" role="tabpanel" data-panel="browser" id="flash">
-          <h2>Из браузера</h2>
-
-          <p>Образ выпуска лежит на сайте <b>зашифрованным</b>. Страница выводит ключ из кода
-            выпуска и расшифровывает файл здесь, в браузере: на прибор уходит уже открытый
-            образ, а на диск не сохраняется ничего. Код один на выпуск — он лежит в посте
-            Boosty этого выпуска, и он одинаковый для всех, кому выпуск доступен.</p>
-
-          <div class="subscribe">
-            <p class="subscribe-lead">Код разблокировки лежит в&nbsp;постах для подписчиков.</p>
-            <p class="subscribe-note">Любой уровень подписки открывает пост с&nbsp;кодом к
-              актуальной прошивке.</p>
-            <p class="subscribe-act">
-              <a class="subscribe-url" href="https://boosty.to/annabiosis"
-                 rel="noopener">boosty.to/annabiosis</a>
-              <a class="btn" href="https://boosty.to/annabiosis" rel="noopener">Подписаться
-                на Boosty</a>
-            </p>
-          </div>
-
-          <form class="unlock" id="unlock" autocomplete="off"
-                data-lock="lock.json"
-                data-sealed="firmware/OBOD.bin.enc"
-                data-manifest="manifest.json">
-            <label for="code">Код выпуска</label>
-            <div class="unlock-row">
-              <input id="code" name="code" type="text" spellcheck="false"
-                     autocapitalize="off" autocomplete="one-time-code" required
-                     aria-describedby="unlock-note">
-              <button class="btn" type="submit">Разблокировать</button>
-            </div>
-            <p class="unlock-note" id="unlock-note">Код чувствителен к регистру и знакам:
-              копируйте его из поста целиком, вместе с дефисами.</p>
-          </form>
-
-          <p id="flash-status" class="flash-status" role="status" aria-live="polite"></p>
-
-          <esp-web-install-button id="installer" hidden>
-            <button slot="activate" class="btn" type="button">Установить прошивку</button>
-            <span slot="unsupported">Браузер не поддерживает Web Serial. Откройте страницу
-              в Chrome или Edge на компьютере.</span>
-            <span slot="not-allowed">Страница открыта не по защищённому адресу: запись
-              работает только по https или на localhost.</span>
-          </esp-web-install-button>
-
-          <p id="flash-meta">Версия, размер и контрольная сумма образа появятся здесь
-            после проверки кода.</p>
-
-          <p class="whats-new"><a href="changelog.html#v1.3.0">Что нового в 1.3.0</a> —
-            разделы и пункты этого выпуска, а также история предыдущих версий.</p>
-
-          <h3>Что нужно</h3>
-
-          <ul>
-            <li><b>Код выпуска</b> — из поста Boosty этого выпуска. Посты с кодами открыты
-              подписке любого уровня. Код один на выпуск и подходит всем, кому выпуск доступен;
-              поле для него выше кнопки записи. Без кода страница не расшифрует образ.</li>
-            <li>Chrome или Edge на компьютере. Firefox, Safari и браузеры телефонов Web Serial
-              не поддерживают — кнопки на них не будет.</li>
-            <li>Прибор подключён кабелем и виден системе как COM-порт.</li>
-            <li>Порт свободен: закройте монитор порта и всё остальное, что его держит.</li>
-            <li>Приём нот выключен. Если на странице <span class="lab lab-view">OPTIONS</span> включён <b>MIDI IN</b>, разъём отдан
-              MIDI-интерфейсу и COM-порта нет: выключите приём, перезагрузите прибор — порт снова
-              станет отладочным.</li>
+<main id="main">
+  <div class="wrap">
+    <div class="doc">
+      <div class="doc-tree">
+        <div class="search" style="margin-bottom:var(--sp-3)">
+          <svg class="search-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3" stroke-linecap="round"/></svg>
+          <input class="input" type="search" placeholder="Найти экран…" data-tree-filter=".tree" aria-label="Поиск по дереву разделов" />
+        </div>
+        <nav class="tree" aria-label="Разделы прибора">
+        <details class="tree-group fam-drn">
+          <summary><svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>Дрон<span class="grp-code">DRN</span></summary>
+          <ul class="tree-list">
+            <li><a class="tree-link" href="ref-drone.html#drn"><span class="tag">DRN</span>DRONE</a></li>
+            <li><a class="tree-link" href="ref-drone.html#dfl"><span class="tag">DFL</span>DRONE FLTR</a></li>
           </ul>
-
-          <h3>Если прибор не отвечает</h3>
-
-          <p>Обычно страница сама переводит прибор в режим загрузчика. На <b>первой прошивке</b>,
-            когда прошивки на плате ещё нет, это может не сработать: страница не найдёт
-            устройство. Тогда режим загрузчика включается руками.</p>
-
-          <ol>
-            <li><b>Воткните USB-кабель</b> — пока прибор выключен. Кабель питание не подаёт, он
-              только для данных; COM-порт появится после включения.</li>
-            <li>Нажмите и держите утопленную кнопку <b>BOOT</b> — удобнее скрепкой или
-              зубочисткой.</li>
-            <li>Не отпуская её, <b>включите прибор кнопкой питания</b>.</li>
-            <li>Дождитесь, пока система увидит COM-порт, и отпустите BOOT. Нажмите «Установить
-              прошивку».</li>
-            <li>После записи <b>выключите и включите прибор кнопкой питания</b>: иначе он
-              останется в режиме загрузчика.</li>
-          </ol>
-
-          <p>Пока BOOT зажат, кольцо может светиться странно. На запись это не влияет.</p>
-
-          <h3>Зачем код</h3>
-
-          <p>Образ на сайте лежит зашифрованным. Из кода страница выводит ключ, расшифровывает
-            файл в памяти и сверяет контрольную сумму — только после этого появляется кнопка
-            записи. На диск ничего не сохраняется: открытый образ уходит прямо в прибор.
-            Неверный код ничего не расшифрует и ничего не испортит — запись просто не начнётся,
-            а страница скажет, что код не подошёл.</p>
-
-          <p>Код один на выпуск, он лежит в посте Boosty этого выпуска и подходит всем, кому
-            выпуск доступен. Посты с кодами доступны по подписке любого уровня:
-            <a href="https://boosty.to/annabiosis" rel="noopener">boosty.to/annabiosis</a>.</p>
-
-          <h3>Исходники</h3>
-
-          <p>Выпуск лежит на сайте и целиком, деревом файлов: код приложения и интерфейса,
-            закреплённые версии компонентов, документация и схема тракта. Архив <b>без
-            защиты</b> — код выпуска для него не нужен.</p>
-
-          <p class="sources-link"><a href="firmware/OBOD-1.2.3-src.zip">Скачать
-            исходники 1.2.3</a></p>
-
-          <p class="sources-data" data-sources="sources.json">размер и SHA-256
-            архива — в sources.json рядом со страницей</p>
-
-          <p>Внутри — все файлы этой версии: код, документация, схема тракта. Готового образа
-            в архиве нет — образ ставится только страницей записи.</p>
-        </div>
-
-        <div class="panel" role="tabpanel" data-panel="lost" hidden>
-          <h2>Что теряется</h2>
-
-          <div class="note">
-            <p><b>При этой прошивке пресеты и настройки теряются.</b> Образ записывается
-              целиком, от нулевого адреса, и закрывает область памяти, где лежат настройки и
-              пресеты: прибор включится с заводскими значениями. Галочка стирания в диалоге на
-              это не влияет. Запишите нужные звуки заранее. Прошивка из командной строки,
-              описанная на вкладке «Командой», настройки сохраняет.</p>
-          </div>
-
-          <p class="muted">Хранение звука, слоты и то, как пресеты переживают смену прошивки,
-            описаны на странице <a href="ref-store.html">«Пресеты»</a>.</p>
-        </div>
-
+        </details>
+        <details class="tree-group fam-lfo">
+          <summary><svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>Модуляция<span class="grp-code">LFO</span></summary>
+          <ul class="tree-list">
+            <li><a class="tree-link" href="ref-lfo.html#lf1"><span class="tag">LF1</span>LFO 1</a></li>
+            <li><a class="tree-link" href="ref-lfo.html#lf2"><span class="tag">LF2</span>LFO 2</a></li>
+          </ul>
+        </details>
+        <details class="tree-group fam-ld">
+          <summary><svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>Лид<span class="grp-code">LD</span></summary>
+          <ul class="tree-list">
+            <li><a class="tree-link" href="ref-lead.html#ld"><span class="tag">LD</span>LEAD</a></li>
+            <li><a class="tree-link" href="ref-lead.html#ltn"><span class="tag">LTN</span>LEAD TONE</a></li>
+            <li><a class="tree-link" href="ref-lead.html#env"><span class="tag">ENV</span>LEAD ENV</a></li>
+          </ul>
+        </details>
+        <details class="tree-group fam-scl">
+          <summary><svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>Генераторы<span class="grp-code">GEN</span></summary>
+          <ul class="tree-list">
+            <li><a class="tree-link" href="ref-time.html#scl"><span class="tag">SCL</span>SCALE</a></li>
+            <li><a class="tree-link" href="ref-time.html#eql"><span class="tag">EQL</span>LEAD EUCLID</a></li>
+            <li><a class="tree-link" href="ref-time.html#arp"><span class="tag">ARP</span>LEAD ARP</a></li>
+          </ul>
+        </details>
+        <details class="tree-group fam-prc">
+          <summary><svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>Перкуссия<span class="grp-code">PRC</span></summary>
+          <ul class="tree-list">
+            <li><a class="tree-link" href="ref-perc.html#prc"><span class="tag">PRC</span>PERC</a></li>
+            <li><a class="tree-link" href="ref-perc.html#psq"><span class="tag">PSQ</span>PERC SEQ</a></li>
+            <li><a class="tree-link" href="ref-perc.html#pmx"><span class="tag">PMX</span>PERC MIX</a></li>
+          </ul>
+        </details>
+        <details class="tree-group fam-bas">
+          <summary><svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>Бас<span class="grp-code">BAS</span></summary>
+          <ul class="tree-list">
+            <li><a class="tree-link" href="ref-bass.html#bas"><span class="tag">BAS</span>BASS</a></li>
+            <li><a class="tree-link" href="ref-bass.html#bsq"><span class="tag">BSQ</span>RHYTHM</a></li>
+          </ul>
+        </details>
+        <details class="tree-group fam-fx">
+          <summary><svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>Эффекты<span class="grp-code">FX</span></summary>
+          <ul class="tree-list">
+            <li><a class="tree-link" href="ref-fx.html#fx"><span class="tag">FX</span>FX</a></li>
+            <li><a class="tree-link" href="ref-fx.html#del"><span class="tag">DEL</span>DELAY</a></li>
+            <li><a class="tree-link" href="ref-fx.html#rev"><span class="tag">REV</span>REVERB</a></li>
+          </ul>
+        </details>
+        <details class="tree-group fam-lvl">
+          <summary><svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>Микшер<span class="grp-code">LVL</span></summary>
+          <ul class="tree-list">
+            <li><a class="tree-link" href="ref-mix.html#mst"><span class="tag">MST</span>MASTER</a></li>
+            <li><a class="tree-link" href="ref-mix.html#lvl"><span class="tag">LVL</span>LEVELS</a></li>
+            <li><a class="tree-link" href="ref-mix.html#rvs"><span class="tag">RVS</span>REV SENDS</a></li>
+            <li><a class="tree-link" href="ref-mix.html#fxs"><span class="tag">FXS</span>FX SENDS</a></li>
+            <li><a class="tree-link" href="ref-mix.html#dls"><span class="tag">DLS</span>DEL SENDS</a></li>
+          </ul>
+        </details>
+        <details class="tree-group fam-prs">
+          <summary><svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>Пресеты и настройки<span class="grp-code">PRS</span></summary>
+          <ul class="tree-list">
+            <li><a class="tree-link" href="ref-store.html#prs"><span class="tag">PRS</span>PRESET</a></li>
+            <li><a class="tree-link" href="ref-store.html#set"><span class="tag">SET</span>SETUP</a></li>
+          </ul>
+        </details>
+        </nav>
       </div>
+
+      <article class="doc-main">
+        <nav class="crumbs" aria-label="Хлебные крошки">
+          <a href="index.html">OBOD</a><span class="sep">/</span>
+          <span aria-current="page">Прошивка</span>
+        </nav>
+
+        <span class="eyebrow">Прибор</span>
+        <h1 style="font-size:var(--fs-48);font-weight:300;margin-top:var(--sp-2)">Прошивка</h1>
+        <p class="lead muted" style="font-size:var(--fs-18);margin-top:var(--sp-3);max-width:var(--measure)">Новый выпуск записывается из браузера и открывается кодом выпуска. Образ на сайте лежит запечатанным; что изменилось в выпуске — в <a href="changelog.html#v1.3.0">истории изменений</a>.</p>
+
+        <div class="note note-info" style="margin-top:var(--sp-6)">
+          <div class="note-title">Что нужно</div>
+          <p>Chrome или Edge на компьютере, кабель USB-C и код выпуска. Код чувствителен к регистру и знакам; страница выводит ключ из кода и расшифровывает образ здесь, в браузере: на прибор уходит уже открытый образ, а на диск не сохраняется ничего.</p>
+        </div>
+
+        <div class="card" style="margin-top:var(--sp-4);padding:var(--sp-5)">
+          <span class="eyebrow">Где взять код</span>
+          <h3 style="font-size:var(--fs-22);margin:var(--sp-2) 0 var(--sp-2)">Пост на Boosty</h3>
+          <p class="muted" style="max-width:var(--measure);font-size:var(--fs-16)">Код разблокировки лежит в постах для подписчиков: любой уровень подписки открывает пост с кодом к актуальной прошивке. Код один на выпуск и одинаковый для всех, кому выпуск доступен.</p>
+          <p style="margin-top:var(--sp-3);display:flex;gap:var(--sp-3);align-items:center;flex-wrap:wrap">
+            <a class="btn btn-primary" href="https://boosty.to/annabiosis" rel="noopener">Подписаться на Boosty</a>
+            <a href="https://boosty.to/annabiosis" rel="noopener" class="mono" style="font-size:var(--fs-14)">boosty.to/annabiosis</a>
+          </p>
+        </div>
+
+        <form class="unlock" id="unlock" autocomplete="off"
+              data-lock="lock.json"
+              data-sealed="firmware/OBOD.bin.enc"
+              data-manifest="manifest.json"
+              style="margin-top:var(--sp-6)">
+          <div class="field">
+            <label class="field-label" for="code">Код выпуска</label>
+            <div style="display:flex;gap:var(--sp-2);flex-wrap:wrap">
+              <input class="input" id="code" name="code" type="text" spellcheck="false" autocomplete="off"
+                     autocapitalize="off" placeholder="код из поста Boosty" aria-describedby="unlock-note" style="min-width:min(420px,100%)" />
+              <button class="btn btn-primary" type="submit">Открыть образ</button>
+            </div>
+            <p class="field-hint" id="unlock-note">Код чувствителен к регистру и знакам. Если замок не открывается, проверьте код в посте — он один на выпуск.</p>
+          </div>
+        </form>
+
+        <p id="flash-status" class="flash-status" role="status" aria-live="polite" style="margin-top:var(--sp-4)"></p>
+
+        <div style="margin-top:var(--sp-4)">
+          <esp-web-install-button id="installer" hidden>
+            <button slot="activate" class="btn btn-primary btn-lg">Записать прошивку</button>
+            <span slot="unsupported" class="muted">Этот браузер не умеет прошивать по USB — откройте страницу в Chrome или Edge.</span>
+            <span slot="not-allowed" class="muted">Страница должна быть открыта по HTTPS, чтобы браузер дал доступ к порту.</span>
+          </esp-web-install-button>
+        </div>
+
+        <p id="flash-meta" class="muted" style="margin-top:var(--sp-3);font-size:var(--fs-14)">Версия, размер и контрольная сумма образа появятся здесь после открытия кода.</p>
+
+        <h2 id="lost" style="font-size:var(--fs-28);margin-top:var(--sp-7)">Что теряется</h2>
+        <p style="max-width:var(--measure)">Браузерная запись пишет образ одним куском от начала флеша, поэтому служебная область настроек попадает под стирание: пресеты и настройки при такой прошивке теряются. Командная строка (<span class="mono">idf.py flash</span>) пишет части по своим адресам и настроек не касается.</p>
+        <div class="note note-warn" style="margin-top:var(--sp-4)">
+          <div class="note-title">Перед записью</div>
+          <p>Сохраните нужные пресеты на компьютер, если они важны, и не отключайте питание до конца записи.</p>
+        </div>
+
+        <h2 id="sources" style="font-size:var(--fs-28);margin-top:var(--sp-7)">Исходники выпуска</h2>
+        <p style="max-width:var(--measure)">Архив исходников лежит рядом, без защиты: код выпуска нужен только образу.</p>
+        <p class="mono muted" data-sources="sources.json" style="font-size:var(--fs-13)">размер и SHA-256 архива появятся здесь</p>
+      </article>
+
+      <div class="doc-toc">
+        <div class="toc-title">На этой странице</div>
+        <ul class="toc">
+          <li><a class="toc-link" href="#lost">Что теряется</a></li>
+          <li><a class="toc-link" href="#sources">Исходники выпуска</a></li>
+        </ul>
+      </div>
+
     </div>
-
-    <nav class="pager" id="pager" aria-label="Соседние страницы"></nav>
-  </main>
-
-  <aside class="toc" aria-label="На этой странице">
-    <p class="toc-title">На этой странице</p>
-    <ul id="toc-list"></ul>
-  </aside>
-
-</div>
+  </div>
+</main>
 
 <footer class="footer">
-  <p><b>OBOD</b> — синтезатор-контроллер на ESP32-S3 с круглым экраном 360 × 360.
-    Девять разделов, двадцать пять экранов, 148 параметров, 128 пресетов.</p>
-  <p>Начало — <a href="start.html">первый запуск</a>, обновление — <a href="flash.html">прошивка</a>,
-    что менялось — <a href="changelog.html">история изменений</a>.</p>
-  <p>Движок голосов — <a href="https://github.com/danilogcrf2-oss/ESP32Synth">ESP32Synth 2.5.0</a>
-    (MIT, © 2025 Danilo Gabriel). Остальное написано для этого прибора.</p>
+  <div class="wrap">
+    <div class="f-col">
+      <span class="f-title">OBOD</span>
+      <p class="f-note">Синтезатор-контроллер на ESP32-S3 с круглым экраном 360 × 360. Голосовой движок — ESP32Synth 2.5.0 (MIT, © 2025 Danilo Gabriel); остальное написано для этого прибора.</p>
+    </div>
+    <div class="f-col">
+      <span class="f-title">Документация</span>
+      <a href="start.html">Первый запуск</a>
+      <a href="ref-drone.html">Справочник</a>
+      <a href="changelog.html">История изменений</a>
+    </div>
+    <div class="f-col">
+      <span class="f-title">Прибор</span>
+      <a href="hw.html">Железо</a>
+      <a href="flash.html">Прошивка</a>
+      <a href="hw.html">Железо</a>
+    </div>
+  </div>
 </footer>
 
-<script src="assets/pages.js?v=20261112a"></script>
-<script src="assets/docs.js?v=20261112a"></script>
-
+<script src="system/ui.js?v=20261112c"></script>
+<script src="assets/deep-link.js?v=20261112c"></script>
 <script type="module" src="https://unpkg.com/esp-web-tools@10.4.0/dist/web/install-button.js?module"></script>
-<script src="assets/unlock.js?v=20261112a"></script>
-<script src="assets/sources.js?v=20261112a"></script>
-
-
+<script src="assets/unlock.js?v=20261112c"></script>
+<script src="assets/sources.js?v=20261112c"></script>
 <script>
   // Работник таймера раньше стоял в корне сайта и получал запросы всех разделов: он
   // ждёт сеть 800 мс и при задержке отдаёт из кэша свою страницу, а образ прошивки

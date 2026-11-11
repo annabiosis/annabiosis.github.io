@@ -1,169 +1,487 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" data-theme="dark">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/docs.css?v=20261112a">
-<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-<title>OBOD — История изменений</title>
-<!--
-  История изменений: все выпуски, от нового к старому.
-
-  Данные не записаны в разметку: их отдаёт changelog.json, собранный из CHANGELOG.md
-  скриптом tools/make-changelog-json.ps1. Отсюда, из папки web/, файл лежит в
-  changelog.json; сборка сайта переписывает путь на соседний
-  changelog.json — так же, как у манифеста и образа на странице прошивки.
-
-  Записи в файле: versions, в каждой version, date и sections. Дата берётся из тега
-  выпуска: в CHANGELOG.md дат нет, и придумывать их нельзя.
-
-  Заголовки версий появляются после чтения файла, поэтому оглавление справа сначала
-  пустое: заполнив страницу, скрипт просит docs.js собрать его заново — тем же
-  событием hashchange, на которое тот уже слушает.
--->
-</head>
-
-<body>
-
-<a class="skip" href="#main">К содержимому</a>
-
-<header class="topbar">
-  <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="sidebar">Разделы</button>
-  <a class="brand" href="index.html">OBOD</a>
-  <nav class="crumbs" id="crumbs" aria-label="Хлебные крошки"></nav>
-</header>
-
-<div class="shell">
-
-  <nav class="sidebar" id="sidebar" aria-label="Разделы документации">
-    <div class="sidebar-head">
-      <p class="sidebar-title">Документация</p>
-      <button class="nav-close" type="button">Закрыть</button>
-    </div>
-    <div id="tree"></div>
-  </nav>
-
-  <div class="backdrop" id="backdrop" hidden></div>
-
-  <main class="content" id="main">
-
-    <h1>История изменений</h1>
-
-    <p class="lead">Все выпуски прибора, от нового к старому: что появилось, что
-      исправлено, что поменялось в поведении.</p>
-
-    <p>Это история прибора: что появилось, что исправлено и что поменялось в поведении. Номер
-      выпуска служит ссылкой — адрес <code>changelog.html#v1.2.3</code> открывает сразу нужную
-      версию, а дата рядом с номером — день выпуска.</p>
-
-    <nav aria-label="Версии">
-      <ul class="cl-index" id="cl-index"></ul>
-    </nav>
-
-    <div id="history" data-source="changelog.json"></div>
-
-    <noscript>
-      <p class="cl-note">Для списка нужен JavaScript. Без него те же записи лежат в файле
-        <a href="changelog.json">changelog.json</a>.</p>
-    </noscript>
-
-    <nav class="pager" id="pager" aria-label="Соседние страницы"></nav>
-  </main>
-
-  <aside class="toc" aria-label="На этой странице">
-    <p class="toc-title">На этой странице</p>
-    <ul id="toc-list"></ul>
-  </aside>
-
-</div>
-
-<footer class="footer">
-  <p><b>OBOD</b> — синтезатор-контроллер на ESP32-S3 с круглым экраном 360 × 360.
-    Девять разделов, двадцать пять экранов, 148 параметров, 128 пресетов.</p>
-  <p>Начало — <a href="start.html">первый запуск</a>, обновление — <a href="flash.html">прошивка</a>,
-    что менялось — <a href="changelog.html">история изменений</a>.</p>
-  <p>Движок голосов — <a href="https://github.com/danilogcrf2-oss/ESP32Synth">ESP32Synth 2.5.0</a>
-    (MIT, © 2025 Danilo Gabriel). Остальное написано для этого прибора.</p>
-</footer>
-
-<script src="assets/pages.js?v=20261112a"></script>
-<script src="assets/docs.js?v=20261112a"></script>
-<script src="assets/changelog.js?v=20261112a"></script>
-
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#060A09" />
+<title>OBOD — история изменений</title>
+<meta name="description" content="Все выпуски прошивки OBOD: новое, улучшения и исправления — коротко и по делу." />
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="system/tokens.css?v=20261112c" />
+<link rel="stylesheet" href="system/base.css?v=20261112c" />
+<link rel="stylesheet" href="system/grid.css?v=20261112c" />
+<link rel="stylesheet" href="system/components.css?v=20261112c" />
 <script>
-  // Заполнение страницы: список версий для перехода и сами версии с разделами.
-  // Путь к файлу задан в разметке, в data-source у #history: на сайте сборка
-  // заменяет его на соседний changelog.json — как у манифеста на странице прошивки.
-  (async function () {
-    var host = document.getElementById('history');
-    var index = document.getElementById('cl-index');
-    if (!host || !index) return;
-
-    var versions = await ObodChangelog.load(
-      host.getAttribute('data-source') || 'changelog.json');
-
-    if (!versions.length) {
-      var miss = document.createElement('p');
-      miss.className = 'cl-note';
-      miss.textContent = 'Список изменений не загрузился. Файл с ним лежит рядом со ' +
-        'страницей: changelog.json.';
-      host.appendChild(miss);
-      return;
-    }
-
-    versions.forEach(function (entry) {
-      var id = 'v' + entry.version;
-
-      // Пункт списка версий: номер и дата.
-      var li = document.createElement('li');
-      var a = document.createElement('a');
-      a.setAttribute('href', '#' + id);
-      a.textContent = entry.version;
-      var when = ObodChangelog.date(entry.date);
-      if (when) {
-        var d = document.createElement('span');
-        d.className = 'd';
-        d.textContent = when;
-        a.appendChild(d);
-      }
-      li.appendChild(a);
-      index.appendChild(li);
-
-      // Сама версия: заголовок с якорем, затем разделы и пункты.
-      var head = document.createElement('h2');
-      head.id = id;
-      head.textContent = entry.version;
-      if (when) {
-        var stamp = document.createElement('span');
-        stamp.className = 'cl-date';
-        stamp.textContent = when;
-        head.appendChild(stamp);
-      }
-      host.appendChild(head);
-
-      ObodChangelog.sections(host, entry.sections);
-    });
-
-    // Заголовки появились после сборки оглавления: просим docs.js собрать его
-    // заново и, если в адресе есть версия, прокрутить к ней.
-    window.dispatchEvent(new Event('hashchange'));
-
-    /*
-     * Прокрутка к версии из адреса. Сюда приходят по ссылке со страницы прошивки —
-     * changelog.html#v1.2.3, — но заголовок этой версии появляется только теперь,
-     * когда файл прочитан. К этому моменту браузер уже попытался найти цель, не
-     * нашёл её и остался наверху, поэтому прокручиваем сами.
-     */
-    var wanted = window.location.hash.charAt(0) === '#'
-      ? decodeURIComponent(window.location.hash.slice(1))
-      : '';
-    var target = wanted ? document.getElementById(wanted) : null;
-    if (target) { target.scrollIntoView({ block: 'start' }); }
+  (function () {
+    try {
+      var t = localStorage.getItem('obod-theme');
+      if (!t) t = matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+      document.documentElement.dataset.theme = t;
+    } catch (e) { document.documentElement.dataset.theme = 'dark'; }
   })();
 </script>
+</head>
+<body>
+<a class="skip-link" href="#main">К содержимому</a>
+
+<header class="topbar">
+  <a class="brand" href="index.html">
+    <svg class="brand-ring" width="26" height="26" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="12" fill="none" stroke="currentColor" stroke-width="2.6" stroke-dasharray="56 20" stroke-linecap="round" transform="rotate(135 16 16)"/><circle cx="16" cy="16" r="4" fill="currentColor"/></svg>
+    OBOD
+  </a>
+  <nav class="topnav" aria-label="Документация">
+    <a href="index.html">Обзор</a>
+    <a href="start.html">Первый запуск</a>
+    <a href="ref-drone.html">Справочник</a>
+    <a href="hw.html">Железо</a>
+    <a href="flash.html">Прошивка</a>
+    <a href="changelog.html" aria-current="page">История</a>
+  </nav>
+  <div class="topbar-actions">
+    <button class="icon-btn" data-grid-toggle type="button" title="Показать сетку (G)" aria-label="Показать модульную сетку"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></button>
+    <button class="icon-btn theme-toggle" data-theme-toggle type="button" title="Переключить тему" aria-label="Переключить светлую и тёмную тему"><svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg><svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M19.1 4.9l-1.8 1.8M6.7 17.3l-1.8 1.8" stroke-linecap="round"/></svg></button>
+  </div>
+</header>
+
+<main id="main">
+  <div class="wrap">
+    <div class="doc">
+      <div class="doc-tree">
+        <div class="search" style="margin-bottom:var(--sp-3)">
+          <svg class="search-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3" stroke-linecap="round"/></svg>
+          <input class="input" type="search" placeholder="Найти экран…" data-tree-filter=".tree" aria-label="Поиск по дереву разделов" />
+        </div>
+        <nav class="tree" aria-label="Разделы прибора">
+        <details class="tree-group fam-drn">
+          <summary><svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>Дрон<span class="grp-code">DRN</span></summary>
+          <ul class="tree-list">
+            <li><a class="tree-link" href="ref-drone.html#drn"><span class="tag">DRN</span>DRONE</a></li>
+            <li><a class="tree-link" href="ref-drone.html#dfl"><span class="tag">DFL</span>DRONE FLTR</a></li>
+          </ul>
+        </details>
+        <details class="tree-group fam-lfo">
+          <summary><svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>Модуляция<span class="grp-code">LFO</span></summary>
+          <ul class="tree-list">
+            <li><a class="tree-link" href="ref-lfo.html#lf1"><span class="tag">LF1</span>LFO 1</a></li>
+            <li><a class="tree-link" href="ref-lfo.html#lf2"><span class="tag">LF2</span>LFO 2</a></li>
+          </ul>
+        </details>
+        <details class="tree-group fam-ld">
+          <summary><svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>Лид<span class="grp-code">LD</span></summary>
+          <ul class="tree-list">
+            <li><a class="tree-link" href="ref-lead.html#ld"><span class="tag">LD</span>LEAD</a></li>
+            <li><a class="tree-link" href="ref-lead.html#ltn"><span class="tag">LTN</span>LEAD TONE</a></li>
+            <li><a class="tree-link" href="ref-lead.html#env"><span class="tag">ENV</span>LEAD ENV</a></li>
+          </ul>
+        </details>
+        <details class="tree-group fam-scl">
+          <summary><svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>Генераторы<span class="grp-code">GEN</span></summary>
+          <ul class="tree-list">
+            <li><a class="tree-link" href="ref-time.html#scl"><span class="tag">SCL</span>SCALE</a></li>
+            <li><a class="tree-link" href="ref-time.html#eql"><span class="tag">EQL</span>LEAD EUCLID</a></li>
+            <li><a class="tree-link" href="ref-time.html#arp"><span class="tag">ARP</span>LEAD ARP</a></li>
+          </ul>
+        </details>
+        <details class="tree-group fam-prc">
+          <summary><svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>Перкуссия<span class="grp-code">PRC</span></summary>
+          <ul class="tree-list">
+            <li><a class="tree-link" href="ref-perc.html#prc"><span class="tag">PRC</span>PERC</a></li>
+            <li><a class="tree-link" href="ref-perc.html#psq"><span class="tag">PSQ</span>PERC SEQ</a></li>
+            <li><a class="tree-link" href="ref-perc.html#pmx"><span class="tag">PMX</span>PERC MIX</a></li>
+          </ul>
+        </details>
+        <details class="tree-group fam-bas">
+          <summary><svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>Бас<span class="grp-code">BAS</span></summary>
+          <ul class="tree-list">
+            <li><a class="tree-link" href="ref-bass.html#bas"><span class="tag">BAS</span>BASS</a></li>
+            <li><a class="tree-link" href="ref-bass.html#bsq"><span class="tag">BSQ</span>RHYTHM</a></li>
+          </ul>
+        </details>
+        <details class="tree-group fam-fx">
+          <summary><svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>Эффекты<span class="grp-code">FX</span></summary>
+          <ul class="tree-list">
+            <li><a class="tree-link" href="ref-fx.html#fx"><span class="tag">FX</span>FX</a></li>
+            <li><a class="tree-link" href="ref-fx.html#del"><span class="tag">DEL</span>DELAY</a></li>
+            <li><a class="tree-link" href="ref-fx.html#rev"><span class="tag">REV</span>REVERB</a></li>
+          </ul>
+        </details>
+        <details class="tree-group fam-lvl">
+          <summary><svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>Микшер<span class="grp-code">LVL</span></summary>
+          <ul class="tree-list">
+            <li><a class="tree-link" href="ref-mix.html#mst"><span class="tag">MST</span>MASTER</a></li>
+            <li><a class="tree-link" href="ref-mix.html#lvl"><span class="tag">LVL</span>LEVELS</a></li>
+            <li><a class="tree-link" href="ref-mix.html#rvs"><span class="tag">RVS</span>REV SENDS</a></li>
+            <li><a class="tree-link" href="ref-mix.html#fxs"><span class="tag">FXS</span>FX SENDS</a></li>
+            <li><a class="tree-link" href="ref-mix.html#dls"><span class="tag">DLS</span>DEL SENDS</a></li>
+          </ul>
+        </details>
+        <details class="tree-group fam-prs">
+          <summary><svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>Пресеты и настройки<span class="grp-code">PRS</span></summary>
+          <ul class="tree-list">
+            <li><a class="tree-link" href="ref-store.html#prs"><span class="tag">PRS</span>PRESET</a></li>
+            <li><a class="tree-link" href="ref-store.html#set"><span class="tag">SET</span>SETUP</a></li>
+          </ul>
+        </details>
+        </nav>
+      </div>
+
+      <article class="doc-main">
+        <nav class="crumbs" aria-label="Хлебные крошки">
+          <a href="index.html">OBOD</a><span class="sep">/</span>
+          <span aria-current="page">История изменений</span>
+        </nav>
+
+        <span class="eyebrow">Прошивка</span>
+        <h1 style="font-size:var(--fs-48);font-weight:300;margin-top:var(--sp-2)">История изменений</h1>
+        <p class="lead muted" style="font-size:var(--fs-18);margin-top:var(--sp-3);max-width:var(--measure)">Выпуски от нового к старому: что стало иначе в приборе и что это ему дало.</p>
+
+        <section class="release" id="v1.3.0">
+          <div class="release-head">
+            <h2>1.3.0</h2>
+            <span class="badge badge-accent">актуальная</span>
+            <span class="release-date">2026-11-11</span>
+          </div>
+          <div class="release-section rs-add">
+            <h3>Новое</h3>
+            <ul>
+              <li>**Раздел BASS.** Бас стал отдельной частью прибора со своей страницей: рисунок линии, фильтр в заготовке, саб низом, связки и NOTE — смена ноты на семь полутонов в обе стороны.</li>
+              <li>**Страница RHYTHM.** Второй экран баса: PAT, ACCENT, VAR, SLIDE, LEN, GATE и кольцо рисунка — такое же, как у лида и у ударки, поэтому полиритмия видна, а не описана.</li>
+              <li>**Второй LFO.** Два независимых канала: у каждого свой приёмник, две глубины, форма, скорость и триггер. Глубины двусторонние — середина хода это ноль, вправо в фазе, влево в противофазе, — и настройки едут в патче вместе со звуком.</li>
+              <li>**Эффект-машина на странице FX.** Одна позиция в рэке держит десять эффектов на ручке TYPE, от хоруса и фленджера до биткраша и STUTTER; подписи A, B и C меняются вместе с типом, а ручка, которой у эффекта нет, гаснет.</li>
+              <li>**Шесть алгоритмов дилея** на ручке MODE: DIGITAL, PINGPONG, MULTI, TAPE, FILTER, DIFFUSE. Всё в одной точке петли, без новых буферов.</li>
+              <li>**AUTOPLAY: играть ли при включении.** Три положения — ON, OFF и STORE, которое помнит, играл ли транспорт, и возвращает это состояние.</li>
+            </ul>
+          </div>
+          <div class="release-section rs-imp">
+            <h3>Улучшения</h3>
+            <ul>
+              <li>**Кольцо секвенции стало цветным и рисуется в своём слое.** На PERC SEQ, LEAD EUCLID и RHYTHM точки различают дорожки цветом: бочка жёлтая, снейр почти белый, том бирюзовый, хэт зелёным контуром, призрак приглушён, заливка — горячее кольцо; курсор белый и ярче на звучащем шаге. Размеры прежние, точки не сглаживаются, и залипаний нет.</li>
+              <li>**Карта разделов пересажена.** Два кольца по новой расстановке, плитки со скруглёнными углами, MASTER в середине как равная плитка, коды LF1, LF2, BSQ, PSQ, EQL и DEL. Карта открывается без паузы: геометрия считается один раз при загрузке.</li>
+              <li>**Настройки одной страницей.** Список разбит по смыслу на AUDIO, MIDI, PERSONALISATION и SYSTEM, с заголовками, широкой зоной нажатия и плавной прокруткой.</li>
+              <li>**Подписи с единицами.** TONE, PUNCH и TIMBRE на ударке в процентах, TUNE в полутонах, длина удара множителем; доли дилея через двоеточие — 1:8, 1:16, 1:32; посылы в процентах.</li>
+              <li>**Лид: ширина импульса, разброс и шесть групп волн.** PW управляется в том числе приёмником LFO, SPREAD разводит ноты аккорда по-настоящему.</li>
+              <li>**Дрон стал понятнее.** WIDTH делает то, что написано, регистры идут в децибелах с поправкой на слышимость, и дрон уступает лиду по уровню. SKEW из форм дрона убран: излом у него задаёт ручка, которой на странице нет.</li>
+              <li>**Страницы с анимацией не отбирают экран у звука.** Кольцо, дрейф панорамы и метры идут ровно, а смена типа в FX больше не подтормаживает: страница пересобирается, когда колесо остановилось.</li>
+            </ul>
+          </div>
+          <div class="release-section rs-fix">
+            <h3>Исправления</h3>
+            <ul>
+              <li>**Треск снят.** Его давали форма SKW, переключение пресетов, половинная реверберация и отвод MULTI, читавший одну позицию на весь блок.</li>
+              <li>**Звук больше не зависает.** Блок считается в одной задаче: опоздание хвоста эффектов стоит одного повторённого блока, а не застывшего звука.</li>
+              <li>**Патч не пишется, пока прибор играет.** Запись во флеш ждёт остановки транспорта, поэтому движение ручки не даёт провалов в звуке.</li>
+              <li>**Уровни вернулись.** Метры на всех страницах показывали пустоту — половина была объявлена без пересчёта.</li>
+              <li>**Связка у баса стала связкой.** SLIDE тянет ноту в следующую: удара на этом шаге нет, нота длиннее, а на разных высотах она подъезжает к следующей.</li>
+            </ul>
+          </div>
+        </section>
+        <section class="release" id="v1.2.3">
+          <div class="release-head">
+            <h2>1.2.3</h2>
+            
+            <span class="release-date">2026-11-05</span>
+          </div>
+          <div class="release-section rs-add">
+            <h3>Новое</h3>
+            <ul>
+              <li>**CHORD у лида.** У VOICE появилось третье положение: аккорд. Нота, пришедшая от линии или от клавиши, звучит тремя ступенями лада — через одну вверх, — и каждая ступень получает свой голос, поэтому аккорд держится, а не обрывается на второй ноте. В середине круга он показывает себя тремя полосами.</li>
+              <li>**SPAN у генератора.** Мелодия обходит не ровно две октавы, а одну, две или три: на пятиступенном ладу одна октава даёт лад, а не полёт, три — редкие широкие фразы. Заводская середина — прежнее поведение, поэтому записанные патчи звучат как звучали.</li>
+              <li>**DRIFT у дрона.** Регистры дрона больше не идут в центовой точности. Ручка расставляет их до полутона, каждый в своей фазе и с одной медленной скоростью — дыхание раз в десять секунд, — поэтому три голоса то сходятся, то расходятся, и биения выходят неровными, как у живого ансамбля. Ноль — прежний звук до цента; рабочая зона лежит в первых двадцати центах.</li>
+              <li>**DRONE LVL.** LEVEL дрона стал адресатом модуляции: раздел LFO качает громкость дрона вместе с панорамой, лидом и ударами или вместо них.</li>
+              <li>**Пять ладов.** К шестнадцати добавились IN-SEN, NIKRIZ, HIJAZ, SABA и PERSIAN — теперь их двадцать один, и все стоят по консонансу: от чистых ступеней к хроматике. Сохранённый звук при этом остаётся своим ладом: патч и каждая запись пресетов проходят карту старой позиции один раз, при первом включении после обновления.</li>
+              <li>**Удаление пресета.** На странице PRESET появился DEL: он снимает выбранный пресет. Магазин остаётся плотным — записи после удалённой сдвигаются на строку вверх, поэтому имена читаются без таблицы занятости.</li>
+              <li>**OFF у арпеджиатора.** Арпеджиатор выключается кнопкой на своей странице, не переставляя ручки: линия просто перестаёт арпеджировать.</li>
+              <li>**Перегруз видно.** Индикаторы уровня краснеют за десятую долю до потолка. Раньше перегруз был слышен, но не виден, и замечался уже на записи.</li>
+              <li>**Фейдеры по закону пульта.** Уровни в LEVELS и PERC MIX идут по квадрату: каждые десять процентов убавляют примерно поровну, середина даёт −12 дБ вместо −6, и весь полезный ход не собирается в первой трети. Показания ручек остались прежними: заводские значения пересчитаны так, чтобы читаться теми же числами.</li>
+            </ul>
+          </div>
+          <div class="release-section rs-imp">
+            <h3>Улучшения</h3>
+            <ul>
+              <li>**VOICE заводской POLY.** Порядок ручки — POLY, MONO, CHORD, и ноль шкалы снова значит POLY, как было до появления аккорда: звук, записанный давно, читается полифоническим, а не моно. Цена названа вслух: пресет, сохранённый в 1.2.2, где моно стоял первым, вернётся с обратным положением — такой пресет надо пересохранить один раз.</li>
+              <li>**LFO при нулевой глубине молчит.** Раньше выбор адресата менял звук и при DEPTH в нуле: приёмники брали глубину не со страницы этого раздела. Теперь глубина умножает каждый приёмник, а глубины раздела LFO и собственного модулятора фильтра складываются — оба модулятора независимы, и патч открывает развёртку с любой из двух страниц или с обеих.</li>
+            </ul>
+          </div>
+          <div class="release-section rs-fix">
+            <h3>Исправления</h3>
+            <ul>
+              <li>**Аккорд звучит весь.** Раньше из трёх нот оставалась одна: тона брали один голос и вытесняли друг друга.</li>
+              <li>**MONO с клавиатуры.** Клавиши в моно-режиме брали свободные голоса, и на моно-лиде можно было сыграть аккорд. Правило вернулось: в моно одна группа и всегда одна и та же.</li>
+              <li>**Значок VOICE.** Третье положение показывало прежний рисунок: шкала рисунка вдвое короче шкалы ручки, и порог верхнего кадра был недостижим.</li>
+            </ul>
+          </div>
+        </section>
+        <section class="release" id="v1.2.2">
+          <div class="release-head">
+            <h2>1.2.2</h2>
+            
+            <span class="release-date">2026-11-02</span>
+          </div>
+          <div class="release-section rs-add">
+            <h3>Новое</h3>
+            <ul>
+              <li>**Перкуссия из китов.** У ударов теперь свой звук, а не одна высота на всё: KIT выбирает набор из двадцати восьми, TONE двигает выбранный кит целиком, TUNE сажает бочку и том в тональность, DECAY решает, насколько удар длинный, TIMBRE — насколько живой. Дорожек четыре, и у каждой свой голос, поэтому хэт под бочкой больше не отнимает у неё голос.</li>
+              <li>**Партия перкуссии.** На PERC SEQ выбирается один из тридцати двух записанных грувов, а рядом — VAR, FILL, SWING, SPEED и ACCENT: цикл играет подвинутую партию, закрывается сбивкой из пятнадцати, качается, гонит часы барабана вдвое медленнее или вдвое быстрее и расставляет акценты. Когда сбивки нет, цикл заканчивается открытым хэтом.</li>
+              <li>**ACCENT у арпеджиатора.** Свой рисунок акцентов, независимый от акцентов лида и ударов.</li>
+              <li>**NOTE и OCT.** ROOT разделён на ноту и октаву: высота тоники и её октава двигаются отдельными ручками.</li>
+              <li>**MODE у фильтров.** У фильтра дрона и лида появился выбор: низ, полоса, верх и промежуточные положения между ними.</li>
+              <li>**Картинка параметра.** На время вращения ручки в центре круга показывается рисунок параметра — форма волны, кривая, схема.</li>
+              <li>**PUNCH — атака удара.** Сектор на PERC решает, как удар входит: внизу длинная и мягкая атака, наверху короткая и щёлкающая бойком, середина оставляет удар таким, каким его записал кит. Место BODY на странице занял он, а BODY остался мёртвым слотом в пресетах.</li>
+              <li>**Сбивок пятнадцать.** К шести прежним добавились воздух, лестница снейра, ответ тома, триоли и фигуры, где бочка бьёт на третьем шаге каждой доли. Сбивка по-прежнему заменяет вторую половину такта и не повторяется два раза подряд.</li>
+              <li>**Дробь внутри шага.** При высоком FILL на части тактов один шаг делится на три, четыре или шесть ровных ударов — на хэте, снейре или томе. На бочке дроби нет: два удара ногой вплотную слышны как сбитая сетка.</li>
+              <li>**Четыре новые фигуры предпросмотра.** PUNCH, TIMBRE, SCATTER и значки NOTE: у рисунка параметра маска 56 × 56, и он показывает то, что делает ручка.</li>
+              <li>**Формы модуляции дрона.** Плавной случайной формы в списке собственного модулятора фильтра дрона больше нет: остались семь волн и микрофон.</li>
+              <li>**PERC MIX — баланс ударов.** Четыре ручки ставят уровень бочки, снейра, хэта и тома внутри части: 100 — дорожка звучит так, как её записал кит, меньше — только тише. Индикаторы на кольце показывают силу последнего удара каждой дорожки. Уровни хранятся в патче и пресетах.</li>
+              <li>**Мьют двойным тапом.** Двойной тап по сектору на PERC MIX глушит дорожку до нуля, второй возвращает прежний уровень: дорожка на нуле не бьёт и не тратит голос.</li>
+            </ul>
+          </div>
+          <div class="release-section rs-imp">
+            <h3>Улучшения</h3>
+            <ul>
+              <li>**Характер звука.** Бросок случайного патча идёт по характерам, а не по одному срезу: у броска появились исполнение и манера, а не только тембр.</li>
+              <li>**Дрон в FULL.** В FULL дрон следует и за секвенсором с арпеджиатором, а не только за сыгранными нотами.</li>
+              <li>**Регистры дрона.** У каждого регистра своя форма волны и своя база — 55, 110 и 220 Гц, которую тоника не двигает; сама тоника разошлась на семь октав.</li>
+              <li>**Ручка ускоряется.** Долгий поворот ручки на непрерывном параметре идёт быстрее. Списки по-прежнему щёлкают по одной позиции и не разгоняются: кит и грув выбираются по одному.</li>
+              <li>**Тихий старт.** Прибор включается с подъёмом громкости, а громкость по умолчанию — 80%.</li>
+              <li>**Перегруза больше нет.** Формирователь убран из тракта вместе с ручками DRIVE и ALGO. В схемах и описаниях его тоже нет.</li>
+              <li>**Микрофон только для модуляции.** Из посылов эффектов микрофон убран: он двигает параметры, а в реверб, хорус и дилей не идёт.</li>
+              <li>**Кольцо показывает партию.** Точка на кольце больше не сбрасывается при записи параметра на ходу: пока транспорт идёт, кольцо показывает записанное, а не ручку.</li>
+              <li>**Посыл эффектов.** Середина хода посыла звучит заметнее, а крайние положения — как были.</li>
+              <li>**Пресеты на шторке транспорта.** Плитки пресетов на карте разделов больше нет: раздел открывается кнопкой PRESET на экране транспорта, рядом с темпом теперь и заряд.</li>
+              <li>**Подписи плиток насыщеннее.** Названия разделов на карте набраны насыщенными ступенями своих цветов: семейства различаются цветом раньше, чем словом.</li>
+            </ul>
+          </div>
+          <div class="release-section rs-fix">
+            <h3>Исправления</h3>
+            <ul>
+              <li>**Один удар на стыке.** На границе фразы удар больше не двоится.</li>
+              <li>**Выравнивание сеток.** Оно не срабатывает, когда выравнивать нечего.</li>
+              <li>**RESET по секвенциям.** Жест RESET двигает свою секвенцию и не трогает чужую.</li>
+              <li>**Диапазон арпеджиатора.** RANGE идёт от нуля до пяти октав ровным шагом, без удвоения значений на концах.</li>
+              <li>**Панель при включении.** Прибор будит панель и повторяет опрос, пока она не ответит: первый тап после включения больше не теряется.</li>
+              <li>**Спасение состояния.** Негодное значение параметра больше не роняет тракт: звук восстанавливается, а след остаётся в журнале и после перезагрузки.</li>
+              <li>**Фигура формы в модуляции.** Рисунок SHAPE показывает выбранную форму: меандр — меандром, шум — ступенями, экспоненты и микрофон — своими кривыми, а не прямой линией.</li>
+              <li>**Пресеты прежних выпусков.** Они читаются, но кит и грув хранятся позицией в списке, а списки стали длиннее: старый пресет может встать на другой кит или грув. Слышно это сразу, и выбор поправляется ручкой.</li>
+              <li>**Картинка акцента.** Она брала длину бара не оттуда: у фигур с первой долей в маске акцентированными выглядели все шестнадцать шагов, у 2&amp;4 — ни одного. Теперь картинка и звук считают один и тот же бар.</li>
+              <li>**Сбивка перестала залипать.** Сбивка повторялась одна и та же каждый цикл; теперь фигура выбирается заново, и подряд две одинаковые не выпадают.</li>
+            </ul>
+          </div>
+        </section>
+        <section class="release" id="v1.2.1">
+          <div class="release-head">
+            <h2>1.2.1</h2>
+            
+            <span class="release-date">2026-10-27</span>
+          </div>
+          <div class="release-section rs-add">
+            <h3>Новое</h3>
+            <ul>
+              <li>**Выравнивание сеток в пресете.** RESET переехал из настроек на страницу SCALE и стал параметром звука: он задает, через сколько шагов сетки лид, перкуссия и арпеджиатор начинают свои рисунки заново, и теперь хранится вместе с пресетом. Заводское значение — 16, и звуки прежних выпусков получают его при загрузке.</li>
+              <li>**Страница SCALE.** LEAD GEN теперь называется SCALE: лад, тоника, плотность, октава и выравнивание сеток собраны на одной странице, а на месте RESET в SYSTEM остался пустой сектор.</li>
+            </ul>
+          </div>
+          <div class="release-section rs-imp">
+            <h3>Улучшения</h3>
+            <ul>
+              <li>**Кольцо темпа.** На транспортной шторке темп теперь показан кольцом насечек — так же, как на страницах: закрашенные насечки показывают темп, а прежней дуги нет.</li>
+              <li>**Кнопка транспорта.** Стоп/плей стал компактнее: он больше не теснит кольцо темпа, число BPM и заряд, а промахнуться по нему по-прежнему трудно.</li>
+              <li>**Подписи.** Строка пресета выровнена по видимой высоте букв, OPTIONS набран малым начертанием, а большое начертание стало чуть свободнее — длинные заголовки больше не упираются в соседние секторы.</li>
+              <li>**Пресеты на ощупь.** Вокруг LOAD, SAVE, RND и строки списка появилось поле: касание рядом с кнопкой теперь попадает в нее. Список при этом ничего не выбирает — пресет по-прежнему берут колесом и свайпом.</li>
+              <li>**Оборот страницы.** Страницы едут вместе, сдвигом: на полпути видно фон, а не край картинки, и круг больше не обрезается.</li>
+              <li>**Быстрый свайп.** Быстрый флик листает страницу сразу, не дожидаясь отпускания, медленное движение остается драгом под пальцем; так же открываются и закрываются шторки. Снимок страницы больше не делается на каждое касание, поэтому тап отвечает без задержки.</li>
+            </ul>
+          </div>
+          <div class="release-section rs-fix">
+            <h3>Исправления</h3>
+            <ul>
+              <li>**Скорость флика.** Правило «быстрый флик завершает оборот» не срабатывало, и оборот решал только пройденный путь; теперь решают и скорость, и путь.</li>
+              <li>**Надпись арпеджиатора.** «ARP IS ACTIVE» и затемнение под ней больше не двоятся на обороте, а выключенный на ходу арпеджиатор сходится к посадке страницы.</li>
+            </ul>
+          </div>
+        </section>
+        <section class="release" id="v1.2.0">
+          <div class="release-head">
+            <h2>1.2.0</h2>
+            
+            <span class="release-date">2026-10-26</span>
+          </div>
+          <div class="release-section rs-add">
+            <h3>Новое</h3>
+            <ul>
+              <li>**RESET вместо виброотдачи.** На месте HAPTIC в SYSTEM появился RESET: через 16, 32, 64, 128 или 256 шагов сетки лид, перкуссия и арпеджиатор начинают свои рисунки заново — вместе, с одной границы. Виброотклика больше нет: отклик у прибора теперь кольцо и экран, а мотор на плате не используется.</li>
+              <li>**PERC QUANT.** Высоту удара можно притянуть к ладу: с ON центр удара встает на ближайшую ноту выбранного лада, а вместо герц на экране имя ноты. Это параметр звука, поэтому он хранится в пресете; заводское значение — OFF, и прежние звуки играют как раньше.</li>
+            </ul>
+          </div>
+          <div class="release-section rs-imp">
+            <h3>Улучшения</h3>
+            <ul>
+              <li>**Насечки на ободе.** Полоса обода стала лестницей ровных насечек с одинаковыми просветами: уровень читается по числу закрашенных, а заливка сектора, полоса измерителей и насечки разведены с равными промежутками.</li>
+              <li>**Активный сектор.** Выбранная ручка отмечена почти белыми насечками, у списочных ручек горит отрезок ровно в одну позицию, а измеритель активного сектора виден по всей дуге. Лента выхода мастера на странице пресетов идет от края до края.</li>
+              <li>**Обод без промахов.** Заливка больше не выходит за свой сектор, при входе в раздел обод сразу показывает уровни, а после свайпа палец не меняет настройку вместо поворота страницы.</li>
+              <li>**Карта разделов.** Шторка стала мозаикой из двадцати двух областей одинаковой площади: они покрывают диск без пустых мест, укладки кольцами больше нет, а вид стал тише — ячейки затемнены, швов нет, текущий раздел отмечен одной заливкой.</li>
+              <li>**Темп после включения.** Темп сохраняется между включениями и возвращается при любом режиме патча, поэтому прибор больше не включается на другой скорости после FORGET или RANDOM.</li>
+              <li>**PULSES и ROTATE.** Обе ручки эвклидовых секвенсоров стали короче ровно по числу шагов сетки: у PULSES нет мертвого хода за последним импульсом, ROTATE идет по той же сетке, а заводское PULSES — все шаги.</li>
+            </ul>
+          </div>
+          <div class="release-section rs-fix">
+            <h3>Исправления</h3>
+            <ul>
+              <li>**Попадание по карте.** Нажатие открывает ту область, которая нарисована: раньше на части диска палец уводил в соседний раздел, а тап по подписи не доходил до карты вовсе. Выбранная ячейка светлеет под пальцем.</li>
+              <li>**Драйв и ручки перкуссии.** Выход ручки драйва из нуля больше не прыгает громкостью на границе чистого тракта и перегруза, а движение ручки высоты, ENV, DECAY и BODY больше не теряется: следующий удар играет с тем значением, которое поставили.</li>
+            </ul>
+          </div>
+        </section>
+        <section class="release" id="v1.1.0">
+          <div class="release-head">
+            <h2>1.1.0</h2>
+            
+            <span class="release-date">2026-10-25</span>
+          </div>
+          <div class="release-section rs-add">
+            <h3>Новое</h3>
+            <ul>
+              <li>**Перегруз до или после эффектов.** На странице SYSTEM появилась ручка DRIVE: BEFORE FX ставит перегруз на сумму слоев, и эффекты слышат уже перегруженный сигнал, а удар остается чистым; AFTER FX ставит его последним перед мастером. Выбор относится к инструменту и переживает смену пресета.</li>
+            </ul>
+          </div>
+          <div class="release-section rs-imp">
+            <h3>Улучшения</h3>
+            <ul>
+              <li>**Ручки без треска.** Громкость, посылы и драйв больше не меняются ступенькой: значения доезжают плавно, и шаг ручки слышен как движение.</li>
+              <li>**Звук и экран не мешают друг другу.** Перерисовка страницы больше не отнимает у звука время, поэтому плотный патч не спотыкается при листании и вращении ручек.</li>
+              <li>**Драйв держит громкость.** Ручка меняет характер перегруза, а не громкость: прибавка выровнена по всему ходу. Исключение — FOLD: он берет постоянный уровень и за материалом не следит, но общего скачка громкости нет и у него.</li>
+              <li>**Хорус и дилей работают посылами.** Каждый обрабатывает только то, что пришло на его посыл, и возвращает ответ рядом с сухим звуком; MIX на их страницах стал уровнем возврата и сухой звук не трогает.</li>
+              <li>**Страницы посылов.** SENDS и DRONE SENDS сведены в REV SENDS, рядом встали CHR SENDS и DEL SENDS: шесть частей в одном порядке на каждой странице.</li>
+              <li>**Индикация уровней.** Заливка на ободе ходит с частотой кадров и больше не тормозит страницу, как бы резко ни прыгнул сигнал.</li>
+            </ul>
+          </div>
+        </section>
+        <section class="release" id="v1.0.2">
+          <div class="release-head">
+            <h2>1.0.2</h2>
+            
+            <span class="release-date">2026-10-24</span>
+          </div>
+          <div class="release-section rs-add">
+            <h3>Новое</h3>
+            <ul>
+              <li>**Дилей без изгиба.** У дилея появился выбор MODE: TAPE изгибает повторы, как лента, а XFADE переводит их на новое время без изгиба. Заводское значение — TAPE, так звучат все прежние звуки.</li>
+            </ul>
+          </div>
+          <div class="release-section rs-imp">
+            <h3>Улучшения</h3>
+            <ul>
+              <li>**REVERB вместо VERB.** Страница реверба называется REVERB, короткое имя на плитке осталось REV; страница STATUS убрана, номер версии по-прежнему виден на заставке при запуске.</li>
+              <li>**Обновление без потерь.** Пресет читается и после появления нового параметра: звук прежнего выпуска получает заводские значения для полей, которых тогда не было, поэтому обновление и откат проходят без потерь.</li>
+              <li>**Шрифт и страницы проекта.** Начертания стали редактируемыми по пикселям: рядом с собранным шрифтом лежит файл глифов, из которого он собирается, а к нему — редактор. Снимки экранов приведены к новому имени страницы, числа на странице прибора исправлены.</li>
+            </ul>
+          </div>
+        </section>
+        <section class="release" id="v1.0.1">
+          <div class="release-head">
+            <h2>1.0.1</h2>
+            
+            <span class="release-date">2026-10-16</span>
+          </div>
+          <div class="release-section rs-add">
+            <h3>Новое</h3>
+            <ul>
+              <li>**Пробивные кики.** У удара в перкуссии появился короткий щелчок, а тон изгибается в две ступени — быстрый спад в начале и медленный хвост.</li>
+              <li>**Морфинг волн.** Смена формы волны у дрона и лида идет плавно: обе формы складываются по весу, а время перехода задается ручкой в настройках.</li>
+              <li>**Мьют двойным тапом.** Двойной тап по уровню части или по посылу уводит значение в ноль за время настройки SLIDE, повторный возвращает запомненное. Если параметр входит в макрос, двойной тап по-прежнему переворачивает макрос.</li>
+            </ul>
+          </div>
+          <div class="release-section rs-imp">
+            <h3>Улучшения</h3>
+            <ul>
+              <li>**Ярче кольцо.** Потолок яркости кольца поднят: на 100% оно отдает половину того, что могут светодиоды, а не четверть.</li>
+              <li>**Страницы проекта.** История изменений переехала на отдельную страницу сайта и показывает все выпуски, а на странице прошивки появилось предупреждение, что образ годится только для платы Guition Knob JC3636K718C.</li>
+            </ul>
+          </div>
+          <div class="release-section rs-fix">
+            <h3>Исправления</h3>
+            <ul>
+              <li>**Треск и провалы.** Компрессор, мастер-громкость, микс реверба и балансы хоруса и дилея больше не щелкают при вращении ручек, а дилей не проваливается при первом поднятии микса и не перезагружает прибор от неверного времени задержки.</li>
+              <li>**Реверб.** Шум при переключении алгоритмов ушел, а режим HOLD убран: на переходе с него на CATHEDRAL ломался звук. Алгоритмов осталось четыре — ROOM, HALL, CATH, PLAT, — сохраненный HOLD грузится как HALL.</li>
+              <li>**Оборот страницы.** Прилетающая страница едет и тормозит у своего места, а покидаемая стоит неподвижно под ней — как у шторок навигатора и транспорта.</li>
+              <li>**Срез дрона.** Срез фильтра дрона переехал в верхний сектор, как на странице тона лида, и при входе на страницу он по-прежнему под рукой.</li>
+            </ul>
+          </div>
+        </section>
+        <section class="release" id="v1.0.0">
+          <div class="release-head">
+            <h2>1.0.0</h2>
+            
+            <span class="release-date">2026-10-15</span>
+          </div>
+          <div class="release-section rs-add">
+            <h3>Новое</h3>
+            <ul>
+              <li>**Звук.** 24 голоса на 48 кГц: дрон из трех спектральных частей, лид с собственным тоном и огибающей, арпеджиатор и перкуссия. Шесть волн у дрона и лида, фильтр со свипом, дрейф панорамы, микрофонный вход и мастер-компрессор с одной ручкой.</li>
+              <li>**Лады.** Шестнадцать ладов, от пентатоник до хроматического: присланная нота притягивается к выбранному ладу относительно тоники, а на CHROMATIC проходит без изменений. Перкуссия квантованию не подлежит — у нее нота задает высоту удара.</li>
+              <li>**Секвенсоры и арпеджиатор.** У лида и у перкуссии свои эвклидовы сетки, у арпеджиатора фигура, направление, скорость и удержание нот; рисунок акцента читается обеими частями. При включенном арпеджиаторе сетка лида не играет, и на экране видно «ARP IS ACTIVE».</li>
+              <li>**Эффекты.** Хорус, дилей-пинг-понг и реверб в пяти режимах, включая плиту; MIX у реверба работает балансом, а смена режима проходит без щелчка.</li>
+              <li>**MIDI.** Прием нот по USB: порт «OBOD MIDI IN», канал 1 — лид, канал 2 — перкуссия, транспорт и часы с провода. Включается настройкой MIDI IN и работает на ходу, без перезагрузки.</li>
+              <li>**Управление.** Диск 360 × 360 и обод, разбитый на секторы по числу ручек страницы: тап выбирает ручку, значение меняет только энкодер, долгое нажатие сводит параметр в макрос, двойной тап включает инверсию. Свайп листает страницы, вниз открывает карту разделов, вверх — транспорт.</li>
+              <li>**Экраны.** 22 страницы, 75 параметров звука и 82 ручки на экранах, восемь цветовых семейств, точки пагинации внутри семейства и кольцо индикации в четырех режимах.</li>
+              <li>**Пресеты и настройки.** 128 слотов с именами из двух слов, LOAD, SAVE и RND; SAVE мигает, пока звук отличается от слота. Случайный звук в двух глубинах: короткое нажатие меняет тембр, долгое добавляет структуру. Настройки — PATCH, SLIDE, RND DEL, WEAK VEL, MIDI IN и служебные SYSTEM: яркость экрана, кольцо и его режим, отдача, микрофон — хранятся отдельно от звука и в пресеты не попадают.</li>
+              <li>**Прошивка из браузера.** Прибор прошивается страницей из браузера, без командной строки, а пресеты переживают смену прошивки. Браузерная запись накрывает область настроек, поэтому звуки перед ней надо сохранить.</li>
+            </ul>
+          </div>
+          <div class="release-section rs-imp">
+            <h3>Чего нет</h3>
+            <ul>
+              <li>**Отладочный порт.** Прием нот занимает единственный USB-контроллер, поэтому пока он включен, отладочного COM-порта на кабеле нет. С завода прием выключен.</li>
+              <li>**MIDI и звук.** Control change, pitch bend и program change не обрабатываются, MIDI-выхода нет, темп с провода не доходит до синхронизации дилея. Мастер-лимитера, дизера, Bluetooth-MIDI и сети в приборе нет.</li>
+            </ul>
+          </div>
+        </section>
+      </article>
+
+      <div class="doc-toc">
+        <div class="toc-title">На этой странице</div>
+        <ul class="toc">
+          <li><a class="toc-link" href="#v1.3.0">1.3.0 · 2026-11-11</a></li>
+          <li><a class="toc-link" href="#v1.2.3">1.2.3 · 2026-11-05</a></li>
+          <li><a class="toc-link" href="#v1.2.2">1.2.2 · 2026-11-02</a></li>
+          <li><a class="toc-link" href="#v1.2.1">1.2.1 · 2026-10-27</a></li>
+          <li><a class="toc-link" href="#v1.2.0">1.2.0 · 2026-10-26</a></li>
+          <li><a class="toc-link" href="#v1.1.0">1.1.0 · 2026-10-25</a></li>
+          <li><a class="toc-link" href="#v1.0.2">1.0.2 · 2026-10-24</a></li>
+          <li><a class="toc-link" href="#v1.0.1">1.0.1 · 2026-10-16</a></li>
+          <li><a class="toc-link" href="#v1.0.0">1.0.0 · 2026-10-15</a></li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="f-col">
+      <span class="f-title">OBOD</span>
+      <p class="f-note">Синтезатор-контроллер на ESP32-S3 с круглым экраном 360 × 360. Голосовой движок — ESP32Synth 2.5.0 (MIT, © 2025 Danilo Gabriel); остальное написано для этого прибора.</p>
+    </div>
+    <div class="f-col">
+      <span class="f-title">Документация</span>
+      <a href="start.html">Первый запуск</a>
+      <a href="ref-drone.html">Справочник</a>
+      <a href="changelog.html">История изменений</a>
+    </div>
+    <div class="f-col">
+      <span class="f-title">Прибор</span>
+      <a href="hw.html">Железо</a>
+      <a href="flash.html">Прошивка</a>
+      <a href="hw.html">Железо</a>
+    </div>
+  </div>
+</footer>
+
+<script src="system/ui.js?v=20261112c"></script>
+<script src="assets/deep-link.js?v=20261112c"></script>
 
 <script>
   // Работник таймера раньше стоял в корне сайта и получал запросы всех разделов: он

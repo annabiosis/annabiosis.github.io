@@ -1,79 +1,364 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" data-theme="dark">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/docs.css?v=20261112a">
-<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-<title>OBOD — Время</title>
-<!--
-  Лад, евклидова фигура и арпеджиатор — то, что превращает голос в партию. Цвет семьи —
-  бирюзовый.
--->
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#060A09" />
+<title>OBOD — Генераторы · Справочник</title>
+<meta name="description" content="Генераторы: SCALE, LEAD EUCLID, LEAD ARP." />
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="system/tokens.css?v=20261112c" />
+<link rel="stylesheet" href="system/base.css?v=20261112c" />
+<link rel="stylesheet" href="system/grid.css?v=20261112c" />
+<link rel="stylesheet" href="system/components.css?v=20261112c" />
+<script>
+  (function () {
+    try {
+      var t = localStorage.getItem('obod-theme');
+      if (!t) t = matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+      document.documentElement.dataset.theme = t;
+    } catch (e) { document.documentElement.dataset.theme = 'dark'; }
+  })();
+</script>
 </head>
-
 <body>
-
-<a class="skip" href="#main">К содержимому</a>
+<a class="skip-link" href="#main">К содержимому</a>
 
 <header class="topbar">
-  <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="sidebar">Разделы</button>
-  <a class="brand" href="index.html">OBOD</a>
-  <nav class="crumbs" id="crumbs" aria-label="Хлебные крошки"></nav>
+  <a class="brand" href="index.html">
+    <svg class="brand-ring" width="26" height="26" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="12" fill="none" stroke="currentColor" stroke-width="2.6" stroke-dasharray="56 20" stroke-linecap="round" transform="rotate(135 16 16)"/><circle cx="16" cy="16" r="4" fill="currentColor"/></svg>
+    OBOD
+  </a>
+  <nav class="topnav" aria-label="Документация">
+    <a href="index.html">Обзор</a>
+    <a href="start.html">Первый запуск</a>
+    <a href="ref-drone.html" aria-current="page">Справочник</a>
+    <a href="hw.html">Железо</a>
+    <a href="flash.html">Прошивка</a>
+    <a href="changelog.html">История</a>
+  </nav>
+  <div class="topbar-actions">
+    <button class="icon-btn" data-grid-toggle type="button" title="Показать сетку (G)" aria-label="Показать модульную сетку"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></button>
+    <button class="icon-btn theme-toggle" data-theme-toggle type="button" title="Переключить тему" aria-label="Переключить светлую и тёмную тему"><svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg><svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M19.1 4.9l-1.8 1.8M6.7 17.3l-1.8 1.8" stroke-linecap="round"/></svg></button>
+  </div>
 </header>
 
-<div class="shell">
+<main id="main">
+  <div class="wrap">
+    <div class="doc">
+      <div class="doc-tree">
+        <div class="search" style="margin-bottom:var(--sp-3)">
+          <svg class="search-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3" stroke-linecap="round"/></svg>
+          <input class="input" type="search" placeholder="Найти экран…" data-tree-filter=".tree" aria-label="Поиск по дереву разделов" />
+        </div>
+        <nav class="tree" aria-label="Разделы прибора">
+        <details class="tree-group fam-drn">
+          <summary><svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>Дрон<span class="grp-code">DRN</span></summary>
+          <ul class="tree-list">
+            <li><a class="tree-link" href="ref-drone.html#drn"><span class="tag">DRN</span>DRONE</a></li>
+            <li><a class="tree-link" href="ref-drone.html#dfl"><span class="tag">DFL</span>DRONE FLTR</a></li>
+          </ul>
+        </details>
+        <details class="tree-group fam-lfo">
+          <summary><svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>Модуляция<span class="grp-code">LFO</span></summary>
+          <ul class="tree-list">
+            <li><a class="tree-link" href="ref-lfo.html#lf1"><span class="tag">LF1</span>LFO 1</a></li>
+            <li><a class="tree-link" href="ref-lfo.html#lf2"><span class="tag">LF2</span>LFO 2</a></li>
+          </ul>
+        </details>
+        <details class="tree-group fam-ld">
+          <summary><svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>Лид<span class="grp-code">LD</span></summary>
+          <ul class="tree-list">
+            <li><a class="tree-link" href="ref-lead.html#ld"><span class="tag">LD</span>LEAD</a></li>
+            <li><a class="tree-link" href="ref-lead.html#ltn"><span class="tag">LTN</span>LEAD TONE</a></li>
+            <li><a class="tree-link" href="ref-lead.html#env"><span class="tag">ENV</span>LEAD ENV</a></li>
+          </ul>
+        </details>
+        <details class="tree-group fam-scl" open>
+          <summary><svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>Генераторы<span class="grp-code">GEN</span></summary>
+          <ul class="tree-list">
+            <li><a class="tree-link" href="ref-time.html#scl"><span class="tag">SCL</span>SCALE</a></li>
+            <li><a class="tree-link" href="ref-time.html#eql"><span class="tag">EQL</span>LEAD EUCLID</a></li>
+            <li><a class="tree-link" href="ref-time.html#arp"><span class="tag">ARP</span>LEAD ARP</a></li>
+          </ul>
+        </details>
+        <details class="tree-group fam-prc">
+          <summary><svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>Перкуссия<span class="grp-code">PRC</span></summary>
+          <ul class="tree-list">
+            <li><a class="tree-link" href="ref-perc.html#prc"><span class="tag">PRC</span>PERC</a></li>
+            <li><a class="tree-link" href="ref-perc.html#psq"><span class="tag">PSQ</span>PERC SEQ</a></li>
+            <li><a class="tree-link" href="ref-perc.html#pmx"><span class="tag">PMX</span>PERC MIX</a></li>
+          </ul>
+        </details>
+        <details class="tree-group fam-bas">
+          <summary><svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>Бас<span class="grp-code">BAS</span></summary>
+          <ul class="tree-list">
+            <li><a class="tree-link" href="ref-bass.html#bas"><span class="tag">BAS</span>BASS</a></li>
+            <li><a class="tree-link" href="ref-bass.html#bsq"><span class="tag">BSQ</span>RHYTHM</a></li>
+          </ul>
+        </details>
+        <details class="tree-group fam-fx">
+          <summary><svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>Эффекты<span class="grp-code">FX</span></summary>
+          <ul class="tree-list">
+            <li><a class="tree-link" href="ref-fx.html#fx"><span class="tag">FX</span>FX</a></li>
+            <li><a class="tree-link" href="ref-fx.html#del"><span class="tag">DEL</span>DELAY</a></li>
+            <li><a class="tree-link" href="ref-fx.html#rev"><span class="tag">REV</span>REVERB</a></li>
+          </ul>
+        </details>
+        <details class="tree-group fam-lvl">
+          <summary><svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>Микшер<span class="grp-code">LVL</span></summary>
+          <ul class="tree-list">
+            <li><a class="tree-link" href="ref-mix.html#mst"><span class="tag">MST</span>MASTER</a></li>
+            <li><a class="tree-link" href="ref-mix.html#lvl"><span class="tag">LVL</span>LEVELS</a></li>
+            <li><a class="tree-link" href="ref-mix.html#rvs"><span class="tag">RVS</span>REV SENDS</a></li>
+            <li><a class="tree-link" href="ref-mix.html#fxs"><span class="tag">FXS</span>FX SENDS</a></li>
+            <li><a class="tree-link" href="ref-mix.html#dls"><span class="tag">DLS</span>DEL SENDS</a></li>
+          </ul>
+        </details>
+        <details class="tree-group fam-prs">
+          <summary><svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>Пресеты и настройки<span class="grp-code">PRS</span></summary>
+          <ul class="tree-list">
+            <li><a class="tree-link" href="ref-store.html#prs"><span class="tag">PRS</span>PRESET</a></li>
+            <li><a class="tree-link" href="ref-store.html#set"><span class="tag">SET</span>SETUP</a></li>
+          </ul>
+        </details>
+        </nav>
+      </div>
 
-  <nav class="sidebar" id="sidebar" aria-label="Разделы документации">
-    <div class="sidebar-head">
-      <p class="sidebar-title">Руководство</p>
-      <button class="nav-close" type="button">Закрыть</button>
+      <article class="doc-main fam-scl">
+        <nav class="crumbs" aria-label="Хлебные крошки">
+          <a href="index.html">OBOD</a><span class="sep">/</span>
+          <a href="ref-drone.html">Справочник</a><span class="sep">/</span>
+          <span aria-current="page">Генераторы</span>
+        </nav>
+
+        <div style="display:flex;align-items:center;gap:var(--sp-3);flex-wrap:wrap">
+          <h1 style="font-size:var(--fs-48);font-weight:300">Генераторы</h1>
+          <span class="chip"><span class="dot"></span>GEN</span>
+        </div>
+        <p class="lead muted" style="font-size:var(--fs-18);margin-top:var(--sp-3);max-width:var(--measure)">Лад, фигура линии и арпеджиатор — то, что решает, какие ноты звучат и в каком порядке.</p>
+
+        <div data-tabs style="margin-top:var(--sp-6)">
+          <div class="tabs" role="tablist" aria-label="Экраны раздела Генераторы">
+            <button class="tab" role="tab" id="tab-scl" aria-controls="panel-scl" aria-selected="true" type="button">SCALE</button>
+            <button class="tab" role="tab" id="tab-eql" aria-controls="panel-eql" aria-selected="false" tabindex="-1" type="button">LEAD EUCLID</button>
+            <button class="tab" role="tab" id="tab-arp" aria-controls="panel-arp" aria-selected="false" tabindex="-1" type="button">LEAD ARP</button>
+          </div>
+
+          <div class="tabpanel" role="tabpanel" id="panel-scl" aria-labelledby="tab-scl">
+            <section id="scl">
+              <h2 style="font-size:var(--fs-28);margin-bottom:var(--sp-2)">Экран SCALE</h2>
+              <p class="muted" style="max-width:var(--measure);margin-bottom:var(--sp-5)">Ноты лида: лад, тоника, плотность и октава. Экран назывался LEAD GEN. RESET здесь больше нет: у каждой секвенции свой период, и оба стоят на страницах с рисунком.</p>
+              <div class="table-scroll">
+                <table class="param-table">
+                  <thead><tr><th>Ручка</th><th>Значения</th><th>Описание</th></tr></thead>
+                  <tbody>
+                    <tr>
+                      <td class="p-name"><span class="param-code">SCALE</span></td>
+                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
+                      <td>лад, из которого берутся ноты: присланная нота притягивается к ближайшей ступени лада, при равном расстоянии — к нижней. Последний в списке, CHROMATIC, содержит все двенадцать ступеней и не квантует ничего</td>
+                    </tr>
+                    <tr>
+                      <td class="p-name"><span class="param-code">NOTE</span></td>
+                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
+                      <td>тоника, вокруг которой берутся ноты: нота, двенадцать позиций от C до B. Октава — соседний сектор OCT. Вместе это те же восемьдесят четыре ноты, что знала одна ручка ROOT, кроме самого верхнего C, которого сетка «нота × октава» назвать не может</td>
+                    </tr>
+                    <tr>
+                      <td class="p-name"><span class="param-code">OCT</span></td>
+                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
+                      <td>октава тоники, 1..7: C1 — MIDI 24, B7 — MIDI 107. Своя ручка, потому что на одной восьмидесятипятиступенной шкале нота искалась на слух, а пара «нота и октава» — это то, на что рука целится</td>
+                    </tr>
+                    <tr>
+                      <td class="p-name"><span class="param-code">DENSITY</span></td>
+                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
+                      <td>как часто шаг звучит вообще</td>
+                    </tr>
+                    <tr>
+                      <td class="p-name"><span class="param-code">OCTAVE</span></td>
+                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
+                      <td>как охотно нота уходит в дальний регистр; на экране вероятность в процентах, до 50</td>
+                    </tr>
+                    <tr>
+                      <td class="p-name"><span class="param-code">SPAN</span></td>
+                      <td><ul class="opt-list">
+<li class="opt"><b>1 OCT</b><span>ноты стоят в одной октаве</span></li>
+<li class="opt"><b>2 OCT</b><span>две октавы, заводское положение</span></li>
+<li class="opt"><b>3 OCT</b><span>три октавы: самый широкий обход</span></li>
+</ul></td>
+                      <td>сколько октав обходит генератор: одна, две или три. Заводское положение — две</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+          </div>
+
+          <div class="tabpanel" role="tabpanel" id="panel-eql" aria-labelledby="tab-eql" hidden>
+            <section id="eql">
+              <h2 style="font-size:var(--fs-28);margin-bottom:var(--sp-2)">Экран LEAD EUCLID</h2>
+              <p class="muted" style="max-width:var(--measure);margin-bottom:var(--sp-5)">Эвклидова сетка нот. Когда сетку забирает арпеджиатор, по центру страницы появляется ARP IS ACTIVE: сетка не играет, и её ручки ничего не меняют. ACCENT у лида свой, отдельный от перкуссионного (SYNTH_PARAM_SEQ_ACCENT): рисунок считается по сетке лида и перкуссию не двигает. Оба экрана печатают одни и те же короткие формы из ACCENT_NAME, поэтому сектор читается одинаково на обеих страницах. RESET — жест лида и только лида.</p>
+              <div class="table-scroll">
+                <table class="param-table">
+                  <thead><tr><th>Ручка</th><th>Значения</th><th>Описание</th></tr></thead>
+                  <tbody>
+                    <tr>
+                      <td class="p-name"><span class="param-code">STEPS</span></td>
+                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
+                      <td>сколько шагов сетки в такте, n</td>
+                    </tr>
+                    <tr>
+                      <td class="p-name"><span class="param-code">PULSES</span></td>
+                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
+                      <td>сколько из них звучит, k; на экране действующее k/n</td>
+                    </tr>
+                    <tr>
+                      <td class="p-name"><span class="param-code">ROTATE</span></td>
+                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
+                      <td>на сколько шагов фигура сдвинута относительно доли</td>
+                    </tr>
+                    <tr>
+                      <td class="p-name"><span class="param-code">ACCENT</span></td>
+                      <td><ul class="opt-list">
+<li class="opt"><b>OFF</b><span>акцента нет: все ноты идут на своих заводских 70/70/55; заводское значение. WEAK VEL при этом не читается</span></li>
+<li class="opt"><b>1/4</b><span>четверти: доли 1, 5, 9, 13</span></li>
+<li class="opt"><b>2&amp;4</b><span>бэкбит, вторая и четвёртая: доли 5 и 13</span></li>
+<li class="opt"><b>OFFB</b><span>оффбит, восьмые между долями: доли 3, 7, 11, 15</span></li>
+<li class="opt"><b>3-3-2</b><span>тресильо: доли 1, 7, 13</span></li>
+<li class="opt"><b>FUNK</b><span>шестнадцатый фанк-акцент: доли 1, 4, 7, 10, 13, 16</span></li>
+<li class="opt"><b>RMB</b><span>румба-клава, первый такт: доли 1, 4, 7</span></li>
+<li class="opt"><b>BOS</b><span>босса-нова, первый такт: доли 1, 4, 7, 10, 13</span></li>
+</ul></td>
+                      <td>рисунок акцента лида: ноты на помеченных долях звучат на полной громкости своих голосов, остальные — на силе WEAK VEL. Свой рисунок, независимый от перкуссии: считается по сетке лида, доли идут от первой доли такта, поэтому с ROTATE рисунок не едет и по числу шагов не растягивается. Помеченный шаг отмечен на экране точкой крупнее. Арпеджиатор читает этот же рисунок: velocity нажатой клавиши задаёт уровень, а фигура — акцент внутри него, поэтому акценты слышны и на удержанном аккорде. Панель печатает короткую форму — она и стоит в списке ниже, полное название осталось у рисунка в коде</td>
+                    </tr>
+                    <tr>
+                      <td class="p-name"><span class="param-code">SCATTER</span></td>
+                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
+                      <td>насколько начало ноты может уехать от своей линии, в процентах шага</td>
+                    </tr>
+                    <tr>
+                      <td class="p-name"><span class="param-code">RESET</span></td>
+                      <td><ul class="opt-list">
+<li class="opt"><b>INF</b><span>не встают: счётчик лида идёт сам по себе; заводское значение для перкуссии, не для лида</span></li>
+<li class="opt"><b>16</b><span>каждые шестнадцать шагов; заводское значение</span></li>
+<li class="opt"><b>32</b><span>каждые тридцать два шага</span></li>
+<li class="opt"><b>64</b><span>каждые шестьдесят четыре шага</span></li>
+<li class="opt"><b>128</b><span>каждые сто двадцать восемь шагов</span></li>
+<li class="opt"><b>256</b><span>каждые двести пятьдесят шесть шагов</span></li>
+</ul></td>
+                      <td>через сколько шагов СВОЕЙ сетки лида фраза лида встаёт на первый шаг своего рисунка. Арпеджиатор этот жест не двигает: он считает от своего начала, и удержанный аккорд продолжает перебираться через сброс фразы. Перкуссию тоже не двигает: у неё свой RESET на PERC SEQ. Входит в звук и в пресет, поэтому смена пресета меняет и его; в пресете, записанном до появления поля, поля нет — он читается как заводские 16</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+          </div>
+
+          <div class="tabpanel" role="tabpanel" id="panel-arp" aria-labelledby="tab-arp" hidden>
+            <section id="arp">
+              <h2 style="font-size:var(--fs-28);margin-bottom:var(--sp-2)">Экран LEAD ARP</h2>
+              <p class="muted" style="max-width:var(--measure);margin-bottom:var(--sp-5)">Арпеджиатор: направление, скорость, длина фигуры, диапазон и свой рисунок акцента.</p>
+              <div class="table-scroll">
+                <table class="param-table">
+                  <thead><tr><th>Ручка</th><th>Значения</th><th>Описание</th></tr></thead>
+                  <tbody>
+                    <tr>
+                      <td class="p-name"><span class="param-code">DIR</span></td>
+                      <td><ul class="opt-list">
+<li class="opt"><b>OFF</b><span>арпеджиатор выключен, сетка играет сама</span></li>
+<li class="opt"><b>UP</b><span>снизу вверх</span></li>
+<li class="opt"><b>DN</b><span>сверху вниз</span></li>
+<li class="opt"><b>UP-DN</b><span>вверх и вниз; крайние ноты звучат по одному разу за оборот</span></li>
+<li class="opt"><b>DN-UP</b><span>то же зеркально</span></li>
+<li class="opt"><b>UP-DN+</b><span>вверх и вниз с задержкой на краях: верхняя и нижняя ноты держатся по два шага</span></li>
+<li class="opt"><b>DN-UP+</b><span>то же зеркально</span></li>
+<li class="opt"><b>RAND</b><span>случайная нота фигуры на каждом шаге</span></li>
+</ul></td>
+                      <td>направление фигуры; OFF выключает арпеджиатор и возвращает сетке голос</td>
+                    </tr>
+                    <tr>
+                      <td class="p-name"><span class="param-code">SPEED</span></td>
+                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
+                      <td>скорость; подпись называет целые доли, когда период на них попадает</td>
+                    </tr>
+                    <tr>
+                      <td class="p-name"><span class="param-code">LEN</span></td>
+                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
+                      <td>сколько нот в фигуре</td>
+                    </tr>
+                    <tr>
+                      <td class="p-name"><span class="param-code">RANGE</span></td>
+                      <td><ul class="opt-list">
+<li class="opt"><b>0</b><span>фигура не поднимается: все её шаги звучат на тонике</span></li>
+<li class="opt"><b>1</b><span>одна октава; заводское значение</span></li>
+<li class="opt"><b>2</b><span>две октавы</span></li>
+<li class="opt"><b>3</b><span>три октавы</span></li>
+<li class="opt"><b>4</b><span>четыре октавы</span></li>
+<li class="opt"><b>5</b><span>пять октав, самое широкое</span></li>
+</ul></td>
+                      <td>сколько октав проходит фигура, от нуля: 0 — одна нота (педаль), 5 — самая широкая. Направление задаёт DIR, поэтому знака у диапазона нет: то же расстояние UP идёт вверх, DN — вниз, UP-DN — туда и обратно</td>
+                    </tr>
+                    <tr>
+                      <td class="p-name"><span class="param-code">ACCENT</span></td>
+                      <td><ul class="opt-list">
+<li class="opt"><b>OFF</b><span>акцента нет: все ноты идут на своих заводских 70/70/55; заводское значение. WEAK VEL при этом не читается</span></li>
+<li class="opt"><b>1/4</b><span>четверти: доли 1, 5, 9, 13</span></li>
+<li class="opt"><b>2&amp;4</b><span>бэкбит, вторая и четвёртая: доли 5 и 13</span></li>
+<li class="opt"><b>OFFB</b><span>оффбит, восьмые между долями: доли 3, 7, 11, 15</span></li>
+<li class="opt"><b>3-3-2</b><span>тресильо: доли 1, 7, 13</span></li>
+<li class="opt"><b>FUNK</b><span>шестнадцатый фанк-акцент: доли 1, 4, 7, 10, 13, 16</span></li>
+<li class="opt"><b>RMB</b><span>румба-клава, первый такт: доли 1, 4, 7</span></li>
+<li class="opt"><b>BOS</b><span>босса-нова, первый такт: доли 1, 4, 7, 10, 13</span></li>
+</ul></td>
+                      <td>рисунок акцента лида: ноты на помеченных долях звучат на полной громкости своих голосов, остальные — на силе WEAK VEL. Свой рисунок, независимый от перкуссии: считается по сетке лида, доли идут от первой доли такта, поэтому с ROTATE рисунок не едет и по числу шагов не растягивается. Помеченный шаг отмечен на экране точкой крупнее. Арпеджиатор читает этот же рисунок: velocity нажатой клавиши задаёт уровень, а фигура — акцент внутри него, поэтому акценты слышны и на удержанном аккорде. Панель печатает короткую форму — она и стоит в списке ниже, полное название осталось у рисунка в коде</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+          </div>
+        </div>
+      </article>
+
+      <div class="doc-toc">
+        <div class="toc-title">На этой странице</div>
+        <ul class="toc">
+          <li><a class="toc-link" href="#scl">Экран SCALE</a></li>
+          <li><a class="toc-link" href="#eql">Экран LEAD EUCLID</a></li>
+          <li><a class="toc-link" href="#arp">Экран LEAD ARP</a></li>
+        </ul>
+      </div>
+
     </div>
-    <div id="tree"></div>
-  </nav>
-
-  <div class="backdrop" id="backdrop" hidden></div>
-
-  <main class="content" id="main">
-    <h1>    <h1>Время</h1>
-
-    <p class="lead">Лад, фигура и арпеджиатор: как линия превращается в партию.</p>
-
-</h1>
-
-    <p class="lead"></p>
-
-    <p>SCALE задаёт лад и тонику: двадцать один лад, и каждая пришедшая нота прижимается к ближайшей ступени. Хроматический лад — «как есть». Октава тоники — своя ручка, поэтому тоника не ползёт по всему диапазону.</p>
-    <p>LEAD EUCLID — фигура линии: STEPS и PULSES раскладывают ноты по кругу, ROTATE сдвигает рисунок, ACCENT выбирает фигуру акцентов, SCATTER — доля случайных нот. На кольце это видно точками: размер — сила, жёлтый — нота, приглушённый — пауза.</p>
-    <p>LEAD ARP берёт удерживаемые ноты и играет их рисунком: направление, октавы и скорость. Арпеджиатор работает и на остановленном транспорте — это генератор, а не секвенсор.</p>
-
-    <div data-ref="family" data-family="Время"></div>
-
-    <nav class="pager" id="pager" aria-label="Соседние страницы"></nav>
-  </main>
-
-  <aside class="toc" aria-label="На этой странице">
-    <p class="toc-title">На этой странице</p>
-    <ul id="toc-list"></ul>
-  </aside>
-
-</div>
+  </div>
+</main>
 
 <footer class="footer">
-  <p><b>OBOD</b> — синтезатор-контроллер на ESP32-S3 с круглым экраном 360 × 360.
-    Девять разделов, двадцать пять экранов, 137 ручек, 148 параметров, 128 пресетов.</p>
-  <p>Начало — <a href="start.html">первый запуск</a>, обновление — <a href="flash.html">прошивка</a>,
-    что менялось — <a href="changelog.html">история изменений</a>.</p>
-  <p>Движок голосов — <a href="https://github.com/danilogcrf2-oss/ESP32Synth">ESP32Synth 2.5.0</a>
-    (MIT, © 2025 Danilo Gabriel). Остальное написано для этого прибора.</p>
+  <div class="wrap">
+    <div class="f-col">
+      <span class="f-title">OBOD</span>
+      <p class="f-note">Синтезатор-контроллер на ESP32-S3 с круглым экраном 360 × 360. Голосовой движок — ESP32Synth 2.5.0 (MIT, © 2025 Danilo Gabriel); остальное написано для этого прибора.</p>
+    </div>
+    <div class="f-col">
+      <span class="f-title">Документация</span>
+      <a href="start.html">Первый запуск</a>
+      <a href="ref-drone.html">Справочник</a>
+      <a href="changelog.html">История изменений</a>
+    </div>
+    <div class="f-col">
+      <span class="f-title">Прибор</span>
+      <a href="hw.html">Железо</a>
+      <a href="flash.html">Прошивка</a>
+      <a href="hw.html">Железо</a>
+    </div>
+  </div>
 </footer>
 
-<script src="assets/pages.js?v=20261112a"></script>
-<script src="assets/ref.js?v=20261112a"></script>
-<script src="assets/docs.js?v=20261112a"></script>
+<script src="system/ui.js?v=20261112c"></script>
+<script src="assets/deep-link.js?v=20261112c"></script>
+
 <script>
   // Работник таймера раньше стоял в корне сайта и получал запросы всех разделов: он
   // ждёт сеть 800 мс и при задержке отдаёт из кэша свою страницу, а образ прошивки

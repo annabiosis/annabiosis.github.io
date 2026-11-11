@@ -1,101 +1,207 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" data-theme="dark">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/docs.css?v=20261112a">
-<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-<title>OBOD — Железо</title>
-<!--
-  Раздел «Железо»: таблица узлов платы, разъёмы USB и питание.
--->
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#060A09" />
+<title>OBOD — железо</title>
+<meta name="description" content="ESP32-S3R8, 8 МБ PSRAM, экран 360 × 360, тач, энкодер без кнопки, ЦАП PCM5100A, мотор DRV2605L." />
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="system/tokens.css?v=20261112c" />
+<link rel="stylesheet" href="system/base.css?v=20261112c" />
+<link rel="stylesheet" href="system/grid.css?v=20261112c" />
+<link rel="stylesheet" href="system/components.css?v=20261112c" />
+<script>
+  (function () {
+    try {
+      var t = localStorage.getItem('obod-theme');
+      if (!t) t = matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+      document.documentElement.dataset.theme = t;
+    } catch (e) { document.documentElement.dataset.theme = 'dark'; }
+  })();
+</script>
 </head>
-
 <body>
-
-<a class="skip" href="#main">К содержимому</a>
+<a class="skip-link" href="#main">К содержимому</a>
 
 <header class="topbar">
-  <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="sidebar">Разделы</button>
-  <a class="brand" href="index.html">OBOD</a>
-  <nav class="crumbs" id="crumbs" aria-label="Хлебные крошки"></nav>
+  <a class="brand" href="index.html">
+    <svg class="brand-ring" width="26" height="26" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="12" fill="none" stroke="currentColor" stroke-width="2.6" stroke-dasharray="56 20" stroke-linecap="round" transform="rotate(135 16 16)"/><circle cx="16" cy="16" r="4" fill="currentColor"/></svg>
+    OBOD
+  </a>
+  <nav class="topnav" aria-label="Документация">
+    <a href="index.html">Обзор</a>
+    <a href="start.html">Первый запуск</a>
+    <a href="ref-drone.html">Справочник</a>
+    <a href="hw.html" aria-current="page">Железо</a>
+    <a href="flash.html">Прошивка</a>
+    <a href="changelog.html">История</a>
+  </nav>
+  <div class="topbar-actions">
+    <button class="icon-btn" data-grid-toggle type="button" title="Показать сетку (G)" aria-label="Показать модульную сетку"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></button>
+    <button class="icon-btn theme-toggle" data-theme-toggle type="button" title="Переключить тему" aria-label="Переключить светлую и тёмную тему"><svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg><svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M19.1 4.9l-1.8 1.8M6.7 17.3l-1.8 1.8" stroke-linecap="round"/></svg></button>
+  </div>
 </header>
 
-<div class="shell">
+<main id="main">
+  <div class="wrap">
+    <div class="doc">
+      <div class="doc-tree">
+        <div class="search" style="margin-bottom:var(--sp-3)">
+          <svg class="search-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3" stroke-linecap="round"/></svg>
+          <input class="input" type="search" placeholder="Найти экран…" data-tree-filter=".tree" aria-label="Поиск по дереву разделов" />
+        </div>
+        <nav class="tree" aria-label="Разделы прибора">
+        <details class="tree-group fam-drn">
+          <summary><svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>Дрон<span class="grp-code">DRN</span></summary>
+          <ul class="tree-list">
+            <li><a class="tree-link" href="ref-drone.html#drn"><span class="tag">DRN</span>DRONE</a></li>
+            <li><a class="tree-link" href="ref-drone.html#dfl"><span class="tag">DFL</span>DRONE FLTR</a></li>
+          </ul>
+        </details>
+        <details class="tree-group fam-lfo">
+          <summary><svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>Модуляция<span class="grp-code">LFO</span></summary>
+          <ul class="tree-list">
+            <li><a class="tree-link" href="ref-lfo.html#lf1"><span class="tag">LF1</span>LFO 1</a></li>
+            <li><a class="tree-link" href="ref-lfo.html#lf2"><span class="tag">LF2</span>LFO 2</a></li>
+          </ul>
+        </details>
+        <details class="tree-group fam-ld">
+          <summary><svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>Лид<span class="grp-code">LD</span></summary>
+          <ul class="tree-list">
+            <li><a class="tree-link" href="ref-lead.html#ld"><span class="tag">LD</span>LEAD</a></li>
+            <li><a class="tree-link" href="ref-lead.html#ltn"><span class="tag">LTN</span>LEAD TONE</a></li>
+            <li><a class="tree-link" href="ref-lead.html#env"><span class="tag">ENV</span>LEAD ENV</a></li>
+          </ul>
+        </details>
+        <details class="tree-group fam-scl">
+          <summary><svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>Генераторы<span class="grp-code">GEN</span></summary>
+          <ul class="tree-list">
+            <li><a class="tree-link" href="ref-time.html#scl"><span class="tag">SCL</span>SCALE</a></li>
+            <li><a class="tree-link" href="ref-time.html#eql"><span class="tag">EQL</span>LEAD EUCLID</a></li>
+            <li><a class="tree-link" href="ref-time.html#arp"><span class="tag">ARP</span>LEAD ARP</a></li>
+          </ul>
+        </details>
+        <details class="tree-group fam-prc">
+          <summary><svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>Перкуссия<span class="grp-code">PRC</span></summary>
+          <ul class="tree-list">
+            <li><a class="tree-link" href="ref-perc.html#prc"><span class="tag">PRC</span>PERC</a></li>
+            <li><a class="tree-link" href="ref-perc.html#psq"><span class="tag">PSQ</span>PERC SEQ</a></li>
+            <li><a class="tree-link" href="ref-perc.html#pmx"><span class="tag">PMX</span>PERC MIX</a></li>
+          </ul>
+        </details>
+        <details class="tree-group fam-bas">
+          <summary><svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>Бас<span class="grp-code">BAS</span></summary>
+          <ul class="tree-list">
+            <li><a class="tree-link" href="ref-bass.html#bas"><span class="tag">BAS</span>BASS</a></li>
+            <li><a class="tree-link" href="ref-bass.html#bsq"><span class="tag">BSQ</span>RHYTHM</a></li>
+          </ul>
+        </details>
+        <details class="tree-group fam-fx">
+          <summary><svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>Эффекты<span class="grp-code">FX</span></summary>
+          <ul class="tree-list">
+            <li><a class="tree-link" href="ref-fx.html#fx"><span class="tag">FX</span>FX</a></li>
+            <li><a class="tree-link" href="ref-fx.html#del"><span class="tag">DEL</span>DELAY</a></li>
+            <li><a class="tree-link" href="ref-fx.html#rev"><span class="tag">REV</span>REVERB</a></li>
+          </ul>
+        </details>
+        <details class="tree-group fam-lvl">
+          <summary><svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>Микшер<span class="grp-code">LVL</span></summary>
+          <ul class="tree-list">
+            <li><a class="tree-link" href="ref-mix.html#mst"><span class="tag">MST</span>MASTER</a></li>
+            <li><a class="tree-link" href="ref-mix.html#lvl"><span class="tag">LVL</span>LEVELS</a></li>
+            <li><a class="tree-link" href="ref-mix.html#rvs"><span class="tag">RVS</span>REV SENDS</a></li>
+            <li><a class="tree-link" href="ref-mix.html#fxs"><span class="tag">FXS</span>FX SENDS</a></li>
+            <li><a class="tree-link" href="ref-mix.html#dls"><span class="tag">DLS</span>DEL SENDS</a></li>
+          </ul>
+        </details>
+        <details class="tree-group fam-prs">
+          <summary><svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>Пресеты и настройки<span class="grp-code">PRS</span></summary>
+          <ul class="tree-list">
+            <li><a class="tree-link" href="ref-store.html#prs"><span class="tag">PRS</span>PRESET</a></li>
+            <li><a class="tree-link" href="ref-store.html#set"><span class="tag">SET</span>SETUP</a></li>
+          </ul>
+        </details>
+        </nav>
+      </div>
 
-  <nav class="sidebar" id="sidebar" aria-label="Разделы документации">
-    <div class="sidebar-head">
-      <p class="sidebar-title">Документация</p>
-      <button class="nav-close" type="button">Закрыть</button>
+      <article class="doc-main">
+        <nav class="crumbs" aria-label="Хлебные крошки">
+          <a href="index.html">OBOD</a><span class="sep">/</span>
+          <span aria-current="page">Железо</span>
+        </nav>
+
+        <span class="eyebrow">Прибор</span>
+        <h1 style="font-size:var(--fs-48);font-weight:300;margin-top:var(--sp-2)">Железо</h1>
+        <p class="lead muted" style="font-size:var(--fs-18);margin-top:var(--sp-3);max-width:var(--measure)">Что внутри корпуса и что из этого следует для звука и интерфейса.</p>
+
+        <div class="table-scroll" id="what" style="margin-top:var(--sp-6)">
+          <table class="param-table">
+            <thead><tr><th>Узел</th><th>Что стоит</th></tr></thead>
+            <tbody>
+              <tr><td class="p-name"><span class="param-code">Процессор</span></td><td>ESP32-S3R8, два ядра LX7 на 240 МГц</td></tr>
+              <tr><td class="p-name"><span class="param-code">Память</span></td><td>16 МБ QIO flash, 8 МБ Octal PSRAM</td></tr>
+              <tr><td class="p-name"><span class="param-code">Экран</span></td><td>1.85″ IPS, 360 × 360, ламинация, ST77916 по QSPI</td></tr>
+              <tr><td class="p-name"><span class="param-code">Ввод</span></td><td>ёмкостный тач CST816S и энкодер; кнопки нет</td></tr>
+              <tr><td class="p-name"><span class="param-code">Выход</span></td><td>кольцо RGB, динамик через PCM5100A, мотор DRV2605L</td></tr>
+              <tr><td class="p-name"><span class="param-code">Микрофон</span></td><td>цифровой I2S: такт на GPIO5, данные на GPIO4</td></tr>
+              <tr><td class="p-name"><span class="param-code">Хранилище</span></td><td>microSD по SDMMC, четыре линии</td></tr>
+              <tr><td class="p-name"><span class="param-code">Питание</span></td><td>USB-C; заряд и батарея — АЦП на GPIO6</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2 id="notes" style="font-size:var(--fs-28);margin-top:var(--sp-7)">Что из этого следует</h2>
+        <div class="grid grid-tight" style="margin-top:var(--sp-4)">
+          <div class="col-6"><div class="card"><h3 style="font-size:var(--fs-18)">Кнопки нет</h3><p class="muted" style="font-size:var(--fs-14);margin-top:var(--sp-2)">На энкодере нет нажимной кнопки, и в демо-прошивке платы её обработка — мёртвый код. Весь интерфейс держится на колесе, касании и удержании: ENTER в LVGL не приходит никогда.</p></div></div>
+          <div class="col-6"><div class="card"><h3 style="font-size:var(--fs-18)">Кольцо на strapping-пине</h3><p class="muted" style="font-size:var(--fs-14);margin-top:var(--sp-2)">Данные кольца идут по GPIO0, а это загрузочный вывод. Кольцо нельзя тянуть до конца загрузки, иначе прибор не стартует.</p></div></div>
+          <div class="col-6"><div class="card"><h3 style="font-size:var(--fs-18)">Одна шина на двоих</h3><p class="muted" style="font-size:var(--fs-14);margin-top:var(--sp-2)">Тач CST816S и мотор DRV2605L сидят на одной шине I2C (GPIO9 и GPIO10). Мотор, включённый во время чтения тача, портит пакет.</p></div></div>
+          <div class="col-6"><div class="card"><h3 style="font-size:var(--fs-18)">Звук без настройки</h3><p class="muted" style="font-size:var(--fs-14);margin-top:var(--sp-2)">PCM5100A не требует ни I2C, ни MCLK: такт он восстанавливает из I2S. Глушение — вывод XSMT, активный низкий.</p></div></div>
+          <div class="col-6"><div class="card"><h3 style="font-size:var(--fs-18)">Память под звук</h3><p class="muted" style="font-size:var(--fs-14);margin-top:var(--sp-2)">Восемь мегабайт PSRAM заняты дилеем, ревербом, плитой и картой разделов. Звук и экран делят одну шину, поэтому кадр на анимированных страницах обновляется двадцать раз в секунду.</p></div></div>
+        </div>
+
+        <p class="muted" style="margin-top:var(--sp-6);font-size:var(--fs-14)">Полная распиновка и оговорки производителя — в репозитории, файл <span class="mono">docs/HARDWARE.md</span>.</p>
+      </article>
+
+      <div class="doc-toc">
+        <div class="toc-title">На этой странице</div>
+        <ul class="toc">
+          <li><a class="toc-link" href="#what">Что стоит</a></li>
+          <li><a class="toc-link" href="#notes">Что из этого следует</a></li>
+        </ul>
+      </div>
+
     </div>
-    <div id="tree"></div>
-  </nav>
-
-  <div class="backdrop" id="backdrop" hidden></div>
-
-  <main class="content" id="main">
-    <h1>Железо</h1>
-
-    <p class="lead">Что стоит внутри и чем прибор связан с компьютером.</p>
-
-    <table>
-      <tr><td>Плата</td><td>Guition Knob JC3636K718C</td></tr>
-      <tr><td>Микроконтроллер</td><td>ESP32-S3, 240 МГц, 8 МБ PSRAM, 16 МБ flash</td></tr>
-      <tr><td>Экран</td><td>круглый LCD 360 × 360, ST77916 по QSPI, ёмкостный тач CST816S</td></tr>
-      <tr><td>Звук</td><td>ЦАП PCM5100A на выход, PDM-микрофон на вход, 48 кГц</td></tr>
-      <tr><td>Обратная связь</td><td>RGB-кольцо по периметру</td></tr>
-      <tr><td>Питание</td><td>одна банка лития, зарядник ETA6003 с power-path: пока воткнут кабель, узел банки держит зарядник</td></tr>
-      <tr><td>Отладка</td><td>USB-Serial-JTAG: журнал и прошивка по одному кабелю, без переходников</td></tr>
-    </table>
-
-    <h2>Разъёмы и питание</h2>
-
-    <p>На плате два разъёма USB. Один подключён через USB-UART-мост, и система видит его как
-      <b>CH340</b>; второй ведёт прямо в USB-контроллер ESP32-S3. Для прошивки и журнала годится
-      любой, но начинать удобнее с CH340: он не пропадает, пока включён приём нот.</p>
-
-    <p>Прибор работает от одной банки лития, а заряжается по USB. Пока кабель воткнут, питание
-      идёт от зарядника, и банка только заряжается. Заряд виден на экране транспорта: свайп снизу
-      вверх.</p>
-
-    <h2>Что где на приборе</h2>
-
-    <ul>
-      <li><b>Обод</b> — поворот и касание: единственный орган управления, кроме экрана.</li>
-      <li><b>Кольцо</b> по периметру — индикация: значение выбранной ручки, стереокартина или
-        свет по звуку.</li>
-      <li><b>Микрофон</b> на входе: чувствительность меняется ручкой <span class="lab lab-view">MIC</span> на странице <span class="lab lab-view">SYSTEM</span>, и им
-        же можно двигать фильтр дрона, выбрав источник <span class="lab lab-view">MIC</span> в модуляции.</li>
-      <li><b>Выход</b> — через ЦАП PCM5100A: линейный сигнал для усилителя или колонки.</li>
-    </ul>
-
-    <p>Плата одна и та же во всех выпусках: менять её не нужно, а разбирать прибор, чтобы
-      что-то подключить, — тоже: всё нужное выведено на два разъёма USB и на обод.</p>
-
-    <nav class="pager" id="pager" aria-label="Соседние страницы"></nav>
-  </main>
-
-  <aside class="toc" aria-label="На этой странице">
-    <p class="toc-title">На этой странице</p>
-    <ul id="toc-list"></ul>
-  </aside>
-
-</div>
+  </div>
+</main>
 
 <footer class="footer">
-  <p><b>OBOD</b> — синтезатор-контроллер на ESP32-S3 с круглым экраном 360 × 360.
-    Девять разделов, двадцать пять экранов, 148 параметров, 128 пресетов.</p>
-  <p>Начало — <a href="start.html">первый запуск</a>, обновление — <a href="flash.html">прошивка</a>,
-    что менялось — <a href="changelog.html">история изменений</a>.</p>
-  <p>Движок голосов — <a href="https://github.com/danilogcrf2-oss/ESP32Synth">ESP32Synth 2.5.0</a>
-    (MIT, © 2025 Danilo Gabriel). Остальное написано для этого прибора.</p>
+  <div class="wrap">
+    <div class="f-col">
+      <span class="f-title">OBOD</span>
+      <p class="f-note">Синтезатор-контроллер на ESP32-S3 с круглым экраном 360 × 360. Голосовой движок — ESP32Synth 2.5.0 (MIT, © 2025 Danilo Gabriel); остальное написано для этого прибора.</p>
+    </div>
+    <div class="f-col">
+      <span class="f-title">Документация</span>
+      <a href="start.html">Первый запуск</a>
+      <a href="ref-drone.html">Справочник</a>
+      <a href="changelog.html">История изменений</a>
+    </div>
+    <div class="f-col">
+      <span class="f-title">Прибор</span>
+      <a href="hw.html">Железо</a>
+      <a href="flash.html">Прошивка</a>
+      <a href="hw.html">Железо</a>
+    </div>
+  </div>
 </footer>
 
-<script src="assets/pages.js?v=20261112a"></script>
-<script src="assets/docs.js?v=20261112a"></script>
+<script src="system/ui.js?v=20261112c"></script>
+<script src="assets/deep-link.js?v=20261112c"></script>
+
 <script>
   // Работник таймера раньше стоял в корне сайта и получал запросы всех разделов: он
   // ждёт сеть 800 мс и при задержке отдаёт из кэша свою страницу, а образ прошивки

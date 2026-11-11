@@ -1,79 +1,342 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" data-theme="dark">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/docs.css?v=20261112a">
-<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-<title>OBOD — Бас</title>
-<!--
-  Линия баса и её рисунок. Цвет семьи — янтарный, и кольцо на RHYTHM того же цвета.
--->
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#060A09" />
+<title>OBOD — Бас · Справочник</title>
+<meta name="description" content="Бас: BASS, RHYTHM." />
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="system/tokens.css?v=20261112c" />
+<link rel="stylesheet" href="system/base.css?v=20261112c" />
+<link rel="stylesheet" href="system/grid.css?v=20261112c" />
+<link rel="stylesheet" href="system/components.css?v=20261112c" />
+<script>
+  (function () {
+    try {
+      var t = localStorage.getItem('obod-theme');
+      if (!t) t = matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+      document.documentElement.dataset.theme = t;
+    } catch (e) { document.documentElement.dataset.theme = 'dark'; }
+  })();
+</script>
 </head>
-
 <body>
-
-<a class="skip" href="#main">К содержимому</a>
+<a class="skip-link" href="#main">К содержимому</a>
 
 <header class="topbar">
-  <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="sidebar">Разделы</button>
-  <a class="brand" href="index.html">OBOD</a>
-  <nav class="crumbs" id="crumbs" aria-label="Хлебные крошки"></nav>
+  <a class="brand" href="index.html">
+    <svg class="brand-ring" width="26" height="26" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="12" fill="none" stroke="currentColor" stroke-width="2.6" stroke-dasharray="56 20" stroke-linecap="round" transform="rotate(135 16 16)"/><circle cx="16" cy="16" r="4" fill="currentColor"/></svg>
+    OBOD
+  </a>
+  <nav class="topnav" aria-label="Документация">
+    <a href="index.html">Обзор</a>
+    <a href="start.html">Первый запуск</a>
+    <a href="ref-drone.html" aria-current="page">Справочник</a>
+    <a href="hw.html">Железо</a>
+    <a href="flash.html">Прошивка</a>
+    <a href="changelog.html">История</a>
+  </nav>
+  <div class="topbar-actions">
+    <button class="icon-btn" data-grid-toggle type="button" title="Показать сетку (G)" aria-label="Показать модульную сетку"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></button>
+    <button class="icon-btn theme-toggle" data-theme-toggle type="button" title="Переключить тему" aria-label="Переключить светлую и тёмную тему"><svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg><svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M19.1 4.9l-1.8 1.8M6.7 17.3l-1.8 1.8" stroke-linecap="round"/></svg></button>
+  </div>
 </header>
 
-<div class="shell">
+<main id="main">
+  <div class="wrap">
+    <div class="doc">
+      <div class="doc-tree">
+        <div class="search" style="margin-bottom:var(--sp-3)">
+          <svg class="search-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3" stroke-linecap="round"/></svg>
+          <input class="input" type="search" placeholder="Найти экран…" data-tree-filter=".tree" aria-label="Поиск по дереву разделов" />
+        </div>
+        <nav class="tree" aria-label="Разделы прибора">
+        <details class="tree-group fam-drn">
+          <summary><svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>Дрон<span class="grp-code">DRN</span></summary>
+          <ul class="tree-list">
+            <li><a class="tree-link" href="ref-drone.html#drn"><span class="tag">DRN</span>DRONE</a></li>
+            <li><a class="tree-link" href="ref-drone.html#dfl"><span class="tag">DFL</span>DRONE FLTR</a></li>
+          </ul>
+        </details>
+        <details class="tree-group fam-lfo">
+          <summary><svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>Модуляция<span class="grp-code">LFO</span></summary>
+          <ul class="tree-list">
+            <li><a class="tree-link" href="ref-lfo.html#lf1"><span class="tag">LF1</span>LFO 1</a></li>
+            <li><a class="tree-link" href="ref-lfo.html#lf2"><span class="tag">LF2</span>LFO 2</a></li>
+          </ul>
+        </details>
+        <details class="tree-group fam-ld">
+          <summary><svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>Лид<span class="grp-code">LD</span></summary>
+          <ul class="tree-list">
+            <li><a class="tree-link" href="ref-lead.html#ld"><span class="tag">LD</span>LEAD</a></li>
+            <li><a class="tree-link" href="ref-lead.html#ltn"><span class="tag">LTN</span>LEAD TONE</a></li>
+            <li><a class="tree-link" href="ref-lead.html#env"><span class="tag">ENV</span>LEAD ENV</a></li>
+          </ul>
+        </details>
+        <details class="tree-group fam-scl">
+          <summary><svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>Генераторы<span class="grp-code">GEN</span></summary>
+          <ul class="tree-list">
+            <li><a class="tree-link" href="ref-time.html#scl"><span class="tag">SCL</span>SCALE</a></li>
+            <li><a class="tree-link" href="ref-time.html#eql"><span class="tag">EQL</span>LEAD EUCLID</a></li>
+            <li><a class="tree-link" href="ref-time.html#arp"><span class="tag">ARP</span>LEAD ARP</a></li>
+          </ul>
+        </details>
+        <details class="tree-group fam-prc">
+          <summary><svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>Перкуссия<span class="grp-code">PRC</span></summary>
+          <ul class="tree-list">
+            <li><a class="tree-link" href="ref-perc.html#prc"><span class="tag">PRC</span>PERC</a></li>
+            <li><a class="tree-link" href="ref-perc.html#psq"><span class="tag">PSQ</span>PERC SEQ</a></li>
+            <li><a class="tree-link" href="ref-perc.html#pmx"><span class="tag">PMX</span>PERC MIX</a></li>
+          </ul>
+        </details>
+        <details class="tree-group fam-bas" open>
+          <summary><svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>Бас<span class="grp-code">BAS</span></summary>
+          <ul class="tree-list">
+            <li><a class="tree-link" href="ref-bass.html#bas"><span class="tag">BAS</span>BASS</a></li>
+            <li><a class="tree-link" href="ref-bass.html#bsq"><span class="tag">BSQ</span>RHYTHM</a></li>
+          </ul>
+        </details>
+        <details class="tree-group fam-fx">
+          <summary><svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>Эффекты<span class="grp-code">FX</span></summary>
+          <ul class="tree-list">
+            <li><a class="tree-link" href="ref-fx.html#fx"><span class="tag">FX</span>FX</a></li>
+            <li><a class="tree-link" href="ref-fx.html#del"><span class="tag">DEL</span>DELAY</a></li>
+            <li><a class="tree-link" href="ref-fx.html#rev"><span class="tag">REV</span>REVERB</a></li>
+          </ul>
+        </details>
+        <details class="tree-group fam-lvl">
+          <summary><svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>Микшер<span class="grp-code">LVL</span></summary>
+          <ul class="tree-list">
+            <li><a class="tree-link" href="ref-mix.html#mst"><span class="tag">MST</span>MASTER</a></li>
+            <li><a class="tree-link" href="ref-mix.html#lvl"><span class="tag">LVL</span>LEVELS</a></li>
+            <li><a class="tree-link" href="ref-mix.html#rvs"><span class="tag">RVS</span>REV SENDS</a></li>
+            <li><a class="tree-link" href="ref-mix.html#fxs"><span class="tag">FXS</span>FX SENDS</a></li>
+            <li><a class="tree-link" href="ref-mix.html#dls"><span class="tag">DLS</span>DEL SENDS</a></li>
+          </ul>
+        </details>
+        <details class="tree-group fam-prs">
+          <summary><svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>Пресеты и настройки<span class="grp-code">PRS</span></summary>
+          <ul class="tree-list">
+            <li><a class="tree-link" href="ref-store.html#prs"><span class="tag">PRS</span>PRESET</a></li>
+            <li><a class="tree-link" href="ref-store.html#set"><span class="tag">SET</span>SETUP</a></li>
+          </ul>
+        </details>
+        </nav>
+      </div>
 
-  <nav class="sidebar" id="sidebar" aria-label="Разделы документации">
-    <div class="sidebar-head">
-      <p class="sidebar-title">Руководство</p>
-      <button class="nav-close" type="button">Закрыть</button>
+      <article class="doc-main fam-bas">
+        <nav class="crumbs" aria-label="Хлебные крошки">
+          <a href="index.html">OBOD</a><span class="sep">/</span>
+          <a href="ref-drone.html">Справочник</a><span class="sep">/</span>
+          <span aria-current="page">Бас</span>
+        </nav>
+
+        <div style="display:flex;align-items:center;gap:var(--sp-3);flex-wrap:wrap">
+          <h1 style="font-size:var(--fs-48);font-weight:300">Бас</h1>
+          <span class="chip"><span class="dot"></span>BAS</span>
+        </div>
+        <p class="lead muted" style="font-size:var(--fs-18);margin-top:var(--sp-3);max-width:var(--measure)">Отдельная часть прибора: линия, её рисунок и связки. Одна нота в один момент, со своим фильтром из заготовки.</p>
+
+        <div data-tabs style="margin-top:var(--sp-6)">
+          <div class="tabs" role="tablist" aria-label="Экраны раздела Бас">
+            <button class="tab" role="tab" id="tab-bas" aria-controls="panel-bas" aria-selected="true" type="button">BASS</button>
+            <button class="tab" role="tab" id="tab-bsq" aria-controls="panel-bsq" aria-selected="false" tabindex="-1" type="button">RHYTHM</button>
+          </div>
+
+          <div class="tabpanel" role="tabpanel" id="panel-bas" aria-labelledby="tab-bas">
+            <section id="bas">
+              <h2 style="font-size:var(--fs-28);margin-bottom:var(--sp-2)">Экран BASS</h2>
+              <p class="muted" style="max-width:var(--measure);margin-bottom:var(--sp-5)">Голос баса: заготовка, щелчок, смена ноты, затухание и доля саба. Линия идёт за темпом и транспозицией прибора; уровень части — на LEVELS, посылы — на страницах посылов.</p>
+              <div class="table-scroll">
+                <table class="param-table">
+                  <thead><tr><th>Ручка</th><th>Значения</th><th>Описание</th></tr></thead>
+                  <tbody>
+                    <tr>
+                      <td class="p-name"><span class="param-code">KIT</span></td>
+                      <td><ul class="opt-list">
+<li class="opt"><b>TIGHT</b><span>сухо и коротко, металла в хэтах нет</span></li>
+<li class="opt"><b>MINI</b><span>машинка, на которой озвучен инструмент; заводской</span></li>
+<li class="opt"><b>BROKEN</b><span>длинный, низкий и металлический, партия бродит</span></li>
+<li class="opt"><b>DUST</b><span>тёмная комната: мягкие атаки и хвост длиннее доли</span></li>
+<li class="opt"><b>TAPE</b><span>потёртая машина — всюду чуть длиннее MINI</span></li>
+<li class="opt"><b>DEEP</b><span>медленный и тяжёлый: низ конца</span></li>
+<li class="opt"><b>BRUSH</b><span>мягкие атаки, длинный шум, партия палочками из воздуха</span></li>
+<li class="opt"><b>MACHINE</b><span>самый жёсткий и ровный: короткие гейты, комнате ничего не остаётся</span></li>
+<li class="opt"><b>EIGHT</b><span>длинный суб и щёлкающий снейр машины, которая дала ему имя</span></li>
+<li class="opt"><b>NINE</b><span>панч и металл над ним</span></li>
+<li class="opt"><b>ROOM</b><span>тот же кит, услышанный из глубины зала</span></li>
+<li class="opt"><b>LOFI</b><span>глухие хэты, мягкая бочка, выше пяти килогерц ничего</span></li>
+<li class="opt"><b>TRAP</b><span>бочка, которая переживает такт, и снейр, которому негде спрятаться</span></li>
+<li class="opt"><b>CLUB</b><span>жёсткая маленькая комната: бочка короткая и вперёд, хэты тесные</span></li>
+<li class="opt"><b>JAZZ</b><span>щётка по снейру и низкий райд там, где были бы хэты</span></li>
+<li class="opt"><b>STEEL</b><span>кит, у которого шум оставлен сырым</span></li>
+<li class="opt"><b>GLASS</b><span>хрупкий металл: высокий тонкий центр на каждой дорожке, длинное кольцо у хэта, снизу ничего</span></li>
+<li class="opt"><b>BOX</b><span>картон: всё тело, ни низа, ни хвоста; звук коробки, ударенной рукой в маленькой комнате</span></li>
+<li class="opt"><b>NEON</b><span>восьмидесятые: гейтированный снейр на весь такт, щелчок у бочки и хэт с открытым верхом</span></li>
+<li class="opt"><b>SUB</b><span>бочка и обещание: самый низкий центр прибора с самым длинным падением, остальные три дорожки далеко позади</span></li>
+<li class="opt"><b>WOOD</b><span>палки по дереву: том с телом на всю ручку и снейр с деревянным призвуком под шумом</span></li>
+<li class="opt"><b>GRIME</b><span>всё в середине: снейр с рукой под ним, тусклый хэт и бочка из одного тела</span></li>
+<li class="opt"><b>TIN</b><span>игрушечный кит: высокие центры, короткие гейты, веса нигде</span></li>
+<li class="opt"><b>INDUS</b><span>металлический конец: длинная бьющая бочка, снейр на треть секунды и том в низкой середине</span></li>
+<li class="opt"><b>ABYSS</b><span>дно голоса: 35 Гц, гейт в секунду с четвертью и падение почти на всю ENV</span></li>
+<li class="opt"><b>SLUDGE</b><span>та же идея медленнее и толще: бочка 38 Гц на 1,46 с, снейр размазан, хэты опаздывают и остаются</span></li>
+<li class="opt"><b>MONK</b><span>обряд на металле: короткая бочка, снейр — ударенная пластина, хэт звенит внахлёст следующей доле</span></li>
+<li class="opt"><b>VOID</b><span>бочка 36 Гц на 1,38 с и воздух: снейр — дыхание, хэт — тик, том — отзвук</span></li>
+</ul></td>
+                      <td>набор: кит и есть звук раздела. Четыре дорожки — бочка, снейр, хэт, том, — у каждой свой рецепт и свой второй голос; кит меняет удар целиком, а не подкручивает его. Ставится от сухого к странному</td>
+                    </tr>
+                    <tr>
+                      <td class="p-name"><span class="param-code">SNAP</span></td>
+                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
+                      <td>щелчок в начале ноты, в процентах: сколько атаки подмешано к телу. Заводское — 35 %</td>
+                    </tr>
+                    <tr>
+                      <td class="p-name"><span class="param-code">NOTE</span></td>
+                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
+                      <td>смена ноты линии, −7…+7 полутонов: сдвиг идёт до прижатия к ладу, поэтому линия остаётся в складе</td>
+                    </tr>
+                    <tr>
+                      <td class="p-name"><span class="param-code">DECAY</span></td>
+                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
+                      <td>за сколько громкость опускается до уровня SUSTAIN; заводское — 250 мс</td>
+                    </tr>
+                    <tr>
+                      <td class="p-name"><span class="param-code">SUB</span></td>
+                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
+                      <td>доля саб-осциллятора под нотой, в процентах: на нуле саба нет</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+          </div>
+
+          <div class="tabpanel" role="tabpanel" id="panel-bsq" aria-labelledby="tab-bsq" hidden>
+            <section id="bsq">
+              <h2 style="font-size:var(--fs-28);margin-bottom:var(--sp-2)">Экран RHYTHM</h2>
+              <p class="muted" style="max-width:var(--measure);margin-bottom:var(--sp-5)">Рисунок баса: где стоит нота и как она играется. Такт — шестнадцать шестнадцатых; LEN решает, сколько из них рисунок играет, остальное такт молчит, но счёт не сбивается.</p>
+              <div class="table-scroll">
+                <table class="param-table">
+                  <thead><tr><th>Ручка</th><th>Значения</th><th>Описание</th></tr></thead>
+                  <tbody>
+                    <tr>
+                      <td class="p-name"><span class="param-code">PAT</span></td>
+                      <td><ul class="opt-list">
+<li class="opt"><b>ROLL</b><span>шестнадцатыми, ровно</span></li>
+<li class="opt"><b>ROLL2</b><span>роллинг с двойным ударом</span></li>
+<li class="opt"><b>PSYROLL</b><span>пси-роллинг со сдвигом</span></li>
+<li class="opt"><b>OFFBEAT</b><span>между долями</span></li>
+<li class="opt"><b>OFF16</b><span>офф-бит шестнадцатыми</span></li>
+<li class="opt"><b>TRIPLET</b><span>триоль: пять нот на такт</span></li>
+<li class="opt"><b>GALLOP</b><span>галоп</span></li>
+<li class="opt"><b>PUMP</b><span>качание через долю</span></li>
+<li class="opt"><b>STAB</b><span>четвертями</span></li>
+<li class="opt"><b>JAB</b><span>короткие тычки</span></li>
+<li class="opt"><b>DRIVE16</b><span>роллинг с толчком в конце</span></li>
+<li class="opt"><b>RUN16</b><span>бег шестнадцатыми</span></li>
+<li class="opt"><b>OCT8</b><span>скачки на октаву</span></li>
+<li class="opt"><b>OCT16</b><span>октава внутри роллинга</span></li>
+<li class="opt"><b>SLIDE</b><span>длинные ноты под связку</span></li>
+<li class="opt"><b>SPACE</b><span>воздух</span></li>
+<li class="opt"><b>HALF</b><span>половина такта, вторая молчит</span></li>
+<li class="opt"><b>CLIMB</b><span>подъём к концу такта</span></li>
+<li class="opt"><b>DESCEND</b><span>спуск к концу такта</span></li>
+<li class="opt"><b>PICKUP</b><span>подход к первой доле</span></li>
+<li class="opt"><b>LATE</b><span>нота опаздывает на шестнадцатую</span></li>
+<li class="opt"><b>SHUFFLE</b><span>качание поперёк такта</span></li>
+<li class="opt"><b>BASSX</b><span>октава через две</span></li>
+<li class="opt"><b>CRAWL</b><span>малыми шагами</span></li>
+<li class="opt"><b>EIGHTH</b><span>восьмыми со сдвигом</span></li>
+<li class="opt"><b>ROLL3</b><span>тройной роллинг в конце такта</span></li>
+<li class="opt"><b>TRANCE</b><span>между долями дважды</span></li>
+<li class="opt"><b>PSYRUN</b><span>пси-бег: роллинг с дырой перед долей</span></li>
+<li class="opt"><b>FLOW</b><span>текущий рисунок без повторов</span></li>
+<li class="opt"><b>BLANK</b><span>одна нота на такт и длинный хвост</span></li>
+</ul></td>
+                      <td>рисунок: тридцать записанных фигур по шестнадцать шагов</td>
+                    </tr>
+                    <tr>
+                      <td class="p-name"><span class="param-code">VAR</span></td>
+                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
+                      <td>вторая часть рисунка: насколько партия уходит от записанной на повторе</td>
+                    </tr>
+                    <tr>
+                      <td class="p-name"><span class="param-code">LEN</span></td>
+                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
+                      <td>сколько нот в фигуре</td>
+                    </tr>
+                    <tr>
+                      <td class="p-name"><span class="param-code">GATE</span></td>
+                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
+                      <td>какую долю шага держится нота. Секвенсор не обрезает хвост следующим шагом: пока звучит релиз, новый шаг берёт следующую группу, поэтому долгие ноты накладываются друг на друга — до четырёх сразу, а пятая забирает самую старую</td>
+                    </tr>
+                    <tr>
+                      <td class="p-name"><span class="param-code">SLIDE</span></td>
+                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
+                      <td>вероятность связки: нота дотягивается до следующей</td>
+                    </tr>
+                    <tr>
+                      <td class="p-name"><span class="param-code">ACCENT</span></td>
+                      <td><ul class="opt-list">
+<li class="opt"><b>OFF</b><span>акцента нет: все ноты идут на своих заводских 70/70/55; заводское значение. WEAK VEL при этом не читается</span></li>
+<li class="opt"><b>1/4</b><span>четверти: доли 1, 5, 9, 13</span></li>
+<li class="opt"><b>2&amp;4</b><span>бэкбит, вторая и четвёртая: доли 5 и 13</span></li>
+<li class="opt"><b>OFFB</b><span>оффбит, восьмые между долями: доли 3, 7, 11, 15</span></li>
+<li class="opt"><b>3-3-2</b><span>тресильо: доли 1, 7, 13</span></li>
+<li class="opt"><b>FUNK</b><span>шестнадцатый фанк-акцент: доли 1, 4, 7, 10, 13, 16</span></li>
+<li class="opt"><b>RMB</b><span>румба-клава, первый такт: доли 1, 4, 7</span></li>
+<li class="opt"><b>BOS</b><span>босса-нова, первый такт: доли 1, 4, 7, 10, 13</span></li>
+</ul></td>
+                      <td>рисунок акцента лида: ноты на помеченных долях звучат на полной громкости своих голосов, остальные — на силе WEAK VEL. Свой рисунок, независимый от перкуссии: считается по сетке лида, доли идут от первой доли такта, поэтому с ROTATE рисунок не едет и по числу шагов не растягивается. Помеченный шаг отмечен на экране точкой крупнее. Арпеджиатор читает этот же рисунок: velocity нажатой клавиши задаёт уровень, а фигура — акцент внутри него, поэтому акценты слышны и на удержанном аккорде. Панель печатает короткую форму — она и стоит в списке ниже, полное название осталось у рисунка в коде</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+          </div>
+        </div>
+      </article>
+
+      <div class="doc-toc">
+        <div class="toc-title">На этой странице</div>
+        <ul class="toc">
+          <li><a class="toc-link" href="#bas">Экран BASS</a></li>
+          <li><a class="toc-link" href="#bsq">Экран RHYTHM</a></li>
+        </ul>
+      </div>
+
     </div>
-    <div id="tree"></div>
-  </nav>
-
-  <div class="backdrop" id="backdrop" hidden></div>
-
-  <main class="content" id="main">
-    <h1>    <h1>Бас</h1>
-
-    <p class="lead">Линия, её рисунок и связки: одна нота в один момент.</p>
-
-</h1>
-
-    <p class="lead"></p>
-
-    <p>BASS — сама линия: TONE и RES фильтра живут в заготовке, NOTE сдвигает ноту на семь полутонов в обе стороны, DECAY и SUSTAIN держат длину, SNAP даёт щелчок в начале.</p>
-    <p>RHYTHM — рисунок партии: PAT, ACCENT, VAR, SLIDE, LEN и GATE. Сорок два рисунка баслиний идут по плотности, поэтому от пустой линии до роллинга можно доехать одной ручкой.</p>
-    <p>LEN — это длина цикла, а не запрет играть дальше: в четыре шага линия повторяется четыре раза за такт перкуссии, в семь — семь шагов против её шестнадцати. Это и есть полиритмия, и она не сбивает сетку.</p>
-    <p>SLIDE — доля связанных нот: связанная нота не бьёт заново, а тянется в следующую и подъезжает к ней по высоте. VAR — доля вариаций, а не их вид: сколько циклов получает скачок на октаву, добавочный акцент и связку.</p>
-
-    <div data-ref="family" data-family="Бас"></div>
-
-    <nav class="pager" id="pager" aria-label="Соседние страницы"></nav>
-  </main>
-
-  <aside class="toc" aria-label="На этой странице">
-    <p class="toc-title">На этой странице</p>
-    <ul id="toc-list"></ul>
-  </aside>
-
-</div>
+  </div>
+</main>
 
 <footer class="footer">
-  <p><b>OBOD</b> — синтезатор-контроллер на ESP32-S3 с круглым экраном 360 × 360.
-    Девять разделов, двадцать пять экранов, 137 ручек, 148 параметров, 128 пресетов.</p>
-  <p>Начало — <a href="start.html">первый запуск</a>, обновление — <a href="flash.html">прошивка</a>,
-    что менялось — <a href="changelog.html">история изменений</a>.</p>
-  <p>Движок голосов — <a href="https://github.com/danilogcrf2-oss/ESP32Synth">ESP32Synth 2.5.0</a>
-    (MIT, © 2025 Danilo Gabriel). Остальное написано для этого прибора.</p>
+  <div class="wrap">
+    <div class="f-col">
+      <span class="f-title">OBOD</span>
+      <p class="f-note">Синтезатор-контроллер на ESP32-S3 с круглым экраном 360 × 360. Голосовой движок — ESP32Synth 2.5.0 (MIT, © 2025 Danilo Gabriel); остальное написано для этого прибора.</p>
+    </div>
+    <div class="f-col">
+      <span class="f-title">Документация</span>
+      <a href="start.html">Первый запуск</a>
+      <a href="ref-drone.html">Справочник</a>
+      <a href="changelog.html">История изменений</a>
+    </div>
+    <div class="f-col">
+      <span class="f-title">Прибор</span>
+      <a href="hw.html">Железо</a>
+      <a href="flash.html">Прошивка</a>
+      <a href="hw.html">Железо</a>
+    </div>
+  </div>
 </footer>
 
-<script src="assets/pages.js?v=20261112a"></script>
-<script src="assets/ref.js?v=20261112a"></script>
-<script src="assets/docs.js?v=20261112a"></script>
+<script src="system/ui.js?v=20261112c"></script>
+<script src="assets/deep-link.js?v=20261112c"></script>
+
 <script>
   // Работник таймера раньше стоял в корне сайта и получал запросы всех разделов: он
   // ждёт сеть 800 мс и при задержке отдаёт из кэша свою страницу, а образ прошивки
