@@ -15,149 +15,163 @@
   },
   {
     "index": 2,
-    "label": "LFO",
-    "file": "lfo.png",
+    "label": "LFO 1",
+    "file": "lfo-1.png",
     "family": "Тело",
-    "page": "LFO"
+    "page": "LFO 1"
   },
   {
     "index": 3,
+    "label": "LFO 2",
+    "file": "lfo-2.png",
+    "family": "Тело",
+    "page": "LFO 2"
+  },
+  {
+    "index": 4,
     "label": "LEAD",
     "file": "lead.png",
     "family": "Голос",
     "page": "LEAD"
   },
   {
-    "index": 4,
+    "index": 5,
     "label": "LEAD TONE",
     "file": "lead-tone.png",
     "family": "Голос",
     "page": "LEAD TONE"
   },
   {
-    "index": 5,
+    "index": 6,
     "label": "LEAD ENV",
     "file": "lead-env.png",
     "family": "Голос",
     "page": "LEAD ENV"
   },
   {
-    "index": 6,
+    "index": 7,
     "label": "SCALE",
     "file": "scale.png",
     "family": "Время",
     "page": "SCALE"
   },
   {
-    "index": 7,
+    "index": 8,
     "label": "LEAD EUCLID",
     "file": "lead-euclid.png",
     "family": "Время",
     "page": "LEAD EUCLID"
   },
   {
-    "index": 8,
+    "index": 9,
     "label": "LEAD ARP",
     "file": "lead-arp.png",
     "family": "Время",
     "page": "LEAD ARP"
   },
   {
-    "index": 9,
+    "index": 10,
     "label": "PERC",
     "file": "perc.png",
     "family": "Перкуссия",
     "page": "PERC"
   },
   {
-    "index": 10,
+    "index": 11,
     "label": "PERC SEQ",
     "file": "perc-seq.png",
     "family": "Перкуссия",
     "page": "PERC SEQ"
   },
   {
-    "index": 11,
+    "index": 12,
     "label": "PERC MIX",
     "file": "perc-mix.png",
     "family": "Перкуссия",
     "page": "PERC MIX"
   },
   {
-    "index": 12,
-    "label": "CHORUS",
-    "file": "chorus.png",
-    "family": "Рэк",
-    "page": "CHORUS"
+    "index": 13,
+    "label": "BASS",
+    "file": "bass.png",
+    "family": "Бас",
+    "page": "BASS"
   },
   {
-    "index": 13,
+    "index": 14,
+    "label": "RHYTHM",
+    "file": "rhythm.png",
+    "family": "Бас",
+    "page": "RHYTHM"
+  },
+  {
+    "index": 15,
+    "label": "FX",
+    "file": "fx.png",
+    "family": "Рэк",
+    "page": "FX"
+  },
+  {
+    "index": 16,
     "label": "DELAY",
     "file": "delay.png",
     "family": "Рэк",
     "page": "DELAY"
   },
   {
-    "index": 14,
+    "index": 17,
     "label": "REVERB",
     "file": "reverb.png",
     "family": "Рэк",
     "page": "REVERB"
   },
   {
-    "index": 15,
+    "index": 18,
     "label": "MASTER",
     "file": "master.png",
     "family": "Микшеры",
     "page": "MASTER"
   },
   {
-    "index": 16,
+    "index": 19,
     "label": "LEVELS",
     "file": "levels.png",
     "family": "Микшеры",
     "page": "LEVELS"
   },
   {
-    "index": 17,
+    "index": 20,
     "label": "REV SENDS",
     "file": "rev-sends.png",
     "family": "Микшеры",
     "page": "REV SENDS"
   },
   {
-    "index": 18,
-    "label": "CHR SENDS",
-    "file": "chr-sends.png",
+    "index": 21,
+    "label": "FX SENDS",
+    "file": "fx-sends.png",
     "family": "Микшеры",
-    "page": "CHR SENDS"
+    "page": "FX SENDS"
   },
   {
-    "index": 19,
+    "index": 22,
     "label": "DEL SENDS",
     "file": "del-sends.png",
     "family": "Микшеры",
     "page": "DEL SENDS"
   },
   {
-    "index": 20,
+    "index": 23,
     "label": "PRESET",
     "file": "preset.png",
     "family": "Пресеты",
     "page": "PRESET"
   },
   {
-    "index": 21,
-    "label": "SYSTEM",
-    "file": "system.png",
+    "index": 24,
+    "label": "SETUP",
+    "file": "setup.png",
     "family": "Настройки",
-    "page": "SYSTEM"
-  },
-  {
-    "index": 22,
-    "label": "OPTIONS",
-    "file": "options.png",
-    "family": "Настройки",
-    "page": "OPTIONS"
+    "page": "SETUP"
   }
 ]

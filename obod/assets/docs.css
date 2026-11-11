@@ -474,10 +474,14 @@ td:first-child { color: var(--muted); }
 .lab-lead   { --lab-ink: #BA68C8; --lab-line: rgba(186, 104, 200, .34); }
 .lab-gen    { --lab-ink: #4DB6AC; --lab-line: rgba(77, 182, 172, .34); }
 .lab-perc   { --lab-ink: #66BB6A; --lab-line: rgba(102, 187, 106, .34); }
+.lab-bass   { --lab-ink: #FFC107; --lab-line: rgba(255, 193, 7, .34); }
 .lab-fx     { --lab-ink: #F06292; --lab-line: rgba(240, 98, 146, .34); }
 .lab-mix    { --lab-ink: #A1887F; --lab-line: rgba(161, 136, 127, .34); }
 .lab-view   { --lab-ink: #90A4AE; --lab-line: rgba(144, 164, 174, .34); }
 .lab-preset { --lab-ink: #CFD8DC; --lab-line: rgba(207, 216, 220, .34); }
+/* LFO: лаймовый. Чистое время — своё семейство, а не часть дрона. */
+/* LFO: жёлтее и насыщеннее — на ободе его путали с зелёным ударки. */
+.lab-lfo    { --lab-ink: #D7E000; --lab-line: rgba(215, 224, 0, .34); }
 .note p:last-child { margin-bottom: 0; }
 
 /* ---------- прошивка ---------- */
