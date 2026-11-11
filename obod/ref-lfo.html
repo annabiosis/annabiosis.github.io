@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/docs.css">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<title>OBOD — Модуляция</title>
+<!--
+  Два LFO: приёмники, глубины, формы и триггеры. Своя семья и свой цвет — лаймовый, как
+  на карте прибора.
+-->
+</head>
+
+<body>
+
+<a class="skip" href="#main">К содержимому</a>
+
+<header class="topbar">
+  <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="sidebar">Разделы</button>
+  <a class="brand" href="index.html">OBOD</a>
+  <nav class="crumbs" id="crumbs" aria-label="Хлебные крошки"></nav>
+</header>
+
+<div class="shell">
+
+  <nav class="sidebar" id="sidebar" aria-label="Разделы документации">
+    <div class="sidebar-head">
+      <p class="sidebar-title">Руководство</p>
+      <button class="nav-close" type="button">Закрыть</button>
+    </div>
+    <div id="tree"></div>
+  </nav>
+
+  <div class="backdrop" id="backdrop" hidden></div>
+
+  <main class="content" id="main">
+    <h1>Модуляция</h1>
+
+    <p class="lead">Два независимых LFO: куда идёт движение, какой оно формы и насколько глубоко.</p>
+
+    <p>LFO двигает ручку сам: настроили один раз — и крутить её больше не нужно. Каждый канал отвечает на четыре вопроса: приёмник (DEST), форма (SHAPE), глубина (DEPTH) и скорость (SPEED). У каждого канала свой второй приёмник и своя вторая глубина.</p>
+    <p>Приёмники названы по семействам: DR.CUT, DR.RES, DR.PAN, DR.LVL — дрон; LD.PTCH, LD.PW, LD.CUT — лид; PC.PTCH, PC.ENV, PC.DEC, PC.PNCH — ударка; FX.MIX, RV.MIX, DLY.MIX — эффекты. Одинаковые приёмники двух LFO складываются.</p>
+    <p>Глубина двусторонняя: середина хода — ноль, вправо в фазе, влево в противофазе. Форма выбирается списком из пятнадцати положений — восемь свободных и семь с триггером, который перезапускает её на ноту. MIC в списке — не форма, а источник: движение задаёт звук комнаты, и скорость на него не влияет.</p>
+    <p>Настройки обоих LFO едут в патче вместе со звуком, поэтому пресет возит модуляцию с собой.</p>
+
+    <div data-ref="family" data-family="Модуляция"></div>
+
+    <nav class="pager" id="pager" aria-label="Соседние страницы"></nav>
+  </main>
+
+  <aside class="toc" aria-label="На этой странице">
+    <p class="toc-title">На этой странице</p>
+    <ul id="toc-list"></ul>
+  </aside>
+
+</div>
+
+<footer class="footer">
+  <p><b>OBOD</b> — синтезатор-контроллер на ESP32-S3 с круглым экраном 360 × 360.
+    Девять разделов, двадцать пять экранов, 137 ручек, 148 параметров, 128 пресетов.</p>
+  <p>Начало — <a href="start.html">первый запуск</a>, обновление — <a href="flash.html">прошивка</a>,
+    что менялось — <a href="changelog.html">история изменений</a>.</p>
+  <p>Движок голосов — <a href="https://github.com/danilogcrf2-oss/ESP32Synth">ESP32Synth 2.5.0</a>
+    (MIT, © 2025 Danilo Gabriel). Остальное написано для этого прибора.</p>
+</footer>
+
+<script src="assets/pages.js"></script>
+<script src="assets/ref.js"></script>
+<script src="assets/docs.js"></script>
+<script>
+  // Работник таймера раньше стоял в корне сайта и получал запросы всех разделов: он
+  // ждёт сеть 800 мс и при задержке отдаёт из кэша свою страницу, а образ прошивки
+  // больше мегабайта и в этот срок не укладывается. Свой работник с более длинным
+  // охватом перекрывает старую регистрацию для этой папки.
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function () {
+      navigator.serviceWorker.register('sw.js', { scope: './' }).catch(function () {});
+    });
+  }
+</script></body>
+</html>

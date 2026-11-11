@@ -655,7 +655,7 @@
       Ref.list(list, {
         href: function (name) {
           var found = pages.filter(function (p) { return p.family === name; })[0];
-          return found ? found.file : 'ref.html';
+          return found ? found.file : 'index.html';
         }
       });
     }

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/docs.css">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<title>OBOD — Пресеты и настройки</title>
+<!--
+  Слоты звука и системные строки: хранилище и поведение прибора. Цвет семьи — серый.
+-->
+</head>
+
+<body>
+
+<a class="skip" href="#main">К содержимому</a>
+
+<header class="topbar">
+  <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="sidebar">Разделы</button>
+  <a class="brand" href="index.html">OBOD</a>
+  <nav class="crumbs" id="crumbs" aria-label="Хлебные крошки"></nav>
+</header>
+
+<div class="shell">
+
+  <nav class="sidebar" id="sidebar" aria-label="Разделы документации">
+    <div class="sidebar-head">
+      <p class="sidebar-title">Руководство</p>
+      <button class="nav-close" type="button">Закрыть</button>
+    </div>
+    <div id="tree"></div>
+  </nav>
+
+  <div class="backdrop" id="backdrop" hidden></div>
+
+  <main class="content" id="main">
+    <h1>Пресеты и настройки</h1>
+
+    <p class="lead">Слоты звука и служебные строки: что прибор помнит о вас.</p>
+
+    <p>PRESET — 128 слотов и действия со звуком: LOAD, SAVE, RND и строка списка. Ручек у экрана нет, поэтому обод остаётся целым. Своей плитки в шторке у пресетов нет: вход — кнопка PRESET на транспортной шторке.</p>
+    <p>SETUP — настройки одним списком: слева имя строки, справа значение, разделы AUDIO, MIDI, PERSONALISATION и SYSTEM. Колесо крутит выбранную строку, касание выбирает строку. Здесь живут AUTOPLAY, яркость, режим кольца, скорость слайда и звук при включении.</p>
+
+    <div data-ref="family" data-family="Пресеты и настройки"></div>
+
+    <nav class="pager" id="pager" aria-label="Соседние страницы"></nav>
+  </main>
+
+  <aside class="toc" aria-label="На этой странице">
+    <p class="toc-title">На этой странице</p>
+    <ul id="toc-list"></ul>
+  </aside>
+
+</div>
+
+<footer class="footer">
+  <p><b>OBOD</b> — синтезатор-контроллер на ESP32-S3 с круглым экраном 360 × 360.
+    Девять разделов, двадцать пять экранов, 137 ручек, 148 параметров, 128 пресетов.</p>
+  <p>Начало — <a href="start.html">первый запуск</a>, обновление — <a href="flash.html">прошивка</a>,
+    что менялось — <a href="changelog.html">история изменений</a>.</p>
+  <p>Движок голосов — <a href="https://github.com/danilogcrf2-oss/ESP32Synth">ESP32Synth 2.5.0</a>
+    (MIT, © 2025 Danilo Gabriel). Остальное написано для этого прибора.</p>
+</footer>
+
+<script src="assets/pages.js"></script>
+<script src="assets/ref.js"></script>
+<script src="assets/docs.js"></script>
+<script>
+  // Работник таймера раньше стоял в корне сайта и получал запросы всех разделов: он
+  // ждёт сеть 800 мс и при задержке отдаёт из кэша свою страницу, а образ прошивки
+  // больше мегабайта и в этот срок не укладывается. Свой работник с более длинным
+  // охватом перекрывает старую регистрацию для этой папки.
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function () {
+      navigator.serviceWorker.register('sw.js', { scope: './' }).catch(function () {});
+    });
+  }
+</script></body>
+</html>
