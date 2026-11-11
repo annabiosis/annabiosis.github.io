@@ -661,8 +661,49 @@
     }
   }
 
+  /*
+   * ТЕМА. По умолчанию тёмная — так прибор и выглядит; светлая включается кнопкой в шапке и
+   * запоминается. Кнопка ставится скриптом, а не в разметку: страниц четырнадцать, и
+   * одинаковая кнопка в каждой — это четырнадцать мест, где она может отстать.
+   */
+  var THEME_KEY = 'obod-docs-theme';
+
+  function storedTheme() {
+    try { return localStorage.getItem(THEME_KEY); } catch (e) { return null; }
+  }
+
+  function applyTheme(name) {
+    if (name === 'light') {
+      document.documentElement.setAttribute('data-theme', 'light');
+    } else {
+      document.documentElement.removeAttribute('data-theme');
+    }
+    try { localStorage.setItem(THEME_KEY, name === 'light' ? 'light' : 'dark'); } catch (e) {}
+  }
+
+  function setupTheme() {
+    var bar = document.querySelector('.topbar');
+    if (!bar) { return; }
+
+    var button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'theme-toggle';
+    button.setAttribute('aria-label', 'Светлая или тёмная тема');
+    button.textContent = 'Тема';
+    bar.appendChild(button);
+
+    button.addEventListener('click', function () {
+      var light = document.documentElement.getAttribute('data-theme') === 'light';
+      applyTheme(light ? 'dark' : 'light');
+    });
+  }
+
+  var saved = storedTheme();
+  if (saved) { applyTheme(saved); }
+
   function init() {
     if (!findPage(here)) { here = 'index.html'; }
+    setupTheme();
 
     setupRef();
     renderTree();

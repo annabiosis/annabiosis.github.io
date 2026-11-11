@@ -12,14 +12,15 @@
  */
 
 :root {
-  --bg:        #000;
-  --panel:     #011b1c;
-  --text:      #fff;
-  /* Имя «muted», а не «grey40»: раньше здесь стояли сорок процентов белого, и
-     предупреждения в .note набирались этим цветом с контрастом 3,77:1. Пятьдесят
-     пять процентов дают 6,27:1 на панели и 5,98:1 на чёрном. */
-  --muted:     rgba(255,255,255,.55);
-  --grey70:    rgba(255,255,255,.72);
+  /* МЯГЧЕ, ЧЕМ ЧЁРНОЕ НА БЕЛОМ. Чистый чёрный фон и чистый белый текст — это предел
+     контраста, и на длинной странице от него устают глаза: буквы выглядят светящимися, а
+     фон проваливается. Фон взят тёмно-бирюзовым (тот же оттенок, что у прибора), текст —
+     чуть теплее белого: контраст остаётся выше 12:1, но перестаёт резать. */
+  --bg:        #061311;
+  --panel:     #0A1D1A;
+  --text:      #E7F1EE;
+  --muted:     rgba(231,241,238,.62);
+  --grey70:    rgba(231,241,238,.78);
   --green600:  #30DA98;
   --green400:  #71FEAB;
   --green900:  #0C7970;
@@ -28,9 +29,9 @@
   --red600:    #DB3323;
   --red500:    #FF5230;
   --red100:    #FFCCAC;
-  --border:    rgba(255,255,255,.2);
-  --divider:   rgba(255,255,255,.1);
-  --divider2:  rgba(255,255,255,.15);
+  --border:    rgba(231,241,238,.22);
+  --divider:   rgba(231,241,238,.12);
+  --divider2:  rgba(231,241,238,.17);
   --radius:    24px;
   --radius-s:  12px;
   --gap:       clamp(16px, 4vw, 40px);
@@ -1063,3 +1064,67 @@ a.fam-card:hover { background: var(--green1000); }
 }
 
 .cl-note { color: var(--muted); font-size: 14px; }
+
+/*
+ * СВЕТЛАЯ ТЕМА — ТА ЖЕ ПАЛИТРА, А НЕ ВТОРАЯ. Меняются только поверхности, текст и границы;
+ * цвет семейств (метки .lab-*) остаётся прежним, потому что это цвет прибора, а не
+ * оформления. Зелёный акцент на светлом фоне берётся тёмной ступенью: яркий #30DA98 на
+ * #F3F7F5 даёт 1,6:1 и не годится ни в текст, ни в линии.
+ */
+:root[data-theme="light"] {
+  --bg:        #F3F7F5;
+  --panel:     #FFFFFF;
+  --text:      #10221E;
+  --muted:     rgba(16,34,30,.66);
+  --grey70:    rgba(16,34,30,.80);
+  --green600:  #0B6B4F;
+  --green400:  #0F7A5A;
+  --green900:  #9AD9C4;
+  --green1000: #E4F3EC;
+  --red600:    #B3251A;
+  --red500:    #C03020;
+  --red100:    #6B1A10;
+  --border:    rgba(16,34,30,.20);
+  --divider:   rgba(16,34,30,.12);
+  --divider2:  rgba(16,34,30,.17);
+}
+
+:root[data-theme="light"] html,
+html[data-theme="light"] { color-scheme: light; }
+
+/*
+ * ЦВЕТА СЕМЕЙСТВ НА СВЕТЛОМ — ТЁМНЫЕ СТУПЕНИ ТОЙ ЖЕ ПАЛИТРЫ. В тёмной теме метка светится
+ * на тёмном; на светлом фоне те же тона дают полтора-два к одному и не читаются. Оттенок
+ * остаётся семейным, меняется только ступень — так же, как ступени выбирались для прибора.
+ */
+:root[data-theme="light"] .lab-drone  { --lab-ink: #1565C0; --lab-line: rgba(21, 101, 192, .38); }
+:root[data-theme="light"] .lab-lead   { --lab-ink: #7B1FA2; --lab-line: rgba(123, 31, 162, .38); }
+:root[data-theme="light"] .lab-gen    { --lab-ink: #00695C; --lab-line: rgba(0, 105, 92, .38); }
+:root[data-theme="light"] .lab-perc   { --lab-ink: #2E7D32; --lab-line: rgba(46, 125, 50, .38); }
+:root[data-theme="light"] .lab-bass   { --lab-ink: #A05000; --lab-line: rgba(160, 80, 0, .38); }
+:root[data-theme="light"] .lab-fx     { --lab-ink: #C2185B; --lab-line: rgba(194, 24, 91, .38); }
+:root[data-theme="light"] .lab-mix    { --lab-ink: #4E342E; --lab-line: rgba(78, 52, 46, .38); }
+:root[data-theme="light"] .lab-preset { --lab-ink: #37474F; --lab-line: rgba(55, 71, 79, .38); }
+:root[data-theme="light"] .lab-view   { --lab-ink: #37474F; --lab-line: rgba(55, 71, 79, .38); }
+:root[data-theme="light"] .lab-lfo    { --lab-ink: #5A6B00; --lab-line: rgba(90, 107, 0, .38); }
+
+/* Переключатель темы в шапке: та же кнопка, что «Разделы», но справа. */
+.theme-toggle {
+  margin-left: auto;
+  margin-right: 16px;
+  padding: 6px 12px;
+  font: inherit;
+  font-size: 13px;
+  letter-spacing: .04em;
+  color: var(--muted);
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  cursor: pointer;
+}
+.theme-toggle:hover { color: var(--text); border-color: var(--grey70); }
+.theme-toggle:focus-visible { outline: 2px solid var(--green400); outline-offset: 3px; }
+
+@media (max-width: 720px) {
+  .theme-toggle { margin-right: 8px; }
+}

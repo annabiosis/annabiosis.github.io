@@ -42,108 +42,61 @@ var DOCS_PAGES = [
   {
     file: 'ref-drone.html',
     title: 'Дрон',
-    family: 'Дрон',
-    tabs: [
-      { id: 'DRONE', title: 'DRONE', tag: 'DRN' },
-      { id: 'FLTR', title: 'DRONE FLTR', tag: 'DFL' }
-    ]
+    family: 'Дрон'
   },
 
   {
     file: 'ref-lfo.html',
     title: 'Модуляция',
-    family: 'Модуляция',
-    tabs: [
-      { id: 'LFO1', title: 'LFO 1', tag: 'LF1' },
-      { id: 'LFO2', title: 'LFO 2', tag: 'LF2' }
-    ]
+    family: 'Модуляция'
   },
 
   {
     file: 'ref-lead.html',
     title: 'Лид',
-    family: 'Лид',
-    tabs: [
-      { id: 'LEAD', title: 'LEAD', tag: 'LD' },
-      { id: 'TONE', title: 'LEAD TONE', tag: 'LTN' },
-      { id: 'ENV', title: 'LEAD ENV', tag: 'ENV' }
-    ]
+    family: 'Лид'
   },
 
   {
     file: 'ref-time.html',
     title: 'Время',
-    family: 'Время',
-    tabs: [
-      { id: 'SCL', title: 'SCALE', tag: 'SCL' },
-      { id: 'EUCL', title: 'LEAD EUCLID', tag: 'EQL' },
-      { id: 'ARP', title: 'LEAD ARP', tag: 'ARP' }
-    ]
+    family: 'Время'
   },
 
   {
     file: 'ref-perc.html',
     title: 'Перкуссия',
-    family: 'Перкуссия',
-    tabs: [
-      { id: 'PERC', title: 'PERC', tag: 'PRC' },
-      { id: 'PSEQ', title: 'PERC SEQ', tag: 'PSQ' },
-      { id: 'PMX', title: 'PERC MIX', tag: 'PMX' }
-    ]
+    family: 'Перкуссия'
   },
 
   {
     file: 'ref-bass.html',
     title: 'Бас',
-    family: 'Бас',
-    tabs: [
-      { id: 'BASS', title: 'BASS', tag: 'BAS' },
-      { id: 'RHYTHM', title: 'RHYTHM', tag: 'BSQ' }
-    ]
+    family: 'Бас'
   },
 
   {
     file: 'ref-fx.html',
     title: 'Эффекты',
-    family: 'Эффекты',
-    tabs: [
-      { id: 'FX', title: 'FX', tag: 'FX' },
-      { id: 'DLY', title: 'DELAY', tag: 'DEL' },
-      { id: 'REV', title: 'REVERB', tag: 'REV' }
-    ]
+    family: 'Эффекты'
   },
 
   {
     file: 'ref-mix.html',
     title: 'Микшер',
-    family: 'Микшер',
-    tabs: [
-      { id: 'MSTR', title: 'MASTER', tag: 'MST' },
-      { id: 'LVLS', title: 'LEVELS', tag: 'LVL' },
-      { id: 'REVS', title: 'REV SENDS', tag: 'RVS' },
-      { id: 'FXS', title: 'FX SENDS', tag: 'FXS' },
-      { id: 'DELS', title: 'DEL SENDS', tag: 'DLS' }
-    ]
+    family: 'Микшер'
   },
 
   {
     file: 'ref-store.html',
     title: 'Пресеты и настройки',
-    family: 'Пресеты и настройки',
-    tabs: [
-      { id: 'PRST', title: 'PRESET', tag: 'PRS' },
-      { id: 'SETUP', title: 'SETUP', tag: 'SET' }
-    ]
+    family: 'Пресеты и настройки'
   },
 
   {
     file: 'flash.html',
     title: 'Прошивка',
-    lead: 'Записать новый выпуск из браузера и что при этом теряется.',
-    tabs: [
-      { id: 'browser', title: 'Из браузера' },
-      { id: 'lost', title: 'Что теряется' }
-    ]
+    lead: 'Записать новый выпуск из браузера и что при этом теряется.'
   },
 
   {
