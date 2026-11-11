@@ -10,12 +10,12 @@
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <title>OBOD — Обзор</title>
 <!--
-  Обзор прибора: что это, из чего состоит и с чего начать. Сайт — руководство, а не
-  описание разработки: девять разделов, по одной строке на ручку, без снимков экранов.
+  Обзор прибора: знак, факты, разделы и с чего начать. Сайт — руководство, а не описание
+  разработки: девять разделов, по одной строке на ручку, без снимков экранов.
 -->
 </head>
 
-<body>
+<body class="is-index">
 
 <a class="skip" href="#main">К содержимому</a>
 
@@ -38,35 +38,123 @@
   <div class="backdrop" id="backdrop" hidden></div>
 
   <main class="content" id="main">
-    <h1>OBOD</h1>
+    <h1></h1>
 
-    <p class="lead">Круглый синтезатор-контроллер: дрон, лид, бас и перкуссия на одной ручке.</p>
+    <p class="lead"></p>
 
-    <p>Прибор звучит сам: включили — играет. Один обод на девять разделов, один экран 360 × 360, одно колесо и касание. Колесо крутит выбранную ручку, касание выбирает ручку или экран, долгое нажатие делает ручку частью макроса.</p>
+    <section class="hero">
+      <h1 class="wordmark">OBOD</h1>
 
-    <p>Разделов девять, и каждый — своя семья цвета на экране и на карте:</p>
+      <div class="hero-cols">
+        <p class="lead" data-rise>Круглый синтезатор-контроллер: дрон, лид, бас и перкуссия
+          на одной ручке.</p>
 
-    <ul class="families">
-      <li><span class="lab lab-drone">DRN</span> <b>Дрон</b> — три регистра и их фильтр,
-        <a href="ref-drone.html">DRONE и DRONE FLTR</a></li>
-      <li><span class="lab lab-lfo">LFO</span> <b>Модуляция</b> — два независимых LFO,
-        <a href="ref-lfo.html">LFO 1 и LFO 2</a></li>
-      <li><span class="lab lab-lead">LD</span> <b>Лид</b> — голос, тембр и огибающая,
-        <a href="ref-lead.html">LEAD, LEAD TONE, LEAD ENV</a></li>
-      <li><span class="lab lab-gen">SCL</span> <b>Время</b> — лад, евклид и арпеджиатор,
-        <a href="ref-time.html">SCALE, LEAD EUCLID, LEAD ARP</a></li>
-      <li><span class="lab lab-perc">PRC</span> <b>Перкуссия</b> — голос удара, рисунок и микшер,
-        <a href="ref-perc.html">PERC, PERC SEQ, PERC MIX</a></li>
-      <li><span class="lab lab-bass">BAS</span> <b>Бас</b> — линия и её рисунок,
-        <a href="ref-bass.html">BASS и RHYTHM</a></li>
-      <li><span class="lab lab-fx">FX</span> <b>Эффекты</b> — машина, дилей и реверб,
-        <a href="ref-fx.html">FX, DELAY, REVERB</a></li>
-      <li><span class="lab lab-mix">LVL</span> <b>Микшер</b> — уровни, мастер и посылы,
-        <a href="ref-mix.html">MASTER, LEVELS и три страницы посылов</a></li>
-      <li><span class="lab lab-preset">PRS</span> <b>Пресеты и настройки</b> — хранилище и
-        системные строки, <a href="ref-store.html">PRESET и SETUP</a></li>
-    </ul>
-    <p>С чего начать — <a href="start.html">первый запуск</a>: включение, обод, жесты, транспорт и сохранение пресета. Что внутри корпуса — <a href="hw.html">железо</a>.</p>
+        <ul class="facts" data-rise>
+          <li><b>9</b> разделов</li>
+          <li><b>25</b> экранов</li>
+          <li><b>137</b> ручек</li>
+          <li><b>148</b> параметров</li>
+        </ul>
+      </div>
+
+      <p class="hero-sub" data-rise>Прибор звучит сам: включили — играет. Одно колесо, одно
+        касание и девять разделов на ободе; долгое нажатие кладёт ручку в макрос.</p>
+
+      <div class="actions" data-rise>
+        <a class="btn btn-primary" href="start.html">Первый запуск</a>
+        <a class="btn" href="ref-drone.html">Разделы</a>
+        <a class="btn" href="flash.html">Прошивка</a>
+      </div>
+
+    </section>
+
+    <nav class="band" aria-label="Разделы прибора" data-rise>
+      <a class="band-cell" href="ref-drone.html" style="--cell:#64B5F6">
+        <span class="band-code">DRN</span>
+        <span class="band-name">Дрон</span>
+      </a>
+      <a class="band-cell" href="ref-lfo.html" style="--cell:#D7E000">
+        <span class="band-code">LFO</span>
+        <span class="band-name">Модуляция</span>
+      </a>
+      <a class="band-cell" href="ref-lead.html" style="--cell:#BA68C8">
+        <span class="band-code">LD</span>
+        <span class="band-name">Лид</span>
+      </a>
+      <a class="band-cell" href="ref-time.html" style="--cell:#4DB6AC">
+        <span class="band-code">SCL</span>
+        <span class="band-name">Время</span>
+      </a>
+      <a class="band-cell" href="ref-perc.html" style="--cell:#66BB6A">
+        <span class="band-code">PRC</span>
+        <span class="band-name">Перкуссия</span>
+      </a>
+      <a class="band-cell" href="ref-bass.html" style="--cell:#FFC107">
+        <span class="band-code">BAS</span>
+        <span class="band-name">Бас</span>
+      </a>
+      <a class="band-cell" href="ref-fx.html" style="--cell:#F06292">
+        <span class="band-code">FX</span>
+        <span class="band-name">Эффекты</span>
+      </a>
+      <a class="band-cell" href="ref-mix.html" style="--cell:#A1887F">
+        <span class="band-code">LVL</span>
+        <span class="band-name">Микшер</span>
+      </a>
+      <a class="band-cell" href="ref-store.html" style="--cell:#CFD8DC">
+        <span class="band-code">PRS</span>
+        <span class="band-name">Пресеты</span>
+      </a>
+    </nav>
+
+    <section class="index">
+      <h2>Что где</h2>
+      <a class="idx" href="ref-drone.html">
+        <span class="idx-head"><span class="lab lab-drone">DRN</span> <b>Дрон</b></span>
+        <span class="idx-screens">DRONE · DRONE FLTR</span>
+        <span class="idx-desc">Три регистра, общий фильтр и его свип</span>
+      </a>
+      <a class="idx" href="ref-lfo.html">
+        <span class="idx-head"><span class="lab lab-lfo">LFO</span> <b>Модуляция</b></span>
+        <span class="idx-screens">LFO 1 · LFO 2</span>
+        <span class="idx-desc">Два канала автоматики: приёмник, глубина, форма, скорость</span>
+      </a>
+      <a class="idx" href="ref-lead.html">
+        <span class="idx-head"><span class="lab lab-lead">LD</span> <b>Лид</b></span>
+        <span class="idx-screens">LEAD · LEAD TONE · LEAD ENV</span>
+        <span class="idx-desc">Голос линии, его тембр и огибающая</span>
+      </a>
+      <a class="idx" href="ref-time.html">
+        <span class="idx-head"><span class="lab lab-gen">SCL</span> <b>Время</b></span>
+        <span class="idx-screens">SCALE · LEAD EUCLID · LEAD ARP</span>
+        <span class="idx-desc">Лад, фигура и арпеджиатор</span>
+      </a>
+      <a class="idx" href="ref-perc.html">
+        <span class="idx-head"><span class="lab lab-perc">PRC</span> <b>Перкуссия</b></span>
+        <span class="idx-screens">PERC · PERC SEQ · PERC MIX</span>
+        <span class="idx-desc">Голос удара, рисунок такта и баланс дорожек</span>
+      </a>
+      <a class="idx" href="ref-bass.html">
+        <span class="idx-head"><span class="lab lab-bass">BAS</span> <b>Бас</b></span>
+        <span class="idx-screens">BASS · RHYTHM</span>
+        <span class="idx-desc">Линия, её рисунок и связки</span>
+      </a>
+      <a class="idx" href="ref-fx.html">
+        <span class="idx-head"><span class="lab lab-fx">FX</span> <b>Эффекты</b></span>
+        <span class="idx-screens">FX · DELAY · REVERB</span>
+        <span class="idx-desc">Машина на десять эффектов, дилей и реверб</span>
+      </a>
+      <a class="idx" href="ref-mix.html">
+        <span class="idx-head"><span class="lab lab-mix">LVL</span> <b>Микшер</b></span>
+        <span class="idx-screens">MASTER · LEVELS · SENDS</span>
+        <span class="idx-desc">Уровни частей, мастер и посылы</span>
+      </a>
+      <a class="idx" href="ref-store.html">
+        <span class="idx-head"><span class="lab lab-preset">PRS</span> <b>Пресеты</b></span>
+        <span class="idx-screens">PRESET · SETUP</span>
+        <span class="idx-desc">Слоты звука и служебные строки</span>
+      </a>
+    </section>
 
     <nav class="pager" id="pager" aria-label="Соседние страницы"></nav>
   </main>

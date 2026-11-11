@@ -701,6 +701,51 @@
   var saved = storedTheme();
   if (saved) { applyTheme(saved); }
 
+  /*
+   * ПОЯВЛЕНИЕ ЧАСТЕЙ. Каждый блок поднимается на четырнадцать пикселей и проявляется, когда
+   * входит в экран; шапка страницы — сразу. При prefers-reduced-motion ничего не двигается:
+   * блоки видны с самого начала, а не ждут наблюдателя.
+   */
+  function setupReveal() {
+    var items = document.querySelectorAll('[data-rise], .content h2, .content p, .content li');
+    if (!items.length) { return; }
+
+    var still = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (still || typeof IntersectionObserver !== 'function') {
+      for (var k = 0; k < items.length; k++) { items[k].classList.add('rise', 'on'); }
+      return;
+    }
+
+    /* Через полторы секунды блокам всё равно быть видимыми: наблюдатель может не сработать
+     * (быстрый скролл, печать, скриншот), а спрятанный текст — это потерянный текст. */
+    window.setTimeout(function () {
+      var all = document.querySelectorAll('.rise');
+      for (var n = 0; n < all.length; n++) { all[n].classList.add('on'); }
+    }, 1500);
+
+    var watch = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) { return; }
+        entry.target.classList.add('on');
+        watch.unobserve(entry.target);
+      });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.06 });
+
+    for (var i = 0; i < items.length; i++) {
+      var el = items[i];
+      el.classList.add('rise');
+      el.style.transitionDelay = (Math.min(i, 6) * 55) + 'ms';
+      watch.observe(el);
+    }
+  }
+
+  /* Оглавление, которому нечего перечислить, — это пустая колонка справа. */
+  function markEmptyToc() {
+    var list = document.getElementById('toc-list');
+    if (!list) { return; }
+    if (!list.querySelector('li')) { document.body.classList.add('no-toc'); }
+  }
+
   function init() {
     if (!findPage(here)) { here = 'index.html'; }
     setupTheme();
@@ -710,10 +755,12 @@
     renderCrumbs();
     renderPager();
     setupTabs(document);
+    markEmptyToc();
     setupDrawer();
     applyHash();
 
     window.addEventListener('hashchange', applyHash);
+    setupReveal();
   }
 
   if (document.readyState === 'loading') {
