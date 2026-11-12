@@ -154,32 +154,32 @@
                 <table class="param-table">
                   <thead><tr><th>Ручка</th><th>Описание</th><th>Значения</th></tr></thead>
                   <tbody>
-                    <tr>
+                    <tr id="fx-type">
                       <td class="p-name"><span class="param-code">TYPE</span></td>
                       <td>Что стоит в машине</td>
                       <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
-                    <tr>
+                    <tr id="fx-mix">
                       <td class="p-name"><span class="param-code">MIX</span></td>
                       <td>Уровень возврата</td>
                       <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
-                    <tr>
+                    <tr id="fx-a">
                       <td class="p-name"><span class="param-code">A</span></td>
                       <td>Первый параметр эффекта</td>
                       <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
-                    <tr>
+                    <tr id="fx-b">
                       <td class="p-name"><span class="param-code">B</span></td>
                       <td>Второй параметр эффекта</td>
                       <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
-                    <tr>
+                    <tr id="fx-c">
                       <td class="p-name"><span class="param-code">C</span></td>
                       <td>Третий параметр эффекта</td>
                       <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
-                    <tr>
+                    <tr id="fx-verb">
                       <td class="p-name"><span class="param-code">VERB</span></td>
                       <td>Посыл возврата в реверб</td>
                       <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
@@ -200,32 +200,39 @@
                 <table class="param-table">
                   <thead><tr><th>Ручка</th><th>Описание</th><th>Значения</th></tr></thead>
                   <tbody>
-                    <tr>
+                    <tr id="del-mix">
                       <td class="p-name"><span class="param-code">MIX</span></td>
                       <td>Уровень возврата</td>
                       <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
-                    <tr>
+                    <tr id="del-fdbk">
                       <td class="p-name"><span class="param-code">FDBK</span></td>
                       <td>сколько повтора возвращается в линию; выше 0,95 не поднимается</td>
                       <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
-                    <tr>
+                    <tr id="del-time">
                       <td class="p-name"><span class="param-code">TIME</span></td>
                       <td>одна ручка времени: сначала доли такта, потом миллисекунды</td>
                       <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
-                    <tr>
+                    <tr id="del-mode">
                       <td class="p-name"><span class="param-code">MODE</span></td>
-                      <td>Форма угла. Ноль: низ пропускает ниже среза и режет выше. Пятьдесят: полоса пропускает вокруг среза. Сто: верх режет ниже среза и пропускает выше. Между этими точками формы смешиваются, а не переключаются. Заводское значение: ноль, низ.</td>
-                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
+                      <td>тип повтора</td>
+                      <td><ul class="opt-list">
+<li class="opt"><b>DIGITAL</b><span>ровные повторы без окраски</span></li>
+<li class="opt"><b>PINGPONG</b><span>каждый повтор уходит в другой канал</span></li>
+<li class="opt"><b>MULTI</b><span>добавочный отвод на полтора времени: два рисунка повторов сразу</span></li>
+<li class="opt"><b>TAPE</b><span>верх срезается, громкость мягко ограничивается: повторы темнеют</span></li>
+<li class="opt"><b>FILTER</b><span>в петле фильтр: повторы теряют низ</span></li>
+<li class="opt"><b>DIFFUSE</b><span>два аллпаса: повторы размываются, у удара пропадает край</span></li>
+</ul></td>
                     </tr>
-                    <tr>
+                    <tr id="del-damp">
                       <td class="p-name"><span class="param-code">DAMP</span></td>
                       <td>насколько темнее каждый следующий повтор: от 18 кГц (прозрачно) до 700 Гц (глухо)</td>
                       <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
-                    <tr>
+                    <tr id="del-verb">
                       <td class="p-name"><span class="param-code">VERB</span></td>
                       <td>Посыл возврата в реверб</td>
                       <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
@@ -246,7 +253,7 @@
                 <table class="param-table">
                   <thead><tr><th>Ручка</th><th>Описание</th><th>Значения</th></tr></thead>
                   <tbody>
-                    <tr>
+                    <tr id="rev-algo">
                       <td class="p-name"><span class="param-code">ALGO</span></td>
                       <td>алгоритм</td>
                       <td><ul class="opt-list">
@@ -256,19 +263,19 @@
 <li class="opt"><b>PLAT</b><span>плита: густой и тёмный хвост, свой характер</span></li>
 </ul></td>
                     </tr>
-                    <tr>
+                    <tr id="rev-mix">
                       <td class="p-name"><span class="param-code">MIX</span></td>
                       <td>Уровень возврата</td>
                       <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
-                    <tr>
+                    <tr id="rev-size">
                       <td class="p-name"><span class="param-code">SIZE</span></td>
                       <td>размер помещения</td>
                       <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
-                    <tr>
+                    <tr id="rev-damp">
                       <td class="p-name"><span class="param-code">DAMP</span></td>
-                      <td>насколько темнее каждый следующий повтор: от 18 кГц (прозрачно) до 700 Гц (глухо)</td>
+                      <td>Гашение верха в хвосте: от 18 кГц (прозрачно) до 700 Гц (глухо)</td>
                       <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
                   </tbody>

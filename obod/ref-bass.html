@@ -146,16 +146,16 @@
           <div class="tabpanel" role="tabpanel" id="panel-bas" aria-labelledby="tab-bas">
             <section id="bas">
               <h2 style="font-size:var(--fs-28);margin-bottom:var(--sp-2)">Экран BASS</h2>
-              <p class="muted" style="max-width:var(--measure);margin-bottom:var(--sp-5)">Голос баса: заготовка, щелчок, смена ноты, затухание, доля саба. Линия идёт за темпом и транспозицией прибора. Уровень части стоит на LEVELS, посылы на страницах посылов.</p>
+              <p class="muted" style="max-width:var(--measure);margin-bottom:var(--sp-5)">Голос баса: заготовка, щелчок, смена ноты, затухание, доля саба. Линия идёт за темпом и транспозицией прибора. Уровень части стоит на <a class="xref" href="ref-mix.html#lvl">LEVELS</a>, посылы на страницах посылов.</p>
 
 
               <div class="table-scroll">
                 <table class="param-table">
                   <thead><tr><th>Ручка</th><th>Описание</th><th>Значения</th></tr></thead>
                   <tbody>
-                    <tr>
+                    <tr id="bas-kit">
                       <td class="p-name"><span class="param-code">KIT</span></td>
-                      <td>Набор ударных: кит задаёт звук раздела. У каждой из четырёх дорожек (бочка, снейр, хэт, том) свой рецепт и свой второй голос. Кит меняет удар целиком, а не подкручивает его. Список идёт от сухого к странному.</td>
+                      <td>Заготовка баса: тридцать наборов, три семьи по десять. Набор задаёт тембр и срез фильтра</td>
                       <td><ul class="opt-list">
 <li class="opt"><b>TIGHT</b><span>сухо и коротко, металла в хэтах нет</span></li>
 <li class="opt"><b>MINI</b><span>машинка, на которой озвучен инструмент; заводской</span></li>
@@ -187,22 +187,22 @@
 <li class="opt"><b>VOID</b><span>бочка 36 Гц на 1,38 с и воздух: снейр — дыхание, хэт — тик, том — отзвук</span></li>
 </ul></td>
                     </tr>
-                    <tr>
+                    <tr id="bas-snap">
                       <td class="p-name"><span class="param-code">SNAP</span></td>
                       <td>Щелчок в начале ноты, в процентах: сколько атаки подмешано к телу. Заводское значение: 35 %.</td>
                       <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
-                    <tr>
+                    <tr id="bas-note">
                       <td class="p-name"><span class="param-code">NOTE</span></td>
                       <td>смена ноты линии, −7…+7 полутонов: сдвиг идёт до прижатия к ладу, поэтому линия остаётся в складе</td>
                       <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
-                    <tr>
+                    <tr id="bas-decay">
                       <td class="p-name"><span class="param-code">DECAY</span></td>
-                      <td>За сколько громкость опускается до уровня SUSTAIN. Заводское значение: 250 мс.</td>
+                      <td>Затухание ноты: от короткого стаккато до длинного тона</td>
                       <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
-                    <tr>
+                    <tr id="bas-sub">
                       <td class="p-name"><span class="param-code">SUB</span></td>
                       <td>доля саб-осциллятора под нотой, в процентах: на нуле саба нет</td>
                       <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
@@ -216,14 +216,14 @@
           <div class="tabpanel" role="tabpanel" id="panel-bsq" aria-labelledby="tab-bsq" hidden>
             <section id="bsq">
               <h2 style="font-size:var(--fs-28);margin-bottom:var(--sp-2)">Экран RHYTHM</h2>
-              <p class="muted" style="max-width:var(--measure);margin-bottom:var(--sp-5)">Рисунок баса: где стоит нота и как она играется. Такт — шестнадцать шестнадцатых. LEN решает, сколько из них звучит; остаток такта молчит, счёт не сбивается.</p>
+              <p class="muted" style="max-width:var(--measure);margin-bottom:var(--sp-5)">Рисунок баса: где стоит нота и как она играется. Такт — шестнадцать шестнадцатых. <a class="xref" href="ref-time.html#arp-len">LEN</a> решает, сколько из них звучит; остаток такта молчит, счёт не сбивается.</p>
 
 
               <div class="table-scroll">
                 <table class="param-table">
                   <thead><tr><th>Ручка</th><th>Описание</th><th>Значения</th></tr></thead>
                   <tbody>
-                    <tr>
+                    <tr id="bsq-pat">
                       <td class="p-name"><span class="param-code">PAT</span></td>
                       <td>рисунок: тридцать записанных фигур по шестнадцать шагов</td>
                       <td><ul class="opt-list">
@@ -259,29 +259,29 @@
 <li class="opt"><b>BLANK</b><span>одна нота на такт и длинный хвост</span></li>
 </ul></td>
                     </tr>
-                    <tr>
+                    <tr id="bsq-var">
                       <td class="p-name"><span class="param-code">VAR</span></td>
                       <td>вторая часть рисунка: насколько партия уходит от записанной на повторе</td>
                       <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
-                    <tr>
+                    <tr id="bsq-len">
                       <td class="p-name"><span class="param-code">LEN</span></td>
-                      <td>сколько нот в фигуре</td>
+                      <td>Сколько шагов такта играет рисунок: от четырёх до шестнадцати</td>
                       <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
-                    <tr>
+                    <tr id="bsq-gate">
                       <td class="p-name"><span class="param-code">GATE</span></td>
-                      <td>Какую долю шага держится нота. Секвенсор не обрезает хвост следующим шагом: пока звучит релиз, новый шаг берёт следующую группу. Долгие ноты накладываются, до четырёх сразу; пятая забирает самую старую.</td>
+                      <td>Какую долю шага держится нота: короткая отрывистая или вязаная</td>
                       <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
-                    <tr>
+                    <tr id="bsq-slide">
                       <td class="p-name"><span class="param-code">SLIDE</span></td>
                       <td>вероятность связки: нота дотягивается до следующей</td>
                       <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
-                    <tr>
+                    <tr id="bsq-accent">
                       <td class="p-name"><span class="param-code">ACCENT</span></td>
-                      <td>Рисунок акцента линии. Ноты на помеченных долях звучат на полной громкости своих голосов, остальные на силе WEAK VEL. Рисунок независим от перкуссии: считается по сетке линии, доли идут от первой доли такта, поэтому с ROTATE он не едет и по числу шагов не растягивается. Помеченный шаг отмечен точкой крупнее. Арпеджиатор читает этот же рисунок: velocity нажатой клавиши задаёт уровень, а фигура акцент внутри него, поэтому акценты слышны и на удержанном аккорде.</td>
+                      <td>Рисунок акцента баса: ноты на помеченных долях звучат громче</td>
                       <td><ul class="opt-list">
 <li class="opt"><b>OFF</b><span>акцента нет: все ноты идут на своих заводских 70/70/55; заводское значение. WEAK VEL при этом не читается</span></li>
 <li class="opt"><b>1/4</b><span>четверти: доли 1, 5, 9, 13</span></li>

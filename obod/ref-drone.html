@@ -135,7 +135,7 @@
           <h1 style="font-size:var(--fs-48);font-weight:300">Дрон</h1>
           <span class="chip"><span class="dot"></span>DRN</span>
         </div>
-        <p class="lead muted" style="font-size:var(--fs-18);margin-top:var(--sp-3);max-width:var(--measure)">Три регистра, общий фильтр и свип. Дрон звучит сам, без нажатия клавиш. Уровни регистров стоят только на LEVELS.</p>
+        <p class="lead muted" style="font-size:var(--fs-18);margin-top:var(--sp-3);max-width:var(--measure)">Три регистра, общий фильтр и свип. Дрон звучит сам, без нажатия клавиш. Уровни регистров стоят только на <a class="xref" href="ref-mix.html#lvl">LEVELS</a>.</p>
 
         <div data-tabs style="margin-top:var(--sp-6)">
           <div class="tabs" role="tablist" aria-label="Экраны раздела Дрон">
@@ -153,7 +153,7 @@
                 <table class="param-table">
                   <thead><tr><th>Ручка</th><th>Описание</th><th>Значения</th></tr></thead>
                   <tbody>
-                    <tr>
+                    <tr id="drn-h-osc">
                       <td class="p-name"><span class="param-code">H.OSC</span></td>
                       <td>Форма верхнего регистра: то, что слышно как тело аккорда.</td>
                       <td><ul class="opt-list">
@@ -165,7 +165,7 @@
 <li class="opt"><b>NSE</b><span>шум: дыхание и ветер</span></li>
 </ul></td>
                     </tr>
-                    <tr>
+                    <tr id="drn-m-osc">
                       <td class="p-name"><span class="param-code">M.OSC</span></td>
                       <td>Форма среднего регистра: середина аккорда.</td>
                       <td><ul class="opt-list">
@@ -177,7 +177,7 @@
 <li class="opt"><b>NSE</b><span>шум: дыхание и ветер</span></li>
 </ul></td>
                     </tr>
-                    <tr>
+                    <tr id="drn-l-osc">
                       <td class="p-name"><span class="param-code">L.OSC</span></td>
                       <td>Форма нижнего регистра: основа, которая держит аккорд.</td>
                       <td><ul class="opt-list">
@@ -189,12 +189,12 @@
 <li class="opt"><b>NSE</b><span>шум: дыхание и ветер</span></li>
 </ul></td>
                     </tr>
-                    <tr>
+                    <tr id="drn-width">
                       <td class="p-name"><span class="param-code">WIDTH</span></td>
                       <td>Ширина: раздвигает панораму и добавляет глубины свипу фильтра. Вместе с DEPTH срез гуляет до шести октав на нижнем регистре.</td>
                       <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
-                    <tr>
+                    <tr id="drn-follow">
                       <td class="p-name"><span class="param-code">FOLLOW</span></td>
                       <td>куда дрон идёт за лидом: его собственная база 55/110/220 Гц против самой новой ноты лида</td>
                       <td><ul class="opt-list">
@@ -203,7 +203,7 @@
 <li class="opt"><b>CONS</b><span>берёт ноту только на благозвучном интервале выше базы — прима, терция, кварта, квинта; на остальном стоит где стоял</span></li>
 </ul></td>
                     </tr>
-                    <tr>
+                    <tr id="drn-drift">
                       <td class="p-name"><span class="param-code">DRIFT</span></td>
                       <td>Дрейф строя в центах: расстройка трёх регистров друг относительно друга. На нуле ни одного цента, и всё, что сохранено раньше, звучит как звучало.</td>
                       <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
@@ -224,32 +224,32 @@
                 <table class="param-table">
                   <thead><tr><th>Ручка</th><th>Описание</th><th>Значения</th></tr></thead>
                   <tbody>
-                    <tr>
+                    <tr id="dfl-rate">
                       <td class="p-name"><span class="param-code">RATE</span></td>
                       <td>скорость свипа: от одного цикла за двадцать секунд до шести герц. У регистров скорость немного разная</td>
                       <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
-                    <tr>
+                    <tr id="dfl-cutoff">
                       <td class="p-name"><span class="param-code">CUTOFF</span></td>
-                      <td>базовая частота среза, одна на все три регистра</td>
+                      <td>Срез фильтра дрона, один на все три регистра</td>
                       <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
-                    <tr>
+                    <tr id="dfl-res">
                       <td class="p-name"><span class="param-code">RES</span></td>
                       <td>резонанс: подчёркивает звук у самого среза</td>
                       <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
-                    <tr>
+                    <tr id="dfl-depth">
                       <td class="p-name"><span class="param-code">DEPTH</span></td>
-                      <td>Глубина свипа: до четырёх октав, вместе с WIDTH до шести.</td>
+                      <td>Глубина свипа: до четырёх октав, вместе с WIDTH до шести</td>
                       <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
-                    <tr>
+                    <tr id="dfl-k-trck">
                       <td class="p-name"><span class="param-code">K.TRCK</span></td>
-                      <td>Слежение среза фильтра дрона за высотой, в процентах. На нуле срез стоит там, куда его поставила ручка CUTOFF; на ста едет за нотой октава в октаву. Отсчёт идёт от базы дрона, A1 (55 Гц), общий для всех трёх регистров. Заводское значение: ноль.</td>
+                      <td>Слежение среза за высотой, в процентах: отсчёт от базы дрона A1 (55 Гц), общей для трёх регистров</td>
                       <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
-                    <tr>
+                    <tr id="dfl-mode">
                       <td class="p-name"><span class="param-code">MODE</span></td>
                       <td>Форма угла. Ноль: низ пропускает ниже среза и режет выше. Пятьдесят: полоса пропускает вокруг среза. Сто: верх режет ниже среза и пропускает выше. Между этими точками формы смешиваются, а не переключаются. Заводское значение: ноль, низ.</td>
                       <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>

@@ -639,6 +639,29 @@ a.fam-card:hover {
   .field-row .btn { width: 100%; }
 }
 
+/* ─────────────── Кросс-ссылки ─────────────── */
+/* Ссылка внутри текста: видно, что это ссылка, но она не спорит с абзацем. */
+.xref {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: var(--accent-line);
+  text-decoration-thickness: .06em;
+  text-underline-offset: .2em;
+}
+.xref:hover { color: var(--accent); text-decoration-color: var(--accent); }
+
+/* Пришли по ссылке на ручку: строка подсвечена, пока якорь в адресе. */
+.param-table tr:target { background: var(--accent-soft); }
+.param-table tr.is-flash { animation: row-flash 1.6s var(--ease-out) 1; }
+@keyframes row-flash {
+  0%   { background: var(--accent-soft); }
+  60%  { background: var(--accent-soft); }
+  100% { background: transparent; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .param-table tr.is-flash { animation: none; background: var(--accent-soft); }
+}
+
 /* ─────────────── Релизы ─────────────── */
 .release { padding-block: var(--sp-6); border-top: 1px solid var(--line-1); }
 .release:first-of-type { border-top: 0; }

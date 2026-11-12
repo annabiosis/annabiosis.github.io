@@ -135,7 +135,7 @@
           <h1 style="font-size:var(--fs-48);font-weight:300">Лид</h1>
           <span class="chip"><span class="dot"></span>LD</span>
         </div>
-        <p class="lead muted" style="font-size:var(--fs-18);margin-top:var(--sp-3);max-width:var(--measure)">Голос линии: длина ноты, скольжение, форма волны, фильтр, огибающая. Уровень стоит на LEVELS.</p>
+        <p class="lead muted" style="font-size:var(--fs-18);margin-top:var(--sp-3);max-width:var(--measure)">Голос линии: длина ноты, скольжение, форма волны, фильтр, огибающая. Уровень стоит на <a class="xref" href="ref-mix.html#lvl">LEVELS</a>.</p>
 
         <div data-tabs style="margin-top:var(--sp-6)">
           <div class="tabs" role="tablist" aria-label="Экраны раздела Лид">
@@ -154,17 +154,17 @@
                 <table class="param-table">
                   <thead><tr><th>Ручка</th><th>Описание</th><th>Значения</th></tr></thead>
                   <tbody>
-                    <tr>
+                    <tr id="ld-gate">
                       <td class="p-name"><span class="param-code">GATE</span></td>
-                      <td>Какую долю шага держится нота. Секвенсор не обрезает хвост следующим шагом: пока звучит релиз, новый шаг берёт следующую группу. Долгие ноты накладываются, до четырёх сразу; пятая забирает самую старую.</td>
+                      <td>Какую долю шага держится нота. Секвенсор не обрезает хвост: пока звучит релиз, новый шаг берёт следующую группу, до четырёх нот сразу</td>
                       <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
-                    <tr>
+                    <tr id="ld-porta">
                       <td class="p-name"><span class="param-code">PORTA</span></td>
                       <td>скольжение к следующей ноте: OFF или время в миллисекундах</td>
                       <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
-                    <tr>
+                    <tr id="ld-osc">
                       <td class="p-name"><span class="param-code">OSC</span></td>
                       <td>форма волны лида, те же шесть</td>
                       <td><ul class="opt-list">
@@ -176,17 +176,17 @@
 <li class="opt"><b>NSE</b><span>шум: дыхание и ветер</span></li>
 </ul></td>
                     </tr>
-                    <tr>
+                    <tr id="ld-voice">
                       <td class="p-name"><span class="param-code">VOICE</span></td>
                       <td>Сколько голосов у линии. POLY: четыре. Шаг, пришедший пока звучит хвост предыдущего, берёт следующую группу, а аккорд на клавишах звучит весь. MONO: один. Каждая нота перезапускает те же три голоса, поэтому следующая нота обрезает релиз, а из аккорда слышен последний палец. Заводское значение: POLY.</td>
                       <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
-                    <tr>
+                    <tr id="ld-spread">
                       <td class="p-name"><span class="param-code">SPREAD</span></td>
                       <td>Разброс стерео в процентах: сколько разностного сигнала подмешано в стороны. На нуле разброса нет.</td>
                       <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
-                    <tr>
+                    <tr id="ld-pw">
                       <td class="p-name"><span class="param-code">PW</span></td>
                       <td>Ширина импульса в процентах. Пятьдесят даёт меандр, ниже узкий импульс. Действует только на форме SQR.</td>
                       <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
@@ -207,32 +207,32 @@
                 <table class="param-table">
                   <thead><tr><th>Ручка</th><th>Описание</th><th>Значения</th></tr></thead>
                   <tbody>
-                    <tr>
+                    <tr id="ltn-cutoff">
                       <td class="p-name"><span class="param-code">CUTOFF</span></td>
-                      <td>базовая частота среза, одна на все три регистра</td>
+                      <td>Срез фильтра линии</td>
                       <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
-                    <tr>
+                    <tr id="ltn-res">
                       <td class="p-name"><span class="param-code">RES</span></td>
                       <td>резонанс: подчёркивает звук у самого среза</td>
                       <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
-                    <tr>
+                    <tr id="ltn-env">
                       <td class="p-name"><span class="param-code">ENV</span></td>
-                      <td>Глубина огибающей в процентах хода до упора. −100 закрывает фильтр совсем (20 Гц), +100 открывает до потолка, 0 оставляет срез там, куда его поставила ручка CUTOFF. Октавы считаются от этого положения, поэтому упор достигается на любом CUTOFF.</td>
+                      <td>Глубина огибающей в процентах хода до упора: −100 закрывает фильтр совсем (20 Гц), +100 открывает до потолка, 0 оставляет срез там, куда его поставила ручка <a class="xref" href="ref-drone.html#dfl-cutoff">CUTOFF</a></td>
                       <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
-                    <tr>
+                    <tr id="ltn-shape">
                       <td class="p-name"><span class="param-code">SHAPE</span></td>
                       <td>форма и режим: восемь свободных положений, затем семь с триггером</td>
                       <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
-                    <tr>
+                    <tr id="ltn-k-trck">
                       <td class="p-name"><span class="param-code">K.TRCK</span></td>
-                      <td>Слежение среза фильтра дрона за высотой, в процентах. На нуле срез стоит там, куда его поставила ручка CUTOFF; на ста едет за нотой октава в октаву. Отсчёт идёт от базы дрона, A1 (55 Гц), общий для всех трёх регистров. Заводское значение: ноль.</td>
+                      <td>Слежение среза за высотой, в процентах: срез идёт за нотой линии</td>
                       <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
-                    <tr>
+                    <tr id="ltn-mode">
                       <td class="p-name"><span class="param-code">MODE</span></td>
                       <td>Форма угла. Ноль: низ пропускает ниже среза и режет выше. Пятьдесят: полоса пропускает вокруг среза. Сто: верх режет ниже среза и пропускает выше. Между этими точками формы смешиваются, а не переключаются. Заводское значение: ноль, низ.</td>
                       <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
@@ -246,29 +246,29 @@
           <div class="tabpanel" role="tabpanel" id="panel-env" aria-labelledby="tab-env" hidden>
             <section id="env">
               <h2 style="font-size:var(--fs-28);margin-bottom:var(--sp-2)">Экран LEAD ENV</h2>
-              <p class="muted" style="max-width:var(--measure);margin-bottom:var(--sp-5)">Огибающая громкости ноты. Время показывается в миллисекундах до секунды и в секундах выше. У огибающей фильтра своя страница, две ступени и ручка SHAPE.</p>
+              <p class="muted" style="max-width:var(--measure);margin-bottom:var(--sp-5)">Огибающая громкости ноты. Время показывается в миллисекундах до секунды и в секундах выше. У огибающей фильтра своя страница, две ступени и ручка <a class="xref" href="ref-lfo.html#lf1-shape">SHAPE</a>.</p>
 
 
               <div class="table-scroll">
                 <table class="param-table">
                   <thead><tr><th>Ручка</th><th>Описание</th><th>Значения</th></tr></thead>
                   <tbody>
-                    <tr>
+                    <tr id="env-attack">
                       <td class="p-name"><span class="param-code">ATTACK</span></td>
                       <td>За сколько нота набирает громкость. Заводское значение 40 мс: с ним голоса линии были настроены до появления ручки.</td>
                       <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
-                    <tr>
+                    <tr id="env-decay">
                       <td class="p-name"><span class="param-code">DECAY</span></td>
                       <td>За сколько громкость опускается до уровня SUSTAIN. Заводское значение: 250 мс.</td>
                       <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
-                    <tr>
+                    <tr id="env-release">
                       <td class="p-name"><span class="param-code">RELEASE</span></td>
                       <td>За сколько нота гаснет после отпускания. Заводское значение 500 мс; это же время держит выход открытым для ноты, пришедшей по MIDI.</td>
                       <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
-                    <tr>
+                    <tr id="env-sustain">
                       <td class="p-name"><span class="param-code">SUSTAIN</span></td>
                       <td>Уровень, который держится, пока нота звучит. Заводское значение: 86 %.</td>
                       <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>

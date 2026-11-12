@@ -147,16 +147,16 @@
           <div class="tabpanel" role="tabpanel" id="panel-prc" aria-labelledby="tab-prc">
             <section id="prc">
               <h2 style="font-size:var(--fs-28);margin-bottom:var(--sp-2)">Экран PERC</h2>
-              <p class="muted" style="max-width:var(--measure);margin-bottom:var(--sp-5)">Звук ударных: набор, строй, длина, атака, жизнь. Уровень части стоит на LEVELS. Высоту, ENV, DECAY и атаку двигает модуляция со страницы LFO.</p>
+              <p class="muted" style="max-width:var(--measure);margin-bottom:var(--sp-5)">Звук ударных: набор, строй, длина, атака, жизнь. Уровень части стоит на <a class="xref" href="ref-mix.html#lvl">LEVELS</a>. Высоту, <a class="xref" href="ref-lead.html#ltn-env">ENV</a>, <a class="xref" href="ref-lead.html#env-decay">DECAY</a> и атаку двигает модуляция со страницы LFO.</p>
 
 
               <div class="table-scroll">
                 <table class="param-table">
                   <thead><tr><th>Ручка</th><th>Описание</th><th>Значения</th></tr></thead>
                   <tbody>
-                    <tr>
+                    <tr id="prc-kit">
                       <td class="p-name"><span class="param-code">KIT</span></td>
-                      <td>Набор ударных: кит задаёт звук раздела. У каждой из четырёх дорожек (бочка, снейр, хэт, том) свой рецепт и свой второй голос. Кит меняет удар целиком, а не подкручивает его. Список идёт от сухого к странному.</td>
+                      <td>Набор ударных: четыре дорожки (бочка, снейр, хэт, том), у каждой свой рецепт и свой второй голос. Список идёт от сухого к странному</td>
                       <td><ul class="opt-list">
 <li class="opt"><b>TIGHT</b><span>сухо и коротко, металла в хэтах нет</span></li>
 <li class="opt"><b>MINI</b><span>машинка, на которой озвучен инструмент; заводской</span></li>
@@ -188,27 +188,27 @@
 <li class="opt"><b>VOID</b><span>бочка 36 Гц на 1,38 с и воздух: снейр — дыхание, хэт — тик, том — отзвук</span></li>
 </ul></td>
                     </tr>
-                    <tr>
+                    <tr id="prc-tone">
                       <td class="p-name"><span class="param-code">TONE</span></td>
                       <td>транспонирует весь кит: бочку, снейр, хэт и том вместе с их вторыми голосами</td>
                       <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
-                    <tr>
+                    <tr id="prc-decay">
                       <td class="p-name"><span class="param-code">DECAY</span></td>
-                      <td>За сколько громкость опускается до уровня SUSTAIN. Заводское значение: 250 мс.</td>
+                      <td>Длина удара: от короткого щелчка до длинного хвоста</td>
                       <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
-                    <tr>
+                    <tr id="prc-punch">
                       <td class="p-name"><span class="param-code">PUNCH</span></td>
                       <td>атака удара: внизу длинная и мягкая, наверху короткая и щёлкающая</td>
                       <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
-                    <tr>
+                    <tr id="prc-timbre">
                       <td class="p-name"><span class="param-code">TIMBRE</span></td>
                       <td>жизнь: насколько сильный удар ярче и длиннее, дрожь по высоте, уход строя по тактам</td>
                       <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
-                    <tr>
+                    <tr id="prc-tune">
                       <td class="p-name"><span class="param-code">TUNE</span></td>
                       <td>строй только бочки и тома: бочка попадает в тональность, а хэт остаётся хэтом</td>
                       <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
@@ -222,14 +222,14 @@
           <div class="tabpanel" role="tabpanel" id="panel-psq" aria-labelledby="tab-psq" hidden>
             <section id="psq">
               <h2 style="font-size:var(--fs-28);margin-bottom:var(--sp-2)">Экран PERC SEQ</h2>
-              <p class="muted" style="max-width:var(--measure);margin-bottom:var(--sp-5)">Партия ударных: рисунок, вторая часть, сбивка, качание, скорость часов, акцент. Высоты и ENV здесь нет: это голос, он на PERC.</p>
+              <p class="muted" style="max-width:var(--measure);margin-bottom:var(--sp-5)">Партия ударных: рисунок, вторая часть, сбивка, качание, скорость часов, акцент. Высоты и <a class="xref" href="ref-lead.html#ltn-env">ENV</a> здесь нет: это голос, он на PERC.</p>
 
 
               <div class="table-scroll">
                 <table class="param-table">
                   <thead><tr><th>Ручка</th><th>Описание</th><th>Значения</th></tr></thead>
                   <tbody>
-                    <tr>
+                    <tr id="psq-groove">
                       <td class="p-name"><span class="param-code">GROOVE</span></td>
                       <td>рисунок: тридцать записанных партий по шестнадцатой на шаг, у каждой свои призрачные ноты и свой цикл тактов</td>
                       <td><ul class="opt-list">
@@ -267,29 +267,29 @@
 <li class="opt"><b>SHAKE</b><span>шейкер шестнадцатыми поверх половинной бочки</span></li>
 </ul></td>
                     </tr>
-                    <tr>
+                    <tr id="psq-var">
                       <td class="p-name"><span class="param-code">VAR</span></td>
                       <td>вторая часть рисунка: насколько партия уходит от записанной на повторе</td>
                       <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
-                    <tr>
+                    <tr id="psq-fill">
                       <td class="p-name"><span class="param-code">FILL</span></td>
                       <td>сбивка перед тактовой чертой: чем выше, тем чаще и громче она вклинивается</td>
                       <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
-                    <tr>
+                    <tr id="psq-swing">
                       <td class="p-name"><span class="param-code">SWING</span></td>
                       <td>Задерживает каждую вторую шестнадцатую. Это качание, а не смена сетки. Заводское значение: ровно.</td>
                       <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
-                    <tr>
+                    <tr id="psq-speed">
                       <td class="p-name"><span class="param-code">SPEED</span></td>
                       <td>скорость; подпись называет целые доли, когда период на них попадает</td>
                       <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
-                    <tr>
+                    <tr id="psq-accent">
                       <td class="p-name"><span class="param-code">ACCENT</span></td>
-                      <td>Рисунок акцента линии. Ноты на помеченных долях звучат на полной громкости своих голосов, остальные на силе WEAK VEL. Рисунок независим от перкуссии: считается по сетке линии, доли идут от первой доли такта, поэтому с ROTATE он не едет и по числу шагов не растягивается. Помеченный шаг отмечен точкой крупнее. Арпеджиатор читает этот же рисунок: velocity нажатой клавиши задаёт уровень, а фигура акцент внутри него, поэтому акценты слышны и на удержанном аккорде.</td>
+                      <td>Рисунок акцента перкуссии: помеченные доли звучат громче, остальные на силе <a class="xref" href="ref-store.html#set-weak-vel">WEAK VEL</a></td>
                       <td><ul class="opt-list">
 <li class="opt"><b>OFF</b><span>акцента нет: все ноты идут на своих заводских 70/70/55; заводское значение. WEAK VEL при этом не читается</span></li>
 <li class="opt"><b>1/4</b><span>четверти: доли 1, 5, 9, 13</span></li>
@@ -310,29 +310,29 @@
           <div class="tabpanel" role="tabpanel" id="panel-pmx" aria-labelledby="tab-pmx" hidden>
             <section id="pmx">
               <h2 style="font-size:var(--fs-28);margin-bottom:var(--sp-2)">Экран PERC MIX</h2>
-              <p class="muted" style="max-width:var(--measure);margin-bottom:var(--sp-5)">Микшер четырёх дорожек: бочка, снейр, хэт, том. Здесь только уровень каждой дорожки в общей партии. Голос и рисунок живут на PERC и PERC SEQ.</p>
+              <p class="muted" style="max-width:var(--measure);margin-bottom:var(--sp-5)"><a class="xref" href="ref-mix.html">Микшер</a> четырёх дорожек: бочка, снейр, хэт, том. Здесь только уровень каждой дорожки в общей партии. Голос и рисунок живут на PERC и PERC SEQ.</p>
 
 
               <div class="table-scroll">
                 <table class="param-table">
                   <thead><tr><th>Ручка</th><th>Описание</th><th>Значения</th></tr></thead>
                   <tbody>
-                    <tr>
+                    <tr id="pmx-kick">
                       <td class="p-name"><span class="param-code">KICK</span></td>
                       <td>уровень бочки в партии</td>
                       <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
-                    <tr>
+                    <tr id="pmx-snare">
                       <td class="p-name"><span class="param-code">SNARE</span></td>
                       <td>Уровень снейра. Сто значит «как записал кит».</td>
                       <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
-                    <tr>
+                    <tr id="pmx-hat">
                       <td class="p-name"><span class="param-code">HAT</span></td>
                       <td>уровень хэта, открытого и призрачного вместе</td>
                       <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
-                    <tr>
+                    <tr id="pmx-tom">
                       <td class="p-name"><span class="param-code">TOM</span></td>
                       <td>уровень тома</td>
                       <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>

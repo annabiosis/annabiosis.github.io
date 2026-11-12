@@ -169,12 +169,12 @@
                 <table class="param-table">
                   <thead><tr><th>Ручка</th><th>Описание</th><th>Значения</th></tr></thead>
                   <tbody>
-                    <tr>
+                    <tr id="set-slide">
                       <td class="p-name"><span class="param-code">SLIDE</span></td>
                       <td>сколько времени идёт пачка новых значений: так встаёт пресет и приезжают ручки</td>
                       <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
-                    <tr>
+                    <tr id="set-rnd-del">
                       <td class="p-name"><span class="param-code">RND DEL</span></td>
                       <td>может ли случайный бросок двигать время дилея</td>
                       <td><ul class="opt-list">
@@ -182,17 +182,17 @@
 <li class="opt"><b>ON</b><span>бросок ставит и время дилея</span></li>
 </ul></td>
                     </tr>
-                    <tr>
+                    <tr id="set-weak-vel">
                       <td class="p-name"><span class="param-code">WEAK VEL</span></td>
                       <td>какой силой бьёт удар, которого не коснулся акцент: сто двадцать восемь ступеней, по одной на щелчок</td>
                       <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
-                    <tr>
+                    <tr id="set-mic">
                       <td class="p-name"><span class="param-code">MIC</span></td>
                       <td>насколько громко прибор слушает микрофон: это свойство комнаты, а не звука</td>
                       <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
-                    <tr>
+                    <tr id="set-midi-in">
                       <td class="p-name"><span class="param-code">MIDI IN</span></td>
                       <td>сделать прибор USB-MIDI-устройством</td>
                       <td><ul class="opt-list">
@@ -200,22 +200,22 @@
 <li class="opt"><b>ON</b><span>прибор виден как OBOD MIDI IN; отладочный порт пропадает до перезагрузки</span></li>
 </ul></td>
                     </tr>
-                    <tr>
+                    <tr id="set-screen">
                       <td class="p-name"><span class="param-code">SCREEN</span></td>
                       <td>яркость экрана, от одного процента</td>
                       <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
-                    <tr>
+                    <tr id="set-ring">
                       <td class="p-name"><span class="param-code">RING</span></td>
                       <td>яркость светодиодного кольца</td>
                       <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
-                    <tr>
+                    <tr id="set-ring-fx">
                       <td class="p-name"><span class="param-code">RING FX</span></td>
                       <td>что делает кольцо: ровный свет, реакция на звук или вращение</td>
                       <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
-                    <tr>
+                    <tr id="set-morph">
                       <td class="p-name"><span class="param-code">MORPH</span></td>
                       <td>за сколько времени голос переходит с одной волны на другую: этот переход и убирает щелчок при смене WAVE</td>
                       <td><ul class="opt-list">
@@ -225,12 +225,12 @@
 <li class="opt"><b>100 MS</b><span>самый плавный переход</span></li>
 </ul></td>
                     </tr>
-                    <tr>
+                    <tr id="set-patch">
                       <td class="p-name"><span class="param-code">PATCH</span></td>
                       <td>действие, а не значение: долгое нажатие записывает звук под новым именем или забывает запомненный</td>
                       <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
-                    <tr>
+                    <tr id="set-autoplay">
                       <td class="p-name"><span class="param-code">AUTOPLAY</span></td>
                       <td>Запускать ли транспорт при включении. ON: сразу. OFF: молча. STORE: как было при выключении.</td>
                       <td><ul class="opt-list">
@@ -239,7 +239,7 @@
 <li class="opt"><b>STORE</b><span>возвращает то состояние, в котором прибор выключили</span></li>
 </ul></td>
                     </tr>
-                    <tr>
+                    <tr id="set-fast-rand">
                       <td class="p-name"><span class="param-code">FAST RAND</span></td>
                       <td>Что делает долгое нажатие по центру: ничего, случайный параметр или вся страница.</td>
                       <td><ul class="opt-list">

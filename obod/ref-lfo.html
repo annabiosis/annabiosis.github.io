@@ -146,39 +146,39 @@
           <div class="tabpanel" role="tabpanel" id="panel-lf1" aria-labelledby="tab-lf1">
             <section id="lf1">
               <h2 style="font-size:var(--fs-28);margin-bottom:var(--sp-2)">Экран LFO 1</h2>
-              <p class="muted" style="max-width:var(--measure);margin-bottom:var(--sp-5)">Первый LFO. Два приёмника, у каждого своя глубина. Форма выбирается из пятнадцати положений: восемь свободных и семь с триггером, который перезапускает волну на ноту. Синус фильтра на странице DRONE FLTR считается отдельно, глубины складываются.</p>
+              <p class="muted" style="max-width:var(--measure);margin-bottom:var(--sp-5)">Первый LFO. Два приёмника, у каждого своя глубина. Форма выбирается из пятнадцати положений: восемь свободных и семь с триггером, который перезапускает волну на ноту. Синус фильтра на странице <a class="xref" href="ref-drone.html#dfl">DRONE FLTR</a> считается отдельно, глубины складываются.</p>
 
 
               <div class="table-scroll">
                 <table class="param-table">
                   <thead><tr><th>Ручка</th><th>Описание</th><th>Значения</th></tr></thead>
                   <tbody>
-                    <tr>
+                    <tr id="lf1-dest">
                       <td class="p-name"><span class="param-code">DEST</span></td>
                       <td>приёмник: дрон, лид, ударка или эффекты</td>
                       <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
-                    <tr>
+                    <tr id="lf1-depth">
                       <td class="p-name"><span class="param-code">DEPTH</span></td>
-                      <td>Глубина свипа: до четырёх октав, вместе с WIDTH до шести.</td>
+                      <td>Глубина свипа: до четырёх октав, вместе с <a class="xref" href="ref-drone.html#drn-width">WIDTH</a> до шести.</td>
                       <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
-                    <tr>
+                    <tr id="lf1-depth2">
                       <td class="p-name"><span class="param-code">DEPTH2</span></td>
                       <td>глубина для второго приёмника, тоже двусторонняя</td>
                       <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
-                    <tr>
+                    <tr id="lf1-dest2">
                       <td class="p-name"><span class="param-code">DEST2</span></td>
                       <td>второй приёмник: выбирается независимо</td>
                       <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
-                    <tr>
+                    <tr id="lf1-shape">
                       <td class="p-name"><span class="param-code">SHAPE</span></td>
                       <td>форма и режим: восемь свободных положений, затем семь с триггером</td>
                       <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
-                    <tr>
+                    <tr id="lf1-speed">
                       <td class="p-name"><span class="param-code">SPEED</span></td>
                       <td>скорость; подпись называет целые доли, когда период на них попадает</td>
                       <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
@@ -199,32 +199,32 @@
                 <table class="param-table">
                   <thead><tr><th>Ручка</th><th>Описание</th><th>Значения</th></tr></thead>
                   <tbody>
-                    <tr>
+                    <tr id="lf2-dest">
                       <td class="p-name"><span class="param-code">DEST</span></td>
                       <td>приёмник: дрон, лид, ударка или эффекты</td>
                       <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
-                    <tr>
+                    <tr id="lf2-depth">
                       <td class="p-name"><span class="param-code">DEPTH</span></td>
-                      <td>Глубина свипа: до четырёх октав, вместе с WIDTH до шести.</td>
+                      <td>Глубина свипа: до четырёх октав, вместе с <a class="xref" href="ref-drone.html#drn-width">WIDTH</a> до шести.</td>
                       <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
-                    <tr>
+                    <tr id="lf2-depth2">
                       <td class="p-name"><span class="param-code">DEPTH2</span></td>
                       <td>глубина для второго приёмника, тоже двусторонняя</td>
                       <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
-                    <tr>
+                    <tr id="lf2-dest2">
                       <td class="p-name"><span class="param-code">DEST2</span></td>
                       <td>второй приёмник: выбирается независимо</td>
                       <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
-                    <tr>
+                    <tr id="lf2-shape">
                       <td class="p-name"><span class="param-code">SHAPE</span></td>
                       <td>форма и режим: восемь свободных положений, затем семь с триггером</td>
                       <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
-                    <tr>
+                    <tr id="lf2-speed">
                       <td class="p-name"><span class="param-code">SPEED</span></td>
                       <td>скорость; подпись называет целые доли, когда период на них попадает</td>
                       <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
