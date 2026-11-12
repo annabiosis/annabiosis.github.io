@@ -10,10 +10,10 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="system/tokens.css?v=20261112f" />
-<link rel="stylesheet" href="system/base.css?v=20261112f" />
-<link rel="stylesheet" href="system/grid.css?v=20261112f" />
-<link rel="stylesheet" href="system/components.css?v=20261112f" />
+<link rel="stylesheet" href="system/tokens.css?v=20261112g" />
+<link rel="stylesheet" href="system/base.css?v=20261112g" />
+<link rel="stylesheet" href="system/grid.css?v=20261112g" />
+<link rel="stylesheet" href="system/components.css?v=20261112g" />
 <script>
   (function () {
     try {
@@ -183,12 +183,12 @@
                 <p>Самую первую прошивку прибор принимает только в режиме загрузки. Зажмите утопленную кнопку между гнездом 3,5 мм и разъёмом USB-C острым предметом и, не отпуская, включите прибор: он войдёт в режим загрузки, и браузер сможет записать образ. Дальше обновления идут без кнопки.</p></div>
               </div>
               <div style="margin-top:var(--sp-4)">
-                <esp-web-install-button id="installer" hidden>
-                  <button slot="activate" class="btn btn-primary btn-lg">Записать прошивку</button>
+                <esp-web-install-button id="installer" style="display:block;margin-bottom:var(--sp-4)">
+                  <button slot="activate" class="btn btn-primary btn-lg" disabled>Записать прошивку</button>
                   <span slot="unsupported" class="muted">Этот браузер не умеет прошивать по USB — откройте страницу в Chrome или Edge.</span>
                   <span slot="not-allowed" class="muted">Страница должна быть открыта по HTTPS, чтобы браузер дал доступ к порту.</span>
                 </esp-web-install-button>
-                <p id="flash-meta" class="muted" style="font-size:var(--fs-14)">Версия, размер и контрольная сумма образа появятся здесь после открытия кода.</p>
+                <p id="flash-meta" class="muted" style="font-size:var(--fs-14);margin-top:var(--sp-2)">Версия, размер и контрольная сумма образа появятся здесь после открытия кода.</p>
               </div>
             </div>
           </div>
@@ -240,11 +240,11 @@
   </div>
 </footer>
 
-<script src="system/ui.js?v=20261112f"></script>
-<script src="assets/deep-link.js?v=20261112f"></script>
+<script src="system/ui.js?v=20261112g"></script>
+<script src="assets/deep-link.js?v=20261112g"></script>
 <script type="module" src="https://unpkg.com/esp-web-tools@10.4.0/dist/web/install-button.js?module"></script>
-<script src="assets/unlock.js?v=20261112f"></script>
-<script src="assets/sources.js?v=20261112f"></script>
+<script src="assets/unlock.js?v=20261112g"></script>
+<script src="assets/sources.js?v=20261112g"></script>
 <script>
   // Работник таймера раньше стоял в корне сайта и получал запросы всех разделов: он
   // ждёт сеть 800 мс и при задержке отдаёт из кэша свою страницу, а образ прошивки

@@ -121,7 +121,11 @@
     function attach() {
       try { button.manifest = manifestUrl; } catch (error) { /* свойство есть не всегда */ }
       button.setAttribute('manifest', manifestUrl);
-      button.hidden = false;
+      /* Кнопка записи видна всегда, но до открытия кода она неактивна: так видно, что
+     * следующий шаг существует, и нельзя нажать его раньше времени. */
+    button.hidden = false;
+    var install = button.querySelector('button[slot="activate"]');
+    if (install) { install.disabled = false; }
       lit = true;
       form.classList.remove('busy');
       form.classList.add('done');
