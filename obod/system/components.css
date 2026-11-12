@@ -641,22 +641,18 @@ a.fam-card:hover {
 
 /* ─────────────── Схема прибора ─────────────── */
 /* Рисунок владельца, оттрассированный в вектор: форма и толщина линий с оригинала, цвет из
-   токенов (fill="currentColor"), поэтому тема меняет и схему. Стоит в своей колонке справа
-   от текста — крупным, но не во весь экран. */
-.device {
-  margin: 0;
-  display: flex;
-  justify-content: center;
-}
+   токенов (fill="currentColor"), поэтому тема меняет и схему. Поля обрезаны, высота задана
+   явно — рисунок занимает колонку по высоте, а ширина считается из пропорций. */
+.device { margin: 0; display: flex; align-items: center; justify-content: center; }
 .device-svg {
-  width: 100%;
-  max-width: 680px;
-  height: auto;
+  height: clamp(420px, 62vh, 660px);
+  width: auto;
+  max-width: 100%;
   color: var(--ink-2);
 }
 
 @media (max-width: 1180px) {
-  .device-svg { max-width: 520px; }
+  .device-svg { height: clamp(340px, 46vh, 520px); }
 }
 @media (max-width: 900px) {
   .device { display: none; }
