@@ -135,7 +135,7 @@
           <h1 style="font-size:var(--fs-48);font-weight:300">Микшер</h1>
           <span class="chip"><span class="dot"></span>LVL</span>
         </div>
-        <p class="lead muted" style="font-size:var(--fs-18);margin-top:var(--sp-3);max-width:var(--measure)">Уровни частей, мастер с компрессором и три страницы посылов: что и куда уходит.</p>
+        <p class="lead muted" style="font-size:var(--fs-18);margin-top:var(--sp-3);max-width:var(--measure)">Уровни частей, мастер с компрессором и три страницы посылов.</p>
 
         <div data-tabs style="margin-top:var(--sp-6)">
           <div class="tabs" role="tablist" aria-label="Экраны раздела Микшер">
@@ -149,7 +149,7 @@
           <div class="tabpanel" role="tabpanel" id="panel-mst" aria-labelledby="tab-mst">
             <section id="mst">
               <h2 style="font-size:var(--fs-28);margin-bottom:var(--sp-2)">Экран MASTER</h2>
-              <p class="muted" style="max-width:var(--measure);margin-bottom:var(--sp-5)">Выход, подавление низа дрона перкуссией и мастер-компрессор. Перегруза здесь нет: он ушёл из прибора вместе со своей страницей, и стадии насыщения в тракте не осталось.</p>
+              <p class="muted" style="max-width:var(--measure);margin-bottom:var(--sp-5)">Выход, подавление низа дрона перкуссией и мастер-компрессор. Перегруза в тракте нет: его убрали вместе с отдельной страницей.</p>
 
 
               <div class="table-scroll">
@@ -168,22 +168,22 @@
                     </tr>
                     <tr>
                       <td class="p-name"><span class="param-code">DUCK</span></td>
-                      <td>насколько удар подавляет низ дрона: нижний регистр уходит целиком, средний наполовину. На экране проценты, внизу OFF</td>
+                      <td>Насколько удар подавляет низ дрона. Нижний регистр уходит целиком, средний наполовину. На экране проценты, ниже OFF.</td>
                       <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
                     <tr>
                       <td class="p-name"><span class="param-code">SRC</span></td>
-                      <td>чем в ударе открывается подавление: LP — низом, бочкой; BP — серединой; HP — верхом, хэтом. На экране LP, BP или HP, заводское значение — BP</td>
+                      <td>Чем в ударе открывается подавление. LP срабатывает от низа и бочки, BP от середины, HP от верха и хэта. Заводское значение: BP.</td>
                       <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
                     <tr>
                       <td class="p-name"><span class="param-code">REL</span></td>
-                      <td>как быстро низ возвращается после удара: внизу за 60 мс, наверху за 400 мс; заводское значение — около 180 мс</td>
+                      <td>Как быстро низ возвращается после удара: на низких значениях за 60 мс, на высоких за 400 мс. Заводское значение около 180 мс.</td>
                       <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
                     <tr>
                       <td class="p-name"><span class="param-code">SIDE</span></td>
-                      <td>сайдчейн посылов в эффекты: 0 — не трогать, 100 — хвосты закрываются на пике удара</td>
+                      <td>Сайдчейн посылов в эффекты. На нуле он не вмешивается, на ста хвосты закрываются на пике удара.</td>
                       <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
                   </tbody>
@@ -195,7 +195,7 @@
           <div class="tabpanel" role="tabpanel" id="panel-lvl" aria-labelledby="tab-lvl" hidden>
             <section id="lvl">
               <h2 style="font-size:var(--fs-28);margin-bottom:var(--sp-2)">Экран LEVELS</h2>
-              <p class="muted" style="max-width:var(--measure);margin-bottom:var(--sp-5)">Уровни частей в одном списке: сравнение чисел, которые значат что-то только вместе. Это единственное место, где они есть.</p>
+              <p class="muted" style="max-width:var(--measure);margin-bottom:var(--sp-5)">Уровни всех частей в одном списке. Числа значат что-то только вместе: здесь видно баланс.</p>
 
 
               <div class="table-scroll">
@@ -241,7 +241,7 @@
           <div class="tabpanel" role="tabpanel" id="panel-rvs" aria-labelledby="tab-rvs" hidden>
             <section id="rvs">
               <h2 style="font-size:var(--fs-28);margin-bottom:var(--sp-2)">Экран REV SENDS</h2>
-              <p class="muted" style="max-width:var(--measure);margin-bottom:var(--sp-5)">Посылы в реверб, шесть частей на одном экране: ведущий, перкуссия, бас и три регистра дрона. Микрофона здесь нет: он больше не идёт в эффекты и работает только как источник модуляции.</p>
+              <p class="muted" style="max-width:var(--measure);margin-bottom:var(--sp-5)">Посылы в реверб для шести частей: лид, перкуссия, бас и три регистра дрона. Микрофона здесь нет: он работает только как источник модуляции.</p>
 
 
               <div class="table-scroll">
@@ -287,7 +287,7 @@
           <div class="tabpanel" role="tabpanel" id="panel-fxs" aria-labelledby="tab-fxs" hidden>
             <section id="fxs">
               <h2 style="font-size:var(--fs-28);margin-bottom:var(--sp-2)">Экран FX SENDS</h2>
-              <p class="muted" style="max-width:var(--measure);margin-bottom:var(--sp-5)">Посылы в хорус: те же шесть частей в том же порядке, у каждой своё количество.</p>
+              <p class="muted" style="max-width:var(--measure);margin-bottom:var(--sp-5)">Посылы в хорус для тех же шести частей, в том же порядке.</p>
 
 
               <div class="table-scroll">
@@ -333,7 +333,7 @@
           <div class="tabpanel" role="tabpanel" id="panel-dls" aria-labelledby="tab-dls" hidden>
             <section id="dls">
               <h2 style="font-size:var(--fs-28);margin-bottom:var(--sp-2)">Экран DEL SENDS</h2>
-              <p class="muted" style="max-width:var(--measure);margin-bottom:var(--sp-5)">Посылы в дилей: те же шесть частей в том же порядке, у каждой своё количество повторов.</p>
+              <p class="muted" style="max-width:var(--measure);margin-bottom:var(--sp-5)">Посылы в дилей для тех же шести частей, в том же порядке.</p>
 
 
               <div class="table-scroll">
@@ -397,7 +397,7 @@
   <div class="wrap">
     <div class="f-col">
       <span class="f-title">OBOD</span>
-      <p class="f-note">Синтезатор-грувбокс на ESP32-S3 с круглым экраном 360 × 360. Голосовой движок — ESP32Synth 2.5.0 (MIT, © 2025 Danilo Gabriel); остальное написано для этого прибора.</p>
+      <p class="f-note">Синтезатор-грувбокс на ESP32-S3, экран 360 × 360. Голосовой движок ESP32Synth 2.5.0 (MIT, © 2025 Danilo Gabriel), остальной код написан для этого прибора.</p>
     </div>
     <div class="f-col">
       <span class="f-title">Документация</span>

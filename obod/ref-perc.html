@@ -135,7 +135,7 @@
           <h1 style="font-size:var(--fs-48);font-weight:300">Перкуссия</h1>
           <span class="chip"><span class="dot"></span>PRC</span>
         </div>
-        <p class="lead muted" style="font-size:var(--fs-18);margin-top:var(--sp-3);max-width:var(--measure)">Пять голосов удара, рисунок такта и баланс дорожек. Удар и его рисунок — разные экраны.</p>
+        <p class="lead muted" style="font-size:var(--fs-18);margin-top:var(--sp-3);max-width:var(--measure)">Пять голосов удара, рисунок такта и баланс дорожек. Удар и рисунок стоят на разных экранах.</p>
 
         <div data-tabs style="margin-top:var(--sp-6)">
           <div class="tabs" role="tablist" aria-label="Экраны раздела Перкуссия">
@@ -147,7 +147,7 @@
           <div class="tabpanel" role="tabpanel" id="panel-prc" aria-labelledby="tab-prc">
             <section id="prc">
               <h2 style="font-size:var(--fs-28);margin-bottom:var(--sp-2)">Экран PERC</h2>
-              <p class="muted" style="max-width:var(--measure);margin-bottom:var(--sp-5)">Звук ударных: набор, строй, длина, атака, жизнь. Уровень части стоит только на LEVELS. Высоту, ENV, DECAY и атаку удара двигает модуляция со страницы LFO.</p>
+              <p class="muted" style="max-width:var(--measure);margin-bottom:var(--sp-5)">Звук ударных: набор, строй, длина, атака, жизнь. Уровень части стоит на LEVELS. Высоту, ENV, DECAY и атаку двигает модуляция со страницы LFO.</p>
 
 
               <div class="table-scroll">
@@ -156,7 +156,7 @@
                   <tbody>
                     <tr>
                       <td class="p-name"><span class="param-code">KIT</span></td>
-                      <td>набор: кит и есть звук раздела. Четыре дорожки — бочка, снейр, хэт, том, — у каждой свой рецепт и свой второй голос; кит меняет удар целиком, а не подкручивает его. Ставится от сухого к странному</td>
+                      <td>Набор ударных: кит задаёт звук раздела. У каждой из четырёх дорожек (бочка, снейр, хэт, том) свой рецепт и свой второй голос. Кит меняет удар целиком, а не подкручивает его. Список идёт от сухого к странному.</td>
                       <td><ul class="opt-list">
 <li class="opt"><b>TIGHT</b><span>сухо и коротко, металла в хэтах нет</span></li>
 <li class="opt"><b>MINI</b><span>машинка, на которой озвучен инструмент; заводской</span></li>
@@ -195,7 +195,7 @@
                     </tr>
                     <tr>
                       <td class="p-name"><span class="param-code">DECAY</span></td>
-                      <td>за сколько громкость опускается до уровня SUSTAIN; заводское — 250 мс</td>
+                      <td>За сколько громкость опускается до уровня SUSTAIN. Заводское значение: 250 мс.</td>
                       <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
                     <tr>
@@ -222,7 +222,7 @@
           <div class="tabpanel" role="tabpanel" id="panel-psq" aria-labelledby="tab-psq" hidden>
             <section id="psq">
               <h2 style="font-size:var(--fs-28);margin-bottom:var(--sp-2)">Экран PERC SEQ</h2>
-              <p class="muted" style="max-width:var(--measure);margin-bottom:var(--sp-5)">Партия ударных и то, как она живёт: рисунок, вторая часть, сбивка, качание, скорость часов и акцент. Высоты и ENV здесь нет: это голос, он на PERC.</p>
+              <p class="muted" style="max-width:var(--measure);margin-bottom:var(--sp-5)">Партия ударных: рисунок, вторая часть, сбивка, качание, скорость часов, акцент. Высоты и ENV здесь нет: это голос, он на PERC.</p>
 
 
               <div class="table-scroll">
@@ -279,7 +279,7 @@
                     </tr>
                     <tr>
                       <td class="p-name"><span class="param-code">SWING</span></td>
-                      <td>задерживает каждую вторую шестнадцатую: качание, а не смена сетки. Заводское — ровно</td>
+                      <td>Задерживает каждую вторую шестнадцатую. Это качание, а не смена сетки. Заводское значение: ровно.</td>
                       <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
                     <tr>
@@ -289,7 +289,7 @@
                     </tr>
                     <tr>
                       <td class="p-name"><span class="param-code">ACCENT</span></td>
-                      <td>рисунок акцента лида: ноты на помеченных долях звучат на полной громкости своих голосов, остальные — на силе WEAK VEL. Свой рисунок, независимый от перкуссии: считается по сетке лида, доли идут от первой доли такта, поэтому с ROTATE рисунок не едет и по числу шагов не растягивается. Помеченный шаг отмечен на экране точкой крупнее. Арпеджиатор читает этот же рисунок: velocity нажатой клавиши задаёт уровень, а фигура — акцент внутри него, поэтому акценты слышны и на удержанном аккорде. Панель печатает короткую форму — она и стоит в списке ниже, полное название осталось у рисунка в коде</td>
+                      <td>Рисунок акцента линии. Ноты на помеченных долях звучат на полной громкости своих голосов, остальные на силе WEAK VEL. Рисунок независим от перкуссии: считается по сетке линии, доли идут от первой доли такта, поэтому с ROTATE он не едет и по числу шагов не растягивается. Помеченный шаг отмечен точкой крупнее. Арпеджиатор читает этот же рисунок: velocity нажатой клавиши задаёт уровень, а фигура акцент внутри него, поэтому акценты слышны и на удержанном аккорде.</td>
                       <td><ul class="opt-list">
 <li class="opt"><b>OFF</b><span>акцента нет: все ноты идут на своих заводских 70/70/55; заводское значение. WEAK VEL при этом не читается</span></li>
 <li class="opt"><b>1/4</b><span>четверти: доли 1, 5, 9, 13</span></li>
@@ -310,7 +310,7 @@
           <div class="tabpanel" role="tabpanel" id="panel-pmx" aria-labelledby="tab-pmx" hidden>
             <section id="pmx">
               <h2 style="font-size:var(--fs-28);margin-bottom:var(--sp-2)">Экран PERC MIX</h2>
-              <p class="muted" style="max-width:var(--measure);margin-bottom:var(--sp-5)">Микшер четырёх дорожек: бочка, снейр, хэт, том. Здесь только уровень каждой дорожки в общей партии; голос и рисунок живут на PERC и PERC SEQ.</p>
+              <p class="muted" style="max-width:var(--measure);margin-bottom:var(--sp-5)">Микшер четырёх дорожек: бочка, снейр, хэт, том. Здесь только уровень каждой дорожки в общей партии. Голос и рисунок живут на PERC и PERC SEQ.</p>
 
 
               <div class="table-scroll">
@@ -324,7 +324,7 @@
                     </tr>
                     <tr>
                       <td class="p-name"><span class="param-code">SNARE</span></td>
-                      <td>уровень снейра: сто — как записал кит</td>
+                      <td>Уровень снейра. Сто значит «как записал кит».</td>
                       <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
                     <tr>
@@ -362,7 +362,7 @@
   <div class="wrap">
     <div class="f-col">
       <span class="f-title">OBOD</span>
-      <p class="f-note">Синтезатор-грувбокс на ESP32-S3 с круглым экраном 360 × 360. Голосовой движок — ESP32Synth 2.5.0 (MIT, © 2025 Danilo Gabriel); остальное написано для этого прибора.</p>
+      <p class="f-note">Синтезатор-грувбокс на ESP32-S3, экран 360 × 360. Голосовой движок ESP32Synth 2.5.0 (MIT, © 2025 Danilo Gabriel), остальной код написан для этого прибора.</p>
     </div>
     <div class="f-col">
       <span class="f-title">Документация</span>

@@ -135,7 +135,7 @@
           <h1 style="font-size:var(--fs-48);font-weight:300">Дрон</h1>
           <span class="chip"><span class="dot"></span>DRN</span>
         </div>
-        <p class="lead muted" style="font-size:var(--fs-18);margin-top:var(--sp-3);max-width:var(--measure)">Три регистра, один общий фильтр и его свип. Дрон звучит сам, без нажатия клавиш; уровни регистров стоят только на LEVELS.</p>
+        <p class="lead muted" style="font-size:var(--fs-18);margin-top:var(--sp-3);max-width:var(--measure)">Три регистра, общий фильтр и свип. Дрон звучит сам, без нажатия клавиш. Уровни регистров стоят только на LEVELS.</p>
 
         <div data-tabs style="margin-top:var(--sp-6)">
           <div class="tabs" role="tablist" aria-label="Экраны раздела Дрон">
@@ -146,7 +146,7 @@
           <div class="tabpanel" role="tabpanel" id="panel-drn" aria-labelledby="tab-drn">
             <section id="drn">
               <h2 style="font-size:var(--fs-28);margin-bottom:var(--sp-2)">Экран DRONE</h2>
-              <p class="muted" style="max-width:var(--measure);margin-bottom:var(--sp-5)">Форма волны трёх регистров, ширина, дрейф строя и то, следует ли дрон за лидом. База регистров — 55, 110 и 220 Гц; ручка ROOT её не двигает, строй достигается ладом.</p>
+              <p class="muted" style="max-width:var(--measure);margin-bottom:var(--sp-5)">Форма волны трёх регистров, ширина, дрейф строя и слежение за лидом. Регистры стоят на 55, 110 и 220 Гц. Ручка ROOT их не двигает: строй задаётся ладом.</p>
 
 
               <div class="table-scroll">
@@ -155,7 +155,7 @@
                   <tbody>
                     <tr>
                       <td class="p-name"><span class="param-code">H.OSC</span></td>
-                      <td>форма верхнего регистра — того, что слышен как тело аккорда</td>
+                      <td>Форма верхнего регистра: то, что слышно как тело аккорда.</td>
                       <td><ul class="opt-list">
 <li class="opt"><b>SIN</b><span>синус: самый мягкий, без призвуков</span></li>
 <li class="opt"><b>TRI</b><span>треугольник: мягче пилы, но с характером</span></li>
@@ -167,7 +167,7 @@
                     </tr>
                     <tr>
                       <td class="p-name"><span class="param-code">M.OSC</span></td>
-                      <td>форма среднего регистра — середины аккорда</td>
+                      <td>Форма среднего регистра: середина аккорда.</td>
                       <td><ul class="opt-list">
 <li class="opt"><b>SIN</b><span>синус: самый мягкий, без призвуков</span></li>
 <li class="opt"><b>TRI</b><span>треугольник: мягче пилы, но с характером</span></li>
@@ -179,7 +179,7 @@
                     </tr>
                     <tr>
                       <td class="p-name"><span class="param-code">L.OSC</span></td>
-                      <td>форма нижнего регистра — основы, которая держит весь аккорд</td>
+                      <td>Форма нижнего регистра: основа, которая держит аккорд.</td>
                       <td><ul class="opt-list">
 <li class="opt"><b>SIN</b><span>синус: самый мягкий, без призвуков</span></li>
 <li class="opt"><b>TRI</b><span>треугольник: мягче пилы, но с характером</span></li>
@@ -191,7 +191,7 @@
                     </tr>
                     <tr>
                       <td class="p-name"><span class="param-code">WIDTH</span></td>
-                      <td>ширина: раздвигает панораму и добавляет глубины свипу фильтра — вместе с DEPTH срез гуляет шире, до шести октав на нижнем регистре</td>
+                      <td>Ширина: раздвигает панораму и добавляет глубины свипу фильтра. Вместе с DEPTH срез гуляет до шести октав на нижнем регистре.</td>
                       <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
                     <tr>
@@ -205,7 +205,7 @@
                     </tr>
                     <tr>
                       <td class="p-name"><span class="param-code">DRIFT</span></td>
-                      <td>дрейф строя в центах: расстройка трёх регистров друг относительно друга. Ноль — ни одного цента, всё, что сохранено раньше, звучит как звучало</td>
+                      <td>Дрейф строя в центах: расстройка трёх регистров друг относительно друга. На нуле ни одного цента, и всё, что сохранено раньше, звучит как звучало.</td>
                       <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
                   </tbody>
@@ -217,7 +217,7 @@
           <div class="tabpanel" role="tabpanel" id="panel-dfl" aria-labelledby="tab-dfl" hidden>
             <section id="dfl">
               <h2 style="font-size:var(--fs-28);margin-bottom:var(--sp-2)">Экран DRONE FLTR</h2>
-              <p class="muted" style="max-width:var(--measure);margin-bottom:var(--sp-5)">Срез, резонанс и свип, общие для трёх регистров: скорость, глубина, слежение за высотой и форма угла.</p>
+              <p class="muted" style="max-width:var(--measure);margin-bottom:var(--sp-5)">Срез, резонанс и свип для трёх регистров сразу. Свип задаёт скорость, глубину, слежение за высотой и форму угла.</p>
 
 
               <div class="table-scroll">
@@ -241,17 +241,17 @@
                     </tr>
                     <tr>
                       <td class="p-name"><span class="param-code">DEPTH</span></td>
-                      <td>глубина свипа: до четырёх октав, а вместе с WIDTH — до шести</td>
+                      <td>Глубина свипа: до четырёх октав, вместе с WIDTH до шести.</td>
                       <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
                     <tr>
                       <td class="p-name"><span class="param-code">K.TRCK</span></td>
-                      <td>слежение среза фильтра дрона за высотой, в процентах: 0 — срез стоит там, куда его поставила ручка CUTOFF; 100 — едет за нотой октава в октаву. Отсчёт от собственной базы дрона, A1 (55 Гц), общий для всех трёх регистров; заводское значение — 0</td>
+                      <td>Слежение среза фильтра дрона за высотой, в процентах. На нуле срез стоит там, куда его поставила ручка CUTOFF; на ста едет за нотой октава в октаву. Отсчёт идёт от базы дрона, A1 (55 Гц), общий для всех трёх регистров. Заводское значение: ноль.</td>
                       <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
                     <tr>
                       <td class="p-name"><span class="param-code">MODE</span></td>
-                      <td>форма угла: 0 — низ пропускает ниже среза и режет выше, 50 — полоса пропускает вокруг среза, 100 — верх режет ниже среза и пропускает выше; между ними смешение соседних форм, а не переключение. Заводское значение — 0, низ</td>
+                      <td>Форма угла. Ноль: низ пропускает ниже среза и режет выше. Пятьдесят: полоса пропускает вокруг среза. Сто: верх режет ниже среза и пропускает выше. Между этими точками формы смешиваются, а не переключаются. Заводское значение: ноль, низ.</td>
                       <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
                   </tbody>
@@ -278,7 +278,7 @@
   <div class="wrap">
     <div class="f-col">
       <span class="f-title">OBOD</span>
-      <p class="f-note">Синтезатор-грувбокс на ESP32-S3 с круглым экраном 360 × 360. Голосовой движок — ESP32Synth 2.5.0 (MIT, © 2025 Danilo Gabriel); остальное написано для этого прибора.</p>
+      <p class="f-note">Синтезатор-грувбокс на ESP32-S3, экран 360 × 360. Голосовой движок ESP32Synth 2.5.0 (MIT, © 2025 Danilo Gabriel), остальной код написан для этого прибора.</p>
     </div>
     <div class="f-col">
       <span class="f-title">Документация</span>

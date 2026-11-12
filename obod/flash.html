@@ -132,17 +132,17 @@
 
         <span class="eyebrow">Прибор</span>
         <h1 style="font-size:var(--fs-48);font-weight:300;margin-top:var(--sp-2)">Прошивка</h1>
-        <p class="lead muted" style="font-size:var(--fs-18);margin-top:var(--sp-3);max-width:var(--measure)">Новый выпуск записывается из браузера и открывается кодом выпуска. Образ на сайте лежит запечатанным; что изменилось в выпуске — в <a href="changelog.html#v1.3.0">истории изменений</a>.</p>
+        <p class="lead muted" style="font-size:var(--fs-18);margin-top:var(--sp-3);max-width:var(--measure)">Выпуск записывается из браузера и открывается кодом. Образ лежит на сайте запечатанным. Что изменилось — в <a href="changelog.html#v1.3.0">истории изменений</a>.</p>
 
         <div class="note note-info" style="margin-top:var(--sp-6)">
           <div class="note-title">Что нужно</div>
-          <p>Chrome или Edge на компьютере, кабель USB-C и код выпуска. Код чувствителен к регистру и знакам; страница выводит ключ из кода и расшифровывает образ здесь, в браузере: на прибор уходит уже открытый образ, а на диск не сохраняется ничего.</p>
+          <p>Chrome или Edge на компьютере, кабель USB-C и код выпуска. Код чувствителен к регистру и знакам. Страница выводит из кода ключ и расшифровывает образ в браузере: на прибор уходит открытый образ, на диск не сохраняется ничего.</p>
         </div>
 
         <div class="card" style="margin-top:var(--sp-4);padding:var(--sp-5)">
           <span class="eyebrow">Где взять код</span>
           <h3 style="font-size:var(--fs-22);margin:var(--sp-2) 0 var(--sp-2)">Пост на Boosty</h3>
-          <p class="muted" style="max-width:var(--measure);font-size:var(--fs-16)">Код разблокировки лежит в постах для подписчиков: любой уровень подписки открывает пост с кодом к актуальной прошивке. Код один на выпуск и одинаковый для всех, кому выпуск доступен.</p>
+          <p class="muted" style="max-width:var(--measure);font-size:var(--fs-16)">Код лежит в постах для подписчиков. Любой уровень подписки открывает пост с кодом к актуальной прошивке. Код один на выпуск и одинаковый для всех, кому выпуск доступен.</p>
           <p style="margin-top:var(--sp-3);display:flex;gap:var(--sp-3);align-items:center;flex-wrap:wrap">
             <a class="btn btn-primary" href="https://boosty.to/annabiosis" rel="noopener">Подписаться на Boosty</a>
             <a href="https://boosty.to/annabiosis" rel="noopener" class="mono" style="font-size:var(--fs-14)">boosty.to/annabiosis</a>
@@ -178,14 +178,14 @@
         <p id="flash-meta" class="muted" style="margin-top:var(--sp-3);font-size:var(--fs-14)">Версия, размер и контрольная сумма образа появятся здесь после открытия кода.</p>
 
         <h2 id="lost" style="font-size:var(--fs-28);margin-top:var(--sp-7)">Что теряется</h2>
-        <p style="max-width:var(--measure)">Браузерная запись пишет образ одним куском от начала флеша, поэтому служебная область настроек попадает под стирание: пресеты и настройки при такой прошивке теряются. Командная строка (<span class="mono">idf.py flash</span>) пишет части по своим адресам и настроек не касается.</p>
+        <p style="max-width:var(--measure)">Браузер пишет образ одним куском от начала флеша, поэтому область настроек стирается: пресеты и настройки теряются. Командная строка (<span class="mono">idf.py flash</span>) пишет части по своим адресам и настроек не касается.</p>
         <div class="note note-warn" style="margin-top:var(--sp-4)">
           <div class="note-title">Перед записью</div>
           <p>Сохраните нужные пресеты на компьютер, если они важны, и не отключайте питание до конца записи.</p>
         </div>
 
         <h2 id="sources" style="font-size:var(--fs-28);margin-top:var(--sp-7)">Исходники выпуска</h2>
-        <p style="max-width:var(--measure)">Архив исходников лежит рядом, без защиты: код выпуска нужен только образу.</p>
+        <p style="max-width:var(--measure)">Архив исходников лежит рядом без защиты: код нужен только образу.</p>
         <p class="mono muted" data-sources="sources.json" style="font-size:var(--fs-13)">размер и SHA-256 архива появятся здесь</p>
       </article>
 
@@ -205,7 +205,7 @@
   <div class="wrap">
     <div class="f-col">
       <span class="f-title">OBOD</span>
-      <p class="f-note">Синтезатор-грувбокс на ESP32-S3 с круглым экраном 360 × 360. Голосовой движок — ESP32Synth 2.5.0 (MIT, © 2025 Danilo Gabriel); остальное написано для этого прибора.</p>
+      <p class="f-note">Синтезатор-грувбокс на ESP32-S3, экран 360 × 360. Голосовой движок ESP32Synth 2.5.0 (MIT, © 2025 Danilo Gabriel), остальной код написан для этого прибора.</p>
     </div>
     <div class="f-col">
       <span class="f-title">Документация</span>

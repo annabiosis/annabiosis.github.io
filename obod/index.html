@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <meta name="theme-color" content="#060A09" />
 <title>OBOD — обзор прибора</title>
-<meta name="description" content="OBOD — круглый синтезатор-грувбокс: дрон, лид, бас и перкуссия под одной ручкой. Девять разделов, двадцать пять экранов." />
+<meta name="description" content="OBOD — синтезатор-грувбокс: дрон, лид, бас и перкуссия под одной ручкой. Девять разделов, 25 экранов, 128 пресетов." />
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -50,7 +50,7 @@
       <div>
         <span class="eyebrow">Круглый синтезатор-грувбокс</span>
         <h1>Дрон, лид, бас и перкуссия — <span class="accent">одна ручка.</span></h1>
-        <p class="lead">OBOD — прибор на ESP32-S3 с круглым экраном 360 × 360. Колесо-обод меняет выбранную ручку, касание выбирает ручку или экран, удержание назначает ручку в макрос. Девять разделов, у каждого своя семья цвета.</p>
+        <p class="lead">Круглый прибор на ESP32-S3, экран 360 × 360. Обод меняет выбранную ручку, касание выбирает ручку или экран, удержание отправляет ручку в макрос. В приборе девять разделов, у каждого свой цвет.</p>
         <div class="hero-actions">
           <a class="btn btn-primary btn-lg" href="flash.html">Установить</a>
           <a class="btn btn-outline btn-lg" href="start.html">Первый запуск</a>
@@ -70,13 +70,13 @@
     <div class="grid">
       <div class="col-4"><div class="card"><span class="eyebrow">Поворот</span>
         <h3 style="font-size:var(--fs-22);margin:var(--sp-3) 0 var(--sp-2)">Колесо меняет ручку</h3>
-        <p class="muted" style="font-size:var(--fs-14)">Обод вращает выбранную ручку. Подпись на экране называет значение и единицы — проценты, полутона, доли такта.</p></div></div>
+        <p class="muted" style="font-size:var(--fs-14)">Обод вращает выбранную ручку. Экран называет значение и единицы: проценты, полутона, доли такта.</p></div></div>
       <div class="col-4"><div class="card"><span class="eyebrow">Касание</span>
         <h3 style="font-size:var(--fs-22);margin:var(--sp-3) 0 var(--sp-2)">Выбор ручки и экрана</h3>
-        <p class="muted" style="font-size:var(--fs-14)">Касание выбирает ручку или экран. Карта разделов открывает любое семейство без паузы.</p></div></div>
+        <p class="muted" style="font-size:var(--fs-14)">Касание выбирает ручку или экран. Карта разделов открывает любой раздел без паузы.</p></div></div>
       <div class="col-4"><div class="card"><span class="eyebrow">Удержание</span>
         <h3 style="font-size:var(--fs-22);margin:var(--sp-3) 0 var(--sp-2)">Ручка уходит в макрос</h3>
-        <p class="muted" style="font-size:var(--fs-14)">Длинное нажатие назначает ручку в макро: одно движение меняет несколько параметров сразу.</p></div></div>
+        <p class="muted" style="font-size:var(--fs-14)">Длинное нажатие отправляет ручку в макрос. Одно движение меняет несколько параметров.</p></div></div>
     </div>
   </div>
 </section>
@@ -86,14 +86,14 @@
     <div class="section-head">
       <span class="eyebrow">Карта прибора</span>
       <h2>Девять разделов</h2>
-      <p class="lead">Порядок — порядок карты: от тела к хранилищу. Код сектора рядом с названием помогает найти страницу по экрану.</p>
+      <p class="lead">Порядок совпадает с картой прибора: от тела к хранилищу. Код сектора рядом с названием помогает найти страницу.</p>
     </div>
     <div class="grid grid-tight">
         <div class="col-4 col-md-3">
           <a class="card fam-card fam-drn" href="ref-drone.html">
             <div class="fam-top"><span class="chip"><span class="dot"></span>DRN</span></div>
             <div class="nm">Дрон</div>
-            <div class="ds">Три регистра, один общий фильтр и его свип. Дрон звучит сам, без нажатия клавиш; уровни регистров стоят только на LEVELS.</div>
+            <div class="ds">Три регистра, общий фильтр и свип. Дрон звучит сам, без нажатия клавиш. Уровни регистров стоят только на LEVELS.</div>
             <div class="fam-meta">DRONE · DRONE FLTR — 2 экрана</div>
           </a>
         </div>
@@ -101,7 +101,7 @@
           <a class="card fam-card fam-lfo" href="ref-lfo.html">
             <div class="fam-top"><span class="chip"><span class="dot"></span>LFO</span></div>
             <div class="nm">Модуляция</div>
-            <div class="ds">Два независимых LFO. Каждый двигает свою ручку сам: приёмник, глубина, форма и скорость — и всё это едет в патче.</div>
+            <div class="ds">Два независимых LFO. Каждый двигает свою ручку: приёмник, глубина, форма, скорость. Настройки входят в патч.</div>
             <div class="fam-meta">LFO 1 · LFO 2 — 2 экрана</div>
           </a>
         </div>
@@ -109,7 +109,7 @@
           <a class="card fam-card fam-ld" href="ref-lead.html">
             <div class="fam-top"><span class="chip"><span class="dot"></span>LD</span></div>
             <div class="nm">Лид</div>
-            <div class="ds">Голос линии: длина ноты, скольжение, форма волны, фильтр и огибающая. Уровень — только на LEVELS.</div>
+            <div class="ds">Голос линии: длина ноты, скольжение, форма волны, фильтр, огибающая. Уровень стоит на LEVELS.</div>
             <div class="fam-meta">LEAD · LEAD TONE · LEAD ENV — 3 экрана</div>
           </a>
         </div>
@@ -117,7 +117,7 @@
           <a class="card fam-card fam-scl" href="ref-time.html">
             <div class="fam-top"><span class="chip"><span class="dot"></span>GEN</span></div>
             <div class="nm">Генераторы</div>
-            <div class="ds">Лад, фигура линии и арпеджиатор — то, что решает, какие ноты звучат и в каком порядке.</div>
+            <div class="ds">Лад, фигура линии и арпеджиатор решают, какие ноты звучат и в каком порядке.</div>
             <div class="fam-meta">SCALE · LEAD EUCLID · LEAD ARP — 3 экрана</div>
           </a>
         </div>
@@ -125,7 +125,7 @@
           <a class="card fam-card fam-prc" href="ref-perc.html">
             <div class="fam-top"><span class="chip"><span class="dot"></span>PRC</span></div>
             <div class="nm">Перкуссия</div>
-            <div class="ds">Пять голосов удара, рисунок такта и баланс дорожек. Удар и его рисунок — разные экраны.</div>
+            <div class="ds">Пять голосов удара, рисунок такта и баланс дорожек. Удар и рисунок стоят на разных экранах.</div>
             <div class="fam-meta">PERC · PERC SEQ · PERC MIX — 3 экрана</div>
           </a>
         </div>
@@ -133,7 +133,7 @@
           <a class="card fam-card fam-bas" href="ref-bass.html">
             <div class="fam-top"><span class="chip"><span class="dot"></span>BAS</span></div>
             <div class="nm">Бас</div>
-            <div class="ds">Отдельная часть прибора: линия, её рисунок и связки. Одна нота в один момент, со своим фильтром из заготовки.</div>
+            <div class="ds">Отдельная часть прибора: линия, её рисунок и связки. Звучит одна нота за раз, фильтр задаёт заготовка.</div>
             <div class="fam-meta">BASS · RHYTHM — 2 экрана</div>
           </a>
         </div>
@@ -141,7 +141,7 @@
           <a class="card fam-card fam-fx" href="ref-fx.html">
             <div class="fam-top"><span class="chip"><span class="dot"></span>FX</span></div>
             <div class="nm">Эффекты</div>
-            <div class="ds">Машина на десять эффектов, дилей на шесть алгоритмов и реверб. Стойка стоит после звука, до мастера.</div>
+            <div class="ds">Машина на десять эффектов, дилей на шесть алгоритмов и реверб. Стойка стоит после звука, перед мастером.</div>
             <div class="fam-meta">FX · DELAY · REVERB — 3 экрана</div>
           </a>
         </div>
@@ -149,7 +149,7 @@
           <a class="card fam-card fam-lvl" href="ref-mix.html">
             <div class="fam-top"><span class="chip"><span class="dot"></span>LVL</span></div>
             <div class="nm">Микшер</div>
-            <div class="ds">Уровни частей, мастер с компрессором и три страницы посылов: что и куда уходит.</div>
+            <div class="ds">Уровни частей, мастер с компрессором и три страницы посылов.</div>
             <div class="fam-meta">MASTER · LEVELS · REV SENDS · FX SENDS · DEL SENDS — 5 экранов</div>
           </a>
         </div>
@@ -157,7 +157,7 @@
           <a class="card fam-card fam-prs" href="ref-store.html">
             <div class="fam-top"><span class="chip"><span class="dot"></span>PRS</span></div>
             <div class="nm">Пресеты и настройки</div>
-            <div class="ds">Сто двадцать восемь слотов звука и служебные строки: чем прибор включается и как отвечает.</div>
+            <div class="ds">128 слотов звука и служебные строки: как прибор включается и как отвечает.</div>
             <div class="fam-meta">PRESET · SETUP — 2 экрана</div>
           </a>
         </div>
@@ -172,9 +172,9 @@
       <h2>С чего начать</h2>
     </div>
     <div class="grid">
-      <div class="col-4"><a class="card tpl-card" href="start.html"><div class="nm">Первый запуск</div><div class="ds">Питание, обод и жесты, транспорт, сохранение пресета и клавиатура.</div><div class="fam-meta">руководство · 5 шагов</div></a></div>
-      <div class="col-4"><a class="card tpl-card" href="changelog.html"><div class="nm">История изменений</div><div class="ds">Выпуски от нового к старому: новое, улучшения и исправления.</div><div class="fam-meta">актуальный выпуск · 1.3.0</div></a></div>
-      <div class="col-4"><a class="card tpl-card" href="hw.html"><div class="nm">Железо</div><div class="ds">Что внутри корпуса, разъёмы, питание и чем прибор дышит.</div><div class="fam-meta">ESP32-S3R8 · 8 МБ PSRAM</div></a></div>
+      <div class="col-4"><a class="card tpl-card" href="start.html"><div class="nm">Первый запуск</div><div class="ds">Питание, жесты, транспорт, сохранение пресета, клавиатура.</div><div class="fam-meta">руководство · 5 шагов</div></a></div>
+      <div class="col-4"><a class="card tpl-card" href="changelog.html"><div class="nm">История изменений</div><div class="ds">Выпуски от нового к старому: что добавилось, что улучшилось, что исправлено.</div><div class="fam-meta">актуальный выпуск · 1.3.0</div></a></div>
+      <div class="col-4"><a class="card tpl-card" href="hw.html"><div class="nm">Железо</div><div class="ds">Что стоит внутри корпуса и сколько чего.</div><div class="fam-meta">ESP32-S3R8 · 8 МБ PSRAM</div></a></div>
     </div>
   </div>
 </section>
@@ -185,7 +185,7 @@
   <div class="wrap">
     <div class="f-col">
       <span class="f-title">OBOD</span>
-      <p class="f-note">Синтезатор-грувбокс на ESP32-S3 с круглым экраном 360 × 360. Голосовой движок — ESP32Synth 2.5.0 (MIT, © 2025 Danilo Gabriel); остальное написано для этого прибора.</p>
+      <p class="f-note">Синтезатор-грувбокс на ESP32-S3, экран 360 × 360. Голосовой движок ESP32Synth 2.5.0 (MIT, © 2025 Danilo Gabriel), остальной код написан для этого прибора.</p>
     </div>
     <div class="f-col">
       <span class="f-title">Документация</span>
