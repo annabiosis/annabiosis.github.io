@@ -134,53 +134,65 @@
         <h1 style="font-size:var(--fs-48);font-weight:300;margin-top:var(--sp-2)">Прошивка</h1>
         <p class="lead muted" style="font-size:var(--fs-18);margin-top:var(--sp-3);max-width:var(--measure)">Выпуск записывается из браузера и открывается кодом. Образ лежит на сайте запечатанным. Что изменилось — в <a href="changelog.html#v1.3.0">истории изменений</a>.</p>
 
-        <div class="note note-info" style="margin-top:var(--sp-6)">
-          <div class="note-body"><span class="note-title">Что нужно</span>
-          <p>Chrome или Edge на компьютере, кабель USB-C и код выпуска. Код чувствителен к регистру и знакам. Страница выводит из кода ключ и расшифровывает образ в браузере: на прибор уходит открытый образ, на диск не сохраняется ничего.</p></div>
-        </div>
+                <h2 id="how" style="font-size:var(--fs-28);margin-top:var(--sp-7)">Как прошить</h2>
 
-        <div class="note note-warn" style="margin-top:var(--sp-4)">
-          <div class="note-body"><span class="note-title">Первая прошивка</span>
-          <p>Самую первую прошивку прибор принимает только в режиме загрузки. Зажмите утопленную кнопку между гнездом 3,5 мм и разъёмом USB-C острым предметом и, не отпуская, включите прибор: он войдёт в режим загрузки, и браузер сможет записать образ. Дальше обновления идут без кнопки.</p></div>
-        </div>
-
-        <div class="card" style="margin-top:var(--sp-4);padding:var(--sp-5)">
-          <span class="eyebrow">Где взять код</span>
-          <h3 style="font-size:var(--fs-22);margin:var(--sp-2) 0 var(--sp-2)">Пост на Boosty</h3>
-          <p class="muted" style="max-width:var(--measure);font-size:var(--fs-16)">Код лежит в постах для подписчиков. Любой уровень подписки открывает пост с кодом к актуальной прошивке. Код один на выпуск и одинаковый для всех, кому выпуск доступен.</p>
-          <p style="margin-top:var(--sp-3);display:flex;gap:var(--sp-3);align-items:center;flex-wrap:wrap">
-            <a class="btn btn-primary" href="https://boosty.to/annabiosis" rel="noopener">Подписаться на Boosty</a>
-            <a href="https://boosty.to/annabiosis" rel="noopener" class="mono" style="font-size:var(--fs-14)">boosty.to/annabiosis</a>
-          </p>
-        </div>
-
-        <form class="unlock" id="unlock" autocomplete="off"
-              data-lock="lock.json"
-              data-sealed="firmware/OBOD.bin.enc"
-              data-manifest="manifest.json"
-              style="margin-top:var(--sp-6)">
-          <div class="field">
-            <label class="field-label" for="code">Код выпуска</label>
-            <div class="field-row">
-              <input class="input" id="code" name="code" type="text" spellcheck="false" autocomplete="off"
-                     autocapitalize="off" placeholder="код из поста Boosty" aria-describedby="unlock-note" />
-              <button class="btn btn-primary" type="submit">Разблокировать прошивку</button>
+        <div class="steps" style="margin-top:var(--sp-5)">
+          <div class="step" id="step-1">
+            <span class="step-num"></span>
+            <div class="step-body">
+              <h3>Подписаться на Boosty и получить код</h3>
+              <p>Код выпуска лежит в постах для подписчиков: любой уровень подписки открывает пост с кодом к актуальной прошивке. Код один на выпуск и одинаковый для всех, кому выпуск доступен.</p>
+              <p style="margin-top:var(--sp-3);display:flex;gap:var(--sp-3);align-items:center;flex-wrap:wrap">
+                <a class="btn btn-primary" href="https://boosty.to/annabiosis" rel="noopener">Подписаться на Boosty</a>
+                <a href="https://boosty.to/annabiosis" rel="noopener" class="mono" style="font-size:var(--fs-14)">boosty.to/annabiosis</a>
+              </p>
             </div>
-            <p class="field-hint" id="unlock-note">Код чувствителен к регистру и знакам. Если замок не открывается, проверьте код в посте — он один на выпуск.</p>
           </div>
-        </form>
 
-        <p id="flash-status" class="flash-status" role="status" aria-live="polite" style="margin-top:var(--sp-4)"></p>
+          <div class="step" id="step-2">
+            <span class="step-num"></span>
+            <div class="step-body">
+              <h3>Разблокировать кодом</h3>
+              <p>Нужны Chrome или Edge на компьютере и кабель USB-C. Код чувствителен к регистру и знакам. Страница выводит из кода ключ и расшифровывает образ в браузере: на прибор уходит открытый образ, на диск не сохраняется ничего.</p>
+              <form class="unlock" id="unlock" autocomplete="off"
+                    data-lock="lock.json"
+                    data-sealed="firmware/OBOD.bin.enc"
+                    data-manifest="manifest.json"
+                    style="margin-top:var(--sp-3)">
+                <div class="field">
+                  <label class="field-label" for="code">Код выпуска</label>
+                  <div class="field-row">
+                    <input class="input" id="code" name="code" type="text" spellcheck="false" autocomplete="off"
+                           autocapitalize="off" placeholder="код из поста Boosty" aria-describedby="unlock-note" />
+                    <button class="btn btn-primary" type="submit">Разблокировать прошивку</button>
+                  </div>
+                  <p class="field-hint" id="unlock-note">Если замок не открывается, проверьте код в посте — он один на выпуск.</p>
+                </div>
+              </form>
+              <p id="flash-status" class="flash-status" role="status" aria-live="polite" style="margin-top:var(--sp-3)"></p>
+            </div>
+          </div>
 
-        <div style="margin-top:var(--sp-4)">
-          <esp-web-install-button id="installer" hidden>
-            <button slot="activate" class="btn btn-primary btn-lg">Записать прошивку</button>
-            <span slot="unsupported" class="muted">Этот браузер не умеет прошивать по USB — откройте страницу в Chrome или Edge.</span>
-            <span slot="not-allowed" class="muted">Страница должна быть открыта по HTTPS, чтобы браузер дал доступ к порту.</span>
-          </esp-web-install-button>
+          <div class="step" id="step-3">
+            <span class="step-num"></span>
+            <div class="step-body">
+              <h3>Прошить</h3>
+              <p>Образ записывается на прибор прямо из браузера. Не отключайте питание до конца записи.</p>
+              <div class="note note-warn" style="margin-top:var(--sp-3)">
+                <div class="note-body"><span class="note-title">Первая прошивка</span>
+                <p>Самую первую прошивку прибор принимает только в режиме загрузки. Зажмите утопленную кнопку между гнездом 3,5 мм и разъёмом USB-C острым предметом и, не отпуская, включите прибор: он войдёт в режим загрузки, и браузер сможет записать образ. Дальше обновления идут без кнопки.</p></div>
+              </div>
+              <div style="margin-top:var(--sp-4)">
+                <esp-web-install-button id="installer" hidden>
+                  <button slot="activate" class="btn btn-primary btn-lg">Записать прошивку</button>
+                  <span slot="unsupported" class="muted">Этот браузер не умеет прошивать по USB — откройте страницу в Chrome или Edge.</span>
+                  <span slot="not-allowed" class="muted">Страница должна быть открыта по HTTPS, чтобы браузер дал доступ к порту.</span>
+                </esp-web-install-button>
+                <p id="flash-meta" class="muted" style="font-size:var(--fs-14)">Версия, размер и контрольная сумма образа появятся здесь после открытия кода.</p>
+              </div>
+            </div>
+          </div>
         </div>
-
-        <p id="flash-meta" class="muted" style="margin-top:var(--sp-3);font-size:var(--fs-14)">Версия, размер и контрольная сумма образа появятся здесь после открытия кода.</p>
 
         <h2 id="lost" style="font-size:var(--fs-28);margin-top:var(--sp-7)">Что теряется</h2>
         <p style="max-width:var(--measure)">Браузерная запись стирает область настроек: пресеты и настройки теряются. Командная строка idf.py flash пишет части по своим адресам и настроек не касается.</p>
@@ -197,6 +209,7 @@
       <div class="doc-toc">
         <div class="toc-title">На этой странице</div>
         <ul class="toc">
+          <li><a class="toc-link" href="#how">Как прошить</a></li>
           <li><a class="toc-link" href="#lost">Что теряется</a></li>
           <li><a class="toc-link" href="#sources">Исходники выпуска</a></li>
         </ul>
