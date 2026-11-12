@@ -629,6 +629,16 @@ a.fam-card:hover {
 .step .step-body p { color: var(--ink-3); font-size: var(--fs-14); }
 .step .step-body p + p { margin-top: var(--sp-2); }
 
+/* Поле и кнопка в одну строку: кнопка стоит справа от поля ввода и держит свою ширину,
+   а не уезжает под него. На узком экране пара складывается в столбик. */
+.field-row { display: flex; gap: var(--sp-2); align-items: stretch; flex-wrap: wrap; }
+.field-row .input { flex: 1 1 220px; min-width: 0; }
+.field-row .btn { flex: 0 0 auto; white-space: nowrap; }
+@media (max-width: 560px) {
+  .field-row { flex-direction: column; }
+  .field-row .btn { width: 100%; }
+}
+
 /* ─────────────── Релизы ─────────────── */
 .release { padding-block: var(--sp-6); border-top: 1px solid var(--line-1); }
 .release:first-of-type { border-top: 0; }
