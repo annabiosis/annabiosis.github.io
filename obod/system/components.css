@@ -639,6 +639,22 @@ a.fam-card:hover {
   .field-row .btn { width: 100%; }
 }
 
+/* ─────────────── Схема прибора ─────────────── */
+/* Рисунок владельца, оттрассированный в вектор. Форма и толщина линий — с оригинала,
+   цвет — из токенов: fill задан currentColor, поэтому в тёмной теме линии светлые, в
+   светлой тёмные, и схема меняется вместе с темой без второй картинки. */
+.device { margin: 0; display: flex; justify-content: center; }
+.device-svg {
+  width: 100%;
+  max-width: 500px;
+  height: auto;
+  color: var(--ink-2);
+}
+
+@media (max-width: 900px) {
+  .device-svg { max-width: 300px; }
+}
+
 /* ─────────────── Кросс-ссылки ─────────────── */
 /* Ссылка внутри текста: видно, что это ссылка, но она не спорит с абзацем. */
 .xref {
@@ -714,7 +730,7 @@ a.fam-card:hover {
 
 /* ─────────────── Герой ─────────────── */
 .hero { position: relative; padding-block: var(--sp-8) var(--sp-7); overflow: hidden; }
-.hero .hero-grid { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: var(--sp-7); align-items: center; }
+.hero .hero-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(320px, 520px); gap: var(--sp-7); align-items: center; }
 @media (max-width: 900px) { .hero .hero-grid { grid-template-columns: 1fr; } }
 .hero h1 { font-size: clamp(var(--fs-48), 7vw, var(--fs-64)); font-weight: var(--fw-light); line-height: var(--lh-tight); letter-spacing: -0.02em; }
 .hero h1 .accent { color: var(--accent); }
