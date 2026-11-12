@@ -640,34 +640,26 @@ a.fam-card:hover {
 }
 
 /* ─────────────── Схема прибора ─────────────── */
-/* Рисунок владельца, оттрассированный в вектор. Форма и толщина линий — с оригинала,
-   цвет — из токенов: fill задан currentColor, поэтому в тёмной теме линии светлые, в
-   светлой тёмные, и схема меняется вместе с темой без второй картинки. */
-/* Рисунок крупный нарочно: линии оригинала в мелком масштабе слипаются. Он стоит поверх
-   пустого места справа от текста и не толкает вёрстку — герой его обрезает, а не прокручивает. */
+/* Рисунок владельца, оттрассированный в вектор: форма и толщина линий с оригинала, цвет из
+   токенов (fill="currentColor"), поэтому тема меняет и схему. Стоит в своей колонке справа
+   от текста — крупным, но не во весь экран. */
 .device {
   margin: 0;
-  position: absolute;
-  top: 50%;
-  right: -12%;
-  width: clamp(720px, 100vw, 1480px);
-  transform: translateY(-50%);
-  opacity: .55;
-  pointer-events: none;
+  display: flex;
+  justify-content: center;
 }
 .device-svg {
   width: 100%;
+  max-width: 680px;
   height: auto;
   color: var(--ink-2);
-  /* Левый край рисунка растворяется: так он может быть крупным и не спорить с текстом. */
-  -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 26%);
-  mask-image: linear-gradient(90deg, transparent 0%, #000 26%);
 }
 
-/* Уже планшета рисунок не наезжает на текст, а встаёт под ним. */
-@media (max-width: 1100px) {
-  .device { position: static; width: auto; transform: none; display: flex; justify-content: center; }
-  .device-svg { max-width: 360px; }
+@media (max-width: 1180px) {
+  .device-svg { max-width: 520px; }
+}
+@media (max-width: 900px) {
+  .device { display: none; }
 }
 
 /* ─────────────── Кросс-ссылки ─────────────── */
@@ -745,17 +737,15 @@ a.fam-card:hover {
 
 /* ─────────────── Герой ─────────────── */
 .hero { position: relative; padding-block: var(--sp-8) var(--sp-7); overflow: hidden; }
-.hero { overflow: hidden; }
 .hero .hero-grid {
-  position: relative;
   display: grid;
-  grid-template-columns: minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 680px);
   gap: var(--sp-7);
   align-items: center;
 }
-.hero .hero-grid > div:first-child { position: relative; z-index: 1; max-width: 72ch; }
-/* Заголовок может идти шире текста: он держит две строки, а лид остаётся в мере для чтения. */
-.hero .hero-grid > div:first-child .lead { max-width: 46ch; }
+@media (max-width: 900px) {
+  .hero .hero-grid { grid-template-columns: minmax(0, 1fr); }
+}
 @media (max-width: 900px) { .hero .hero-grid { grid-template-columns: 1fr; } }
 .hero h1 { font-size: clamp(var(--fs-48), 7vw, var(--fs-64)); font-weight: var(--fw-light); line-height: var(--lh-tight); letter-spacing: -0.02em; }
 .hero h1 .accent { color: var(--accent); }
