@@ -135,7 +135,7 @@
           <h1 style="font-size:var(--fs-48);font-weight:300">Эффекты</h1>
           <span class="chip"><span class="dot"></span>FX</span>
         </div>
-        <p class="lead muted" style="font-size:var(--fs-18);margin-top:var(--sp-3);max-width:var(--measure)">Машина на десять эффектов, дилей на шесть алгоритмов и реверб. Стойка стоит после звука, перед мастером.</p>
+        <p class="lead muted" style="font-size:var(--fs-18);margin-top:var(--sp-3);max-width:var(--measure)">Машина на тринадцать эффектов, дилей на шесть алгоритмов и реверб. Стойка стоит после звука, перед мастером.</p>
 
         <div data-tabs style="margin-top:var(--sp-6)">
           <div class="tabs" role="tablist" aria-label="Экраны раздела Эффекты">
@@ -147,7 +147,7 @@
           <div class="tabpanel" role="tabpanel" id="panel-fx" aria-labelledby="tab-fx">
             <section id="fx">
               <h2 style="font-size:var(--fs-28);margin-bottom:var(--sp-2)">Экран FX</h2>
-              <p class="muted" style="max-width:var(--measure);margin-bottom:var(--sp-5)">Одна позиция в стойке и несколько эффектов в ней. TYPE выбирает, что стоит сейчас. Порядок в списке идёт от чистого к разрушающему: хорус и тремоло держат звук, биткраш и перегруз его ломают. MIX задаёт уровень возврата, VERB посылает возврат в реверб.</p>
+              <p class="muted" style="max-width:var(--measure);margin-bottom:var(--sp-5)">Одна позиция в стойке и тринадцать эффектов в ней. TYPE выбирает эффект. Порядок в списке идёт от чистого к разрушающему: хорус и тремоло держат звук, биткраш и перегруз его ломают. MIX задаёт уровень возврата, VERB посылает возврат в реверб.</p>
 
 
               <div class="table-scroll">
@@ -156,8 +156,22 @@
                   <tbody>
                     <tr id="fx-type">
                       <td class="p-name"><span class="param-code">TYPE</span></td>
-                      <td>Что стоит в машине</td>
-                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
+                      <td>Выбранный эффект</td>
+                      <td><ul class="opt-list">
+<li class="opt"><b>CHORUS</b><span>копии сигнала с плавающей задержкой: шире и мягче</span></li>
+<li class="opt"><b>TREMOLO</b><span>качание громкости</span></li>
+<li class="opt"><b>AUTOPAN</b><span>качание между каналами</span></li>
+<li class="opt"><b>VIBRATO</b><span>качание высоты</span></li>
+<li class="opt"><b>TILT</b><span>наклон тембра: темнее или ярче</span></li>
+<li class="opt"><b>PHASER</b><span>качающаяся гребёнка</span></li>
+<li class="opt"><b>FLANGER</b><span>короткая задержка с обратной связью</span></li>
+<li class="opt"><b>STUTTER</b><span>повтор куска по такту</span></li>
+<li class="opt"><b>COMB</b><span>гребёнка-резонатор</span></li>
+<li class="opt"><b>RING</b><span>кольцевая модуляция</span></li>
+<li class="opt"><b>SRR</b><span>частота выборки вниз</span></li>
+<li class="opt"><b>BITCRUSH</b><span>разрядность вниз</span></li>
+<li class="opt"><b>DRIVE</b><span>перегруз</span></li>
+</ul></td>
                     </tr>
                     <tr id="fx-mix">
                       <td class="p-name"><span class="param-code">MIX</span></td>
