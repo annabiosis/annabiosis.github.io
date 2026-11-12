@@ -28,10 +28,7 @@
 <a class="skip-link" href="#main">К содержимому</a>
 
 <header class="topbar">
-  <a class="brand" href="index.html">
-    <svg class="brand-ring" width="26" height="26" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="12" fill="none" stroke="currentColor" stroke-width="2.6" stroke-dasharray="56 20" stroke-linecap="round" transform="rotate(135 16 16)"/><circle cx="16" cy="16" r="4" fill="currentColor"/></svg>
-    OBOD
-  </a>
+  <a class="brand" href="index.html">OBOD</a>
   <nav class="topnav" aria-label="Документация">
     <a href="index.html">Обзор</a>
     <a href="start.html">Первый запуск</a>
@@ -41,7 +38,6 @@
     <a href="changelog.html">История</a>
   </nav>
   <div class="topbar-actions">
-    <button class="icon-btn" data-grid-toggle type="button" title="Показать сетку (G)" aria-label="Показать модульную сетку"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></button>
     <button class="icon-btn theme-toggle" data-theme-toggle type="button" title="Переключить тему" aria-label="Переключить светлую и тёмную тему"><svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg><svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M19.1 4.9l-1.8 1.8M6.7 17.3l-1.8 1.8" stroke-linecap="round"/></svg></button>
   </div>
 </header>
@@ -152,43 +148,45 @@
             <section id="scl">
               <h2 style="font-size:var(--fs-28);margin-bottom:var(--sp-2)">Экран SCALE</h2>
               <p class="muted" style="max-width:var(--measure);margin-bottom:var(--sp-5)">Ноты лида: лад, тоника, плотность и октава. Экран назывался LEAD GEN. RESET здесь больше нет: у каждой секвенции свой период, и оба стоят на страницах с рисунком.</p>
+
+
               <div class="table-scroll">
                 <table class="param-table">
-                  <thead><tr><th>Ручка</th><th>Значения</th><th>Описание</th></tr></thead>
+                  <thead><tr><th>Ручка</th><th>Описание</th><th>Значения</th></tr></thead>
                   <tbody>
                     <tr>
                       <td class="p-name"><span class="param-code">SCALE</span></td>
-                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                       <td>лад, из которого берутся ноты: присланная нота притягивается к ближайшей ступени лада, при равном расстоянии — к нижней. Последний в списке, CHROMATIC, содержит все двенадцать ступеней и не квантует ничего</td>
+                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
                     <tr>
                       <td class="p-name"><span class="param-code">NOTE</span></td>
-                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                       <td>тоника, вокруг которой берутся ноты: нота, двенадцать позиций от C до B. Октава — соседний сектор OCT. Вместе это те же восемьдесят четыре ноты, что знала одна ручка ROOT, кроме самого верхнего C, которого сетка «нота × октава» назвать не может</td>
+                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
                     <tr>
                       <td class="p-name"><span class="param-code">OCT</span></td>
-                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                       <td>октава тоники, 1..7: C1 — MIDI 24, B7 — MIDI 107. Своя ручка, потому что на одной восьмидесятипятиступенной шкале нота искалась на слух, а пара «нота и октава» — это то, на что рука целится</td>
+                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
                     <tr>
                       <td class="p-name"><span class="param-code">DENSITY</span></td>
-                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                       <td>как часто шаг звучит вообще</td>
+                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
                     <tr>
                       <td class="p-name"><span class="param-code">OCTAVE</span></td>
-                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                       <td>как охотно нота уходит в дальний регистр; на экране вероятность в процентах, до 50</td>
+                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
                     <tr>
                       <td class="p-name"><span class="param-code">SPAN</span></td>
+                      <td>сколько октав обходит генератор: одна, две или три. Заводское положение — две</td>
                       <td><ul class="opt-list">
 <li class="opt"><b>1 OCT</b><span>ноты стоят в одной октаве</span></li>
 <li class="opt"><b>2 OCT</b><span>две октавы, заводское положение</span></li>
 <li class="opt"><b>3 OCT</b><span>три октавы: самый широкий обход</span></li>
 </ul></td>
-                      <td>сколько октав обходит генератор: одна, две или три. Заводское положение — две</td>
                     </tr>
                   </tbody>
                 </table>
@@ -200,27 +198,30 @@
             <section id="eql">
               <h2 style="font-size:var(--fs-28);margin-bottom:var(--sp-2)">Экран LEAD EUCLID</h2>
               <p class="muted" style="max-width:var(--measure);margin-bottom:var(--sp-5)">Эвклидова сетка нот. Когда сетку забирает арпеджиатор, по центру страницы появляется ARP IS ACTIVE: сетка не играет, и её ручки ничего не меняют. ACCENT у лида свой, отдельный от перкуссионного (SYNTH_PARAM_SEQ_ACCENT): рисунок считается по сетке лида и перкуссию не двигает. Оба экрана печатают одни и те же короткие формы из ACCENT_NAME, поэтому сектор читается одинаково на обеих страницах. RESET — жест лида и только лида.</p>
+
+
               <div class="table-scroll">
                 <table class="param-table">
-                  <thead><tr><th>Ручка</th><th>Значения</th><th>Описание</th></tr></thead>
+                  <thead><tr><th>Ручка</th><th>Описание</th><th>Значения</th></tr></thead>
                   <tbody>
                     <tr>
                       <td class="p-name"><span class="param-code">STEPS</span></td>
-                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                       <td>сколько шагов сетки в такте, n</td>
+                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
                     <tr>
                       <td class="p-name"><span class="param-code">PULSES</span></td>
-                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                       <td>сколько из них звучит, k; на экране действующее k/n</td>
+                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
                     <tr>
                       <td class="p-name"><span class="param-code">ROTATE</span></td>
-                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                       <td>на сколько шагов фигура сдвинута относительно доли</td>
+                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
                     <tr>
                       <td class="p-name"><span class="param-code">ACCENT</span></td>
+                      <td>рисунок акцента лида: ноты на помеченных долях звучат на полной громкости своих голосов, остальные — на силе WEAK VEL. Свой рисунок, независимый от перкуссии: считается по сетке лида, доли идут от первой доли такта, поэтому с ROTATE рисунок не едет и по числу шагов не растягивается. Помеченный шаг отмечен на экране точкой крупнее. Арпеджиатор читает этот же рисунок: velocity нажатой клавиши задаёт уровень, а фигура — акцент внутри него, поэтому акценты слышны и на удержанном аккорде. Панель печатает короткую форму — она и стоит в списке ниже, полное название осталось у рисунка в коде</td>
                       <td><ul class="opt-list">
 <li class="opt"><b>OFF</b><span>акцента нет: все ноты идут на своих заводских 70/70/55; заводское значение. WEAK VEL при этом не читается</span></li>
 <li class="opt"><b>1/4</b><span>четверти: доли 1, 5, 9, 13</span></li>
@@ -231,15 +232,15 @@
 <li class="opt"><b>RMB</b><span>румба-клава, первый такт: доли 1, 4, 7</span></li>
 <li class="opt"><b>BOS</b><span>босса-нова, первый такт: доли 1, 4, 7, 10, 13</span></li>
 </ul></td>
-                      <td>рисунок акцента лида: ноты на помеченных долях звучат на полной громкости своих голосов, остальные — на силе WEAK VEL. Свой рисунок, независимый от перкуссии: считается по сетке лида, доли идут от первой доли такта, поэтому с ROTATE рисунок не едет и по числу шагов не растягивается. Помеченный шаг отмечен на экране точкой крупнее. Арпеджиатор читает этот же рисунок: velocity нажатой клавиши задаёт уровень, а фигура — акцент внутри него, поэтому акценты слышны и на удержанном аккорде. Панель печатает короткую форму — она и стоит в списке ниже, полное название осталось у рисунка в коде</td>
                     </tr>
                     <tr>
                       <td class="p-name"><span class="param-code">SCATTER</span></td>
-                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                       <td>насколько начало ноты может уехать от своей линии, в процентах шага</td>
+                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
                     <tr>
                       <td class="p-name"><span class="param-code">RESET</span></td>
+                      <td>через сколько шагов СВОЕЙ сетки лида фраза лида встаёт на первый шаг своего рисунка. Арпеджиатор этот жест не двигает: он считает от своего начала, и удержанный аккорд продолжает перебираться через сброс фразы. Перкуссию тоже не двигает: у неё свой RESET на PERC SEQ. Входит в звук и в пресет, поэтому смена пресета меняет и его; в пресете, записанном до появления поля, поля нет — он читается как заводские 16</td>
                       <td><ul class="opt-list">
 <li class="opt"><b>INF</b><span>не встают: счётчик лида идёт сам по себе; заводское значение для перкуссии, не для лида</span></li>
 <li class="opt"><b>16</b><span>каждые шестнадцать шагов; заводское значение</span></li>
@@ -248,7 +249,6 @@
 <li class="opt"><b>128</b><span>каждые сто двадцать восемь шагов</span></li>
 <li class="opt"><b>256</b><span>каждые двести пятьдесят шесть шагов</span></li>
 </ul></td>
-                      <td>через сколько шагов СВОЕЙ сетки лида фраза лида встаёт на первый шаг своего рисунка. Арпеджиатор этот жест не двигает: он считает от своего начала, и удержанный аккорд продолжает перебираться через сброс фразы. Перкуссию тоже не двигает: у неё свой RESET на PERC SEQ. Входит в звук и в пресет, поэтому смена пресета меняет и его; в пресете, записанном до появления поля, поля нет — он читается как заводские 16</td>
                     </tr>
                   </tbody>
                 </table>
@@ -260,12 +260,15 @@
             <section id="arp">
               <h2 style="font-size:var(--fs-28);margin-bottom:var(--sp-2)">Экран LEAD ARP</h2>
               <p class="muted" style="max-width:var(--measure);margin-bottom:var(--sp-5)">Арпеджиатор: направление, скорость, длина фигуры, диапазон и свой рисунок акцента.</p>
+
+
               <div class="table-scroll">
                 <table class="param-table">
-                  <thead><tr><th>Ручка</th><th>Значения</th><th>Описание</th></tr></thead>
+                  <thead><tr><th>Ручка</th><th>Описание</th><th>Значения</th></tr></thead>
                   <tbody>
                     <tr>
                       <td class="p-name"><span class="param-code">DIR</span></td>
+                      <td>направление фигуры; OFF выключает арпеджиатор и возвращает сетке голос</td>
                       <td><ul class="opt-list">
 <li class="opt"><b>OFF</b><span>арпеджиатор выключен, сетка играет сама</span></li>
 <li class="opt"><b>UP</b><span>снизу вверх</span></li>
@@ -276,20 +279,20 @@
 <li class="opt"><b>DN-UP+</b><span>то же зеркально</span></li>
 <li class="opt"><b>RAND</b><span>случайная нота фигуры на каждом шаге</span></li>
 </ul></td>
-                      <td>направление фигуры; OFF выключает арпеджиатор и возвращает сетке голос</td>
                     </tr>
                     <tr>
                       <td class="p-name"><span class="param-code">SPEED</span></td>
-                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                       <td>скорость; подпись называет целые доли, когда период на них попадает</td>
+                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
                     <tr>
                       <td class="p-name"><span class="param-code">LEN</span></td>
-                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                       <td>сколько нот в фигуре</td>
+                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
                     <tr>
                       <td class="p-name"><span class="param-code">RANGE</span></td>
+                      <td>сколько октав проходит фигура, от нуля: 0 — одна нота (педаль), 5 — самая широкая. Направление задаёт DIR, поэтому знака у диапазона нет: то же расстояние UP идёт вверх, DN — вниз, UP-DN — туда и обратно</td>
                       <td><ul class="opt-list">
 <li class="opt"><b>0</b><span>фигура не поднимается: все её шаги звучат на тонике</span></li>
 <li class="opt"><b>1</b><span>одна октава; заводское значение</span></li>
@@ -298,10 +301,10 @@
 <li class="opt"><b>4</b><span>четыре октавы</span></li>
 <li class="opt"><b>5</b><span>пять октав, самое широкое</span></li>
 </ul></td>
-                      <td>сколько октав проходит фигура, от нуля: 0 — одна нота (педаль), 5 — самая широкая. Направление задаёт DIR, поэтому знака у диапазона нет: то же расстояние UP идёт вверх, DN — вниз, UP-DN — туда и обратно</td>
                     </tr>
                     <tr>
                       <td class="p-name"><span class="param-code">ACCENT</span></td>
+                      <td>рисунок акцента лида: ноты на помеченных долях звучат на полной громкости своих голосов, остальные — на силе WEAK VEL. Свой рисунок, независимый от перкуссии: считается по сетке лида, доли идут от первой доли такта, поэтому с ROTATE рисунок не едет и по числу шагов не растягивается. Помеченный шаг отмечен на экране точкой крупнее. Арпеджиатор читает этот же рисунок: velocity нажатой клавиши задаёт уровень, а фигура — акцент внутри него, поэтому акценты слышны и на удержанном аккорде. Панель печатает короткую форму — она и стоит в списке ниже, полное название осталось у рисунка в коде</td>
                       <td><ul class="opt-list">
 <li class="opt"><b>OFF</b><span>акцента нет: все ноты идут на своих заводских 70/70/55; заводское значение. WEAK VEL при этом не читается</span></li>
 <li class="opt"><b>1/4</b><span>четверти: доли 1, 5, 9, 13</span></li>
@@ -312,7 +315,6 @@
 <li class="opt"><b>RMB</b><span>румба-клава, первый такт: доли 1, 4, 7</span></li>
 <li class="opt"><b>BOS</b><span>босса-нова, первый такт: доли 1, 4, 7, 10, 13</span></li>
 </ul></td>
-                      <td>рисунок акцента лида: ноты на помеченных долях звучат на полной громкости своих голосов, остальные — на силе WEAK VEL. Свой рисунок, независимый от перкуссии: считается по сетке лида, доли идут от первой доли такта, поэтому с ROTATE рисунок не едет и по числу шагов не растягивается. Помеченный шаг отмечен на экране точкой крупнее. Арпеджиатор читает этот же рисунок: velocity нажатой клавиши задаёт уровень, а фигура — акцент внутри него, поэтому акценты слышны и на удержанном аккорде. Панель печатает короткую форму — она и стоит в списке ниже, полное название осталось у рисунка в коде</td>
                     </tr>
                   </tbody>
                 </table>

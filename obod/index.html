@@ -28,10 +28,7 @@
 <a class="skip-link" href="#main">К содержимому</a>
 
 <header class="topbar">
-  <a class="brand" href="index.html">
-    <svg class="brand-ring" width="26" height="26" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="12" fill="none" stroke="currentColor" stroke-width="2.6" stroke-dasharray="56 20" stroke-linecap="round" transform="rotate(135 16 16)"/><circle cx="16" cy="16" r="4" fill="currentColor"/></svg>
-    OBOD
-  </a>
+  <a class="brand" href="index.html">OBOD</a>
   <nav class="topnav" aria-label="Документация">
     <a href="index.html" aria-current="page">Обзор</a>
     <a href="start.html">Первый запуск</a>
@@ -41,7 +38,6 @@
     <a href="changelog.html">История</a>
   </nav>
   <div class="topbar-actions">
-    <button class="icon-btn" data-grid-toggle type="button" title="Показать сетку (G)" aria-label="Показать модульную сетку"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></button>
     <button class="icon-btn theme-toggle" data-theme-toggle type="button" title="Переключить тему" aria-label="Переключить светлую и тёмную тему"><svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg><svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M19.1 4.9l-1.8 1.8M6.7 17.3l-1.8 1.8" stroke-linecap="round"/></svg></button>
   </div>
 </header>
@@ -50,40 +46,17 @@
 
 <section class="hero">
   <div class="wrap">
-    <div class="hero-grid">
+    <div class="hero-grid" style="grid-template-columns:minmax(0,1fr)">
       <div>
         <span class="eyebrow">Круглый синтезатор-контроллер</span>
         <h1>Дрон, лид, бас и перкуссия — <span class="accent">одна ручка.</span></h1>
         <p class="lead">OBOD — прибор на ESP32-S3 с круглым экраном 360 × 360. Колесо-обод меняет выбранную ручку, касание выбирает ручку или экран, удержание назначает ручку в макрос. Девять разделов, у каждого своя семья цвета.</p>
         <div class="hero-actions">
-          <a class="btn btn-primary btn-lg" href="start.html">Первый запуск</a>
-          <a class="btn btn-outline btn-lg" href="ref-drone.html">Справочник</a>
+          <a class="btn btn-primary btn-lg" href="flash.html">Установить</a>
+          <a class="btn btn-outline btn-lg" href="start.html">Первый запуск</a>
+          <a class="btn btn-ghost btn-lg" href="ref-drone.html">Справочник</a>
         </div>
       </div>
-      <div class="device-ring" aria-hidden="true">
-        <svg viewBox="0 0 200 200">
-          <g class="ring-rotor"><circle cx="100" cy="100" r="94" fill="none" stroke="var(--line-2)" stroke-width="1" stroke-dasharray="2 5"/></g>
-          <circle cx="100" cy="100" r="82" fill="none" stroke="var(--fam-drn-ink)" stroke-width="7" stroke-dasharray="47 468" stroke-dashoffset="0" stroke-linecap="round" transform="rotate(-90 100 100)"/>
-          <circle cx="100" cy="100" r="82" fill="none" stroke="var(--fam-lfo-ink)" stroke-width="7" stroke-dasharray="47 468" stroke-dashoffset="-57" stroke-linecap="round" transform="rotate(-90 100 100)"/>
-          <circle cx="100" cy="100" r="82" fill="none" stroke="var(--fam-ld-ink)" stroke-width="7" stroke-dasharray="47 468" stroke-dashoffset="-114" stroke-linecap="round" transform="rotate(-90 100 100)"/>
-          <circle cx="100" cy="100" r="82" fill="none" stroke="var(--fam-scl-ink)" stroke-width="7" stroke-dasharray="47 468" stroke-dashoffset="-171" stroke-linecap="round" transform="rotate(-90 100 100)"/>
-          <circle cx="100" cy="100" r="82" fill="none" stroke="var(--fam-prc-ink)" stroke-width="7" stroke-dasharray="47 468" stroke-dashoffset="-228" stroke-linecap="round" transform="rotate(-90 100 100)"/>
-          <circle cx="100" cy="100" r="82" fill="none" stroke="var(--fam-bas-ink)" stroke-width="7" stroke-dasharray="47 468" stroke-dashoffset="-285" stroke-linecap="round" transform="rotate(-90 100 100)"/>
-          <circle cx="100" cy="100" r="82" fill="none" stroke="var(--fam-fx-ink)" stroke-width="7" stroke-dasharray="47 468" stroke-dashoffset="-342" stroke-linecap="round" transform="rotate(-90 100 100)"/>
-          <circle cx="100" cy="100" r="82" fill="none" stroke="var(--fam-lvl-ink)" stroke-width="7" stroke-dasharray="47 468" stroke-dashoffset="-399" stroke-linecap="round" transform="rotate(-90 100 100)"/>
-          <circle cx="100" cy="100" r="82" fill="none" stroke="var(--fam-prs-ink)" stroke-width="7" stroke-dasharray="47 468" stroke-dashoffset="-456" stroke-linecap="round" transform="rotate(-90 100 100)"/>
-          <circle cx="100" cy="100" r="62" fill="var(--surface-1)" stroke="var(--line-2)"/>
-        </svg>
-        <div class="ring-center-label"><span class="rc-code">OBOD</span><span class="rc-sub">360 × 360</span></div>
-      </div>
-    </div>
-
-    <div class="stats" style="margin-top:var(--sp-7)">
-      <div class="stat"><div class="num">9</div><div class="lbl">разделов</div></div>
-      <div class="stat"><div class="num">25</div><div class="lbl">экранов</div></div>
-      <div class="stat"><div class="num">130</div><div class="lbl">ручек</div></div>
-      <div class="stat"><div class="num">148</div><div class="lbl">параметров</div></div>
-      <div class="stat"><div class="num">128</div><div class="lbl">пресетов</div></div>
     </div>
   </div>
 </section>
@@ -118,9 +91,7 @@
     <div class="grid grid-tight">
         <div class="col-4 col-md-3">
           <a class="card fam-card fam-drn" href="ref-drone.html">
-            <div class="fam-top"><span class="chip"><span class="dot"></span>DRN</span>
-              <svg class="fam-ring" width="30" height="30" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="12" fill="none" stroke="var(--line-2)" stroke-width="2"/><circle cx="16" cy="16" r="12" fill="none" stroke="currentColor" stroke-width="2.6" stroke-dasharray="20 56" stroke-linecap="round" transform="rotate(-90 16 16)"/></svg>
-            </div>
+            <div class="fam-top"><span class="chip"><span class="dot"></span>DRN</span></div>
             <div class="nm">Дрон</div>
             <div class="ds">Три регистра, один общий фильтр и его свип. Дрон звучит сам, без нажатия клавиш; уровни регистров стоят только на LEVELS.</div>
             <div class="fam-meta">DRONE · DRONE FLTR — 2 экрана</div>
@@ -128,9 +99,7 @@
         </div>
         <div class="col-4 col-md-3">
           <a class="card fam-card fam-lfo" href="ref-lfo.html">
-            <div class="fam-top"><span class="chip"><span class="dot"></span>LFO</span>
-              <svg class="fam-ring" width="30" height="30" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="12" fill="none" stroke="var(--line-2)" stroke-width="2"/><circle cx="16" cy="16" r="12" fill="none" stroke="currentColor" stroke-width="2.6" stroke-dasharray="20 56" stroke-linecap="round" transform="rotate(-90 16 16)"/></svg>
-            </div>
+            <div class="fam-top"><span class="chip"><span class="dot"></span>LFO</span></div>
             <div class="nm">Модуляция</div>
             <div class="ds">Два независимых LFO. Каждый двигает свою ручку сам: приёмник, глубина, форма и скорость — и всё это едет в патче.</div>
             <div class="fam-meta">LFO 1 · LFO 2 — 2 экрана</div>
@@ -138,9 +107,7 @@
         </div>
         <div class="col-4 col-md-3">
           <a class="card fam-card fam-ld" href="ref-lead.html">
-            <div class="fam-top"><span class="chip"><span class="dot"></span>LD</span>
-              <svg class="fam-ring" width="30" height="30" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="12" fill="none" stroke="var(--line-2)" stroke-width="2"/><circle cx="16" cy="16" r="12" fill="none" stroke="currentColor" stroke-width="2.6" stroke-dasharray="20 56" stroke-linecap="round" transform="rotate(-90 16 16)"/></svg>
-            </div>
+            <div class="fam-top"><span class="chip"><span class="dot"></span>LD</span></div>
             <div class="nm">Лид</div>
             <div class="ds">Голос линии: длина ноты, скольжение, форма волны, фильтр и огибающая. Уровень — только на LEVELS.</div>
             <div class="fam-meta">LEAD · LEAD TONE · LEAD ENV — 3 экрана</div>
@@ -148,9 +115,7 @@
         </div>
         <div class="col-4 col-md-3">
           <a class="card fam-card fam-scl" href="ref-time.html">
-            <div class="fam-top"><span class="chip"><span class="dot"></span>GEN</span>
-              <svg class="fam-ring" width="30" height="30" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="12" fill="none" stroke="var(--line-2)" stroke-width="2"/><circle cx="16" cy="16" r="12" fill="none" stroke="currentColor" stroke-width="2.6" stroke-dasharray="20 56" stroke-linecap="round" transform="rotate(-90 16 16)"/></svg>
-            </div>
+            <div class="fam-top"><span class="chip"><span class="dot"></span>GEN</span></div>
             <div class="nm">Генераторы</div>
             <div class="ds">Лад, фигура линии и арпеджиатор — то, что решает, какие ноты звучат и в каком порядке.</div>
             <div class="fam-meta">SCALE · LEAD EUCLID · LEAD ARP — 3 экрана</div>
@@ -158,9 +123,7 @@
         </div>
         <div class="col-4 col-md-3">
           <a class="card fam-card fam-prc" href="ref-perc.html">
-            <div class="fam-top"><span class="chip"><span class="dot"></span>PRC</span>
-              <svg class="fam-ring" width="30" height="30" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="12" fill="none" stroke="var(--line-2)" stroke-width="2"/><circle cx="16" cy="16" r="12" fill="none" stroke="currentColor" stroke-width="2.6" stroke-dasharray="20 56" stroke-linecap="round" transform="rotate(-90 16 16)"/></svg>
-            </div>
+            <div class="fam-top"><span class="chip"><span class="dot"></span>PRC</span></div>
             <div class="nm">Перкуссия</div>
             <div class="ds">Пять голосов удара, рисунок такта и баланс дорожек. Удар и его рисунок — разные экраны.</div>
             <div class="fam-meta">PERC · PERC SEQ · PERC MIX — 3 экрана</div>
@@ -168,9 +131,7 @@
         </div>
         <div class="col-4 col-md-3">
           <a class="card fam-card fam-bas" href="ref-bass.html">
-            <div class="fam-top"><span class="chip"><span class="dot"></span>BAS</span>
-              <svg class="fam-ring" width="30" height="30" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="12" fill="none" stroke="var(--line-2)" stroke-width="2"/><circle cx="16" cy="16" r="12" fill="none" stroke="currentColor" stroke-width="2.6" stroke-dasharray="20 56" stroke-linecap="round" transform="rotate(-90 16 16)"/></svg>
-            </div>
+            <div class="fam-top"><span class="chip"><span class="dot"></span>BAS</span></div>
             <div class="nm">Бас</div>
             <div class="ds">Отдельная часть прибора: линия, её рисунок и связки. Одна нота в один момент, со своим фильтром из заготовки.</div>
             <div class="fam-meta">BASS · RHYTHM — 2 экрана</div>
@@ -178,9 +139,7 @@
         </div>
         <div class="col-4 col-md-3">
           <a class="card fam-card fam-fx" href="ref-fx.html">
-            <div class="fam-top"><span class="chip"><span class="dot"></span>FX</span>
-              <svg class="fam-ring" width="30" height="30" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="12" fill="none" stroke="var(--line-2)" stroke-width="2"/><circle cx="16" cy="16" r="12" fill="none" stroke="currentColor" stroke-width="2.6" stroke-dasharray="20 56" stroke-linecap="round" transform="rotate(-90 16 16)"/></svg>
-            </div>
+            <div class="fam-top"><span class="chip"><span class="dot"></span>FX</span></div>
             <div class="nm">Эффекты</div>
             <div class="ds">Машина на десять эффектов, дилей на шесть алгоритмов и реверб. Стойка стоит после звука, до мастера.</div>
             <div class="fam-meta">FX · DELAY · REVERB — 3 экрана</div>
@@ -188,9 +147,7 @@
         </div>
         <div class="col-4 col-md-3">
           <a class="card fam-card fam-lvl" href="ref-mix.html">
-            <div class="fam-top"><span class="chip"><span class="dot"></span>LVL</span>
-              <svg class="fam-ring" width="30" height="30" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="12" fill="none" stroke="var(--line-2)" stroke-width="2"/><circle cx="16" cy="16" r="12" fill="none" stroke="currentColor" stroke-width="2.6" stroke-dasharray="20 56" stroke-linecap="round" transform="rotate(-90 16 16)"/></svg>
-            </div>
+            <div class="fam-top"><span class="chip"><span class="dot"></span>LVL</span></div>
             <div class="nm">Микшер</div>
             <div class="ds">Уровни частей, мастер с компрессором и три страницы посылов: что и куда уходит.</div>
             <div class="fam-meta">MASTER · LEVELS · REV SENDS · FX SENDS · DEL SENDS — 5 экранов</div>
@@ -198,9 +155,7 @@
         </div>
         <div class="col-4 col-md-3">
           <a class="card fam-card fam-prs" href="ref-store.html">
-            <div class="fam-top"><span class="chip"><span class="dot"></span>PRS</span>
-              <svg class="fam-ring" width="30" height="30" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="12" fill="none" stroke="var(--line-2)" stroke-width="2"/><circle cx="16" cy="16" r="12" fill="none" stroke="currentColor" stroke-width="2.6" stroke-dasharray="20 56" stroke-linecap="round" transform="rotate(-90 16 16)"/></svg>
-            </div>
+            <div class="fam-top"><span class="chip"><span class="dot"></span>PRS</span></div>
             <div class="nm">Пресеты и настройки</div>
             <div class="ds">Сто двадцать восемь слотов звука и служебные строки: чем прибор включается и как отвечает.</div>
             <div class="fam-meta">PRESET · SETUP — 2 экрана</div>

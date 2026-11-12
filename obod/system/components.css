@@ -200,7 +200,7 @@ a.fam-card:hover {
   transform: translateY(-3px);
   box-shadow: var(--shadow-2);
 }
-.fam-card .fam-top { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-3); }
+.fam-card .fam-top { display: flex; align-items: center; justify-content: flex-start; gap: var(--sp-3); }
 .fam-card .fam-ring { color: var(--fam-ink); flex: 0 0 auto; }
 .fam-card .nm { font-size: var(--fs-18); font-weight: var(--fw-medium); }
 .fam-card .ds { color: var(--ink-3); font-size: var(--fs-14); line-height: 1.5; }
@@ -344,7 +344,12 @@ a.fam-card:hover {
   border-radius: var(--r-m);
   background: var(--surface-1);
 }
-.param-table { width: 100%; border-collapse: collapse; font-size: var(--fs-14); min-width: 560px; }
+.param-table { width: 100%; border-collapse: collapse; font-size: var(--fs-14); min-width: 560px; table-layout: fixed; }
+/* Ручка узкая, а описание и значения делят остаток поровну: колонка значений больше не
+   растягивается длинным списком и не сжимает текст. */
+.param-table th:nth-child(1), .param-table td:nth-child(1) { width: 140px; }
+.param-table th:nth-child(2), .param-table td:nth-child(2),
+.param-table th:nth-child(3), .param-table td:nth-child(3) { width: auto; }
 .param-table thead th {
   position: sticky;
   top: 0;
@@ -618,7 +623,7 @@ a.fam-card:hover {
   border-radius: 50%;
   background: var(--accent-soft);
 }
-.step .step-num::before { content: counter(step, decimal-leading-zero); }
+.step .step-num::before { content: counter(step); }
 .step .step-body { flex: 1; padding-top: 6px; }
 .step .step-body h3 { font-size: var(--fs-18); margin-bottom: var(--sp-2); }
 .step .step-body p { color: var(--ink-3); font-size: var(--fs-14); }

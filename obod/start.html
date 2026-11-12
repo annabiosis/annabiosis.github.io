@@ -28,10 +28,7 @@
 <a class="skip-link" href="#main">К содержимому</a>
 
 <header class="topbar">
-  <a class="brand" href="index.html">
-    <svg class="brand-ring" width="26" height="26" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="12" fill="none" stroke="currentColor" stroke-width="2.6" stroke-dasharray="56 20" stroke-linecap="round" transform="rotate(135 16 16)"/><circle cx="16" cy="16" r="4" fill="currentColor"/></svg>
-    OBOD
-  </a>
+  <a class="brand" href="index.html">OBOD</a>
   <nav class="topnav" aria-label="Документация">
     <a href="index.html">Обзор</a>
     <a href="start.html" aria-current="page">Первый запуск</a>
@@ -41,7 +38,6 @@
     <a href="changelog.html">История</a>
   </nav>
   <div class="topbar-actions">
-    <button class="icon-btn" data-grid-toggle type="button" title="Показать сетку (G)" aria-label="Показать модульную сетку"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></button>
     <button class="icon-btn theme-toggle" data-theme-toggle type="button" title="Переключить тему" aria-label="Переключить светлую и тёмную тему"><svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg><svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M19.1 4.9l-1.8 1.8M6.7 17.3l-1.8 1.8" stroke-linecap="round"/></svg></button>
   </div>
 </header>
@@ -145,18 +141,18 @@
 
         <div class="steps" style="margin-top:var(--sp-7)">
           <div class="step" id="step-1">
-            <span class="step-num">01</span>
+            <span class="step-num"></span>
             <div class="step-body">
-              <h2 style="font-size:var(--fs-22)">Включение</h2>
+              <h3>Включение</h3>
               
       <p>Питание — по USB-C. Прибор загружается, показывает заставку и открывает карту разделов: два кольца и девять семейств. Карта считается один раз при загрузке и открывается без паузы.</p>
       <p>Дрон звучит сам, без нажатия клавиш. Играть ли транспорту при включении, решает AUTOPLAY в SETUP: <b>ON</b> — заводское, транспорт стартует сразу; <b>OFF</b> — прибор включается молча; <b>STORE</b> — возвращает то состояние, в котором его выключили.</p>
             </div>
           </div>
           <div class="step" id="step-2">
-            <span class="step-num">02</span>
+            <span class="step-num"></span>
             <div class="step-body">
-              <h2 style="font-size:var(--fs-22)">Обод и жесты</h2>
+              <h3>Обод и жесты</h3>
               
       <p>Колесо-обод вращает выбранную ручку. Подпись на экране называет значение и единицы: проценты, полутона, доли такта.</p>
       <ul>
@@ -167,27 +163,27 @@
             </div>
           </div>
           <div class="step" id="step-3">
-            <span class="step-num">03</span>
+            <span class="step-num"></span>
             <div class="step-body">
-              <h2 style="font-size:var(--fs-22)">Транспорт</h2>
+              <h3>Транспорт</h3>
               
       <p>PLAY и STOP ведут себя как на драм-машине. STOP закрывает выход, но секвенсоры продолжают идти: после пуска линия входит в свою долю, а не начинает такт заново.</p>
       <p>Темп крутится на транспортной шторке, там же кнопка PRESET. Приём нот по USB-MIDI приносит и часы.</p>
             </div>
           </div>
           <div class="step" id="step-4">
-            <span class="step-num">04</span>
+            <span class="step-num"></span>
             <div class="step-body">
-              <h2 style="font-size:var(--fs-22)">Пресет</h2>
+              <h3>Пресет</h3>
               
       <p>Звук пишется в память, когда транспорт остановлен: запись во флеш встаёт в звук, и поэтому она ждёт STOP. Настройки пишутся сразу.</p>
       <p>Слотов 128. RND в PRESET собирает случайный звук, а RANDOM в SETUP решает, каким прибор включится — заводским, последним или новым каждый раз.</p>
             </div>
           </div>
           <div class="step" id="step-5">
-            <span class="step-num">05</span>
+            <span class="step-num"></span>
             <div class="step-body">
-              <h2 style="font-size:var(--fs-22)">Клавиатура</h2>
+              <h3>Клавиатура</h3>
               
       <p>Прибор понимает USB-MIDI: ноты, аккорды и часы. Пришедшие ноты прижимаются к ступеням выбранного лада, а дрон и бас идут за той же тоникой.</p>
       <p>Пока приём нот включён, отладочного COM-порта на кабеле нет: единственный USB-контроллер занят. Порт вернётся после выключения приёма и перезагрузки.</p>

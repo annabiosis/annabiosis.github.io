@@ -28,10 +28,7 @@
 <a class="skip-link" href="#main">К содержимому</a>
 
 <header class="topbar">
-  <a class="brand" href="index.html">
-    <svg class="brand-ring" width="26" height="26" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="12" fill="none" stroke="currentColor" stroke-width="2.6" stroke-dasharray="56 20" stroke-linecap="round" transform="rotate(135 16 16)"/><circle cx="16" cy="16" r="4" fill="currentColor"/></svg>
-    OBOD
-  </a>
+  <a class="brand" href="index.html">OBOD</a>
   <nav class="topnav" aria-label="Документация">
     <a href="index.html">Обзор</a>
     <a href="start.html">Первый запуск</a>
@@ -41,7 +38,6 @@
     <a href="changelog.html">История</a>
   </nav>
   <div class="topbar-actions">
-    <button class="icon-btn" data-grid-toggle type="button" title="Показать сетку (G)" aria-label="Показать модульную сетку"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></button>
     <button class="icon-btn theme-toggle" data-theme-toggle type="button" title="Переключить тему" aria-label="Переключить светлую и тёмную тему"><svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg><svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M19.1 4.9l-1.8 1.8M6.7 17.3l-1.8 1.8" stroke-linecap="round"/></svg></button>
   </div>
 </header>
@@ -150,27 +146,108 @@
           <div class="tabpanel" role="tabpanel" id="panel-prs" aria-labelledby="tab-prs">
             <section id="prs">
               <h2 style="font-size:var(--fs-28);margin-bottom:var(--sp-2)">Экран PRESET</h2>
-              <p class="muted" style="max-width:var(--measure);margin-bottom:var(--sp-5)">Слоты и действия со звуком. Ручек у экрана нет, поэтому обод целый. Своей плитки в шторке у пресетов больше нет: вход — кнопка PRESET на транспортной шторке, там, где раньше стоял заряд.</p>
-              <div class="table-scroll">
-                <table class="param-table">
-                  <thead><tr><th>Ручка</th><th>Значения</th><th>Описание</th></tr></thead>
-                  <tbody>
+              <p class="muted" style="max-width:var(--measure);margin-bottom:var(--sp-4)">Слоты и действия со звуком. Ручек у экрана нет, поэтому обод целый. Своей плитки в шторке у пресетов больше нет: вход — кнопка PRESET на транспортной шторке, там, где раньше стоял заряд.</p>
+              <p class="muted" style="max-width:var(--measure);margin-bottom:var(--sp-2)"><b class="param-code" style="font-family:inherit">LOAD</b> — загрузить выбранную строку: звук встаёт сразу. Строка INIT — заводской звук, её можно загрузить, но нельзя перезаписать</p>
+              <p class="muted" style="max-width:var(--measure);margin-bottom:var(--sp-2)"><b class="param-code" style="font-family:inherit">SAVE</b> — записать текущий звук в выбранный слот. На пустом слоте и на INIT кнопка не предлагается: писать некуда</p>
+              <p class="muted" style="max-width:var(--measure);margin-bottom:var(--sp-2)"><b class="param-code" style="font-family:inherit">DEL</b> — стереть выбранный слот: строка снова становится пустой</p>
+              <p class="muted" style="max-width:var(--measure);margin-bottom:var(--sp-2)"><b class="param-code" style="font-family:inherit">RND</b> — бросить случайный звук. Короткое нажатие — один бросок, долгое — серия, пока держите, и остаётся последний. Бросок берёт середину каждого диапазона, поэтому крайностей — закрытого фильтра и открытого — он не выдаёт; у дилея и арпеджиатора окна свои</p>
+              <div style="height:var(--sp-4)"></div>
 
-                  </tbody>
-                </table>
-              </div>
             </section>
           </div>
 
           <div class="tabpanel" role="tabpanel" id="panel-set" aria-labelledby="tab-set" hidden>
             <section id="set">
               <h2 style="font-size:var(--fs-28);margin-bottom:var(--sp-2)">Экран SETUP</h2>
-              <p class="muted" style="max-width:var(--measure);margin-bottom:var(--sp-5)">Настройки одним списком: слева имя строки, справа значение, разделы AUDIO, MIDI, PERSONALISATION и SYSTEM. Экран стоит вне карусели: он открывается из шторки кнопкой SETUP или плиткой на карте. Колесо крутит выбранную строку, касание выбирает строку.</p>
+              <p class="muted" style="max-width:var(--measure);margin-bottom:var(--sp-4)">Настройки одним списком: слева имя строки, справа значение, разделы AUDIO, MIDI, PERSONALISATION и SYSTEM. Экран стоит вне карусели: он открывается из шторки кнопкой SETUP или плиткой на карте. Колесо крутит выбранную строку, касание выбирает строку.</p>
+              <p class="muted" style="max-width:var(--measure);margin-bottom:var(--sp-2)"><b class="param-code" style="font-family:inherit">Колесо</b> — крутит строку, на которой стоит список. Заголовки AUDIO, MIDI, PERSONALISATION и SYSTEM — не строки: колесо их перескакивает</p>
+              <p class="muted" style="max-width:var(--measure);margin-bottom:var(--sp-2)"><b class="param-code" style="font-family:inherit">Касание</b> — выбирает строку; повторное касание включает правку — после него колесо меняет значение, а не двигает список</p>
+              <p class="muted" style="max-width:var(--measure);margin-bottom:var(--sp-2)"><b class="param-code" style="font-family:inherit">PATCH</b> — единственная строка-действие: долгое нажатие записывает звук под новым именем или забывает запомненный</p>
+              <p class="muted" style="max-width:var(--measure);margin-bottom:var(--sp-2)"><b class="param-code" style="font-family:inherit">Долгое нажатие по центру</b> — быстрый бросок: что именно он бросает, решает строка FAST RAND — ничего, выбранную ручку или всю страницу; записано это в строке, а не в жесте</p>
+              <div style="height:var(--sp-4)"></div>
               <div class="table-scroll">
                 <table class="param-table">
-                  <thead><tr><th>Ручка</th><th>Значения</th><th>Описание</th></tr></thead>
+                  <thead><tr><th>Ручка</th><th>Описание</th><th>Значения</th></tr></thead>
                   <tbody>
-
+                    <tr>
+                      <td class="p-name"><span class="param-code">SLIDE</span></td>
+                      <td>сколько времени идёт пачка новых значений: так встаёт пресет и приезжают ручки</td>
+                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
+                    </tr>
+                    <tr>
+                      <td class="p-name"><span class="param-code">RND DEL</span></td>
+                      <td>может ли случайный бросок двигать время дилея</td>
+                      <td><ul class="opt-list">
+<li class="opt"><b>OFF</b><span>время дилея бросок не трогает</span></li>
+<li class="opt"><b>ON</b><span>бросок ставит и время дилея</span></li>
+</ul></td>
+                    </tr>
+                    <tr>
+                      <td class="p-name"><span class="param-code">WEAK VEL</span></td>
+                      <td>какой силой бьёт удар, которого не коснулся акцент: сто двадцать восемь ступеней, по одной на щелчок</td>
+                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
+                    </tr>
+                    <tr>
+                      <td class="p-name"><span class="param-code">MIC</span></td>
+                      <td>насколько громко прибор слушает микрофон: это свойство комнаты, а не звука</td>
+                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
+                    </tr>
+                    <tr>
+                      <td class="p-name"><span class="param-code">MIDI IN</span></td>
+                      <td>сделать прибор USB-MIDI-устройством</td>
+                      <td><ul class="opt-list">
+<li class="opt"><b>OFF</b><span>приём нот выключен, на кабеле есть отладочный порт</span></li>
+<li class="opt"><b>ON</b><span>прибор виден как OBOD MIDI IN; отладочный порт пропадает до перезагрузки</span></li>
+</ul></td>
+                    </tr>
+                    <tr>
+                      <td class="p-name"><span class="param-code">SCREEN</span></td>
+                      <td>яркость экрана, от одного процента</td>
+                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
+                    </tr>
+                    <tr>
+                      <td class="p-name"><span class="param-code">RING</span></td>
+                      <td>яркость светодиодного кольца</td>
+                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
+                    </tr>
+                    <tr>
+                      <td class="p-name"><span class="param-code">RING FX</span></td>
+                      <td>что делает кольцо: ровный свет, реакция на звук или вращение</td>
+                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
+                    </tr>
+                    <tr>
+                      <td class="p-name"><span class="param-code">MORPH</span></td>
+                      <td>за сколько времени голос переходит с одной волны на другую: этот переход и убирает щелчок при смене WAVE</td>
+                      <td><ul class="opt-list">
+<li class="opt"><b>OFF</b><span>смена сразу, как до этой строки</span></li>
+<li class="opt"><b>5 MS</b><span>самый короткий переход</span></li>
+<li class="opt"><b>25 MS</b><span>заводское значение</span></li>
+<li class="opt"><b>100 MS</b><span>самый плавный переход</span></li>
+</ul></td>
+                    </tr>
+                    <tr>
+                      <td class="p-name"><span class="param-code">PATCH</span></td>
+                      <td>действие, а не значение: долгое нажатие записывает звук под новым именем или забывает запомненный</td>
+                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
+                    </tr>
+                    <tr>
+                      <td class="p-name"><span class="param-code">AUTOPLAY</span></td>
+                      <td>играть ли транспорту при включении: ON — сразу, OFF — молча, STORE — как было при выключении</td>
+                      <td><ul class="opt-list">
+<li class="opt"><b>ON</b><span>транспорт стартует сразу после загрузки; заводское значение</span></li>
+<li class="opt"><b>OFF</b><span>прибор включается молча</span></li>
+<li class="opt"><b>STORE</b><span>возвращает то состояние, в котором прибор выключили</span></li>
+</ul></td>
+                    </tr>
+                    <tr>
+                      <td class="p-name"><span class="param-code">FAST RAND</span></td>
+                      <td>что делает долгое нажатие по центру: ничего, случайный параметр или случайная страница целиком</td>
+                      <td><ul class="opt-list">
+<li class="opt"><b>OFF</b><span>долгое нажатие ничего не бросает</span></li>
+<li class="opt"><b>PARAM</b><span>бросает выбранную ручку</span></li>
+<li class="opt"><b>PAGE</b><span>бросает все ручки страницы</span></li>
+</ul></td>
+                    </tr>
                   </tbody>
                 </table>
               </div>

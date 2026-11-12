@@ -28,10 +28,7 @@
 <a class="skip-link" href="#main">К содержимому</a>
 
 <header class="topbar">
-  <a class="brand" href="index.html">
-    <svg class="brand-ring" width="26" height="26" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="12" fill="none" stroke="currentColor" stroke-width="2.6" stroke-dasharray="56 20" stroke-linecap="round" transform="rotate(135 16 16)"/><circle cx="16" cy="16" r="4" fill="currentColor"/></svg>
-    OBOD
-  </a>
+  <a class="brand" href="index.html">OBOD</a>
   <nav class="topnav" aria-label="Документация">
     <a href="index.html">Обзор</a>
     <a href="start.html">Первый запуск</a>
@@ -41,7 +38,6 @@
     <a href="changelog.html">История</a>
   </nav>
   <div class="topbar-actions">
-    <button class="icon-btn" data-grid-toggle type="button" title="Показать сетку (G)" aria-label="Показать модульную сетку"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></button>
     <button class="icon-btn theme-toggle" data-theme-toggle type="button" title="Переключить тему" aria-label="Переключить светлую и тёмную тему"><svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg><svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M19.1 4.9l-1.8 1.8M6.7 17.3l-1.8 1.8" stroke-linecap="round"/></svg></button>
   </div>
 </header>
@@ -136,7 +132,7 @@
 
         <span class="eyebrow">Прибор</span>
         <h1 style="font-size:var(--fs-48);font-weight:300;margin-top:var(--sp-2)">Железо</h1>
-        <p class="lead muted" style="font-size:var(--fs-18);margin-top:var(--sp-3);max-width:var(--measure)">Что внутри корпуса и что из этого следует для звука и интерфейса.</p>
+        <p class="lead muted" style="font-size:var(--fs-18);margin-top:var(--sp-3);max-width:var(--measure)">Что внутри корпуса и чем прибор дышит.</p>
 
         <div class="table-scroll" id="what" style="margin-top:var(--sp-6)">
           <table class="param-table">
@@ -154,15 +150,6 @@
           </table>
         </div>
 
-        <h2 id="notes" style="font-size:var(--fs-28);margin-top:var(--sp-7)">Что из этого следует</h2>
-        <div class="grid grid-tight" style="margin-top:var(--sp-4)">
-          <div class="col-6"><div class="card"><h3 style="font-size:var(--fs-18)">Кнопки нет</h3><p class="muted" style="font-size:var(--fs-14);margin-top:var(--sp-2)">На энкодере нет нажимной кнопки, и в демо-прошивке платы её обработка — мёртвый код. Весь интерфейс держится на колесе, касании и удержании: ENTER в LVGL не приходит никогда.</p></div></div>
-          <div class="col-6"><div class="card"><h3 style="font-size:var(--fs-18)">Кольцо на strapping-пине</h3><p class="muted" style="font-size:var(--fs-14);margin-top:var(--sp-2)">Данные кольца идут по GPIO0, а это загрузочный вывод. Кольцо нельзя тянуть до конца загрузки, иначе прибор не стартует.</p></div></div>
-          <div class="col-6"><div class="card"><h3 style="font-size:var(--fs-18)">Одна шина на двоих</h3><p class="muted" style="font-size:var(--fs-14);margin-top:var(--sp-2)">Тач CST816S и мотор DRV2605L сидят на одной шине I2C (GPIO9 и GPIO10). Мотор, включённый во время чтения тача, портит пакет.</p></div></div>
-          <div class="col-6"><div class="card"><h3 style="font-size:var(--fs-18)">Звук без настройки</h3><p class="muted" style="font-size:var(--fs-14);margin-top:var(--sp-2)">PCM5100A не требует ни I2C, ни MCLK: такт он восстанавливает из I2S. Глушение — вывод XSMT, активный низкий.</p></div></div>
-          <div class="col-6"><div class="card"><h3 style="font-size:var(--fs-18)">Память под звук</h3><p class="muted" style="font-size:var(--fs-14);margin-top:var(--sp-2)">Восемь мегабайт PSRAM заняты дилеем, ревербом, плитой и картой разделов. Звук и экран делят одну шину, поэтому кадр на анимированных страницах обновляется двадцать раз в секунду.</p></div></div>
-        </div>
-
         <p class="muted" style="margin-top:var(--sp-6);font-size:var(--fs-14)">Полная распиновка и оговорки производителя — в репозитории, файл <span class="mono">docs/HARDWARE.md</span>.</p>
       </article>
 
@@ -170,7 +157,6 @@
         <div class="toc-title">На этой странице</div>
         <ul class="toc">
           <li><a class="toc-link" href="#what">Что стоит</a></li>
-          <li><a class="toc-link" href="#notes">Что из этого следует</a></li>
         </ul>
       </div>
 

@@ -28,10 +28,7 @@
 <a class="skip-link" href="#main">К содержимому</a>
 
 <header class="topbar">
-  <a class="brand" href="index.html">
-    <svg class="brand-ring" width="26" height="26" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="12" fill="none" stroke="currentColor" stroke-width="2.6" stroke-dasharray="56 20" stroke-linecap="round" transform="rotate(135 16 16)"/><circle cx="16" cy="16" r="4" fill="currentColor"/></svg>
-    OBOD
-  </a>
+  <a class="brand" href="index.html">OBOD</a>
   <nav class="topnav" aria-label="Документация">
     <a href="index.html">Обзор</a>
     <a href="start.html">Первый запуск</a>
@@ -41,7 +38,6 @@
     <a href="changelog.html">История</a>
   </nav>
   <div class="topbar-actions">
-    <button class="icon-btn" data-grid-toggle type="button" title="Показать сетку (G)" aria-label="Показать модульную сетку"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></button>
     <button class="icon-btn theme-toggle" data-theme-toggle type="button" title="Переключить тему" aria-label="Переключить светлую и тёмную тему"><svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg><svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M19.1 4.9l-1.8 1.8M6.7 17.3l-1.8 1.8" stroke-linecap="round"/></svg></button>
   </div>
 </header>
@@ -154,39 +150,41 @@
             <section id="mst">
               <h2 style="font-size:var(--fs-28);margin-bottom:var(--sp-2)">Экран MASTER</h2>
               <p class="muted" style="max-width:var(--measure);margin-bottom:var(--sp-5)">Выход, подавление низа дрона перкуссией и мастер-компрессор. Перегруза здесь нет: он ушёл из прибора вместе со своей страницей, и стадии насыщения в тракте не осталось.</p>
+
+
               <div class="table-scroll">
                 <table class="param-table">
-                  <thead><tr><th>Ручка</th><th>Значения</th><th>Описание</th></tr></thead>
+                  <thead><tr><th>Ручка</th><th>Описание</th><th>Значения</th></tr></thead>
                   <tbody>
                     <tr>
                       <td class="p-name"><span class="param-code">VOL</span></td>
-                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                       <td>общая громкость выхода</td>
+                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
                     <tr>
                       <td class="p-name"><span class="param-code">COMP</span></td>
-                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                       <td>одна ручка ведёт порог и степень вместе; на экране отношение, внизу OFF. Атака и релиз фиксированы: 25 и 250 мс, мягкое колено 6 дБ, сайдчейн-фильтр 150 Гц</td>
+                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
                     <tr>
                       <td class="p-name"><span class="param-code">DUCK</span></td>
-                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                       <td>насколько удар подавляет низ дрона: нижний регистр уходит целиком, средний наполовину. На экране проценты, внизу OFF</td>
+                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
                     <tr>
                       <td class="p-name"><span class="param-code">SRC</span></td>
-                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                       <td>чем в ударе открывается подавление: LP — низом, бочкой; BP — серединой; HP — верхом, хэтом. На экране LP, BP или HP, заводское значение — BP</td>
+                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
                     <tr>
                       <td class="p-name"><span class="param-code">REL</span></td>
-                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                       <td>как быстро низ возвращается после удара: внизу за 60 мс, наверху за 400 мс; заводское значение — около 180 мс</td>
+                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
                     <tr>
                       <td class="p-name"><span class="param-code">SIDE</span></td>
-                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                       <td>сайдчейн посылов в эффекты: 0 — не трогать, 100 — хвосты закрываются на пике удара</td>
+                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
                   </tbody>
                 </table>
@@ -198,39 +196,41 @@
             <section id="lvl">
               <h2 style="font-size:var(--fs-28);margin-bottom:var(--sp-2)">Экран LEVELS</h2>
               <p class="muted" style="max-width:var(--measure);margin-bottom:var(--sp-5)">Уровни частей в одном списке: сравнение чисел, которые значат что-то только вместе. Это единственное место, где они есть.</p>
+
+
               <div class="table-scroll">
                 <table class="param-table">
-                  <thead><tr><th>Ручка</th><th>Значения</th><th>Описание</th></tr></thead>
+                  <thead><tr><th>Ручка</th><th>Описание</th><th>Значения</th></tr></thead>
                   <tbody>
                     <tr>
                       <td class="p-name"><span class="param-code">LEAD</span></td>
-                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                       <td>уровень лида; есть только здесь</td>
+                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
                     <tr>
                       <td class="p-name"><span class="param-code">PERC</span></td>
-                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                       <td>уровень перкуссии; есть только здесь</td>
+                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
                     <tr>
                       <td class="p-name"><span class="param-code">BASS</span></td>
-                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                       <td>уровень баса; есть только здесь</td>
+                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
                     <tr>
                       <td class="p-name"><span class="param-code">LOW</span></td>
-                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                       <td>уровень нижнего регистра дрона; есть только здесь</td>
+                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
                     <tr>
                       <td class="p-name"><span class="param-code">MID</span></td>
-                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                       <td>уровень среднего регистра дрона; есть только здесь</td>
+                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
                     <tr>
                       <td class="p-name"><span class="param-code">HIGH</span></td>
-                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                       <td>уровень верхнего регистра дрона; есть только здесь</td>
+                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
                   </tbody>
                 </table>
@@ -242,39 +242,41 @@
             <section id="rvs">
               <h2 style="font-size:var(--fs-28);margin-bottom:var(--sp-2)">Экран REV SENDS</h2>
               <p class="muted" style="max-width:var(--measure);margin-bottom:var(--sp-5)">Посылы в реверб, шесть частей на одном экране: ведущий, перкуссия, бас и три регистра дрона. Микрофона здесь нет: он больше не идёт в эффекты и работает только как источник модуляции.</p>
+
+
               <div class="table-scroll">
                 <table class="param-table">
-                  <thead><tr><th>Ручка</th><th>Значения</th><th>Описание</th></tr></thead>
+                  <thead><tr><th>Ручка</th><th>Описание</th><th>Значения</th></tr></thead>
                   <tbody>
                     <tr>
                       <td class="p-name"><span class="param-code">LEAD</span></td>
-                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                       <td>уровень лида; есть только здесь</td>
+                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
                     <tr>
                       <td class="p-name"><span class="param-code">PERC</span></td>
-                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                       <td>уровень перкуссии; есть только здесь</td>
+                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
                     <tr>
                       <td class="p-name"><span class="param-code">BASS</span></td>
-                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                       <td>уровень баса; есть только здесь</td>
+                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
                     <tr>
                       <td class="p-name"><span class="param-code">LOW</span></td>
-                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                       <td>уровень нижнего регистра дрона; есть только здесь</td>
+                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
                     <tr>
                       <td class="p-name"><span class="param-code">MID</span></td>
-                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                       <td>уровень среднего регистра дрона; есть только здесь</td>
+                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
                     <tr>
                       <td class="p-name"><span class="param-code">HIGH</span></td>
-                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                       <td>уровень верхнего регистра дрона; есть только здесь</td>
+                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
                   </tbody>
                 </table>
@@ -286,39 +288,41 @@
             <section id="fxs">
               <h2 style="font-size:var(--fs-28);margin-bottom:var(--sp-2)">Экран FX SENDS</h2>
               <p class="muted" style="max-width:var(--measure);margin-bottom:var(--sp-5)">Посылы в хорус: те же шесть частей в том же порядке, у каждой своё количество.</p>
+
+
               <div class="table-scroll">
                 <table class="param-table">
-                  <thead><tr><th>Ручка</th><th>Значения</th><th>Описание</th></tr></thead>
+                  <thead><tr><th>Ручка</th><th>Описание</th><th>Значения</th></tr></thead>
                   <tbody>
                     <tr>
                       <td class="p-name"><span class="param-code">LEAD</span></td>
-                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                       <td>уровень лида; есть только здесь</td>
+                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
                     <tr>
                       <td class="p-name"><span class="param-code">PERC</span></td>
-                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                       <td>уровень перкуссии; есть только здесь</td>
+                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
                     <tr>
                       <td class="p-name"><span class="param-code">BASS</span></td>
-                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                       <td>уровень баса; есть только здесь</td>
+                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
                     <tr>
                       <td class="p-name"><span class="param-code">LOW</span></td>
-                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                       <td>уровень нижнего регистра дрона; есть только здесь</td>
+                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
                     <tr>
                       <td class="p-name"><span class="param-code">MID</span></td>
-                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                       <td>уровень среднего регистра дрона; есть только здесь</td>
+                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
                     <tr>
                       <td class="p-name"><span class="param-code">HIGH</span></td>
-                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                       <td>уровень верхнего регистра дрона; есть только здесь</td>
+                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
                   </tbody>
                 </table>
@@ -330,39 +334,41 @@
             <section id="dls">
               <h2 style="font-size:var(--fs-28);margin-bottom:var(--sp-2)">Экран DEL SENDS</h2>
               <p class="muted" style="max-width:var(--measure);margin-bottom:var(--sp-5)">Посылы в дилей: те же шесть частей в том же порядке, у каждой своё количество повторов.</p>
+
+
               <div class="table-scroll">
                 <table class="param-table">
-                  <thead><tr><th>Ручка</th><th>Значения</th><th>Описание</th></tr></thead>
+                  <thead><tr><th>Ручка</th><th>Описание</th><th>Значения</th></tr></thead>
                   <tbody>
                     <tr>
                       <td class="p-name"><span class="param-code">LEAD</span></td>
-                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                       <td>уровень лида; есть только здесь</td>
+                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
                     <tr>
                       <td class="p-name"><span class="param-code">PERC</span></td>
-                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                       <td>уровень перкуссии; есть только здесь</td>
+                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
                     <tr>
                       <td class="p-name"><span class="param-code">BASS</span></td>
-                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                       <td>уровень баса; есть только здесь</td>
+                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
                     <tr>
                       <td class="p-name"><span class="param-code">LOW</span></td>
-                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                       <td>уровень нижнего регистра дрона; есть только здесь</td>
+                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
                     <tr>
                       <td class="p-name"><span class="param-code">MID</span></td>
-                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                       <td>уровень среднего регистра дрона; есть только здесь</td>
+                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
                     <tr>
                       <td class="p-name"><span class="param-code">HIGH</span></td>
-                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                       <td>уровень верхнего регистра дрона; есть только здесь</td>
+                      <td><span class="mono muted" style="font-size:var(--fs-13)">непрерывная шкала</span></td>
                     </tr>
                   </tbody>
                 </table>
